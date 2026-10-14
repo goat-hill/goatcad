@@ -78,7 +78,8 @@ parts:
 
 about:
   version: Version {version}
-  runtime: Electron v{electron} · Chrome v{chrome}
+  viewSource: Quellcode auf GitHub ansehen
+  shareFeedback: Feedback geben
   checkForUpdates: Automatisch nach Updates suchen
   checkNow: Jetzt suchen
   checkResult:
@@ -87,6 +88,15 @@ about:
     up-to-date: Auf dem neuesten Stand
     failed: Suche fehlgeschlagen
     unavailable: Hier nicht verfügbar
+  licenseHeading: Lizenz
+  license: GoatCAD ist freie Software unter der GNU General Public License, Version 3 oder neuer, und wird ohne jegliche Gewährleistung bereitgestellt.
+  acknowledgementsHeading: Danksagungen
+  acknowledgementsKicad: Wir möchten den Entwicklern von KiCad danken, deren Arbeit die Entwicklung von GoatCAD erheblich beschleunigt hat. Ein Großteil der ursprünglichen Dateiverarbeitung, des Routings und der Designprüfung von GoatCAD ist von KiCad inspiriert oder direkt daraus portiert. GoatCAD ist ein unabhängiges Projekt, das weder mit dem KiCad-Projekt verbunden ist noch von ihm unterstützt wird.
+  acknowledgementsClaude: GoatCAD wird fast vollständig mit Claude geschrieben, einem KI-Modell, das mit einer großen Menge an Open-Source-Software trainiert wurde. Danke an alle, deren öffentliche Open-Source-Beiträge das möglich gemacht haben.
+  thirdPartyLicenses: Lizenzen von Drittanbietern
+  supporting: '{count} unterstützende Komponente | {count} unterstützende Komponenten'
+  noticesFile: Lizenzhinweise öffnen
+  noticesFailed: Die Lizenzdatei konnte nicht geöffnet werden
 
 agent:
   label: Agent

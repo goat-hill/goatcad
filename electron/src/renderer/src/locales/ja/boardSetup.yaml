@@ -25,7 +25,9 @@ groups:
   teardropTrack: 配線間
 actions:
   save: 保存
-  manage: 管理
+  cancel: キャンセル
+  remove: 削除
+  removeOnlyYours: 削除できるのは自分で保存した構成だけです
 profile:
   name: 制約の構成
   custom: カスタム

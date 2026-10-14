@@ -25,7 +25,9 @@ groups:
   teardropTrack: 走线到走线
 actions:
   save: 保存
-  manage: 管理
+  cancel: 取消
+  remove: 移除
+  removeOnlyYours: 只能移除您自己保存的配置
 profile:
   name: 约束配置
   custom: 自定义

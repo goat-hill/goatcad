@@ -25,7 +25,9 @@ groups:
   teardropTrack: Piste à piste
 actions:
   save: Enregistrer
-  manage: Gérer
+  cancel: Annuler
+  remove: Supprimer
+  removeOnlyYours: Seules les configurations que vous avez enregistrées peuvent être supprimées
 profile:
   name: Configuration des contraintes
   custom: Personnalisée

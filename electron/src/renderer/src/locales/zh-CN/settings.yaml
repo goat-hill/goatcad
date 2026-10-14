@@ -69,7 +69,8 @@ parts:
   saveFailed: 无法保存密钥：{error}
 about:
   version: 版本 {version}
-  runtime: Electron v{electron} · Chrome v{chrome}
+  viewSource: 在 GitHub 上查看源代码
+  shareFeedback: 提供反馈
   checkForUpdates: 自动检查更新
   checkNow: 立即检查
   checkResult:
@@ -78,6 +79,15 @@ about:
     up-to-date: 已是最新版本
     failed: 无法检查
     unavailable: 此处不可用
+  licenseHeading: 许可证
+  license: GoatCAD 是依据 GNU 通用公共许可证第 3 版或更高版本发布的自由软件，不提供任何担保。
+  acknowledgementsHeading: 致谢
+  acknowledgementsKicad: 我们要感谢 KiCad 的开发者，他们的工作极大地加快了 GoatCAD 的开发。GoatCAD 最初的文件处理、布线和设计检查有很多受到 KiCad 的启发或直接移植自 KiCad。GoatCAD 是一个独立项目，与 KiCad 项目没有关联，也未获得其认可。
+  acknowledgementsClaude: GoatCAD 几乎完全是借助 Claude 编写的，Claude 是一个基于大量开源软件训练的 AI 模型。感谢所有以公开的开源贡献促成这一切的人。
+  thirdPartyLicenses: 第三方许可证
+  supporting: '{count} 个支持组件'
+  noticesFile: 打开声明文件
+  noticesFailed: 无法打开许可证文件
 agent:
   label: 智能体
   description: 通过活动栏的智能体按钮打开，恢复此文件夹的上一个会话。

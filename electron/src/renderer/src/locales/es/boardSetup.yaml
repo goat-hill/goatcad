@@ -25,7 +25,9 @@ groups:
   teardropTrack: De pista a pista
 actions:
   save: Guardar
-  manage: Gestionar
+  cancel: Cancelar
+  remove: Eliminar
+  removeOnlyYours: Solo se pueden eliminar las configuraciones que haya guardado
 profile:
   name: Configuración de restricciones
   custom: Personalizada

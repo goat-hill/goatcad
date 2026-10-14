@@ -69,7 +69,8 @@ parts:
   saveFailed: 'キーを保存できませんでした：{error}'
 about:
   version: バージョン {version}
-  runtime: Electron v{electron} · Chrome v{chrome}
+  viewSource: GitHub でソースを見る
+  shareFeedback: フィードバックを送る
   checkForUpdates: 自動的に更新を確認
   checkNow: 今すぐ確認
   checkResult:
@@ -78,6 +79,15 @@ about:
     up-to-date: 最新です
     failed: 確認できませんでした
     unavailable: ここでは利用できません
+  licenseHeading: ライセンス
+  license: GoatCAD は GNU 一般公衆利用許諾書 (GPL) バージョン 3 以降のもとで提供されるフリーソフトウェアであり、一切の保証はありません。
+  acknowledgementsHeading: 謝辞
+  acknowledgementsKicad: GoatCAD の開発を大きく加速させてくれた KiCad の開発者の皆さんに感謝します。GoatCAD の初期のファイル処理、配線、設計チェックの多くは KiCad に着想を得たもの、または KiCad から直接移植したものです。GoatCAD は独立したプロジェクトであり、KiCad プロジェクトとは提携しておらず、その承認も受けていません。
+  acknowledgementsClaude: GoatCAD はそのほぼすべてが Claude を使って書かれています。Claude は膨大なオープンソースソフトウェアで学習した AI モデルです。それを可能にしてくれた、オープンソースに公開で貢献してきたすべての方に感謝します。
+  thirdPartyLicenses: サードパーティのライセンス
+  supporting: 'その他のコンポーネント {count} 件'
+  noticesFile: ライセンス表示ファイルを開く
+  noticesFailed: ライセンスファイルを開けませんでした
 agent:
   label: エージェント
   description: アクティビティバーのエージェントボタンで開き、このフォルダーの前回のセッションを再開します。

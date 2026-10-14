@@ -74,7 +74,8 @@ parts:
   saveFailed: 'No se pudo guardar la clave: {error}'
 about:
   version: Versión {version}
-  runtime: Electron v{electron} · Chrome v{chrome}
+  viewSource: Ver el código fuente en GitHub
+  shareFeedback: Enviar comentarios
   checkForUpdates: Buscar actualizaciones automáticamente
   checkNow: Comprobar ahora
   checkResult:
@@ -83,6 +84,15 @@ about:
     up-to-date: Actualizado
     failed: No se pudo comprobar
     unavailable: No disponible aquí
+  licenseHeading: Licencia
+  license: GoatCAD es software libre bajo la Licencia Pública General de GNU, versión 3 o posterior, y se ofrece sin ninguna garantía.
+  acknowledgementsHeading: Agradecimientos
+  acknowledgementsKicad: Queremos reconocer a los desarrolladores de KiCad, cuyo trabajo aceleró enormemente el desarrollo de GoatCAD. Gran parte del manejo inicial de archivos, el enrutado y la verificación de diseño de GoatCAD está inspirada en KiCad o portada directamente de él. GoatCAD es un proyecto independiente, sin afiliación con el proyecto KiCad ni respaldo por su parte.
+  acknowledgementsClaude: GoatCAD está escrito casi por completo con Claude, un modelo de IA entrenado con un amplio conjunto de software de código abierto. Gracias a todas las personas cuyas contribuciones públicas de código abierto lo hicieron posible.
+  thirdPartyLicenses: Licencias de terceros
+  supporting: '{count} componente auxiliar | {count} componentes auxiliares | {count} componentes auxiliares'
+  noticesFile: Abrir el archivo de avisos
+  noticesFailed: No se pudo abrir el archivo de licencias
 agent:
   label: Agente
   description: Se abre con el botón de agente de la barra de actividad y retoma la última sesión de esta carpeta.

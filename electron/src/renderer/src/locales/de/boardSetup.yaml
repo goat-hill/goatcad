@@ -25,7 +25,9 @@ groups:
   teardropTrack: Leiterbahn zu Leiterbahn
 actions:
   save: Speichern
-  manage: Verwalten
+  cancel: Abbrechen
+  remove: Entfernen
+  removeOnlyYours: Nur selbst gespeicherte Konfigurationen können entfernt werden
 profile:
   name: Randbedingungs-Konfiguration
   custom: Benutzerdefiniert
