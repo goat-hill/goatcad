@@ -1094,8 +1094,8 @@ const createProjectForAgent = async (request: McpCreateProjectRequest): Promise<
     ...(request.adopt ? { adopted: request.adopt } : {}),
     opened: opens,
     guidance: opens
-      ? 'The project is open in this window and active: board_describe, schematic_describe and the rest act on it. Nothing was opened as a tab.'
-      : 'The files are written, but this window has another project open, which was left as it is. Ask the user to open the new one.'
+      ? "The project is the workspace's active one: board_describe, schematic_describe and the rest act on it. Nothing was opened as a tab."
+      : 'The files are written, but the workspace has another project active, which was left as it is. workspace_update with this project makes it the active one.'
   }
 }
 

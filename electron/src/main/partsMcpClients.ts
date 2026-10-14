@@ -24,12 +24,11 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 
-/** The name the server is known by, in every client. Tools are `mcp__goatcad__*`
- *  and prompts `/mcp__goatcad__<name>`, so this is user-visible and must not drift. */
+/** The name the server is known by, in every client and every build. Tools are
+ *  `mcp__goatcad__*` and prompts `/mcp__goatcad__<name>`, so this is user-visible and
+ *  must not drift. A development build shares it: its registration is narrower in
+ *  scope, so it shadows an installed GoatCAD's where it applies. */
 export const SERVER_NAME = 'goatcad'
-
-/** A development build's name, so its tools (`mcp__goatcad-dev__*`) sit beside an installed one's. */
-export const DEV_SERVER_NAME = 'goatcad-dev'
 
 /** A prompt as a user types it in Claude Code, `/mcp__<server>__<prompt>`; its `/`
  *  menu lists it as `/goatcad:<name> (MCP)`. */
@@ -76,9 +75,10 @@ export const claudeCode: McpClient = {
   id: 'claude-code',
   name: 'Claude Code',
   manual: 'command',
-  // A worktree's build registers for that folder only, beside an installed GoatCAD's.
+  // A worktree's build registers for that folder only, shadowing an installed
+  // GoatCAD's there rather than replacing it everywhere.
   manualText: ({ command, args, dev }) =>
-    `claude mcp add ${dev ? `--scope local ${DEV_SERVER_NAME}` : `--scope user ${SERVER_NAME}`} -- ${[command, ...args].map(shellWord).join(' ')}`,
+    `claude mcp add --scope ${dev ? 'local' : 'user'} ${SERVER_NAME} -- ${[command, ...args].map(shellWord).join(' ')}`,
   // Where `--scope user` writes.
   configPath: () => join(homedir(), '.claude.json')
 }
@@ -88,9 +88,10 @@ export const codex: McpClient = {
   id: 'codex',
   name: 'Codex',
   manual: 'snippet',
-  manualText: ({ command, args, dev }) =>
+  // One config file for every folder: a worktree's build's table replaces an installed one's.
+  manualText: ({ command, args }) =>
     [
-      `[mcp_servers.${dev ? DEV_SERVER_NAME : SERVER_NAME}]`,
+      `[mcp_servers.${SERVER_NAME}]`,
       `command = ${JSON.stringify(command)}`,
       `args = ${JSON.stringify(args)}`
     ].join('\n'),

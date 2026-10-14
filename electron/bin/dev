@@ -1,9 +1,5 @@
 #!/bin/bash
 # The GoatCAD app in dev mode: electron-vite dev with HMR on the renderer.
 # Blocks the shell until you quit the app (Ctrl-C or closing the window).
-set -e
-if [ -f "$HOME/.nvm/nvm.sh" ]; then
-  source "$HOME/.nvm/nvm.sh"
-fi
-cd "$(dirname "$0")/.."
-npm run dev -- "$@"
+# The same as `./bin/goatcad dev`: the worktree's own profile, or --shared-profile.
+exec "$(dirname "$0")/goatcad" dev "$@"
