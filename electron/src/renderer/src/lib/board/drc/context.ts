@@ -215,6 +215,41 @@ const fillShape = (poly: {
   return shape
 }
 
+/**
+ * The pad or via a teardrop belongs to: the one whose centre it holds, as
+ * KiCad's teardrop description names it. A track-to-track one is the wider
+ * track's. Null when none of its net is there.
+ */
+export function teardropOwner(index: BoardSpatialIndex, zone: KicadBoardZone): CopperItem | null {
+  const ring = zone.points.map(worldOf)
+  const box = ringBox(ring)
+  const net = zone.net ?? 0
+  let owner: CopperItem | null = null
+  let widest = -1
+  for (const item of index.query(box.minX, box.minY, box.maxX, box.maxY)) {
+    if (item.net !== net || !item.layers.some((l) => zone.layers.includes(l))) continue
+    const shape = item.shape
+    const at =
+      item.ref.type === 'pad'
+        ? (item.anchor ?? null)
+        : shape.kind === 'circle'
+          ? { x: shape.cx, y: shape.cy }
+          : null
+    if (at && pointInRegion(at, { outer: ring, holes: [] })) return item
+    if (shape.kind === 'capsule' && shape.halfWidth > widest) {
+      const ends = [
+        { x: shape.x0, y: shape.y0 },
+        { x: shape.x1, y: shape.y1 }
+      ]
+      if (ends.some((p) => pointInRegion(p, { outer: ring, holes: [] }))) {
+        widest = shape.halfWidth
+        owner = item
+      }
+    }
+  }
+  return owner
+}
+
 export function* buildDrcContext(input: BoardCheckInput): Generator<void, DrcContext> {
   const { board, index, connectivity, settings } = input
   /** Each finding with the rule that made it and the boxes it involves. */
@@ -789,40 +824,11 @@ export function* buildDrcContext(input: BoardCheckInput): Generator<void, DrcCon
   // zone's `connect_pads` clearance is maxed with the net classes, but a
   /**
    * A teardrop is its pad's or via's setting, not an item: a finding names it
-   * on the pad or via whose centre it holds (`teardrop on R1.2`) and selects
-   * that, as KiCad's teardrop description does. A track-to-track one is the
-   * wider track's.
+   * on the pad or via it belongs to (`teardropOwner`) and selects that.
    */
   const teardropSubject = (zone: KicadBoardZone): Subject => {
-    const ring = zone.points.map(worldOf)
-    const box = ringBox(ring)
-    const net = zone.net ?? 0
-    let owner: Subject | null = null
-    let widest = -1
-    for (const item of index.query(box.minX, box.minY, box.maxX, box.maxY)) {
-      if (item.net !== net || !item.layers.some((l) => zone.layers.includes(l))) continue
-      const shape = item.shape
-      const at =
-        item.ref.type === 'pad'
-          ? (item.anchor ?? null)
-          : shape.kind === 'circle'
-            ? { x: shape.cx, y: shape.cy }
-            : null
-      if (at && pointInRegion(at, { outer: ring, holes: [] })) {
-        owner = copperOf.get(item.id)?.subject ?? null
-        break
-      }
-      if (shape.kind === 'capsule' && shape.halfWidth > widest) {
-        const ends = [
-          { x: shape.x0, y: shape.y0 },
-          { x: shape.x1, y: shape.y1 }
-        ]
-        if (ends.some((p) => pointInRegion(p, { outer: ring, holes: [] }))) {
-          widest = shape.halfWidth
-          owner = copperOf.get(item.id)?.subject ?? null
-        }
-      }
-    }
+    const item = teardropOwner(index, zone)
+    const owner = item ? (copperOf.get(item.id)?.subject ?? null) : null
     return owner ? { ...owner, name: `teardrop on ${owner.name}` } : zoneSubject(zone)
   }
 

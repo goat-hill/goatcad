@@ -123,13 +123,23 @@ export function sizes(ctx: DrcContext): void {
     const ruleItem = ruleSet.copperItem(item)
     const micro = via.type === 'micro'
     const position = worldOf(via.position)
-    // The diameter is the front's, as KiCad reads it; the ring is each layer's.
+    // Each padstack entry is measured and reported apart, as KiCad measures
+    // each unique padstack layer. The front entry is the via's own size.
+    const entries: Array<[string | null, number]> = via.padstack
+      ? [
+          ['F.Cu', via.size],
+          ...Object.entries(via.padstack.sizes).filter(([layer]) => layer !== 'F.Cu')
+        ]
+      : [[null, via.size]]
     const sizeLimit = sizeRule('via_diameter', ruleItem, null)
-    const size = outOfRange(via.size, sizeLimit, `The diameter of ${subject.name}`)
-    if (size)
-      one('via-diameter', 'error', size.message, subject, position, [item], sizeLimit.severity, {
-        measure: size.measure
-      })
+    for (const [layer, diameter] of entries) {
+      const size = outOfRange(diameter, sizeLimit, `The diameter of ${subject.name}`)
+      if (size)
+        one('via-diameter', 'error', size.message, subject, position, [item], sizeLimit.severity, {
+          measure: size.measure,
+          ...(layer && entries.length > 1 ? { layer } : {})
+        })
+    }
     const drillLimit = sizeRule('hole_size', ruleItem, null)
     const drill = outOfRange(via.drill, drillLimit, `The hole of ${subject.name}`)
     if (drill)
@@ -143,16 +153,7 @@ export function sizes(ctx: DrcContext): void {
         drillLimit.severity,
         { measure: drill.measure }
       )
-    // Each padstack entry is measured and reported apart, as KiCad measures
-    // each unique padstack layer.
     const ringLimit = sizeRule('annular_width', ruleItem, null)
-    // The front entry is the via's own size; the padstack lists the rest.
-    const entries: Array<[string | null, number]> = via.padstack
-      ? [
-          ['F.Cu', via.size],
-          ...Object.entries(via.padstack.sizes).filter(([layer]) => layer !== 'F.Cu')
-        ]
-      : [[null, via.size]]
     for (const [layer, size] of entries) {
       const ring = outOfRange(
         Math.round((size - via.drill) / 2),
@@ -191,14 +192,16 @@ export function sizes(ctx: DrcContext): void {
     }
     if (!pointInPoly(rings, center.x, center.y)) return 0
     const capsule: CopperShape = { ...hole, halfWidth: 0 }
+    // Per edge, as KiCad's `SHAPE_POLY_SET::NearestPoints` against the slot: the
+    // edge's distance to the centerline less half the hole, unsigned, so an edge
+    // that cuts through the hole reads near 0. An edge on the centerline reads 0.
     let nearest = Infinity
     for (const ring of rings)
-      for (let i = 0, j = ring.length - 1; i < ring.length; j = i++)
-        nearest = Math.min(
-          nearest,
-          segmentToShape(capsule, ring[j].x, ring[j].y, ring[i].x, ring[i].y, 0)
-        )
-    return Math.round(mmToNm(Math.abs(nearest - hole.halfWidth)))
+      for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+        const d = segmentToShape(capsule, ring[j].x, ring[j].y, ring[i].x, ring[i].y, 0)
+        nearest = Math.min(nearest, d === 0 ? 0 : Math.abs(d - hole.halfWidth))
+      }
+    return Math.round(mmToNm(nearest))
   }
   /**
    * The ring a pad's hole leaves in the copper of every pad of its number on a

@@ -175,7 +175,7 @@ export const KICAD_COULD_NOT_LOAD = 'kicad-cli could not load the file'
 export const rememberGiveUp = async <T>(key: string, work: () => Promise<T>): Promise<T> => {
   const cache = process.env.PARITY_CACHE
   // Named by the memory cap it was made under: a higher cap tries again.
-  const cap = process.env.PARITY_KICAD_MEMORY ?? '3G'
+  const cap = process.env.PARITY_KICAD_MEMORY ?? '5G'
   const marker = cache ? join(cache, `${key}.gaveup-${cap}`) : null
   if (marker && existsSync(marker)) throw new KicadGaveUp(readFileSync(marker, 'utf8'))
   try {
@@ -204,7 +204,7 @@ const scoped = ((): boolean => {
 /**
  * Run kicad-cli bounded. KiCad's QA corpus holds files KiCad itself cannot
  * check in reasonable memory (issue23020 passes 4 GB in seconds), so each run
- * gets its own cap, PARITY_KICAD_MEMORY (default 3G, systemd only), and
+ * gets its own cap, PARITY_KICAD_MEMORY (default 5G, systemd only), and
  * PARITY_KICAD_TIMEOUT seconds (default 180); past either it is killed and
  * `KicadGaveUp` names why, so the caller can skip that file — as it does a
  * file KiCad cannot load at all. Its scope is a sibling of the suite's, not
@@ -220,7 +220,7 @@ export const runKicad = async (cli: string, args: string[]): Promise<void> => {
           '--scope',
           '--quiet',
           '-p',
-          `MemoryMax=${process.env.PARITY_KICAD_MEMORY ?? '3G'}`,
+          `MemoryMax=${process.env.PARITY_KICAD_MEMORY ?? '5G'}`,
           '-p',
           'MemorySwapMax=0',
           '-p',

@@ -515,6 +515,35 @@ describe('sizes', () => {
       )
     ).toEqual([])
   })
+
+  test("a padstack via's diameter is held on each of its layers", () => {
+    const results = run(
+      `
+  (via (at 115 120) (size 0.6) (drill 0.3) (layers "F.Cu" "B.Cu")
+    (padstack (mode front_inner_back) (layer "Inner" (size 0.8)) (layer "B.Cu" (size 0)))
+    (net 1) (uuid "v1"))`,
+      {},
+      { connectivity: false }
+    )
+    const diameters = results.filter((r) => r.code === 'via-diameter')
+    expect(diameters.map((r) => r.layer)).toEqual(['B.Cu'])
+    expect(diameters[0].measure?.actual).toBe(0)
+  })
+
+  test('an offset hole that crosses its copper reads as the edge it cuts', () => {
+    const results = run(
+      `
+  (footprint "T:J" (layer "F.Cu") (uuid "fp") (at 120 120)
+    (property "Reference" "J1" (at 0 -8) (layer "F.SilkS") (hide yes) (effects (font (size 1 1) (thickness 0.15))))
+    (pad "1" thru_hole oval (at 0 0) (size 5 11) (drill oval 2.5 10 (offset 0 -1))
+      (layers "*.Cu" "*.Mask") (net 1 "A") (uuid "p1")))`,
+      {},
+      { connectivity: false }
+    )
+    const ring = results.find((r) => r.code === 'annular-width')
+    expect(ring?.items).toEqual(['J1.1'])
+    expect(ring!.measure!.actual).toBeLessThan(0.1)
+  })
 })
 
 describe('physical clearance', () => {

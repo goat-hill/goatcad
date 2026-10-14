@@ -103,7 +103,6 @@ to anything a checker reads.
 | **Our schematic netlist names nets differently.** Nets named through a bus member are not yet KiCad's; issue22548 leaves one U4 unannotated. | vme-wren, Jetson, video, RoyalBlue54L, issue22548 | `net_conflict` |
 | **Deliberate deviations** (below) | vme-wren (QA copy), issue5093, One-Air-Max, Jetson, padstacks_complex, issue22475, VCU118, issue24758, complex_hierarchy, issue21482 | silk, `annular_width`, `clearance`, `track_dangling`, `creepage`, `malformed_courtyard` |
 | **KiCad 10.0 bug, fixed upstream.** It reads an oblong NPTH slot as a board edge (KiCad #24799). | stickhub-extra-via, issue23469 | `copper_edge_clearance` |
-| **kicad-cli 10.0.6 length rounding.** It measures one net 2 µm over its limit. | vme-wren | `length_out_of_range` |
 | **KiCad's report cap.** KiCad stops at 199 findings, in its own walk order. | VCU118 | `silk_over_copper` |
 | **Creepage through overlapping cutouts.** KiCad paths round the cutouts' union. | issue24078 | `creepage` |
 | **Not diagnosed** | issue23053 (fill wedges read as slivers), VCU118 (one sliver), vme-wren (narrow necks), CM5_MINIMA_3 and Jetson (silk read as crossing the edge) | `copper_sliver`, `connection_width`, `silk_edge_clearance` |

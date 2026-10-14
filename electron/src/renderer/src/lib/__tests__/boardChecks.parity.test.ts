@@ -33,7 +33,13 @@ import {
 import { createHash } from 'crypto'
 import { tmpdir } from 'os'
 import { basename, dirname, join } from 'path'
-import { allZones, getNetName, parseKicadBoard, type KicadBoard } from '../kicad/board'
+import {
+  allZones,
+  getNetName,
+  isTeardropZone,
+  parseKicadBoard,
+  type KicadBoard
+} from '../kicad/board'
 import { nmToMm } from '../kicad/coordinates'
 import { unescapeKicadText } from '../kicad/textMarkup'
 import { BOARD_KICAD_KEYS, boardChecksSteps } from '../board/boardChecks'
@@ -53,6 +59,7 @@ import { customRulesOf, librariesFor, parityBoards, settingsFor } from './parity
 import { copperDrawings } from '../board/boardDrawings'
 import { boardItemIds } from '../board/boardItems'
 import { positional, worldOf } from '../board/drc/shared'
+import { teardropOwner } from '../board/drc/context'
 import { footprintTransform, tfPoint } from '../schematic/placement'
 import { loadClipper } from '../geometry/clip'
 import { MIN_FORMAT_VERSION } from '../kicad/migrate'
@@ -190,10 +197,6 @@ const KNOWN: Record<string, Known | Known[]> = {
     {
       key: 'connection_width',
       why: 'compared since fromTo() is read: some narrow necks differ both ways, not yet diagnosed'
-    },
-    {
-      key: 'length_out_of_range',
-      why: 'kicad-cli 10.0.6 measures /DDR4-PS.DM1 at 32.0021 mm against a 32 mm max; 10.0.4 and we measure it within, a hair of length arithmetic apart'
     }
   ],
   'qa/data/pcbnew/issue21482/issue21482.kicad_pcb': {
@@ -598,6 +601,24 @@ const compare = async (boardFile: string): Promise<Comparison[]> => {
     ...(parity?.schematic_parity ?? [])
   ].filter((violation) => !deferredViolation(violation))
   const labels = labelsOf(board)
+  // KiCad names a teardrop by its own uuid; ours names the pad or via it belongs to.
+  const { byObject } = boardItemIds(board)
+  for (const zone of allZones(board)) {
+    if (!zone.uuid || !isTeardropZone(zone)) continue
+    const ref = teardropOwner(index, zone)?.ref
+    const owner =
+      ref?.type === 'pad'
+        ? board.footprints[ref.index]?.footprint.pads[ref.pad]
+        : ref?.type === 'segment'
+          ? board.segments[ref.index]
+          : ref?.type === 'tarc'
+            ? board.trackArcs[ref.index]
+            : ref?.type === 'via'
+              ? board.vias[ref.index]
+              : undefined
+    const id = owner && byObject.get(owner)
+    if (id !== undefined) labels.set(zone.uuid, ourLabels.get(id) ?? id)
+  }
   const uuids = uuidsIn(text)
   const nets = netsOf(board)
   const ignored = ignoredKeys(boardFile)
