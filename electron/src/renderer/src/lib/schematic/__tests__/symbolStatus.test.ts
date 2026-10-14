@@ -35,4 +35,19 @@ describe('library status of a symbol copy', () => {
     expect(libSymbolMatches(definition(LIB('~', '1 0')), library)).toBe(false)
     expect(libSymbolMatches(definition(LIB('~', '0 0', true)), library)).toBe(false)
   })
+
+  test("a current file's `~` is literal text, an old file's is empty", () => {
+    const withSheet = (value: string, version: number): KicadLibSymbol =>
+      definition(
+        LIB('~', '0 0')
+          .replace('(version 20241209)', `(version ${version})`)
+          .replace(
+            '(symbol "R_1_1"',
+            `(property "Datasheet" "${value}" (at 0 0 0)) (symbol "R_1_1"`
+          )
+      )
+    const empty = withSheet('', 20251024)
+    expect(compareLibSymbols(empty, withSheet('~', 20251024))?.kind).toBe('fields')
+    expect(compareLibSymbols(empty, withSheet('~', 20241209))).toBeNull()
+  })
 })

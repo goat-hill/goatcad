@@ -144,7 +144,7 @@ const NET_ON_SHEET = new Set(['multiple_net_names'])
  * Where the comparison is known to differ, and why. An entry that stops
  * differing fails the run, so the list cannot go stale.
  */
-const KNOWN: Record<string, { key: string; why: string }> = {
+const KNOWN: Record<string, { key: string | string[]; why: string }> = {
   'CM5_MINIMA_3.kicad_sch': {
     key: 'no_connect_connected',
     why: "KiCad folds a sheet's same-named pieces and checks only the last no-connect the fold took in; we check each (kicad-parity.md deviations)"
@@ -152,6 +152,10 @@ const KNOWN: Record<string, { key: string; why: string }> = {
   'issue21798.kicad_sch': {
     key: 'net_not_bus_member',
     why: 'Two copies of one bus-entry layout, the second off the connection grid: KiCad reports the first pair and not the second, with nothing in the drawing to tell them apart; we report both'
+  },
+  'issue25406.kicad_sch': {
+    key: ['net_not_bus_member', 'multiple_net_names'],
+    why: "KiCad 10.0.7's bus renaming across sheets names members /Input/DIRECT.DIRECT.NEUTRAL and /Input/DIRECT.INPUT.EARTH, then finds them on no bus, and names /Input's EARTH pair by DIRECT.EARTH; we keep the members' own names (kicad-parity.md deviations)"
   }
 }
 
@@ -611,7 +615,10 @@ describe('schematic checks against KiCad ERC', () => {
       ])
       const known = KNOWN[basename(rootFile)]
       if (known) {
-        const expected = differences.filter((line) => line.startsWith(`${known.key}: `))
+        const keys = Array.isArray(known.key) ? known.key : [known.key]
+        const expected = differences.filter((line) =>
+          keys.some((key) => line.startsWith(`${key}: `))
+        )
         expect(expected, known.why).not.toEqual([])
         expect(differences.filter((line) => !expected.includes(line))).toEqual([])
       } else {

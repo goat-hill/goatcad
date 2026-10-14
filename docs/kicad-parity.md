@@ -129,6 +129,7 @@ to anything a checker reads.
 | Propagate nets on edit; on open, a file keeps its own nets | Propagates them on load | issue25670 |
 | Not hold TrueType text to `text_thickness` | Holds it | |
 | Leave a library our parser can't read unjudged | Judges it | |
+| Keep a bus member's own name across a sheet boundary | 10.0.7 renames it from the far bus, sometimes twice (`/Input/DIRECT.DIRECT.NEUTRAL`), then finds it on no bus | issue25406 |
 
 ### Zone fill
 

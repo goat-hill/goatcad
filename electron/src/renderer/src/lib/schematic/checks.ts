@@ -543,7 +543,10 @@ const shapesOf = (definition: KicadLibSymbol): string[] => {
 /** Every symbol has these, empty when its file leaves one out. */
 const MANDATORY_FIELDS = ['Reference', 'Value', 'Footprint', 'Datasheet', 'Description']
 
-/** Older files spell the description `ki_description`; `~` is empty. */
+/**
+ * Older files spell the description `ki_description`. A `~` is literal: files
+ * from before 20250318, where it meant empty, are migrated before they are read.
+ */
 const fieldsOf = (definition: KicadLibSymbol): Map<string, string> =>
   new Map([
     ...MANDATORY_FIELDS.map((key): [string, string] => [key, '']),
@@ -551,9 +554,7 @@ const fieldsOf = (definition: KicadLibSymbol): Map<string, string> =>
       property.key === 'ki_description' ? 'Description' : property.key,
       property.key === 'ki_fp_filters'
         ? property.value.trim().split(/\s+/).join(' ')
-        : property.value === '~'
-          ? ''
-          : property.value
+        : property.value
     ])
   ])
 
