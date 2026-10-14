@@ -15,7 +15,7 @@ place we knowingly differ. The plan and open work are in
 - **Exclusions** are KiCad's, honored but never written. They match on rule and item uuids, so they survive
   moves; a position-only exclusion cannot match. We have no waivers of our own.
 - **Presentation** is ours: findings show as the pill, the drawer and canvas markers, not a dialog.
-- **Testing:** `./bin/test-parity` runs our checks and `kicad-cli` 10.0.6 on KiCad's `demos/` and
+- **Testing:** `./bin/test-parity` runs our checks and `kicad-cli` 10.0.7 on KiCad's `demos/` and
   `qa/data/`, read from the pinned checkout. It never runs on CI.
   - **Known differences.** Each suite lists the boards it accepts as differing, with the reason.
     A board on that list counts as passing, and an entry that stops differing fails the run.
@@ -248,8 +248,8 @@ stackup, 1 GHz, and the same integer units (widths in nm, truncated; delays in a
 ## Chasing a difference
 
 - **Read KiCad's behavior from the release, not the checkout.** The pinned checkout is KiCad's
-  development branch; the suites compare against 10.0.6, and DRC and the filler differ between them.
-  Fetch a file with `curl -sfL https://gitlab.com/kicad/code/kicad/-/raw/10.0.6/<path>` into the
+  development branch; the suites compare against 10.0.7, and DRC and the filler differ between them.
+  Fetch a file with `curl -sfL https://gitlab.com/kicad/code/kicad/-/raw/10.0.7/<path>` into the
   scratchpad and read it there. Use the checkout only to find where to look.
 - **Read what KiCad reported.** The DRC report cache (`$PARITY_CACHE/drc/<sha1>.json`, its source
   file in `source`) has each finding's detail. `(clearance 0.2000 mm; actual 0.1995 mm)` often

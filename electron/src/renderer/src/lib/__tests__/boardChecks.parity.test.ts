@@ -369,6 +369,10 @@ const ourLabelsOf = (board: KicadBoard): Map<string, string> => {
   for (const bfp of board.footprints) {
     const reference = footprintName(bfp)
     label(bfp, reference)
+    // A field our checks name `R5#Reference` (boardFields.ts) KiCad names by the file's uuid.
+    const id = byObject.get(bfp)
+    if (id === bfp.reference)
+      for (const p of bfp.footprint.properties) if (p.uuid) labels.set(`${id}#${p.key}`, p.uuid)
     for (const pad of bfp.footprint.pads) {
       const center = tfPoint(footprintTransform(bfp), pad.position.x, pad.position.y)
       label(

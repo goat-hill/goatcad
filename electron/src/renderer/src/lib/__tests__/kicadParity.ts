@@ -28,7 +28,7 @@ const onPath = (): string | null => {
  * a run on one stops before it compares anything — unless
  * `PARITY_ANY_KICAD_VERSION=1` says the drift is intended.
  */
-export const KICAD_CLI_VERSION = '10.0.6'
+export const KICAD_CLI_VERSION = '10.0.7'
 
 export const kicadCli = (): string | null => {
   const configured = process.env.KICAD_CLI
@@ -58,7 +58,7 @@ export const kicadCli = (): string | null => {
  * are recorded against. `KICAD_SOURCE` names the checkout; `~/code/kicad` is
  * only the fallback. Nothing of it is copied into the repo (RULES.md §7).
  */
-export const KICAD_SOURCE_COMMIT = 'caf7377e9cb6fa1535ec3596dcb8c99bf44a996e'
+export const KICAD_SOURCE_COMMIT = '69cafb907ebc09e7722a2a464b1d466fc2e3608d'
 
 let checkedSource: string | null | undefined
 

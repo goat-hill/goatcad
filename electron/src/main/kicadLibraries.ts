@@ -11,7 +11,7 @@
  * the `KICAD{MAJOR}_*_DIR` env-var names KiCad uses in library tables and
  * footprint `(model …)` paths. Bump together.
  */
-export const KICAD_LIB_VERSION = '10.0.4'
+export const KICAD_LIB_VERSION = '10.0.7'
 export const KICAD_LIB_MAJOR = 10
 
 /** The three standard library sets. 3D is separate — multi-GB, path-based. */
