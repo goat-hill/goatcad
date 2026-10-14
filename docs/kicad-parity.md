@@ -26,20 +26,21 @@ place we knowingly differ. The plan and open work are in
 
 | Suite | Compares | Passing |
 |---|---|---|
-| Board DRC | `kicad-cli pcb drc`, per rule, findings as a multiset | 246 of 249 |
-| Incremental DRC | a check round an edit vs. a whole-board check | 253 of 253 |
-| Zone fill | each zone layer to KiCad's refill, within 10 µm | 243 of 252 |
-| Gerber | | 245 of 255 |
-| ERC | `kicad-cli sch erc`, per violation key | 129 of 145 |
+| Board DRC | `kicad-cli pcb drc`, per rule, findings as a multiset | 258 of 258 |
+| Incremental DRC | a check round an edit vs. a whole-board check | 262 of 262 |
+| Zone fill | each zone layer to KiCad's refill, within 10 µm | 255 of 262 |
+| Gerber | | 254 of 258 |
+| ERC | `kicad-cli sch erc`, per violation key | 135 of 135 |
 | Footprint | KiCad's board DRC on each library | all but listed cases |
 
-"Passing" includes boards that pass through their known differences. Board DRC and zone fill
-are from the last full run; the other rows are from earlier runs.
+"Passing" includes boards that pass through their known differences. Every row is from a full
+run against 10.0.7.
 
 **Failing:**
-- **Board DRC:** none.
-- **Zone fill:** the nine boards under Zone fill below. Three boards were not compared: two copies of
-  `vme-wren` (kicad-cli's memory cap) and `fakeboard` (kicad-cli can't load it).
+- **Board DRC, incremental DRC, ERC, footprint:** none.
+- **Zone fill:** the seven boards under Zone fill below.
+- **Gerber:** `backdrill` (KiCad drills the backdrill holes; we do not), `api_kitchen_sink`
+  (one F.Mask opening), `textbox-border` and `keepout_no_clearance` (silkscreen). None diagnosed.
 
 ### Running the suites
 
@@ -148,13 +149,14 @@ to anything a checker reads.
   - zones that lost islands at the start of a refill;
   - backdrilled layers.
 
-**Known differences.** Every demo kicad-cli could refill matches. Nine QA boards differ:
+**Known differences.** Every demo kicad-cli could refill matches. Seven QA boards differ:
 
 | Boards | Why |
 |---|---|
-| issue24758, issue24835-min, zone_refill_convergence_limit | KiCad's refill rounds |
-| issue23467 | 10.0.6 cuts an unplated slot by the copper clearance |
-| issue12964, issue23790, issue6039, issue21746, issue5093 | each tests one KiCad fix; not diagnosed |
+| issue24835-min | KiCad widens a narrow neck into a full bridge (issue 24835); we drop the plane beyond it as an island |
+| zone_refill_convergence_limit | KiCad's refill rounds |
+| issue23467 | KiCad cuts an unplated slot by the copper clearance |
+| issue12964, issue6039, issue21746, issue5093 | each tests one KiCad fix; not diagnosed |
 
 ### Teardrops
 
