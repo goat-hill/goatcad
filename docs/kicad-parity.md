@@ -101,7 +101,7 @@ to anything a checker reads.
 | Cause | Boards | Rules |
 |---|---|---|
 | **Our schematic netlist names nets differently.** Nets named through a bus member are not yet KiCad's; issue22548 leaves one U4 unannotated. | vme-wren, Jetson, video, RoyalBlue54L, issue22548 | `net_conflict` |
-| **Deliberate deviations** (below) | vme-wren (QA copy), issue5093, One-Air-Max, Jetson, padstacks_complex, issue22475, VCU118, issue24758, complex_hierarchy, issue21482 | silk, `annular_width`, `clearance`, `track_dangling`, `creepage`, `malformed_courtyard` |
+| **Deliberate deviations** (below) | vme-wren (QA copy), issue5093, One-Air-Max, Jetson, padstacks_complex, issue22475, VCU118, issue24758, complex_hierarchy, issue21482, issue25670 | silk, `annular_width`, `clearance`, `track_dangling`, `creepage`, `malformed_courtyard`, `shorting_items` |
 | **KiCad 10.0 bug, fixed upstream.** It reads an oblong NPTH slot as a board edge (KiCad #24799). | stickhub-extra-via, issue23469 | `copper_edge_clearance` |
 | **KiCad's report cap.** KiCad stops at 199 findings, in its own walk order. | VCU118 | `silk_over_copper` |
 | **Creepage through overlapping cutouts.** KiCad paths round the cutouts' union. | issue24078 | `creepage` |
@@ -129,7 +129,7 @@ to anything a checker reads.
 | Not treat `Margin` as an edge to copper (it is one to silkscreen) | Same for silkscreen | |
 | Bore exactly the layers a backdrill passes through | Claims one more layer from B.Cu | |
 | Read a unitless property comparison (`A.Orientation == 0`) in mm, degrees or 1/0 | The comparison never holds | |
-| Propagate nets on edit; on open, a file keeps its own nets | Propagates them on load | |
+| Propagate nets on edit; on open, a file keeps its own nets | Propagates them on load | issue25670 |
 | Not hold TrueType text to `text_thickness` | Holds it | |
 | Leave a library our parser can't read unjudged | Judges it | |
 

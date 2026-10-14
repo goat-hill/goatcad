@@ -203,6 +203,10 @@ const KNOWN: Record<string, Known | Known[]> = {
     key: 'creepage',
     why: "KiCad tests each net pair on every copper layer over one creepage graph it carries from layer to layer, and reports the pair again where a later layer's shortest path names other items (J7 and two unconnected vias, J1 and J3 thrice); we report each pair of items once"
   },
+  'qa/data/pcbnew/issue25670/issue25670.kicad_pcb': {
+    key: ['shorting_items', 'hole_clearance', 'solder_mask_bridge', 'unconnected_items'],
+    why: 'a SIG via overlaps U1.9 (NET8): kicad-cli propagates nets on load and reads the via as NET8, where a file keeps its own nets until an edit (netPropagation.ts), so we report the short and what follows from it'
+  },
   'qa/data/pcbnew/issue24078/issue24078.kicad_pcb': {
     key: 'creepage',
     why: "C4's pads straddle two overlapping cutouts (a slot and a Bézier-bounded one): KiCad's surface path goes round their union, ours finds 2.88 mm between them"

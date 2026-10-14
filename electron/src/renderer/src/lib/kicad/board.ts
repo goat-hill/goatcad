@@ -1079,9 +1079,9 @@ const teardropNodes = new WeakMap<SExprNode, boolean>()
  * KiCad's text variables in a board's own text, resolved from the board: the
  * title block's (`${TITLE}`, `${ISSUE_DATE}`, `${REVISION}`, `${COMPANY}`,
  * `${COMMENT1}`…`${COMMENT9}`) and `${LAYER}`, then the project's text
- * variables — which also answer a title-block name the block leaves empty. A
- * title-block name nothing answers is empty text; anything else unresolved
- * stays as written, which is what KiCad draws for it.
+ * variables. A title-block name is the block's, empty where it leaves it blank
+ * (`BOARD::ResolveTextVar`); anything else unresolved stays as written, which
+ * is what KiCad draws for it.
  */
 export function expandBoardText(
   text: string,
@@ -1123,9 +1123,9 @@ export function expandBoardText(
   return text.replace(/\$\{([A-Za-z_0-9]+)\}/g, (whole, name: string) => {
     if (name === 'LAYER' && layer) return layer
     const fromBlock = titled(name)
-    if (fromBlock) return fromBlock
+    if (fromBlock !== null) return fromBlock
     if (Object.hasOwn(variables, name)) return variables[name]
-    return fromBlock ?? whole
+    return whole
   })
 }
 

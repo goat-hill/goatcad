@@ -379,14 +379,14 @@ function boardVariable(board: KicadBoard, name: string, scope: TextScope): strin
     case 'CURRENT_TIME_LOCALE':
       return ''
   }
-  // A blank title-block field gives way to the project's variable of the same
-  // name, as kicad-cli 10.0.6 plots it (`${REVISION}` with no `(rev …)`).
+  // The title block answers its own fields first, a blank one included (`${REVISION}`
+  // with no `(rev …)` is empty); then the project's variables, then the board's
+  // properties (`BOARD::ResolveTextVar`).
   const block = titleBlockVariable(board, name)
-  if (block) return projectExpanded(block, scope)
+  if (block !== null) return projectExpanded(block, scope)
   if (Object.hasOwn(scope.variables, name)) return scope.variables[name]
   const own = boardProperties(board).get(name)
   if (own !== undefined) return own
-  if (block !== null) return ''
   // Environment variables KiCad always sets: the project's folder and its own paths.
   if (name === 'KIPRJMOD' || /^KICAD\d*_/.test(name)) return ''
   return null
