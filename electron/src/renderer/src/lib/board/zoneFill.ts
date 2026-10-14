@@ -1585,8 +1585,20 @@ export function* computeZoneFillSteps(
       yield
       const before = filled
       filled = difference(filled, zoneCuts)
-      if (opening && filled.length > 0)
-        filled = intersection(minimumWidth(filled, minThickness, maxError), before)
+      if (opening && filled.length > 0) {
+        // On a refill, the band the extents trim took that an abutting same-net
+        // zone still pours into stands in for that zone, so the prune carves no
+        // divot at their border (`sameNetApron`, issue 23790); grown 1 µm to
+        // overlap rather than abut, as 10.0.7 does, then trimmed back off.
+        const apron = refilled
+          ? difference(envelope, [...maxExtents, ...cuts, ...bareHoles, ...zoneCuts])
+          : []
+        const pruned =
+          apron.length > 0
+            ? union([...filled, ...grow(apron, WIDTH_EPSILON, maxError)], [])
+            : filled
+        filled = intersection(minimumWidth(pruned, minThickness, maxError), before)
+      }
     }
     if (sameNetAbove.length > 0 && filled.length > 0) filled = difference(filled, sameNetAbove)
     // A hatched pour carved by a zone above it keeps a solid border along the
