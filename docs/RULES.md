@@ -18,7 +18,8 @@ Reading a sibling project to answer a question is fine; say so.
 
 - **Stay in your directory.** Edit only your project or worktree, plus scratch dirs.
 - **Never install anything.** No `apt`, `brew` or `npm install <pkg>`.
-  - The only exceptions are `bin/deps-sync` and `bin/deps-update`, through the `upgrade-deps` skill.
+  - The only exceptions are `bin/deps-sync` and `bin/deps-update`, through the `upgrade-deps` skill, and
+    `bin/deps-sync` as the `release` skill's first gate.
   - Adding a package is a request to the maintainer (§4).
 - **Never run `npx`** unless the maintainer asks for that exact command. It installs whatever it can't find
   locally. Use the `bin/` wrappers (§3); if none fits, ask for one.

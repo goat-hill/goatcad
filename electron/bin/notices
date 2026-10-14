@@ -4,6 +4,8 @@
 # shows (src/renderer/src/lib/licenses.json), from the installed packages and
 # the built components' *.licenses.txt (scripts/third-party-notices.mjs). Run
 # after any dependency change; the default suite fails while either is stale.
+# Refuses to run while node_modules has drifted from package-lock.json (run
+# bin/deps-sync), since it would write the installed versions, not the locked.
 set -e
 if [ -f "$HOME/.nvm/nvm.sh" ]; then
   source "$HOME/.nvm/nvm.sh"

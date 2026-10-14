@@ -101,7 +101,14 @@ mismatch. The `v` belongs only to the tag.
 Then run the same checks CI runs, but locally where fixing them is cheap. npm is
 not on `PATH`; the `bin/` wrappers source nvm for you. Run from the repo root.
 
-- **Licenses** — `./electron/bin/notices`, first. It rewrites
+- **Dependencies** — `./electron/bin/deps-sync`, before anything else. The
+  gates and the notices read the installed `node_modules`, which drifts behind
+  `package-lock.json` whenever a dependency commit lands from elsewhere; a stale
+  tree tests code you are not shipping and writes downgraded versions into the
+  notices. `npm ci` installs exactly the lockfile and changes no tracked file.
+  `bin/notices` refuses to run on a drifted tree, but sync first rather than
+  waiting for it to refuse.
+- **Licenses** — `./electron/bin/notices`, after the sync. It rewrites
   `resources/THIRD_PARTY_NOTICES.txt` and the About list
   (`src/renderer/src/lib/licenses.json`) from the installed packages
   and the wasm builds' `*.licenses.txt`, so any dependency change in

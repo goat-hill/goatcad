@@ -328,7 +328,37 @@ notices beside the app, in LICENSES.chromium.html.`
   return { text, list: JSON.stringify({ gpl, components: entries }, null, 2) + '\n' }
 }
 
+/**
+ * Packages whose installed version is not the one package-lock.json names. The
+ * notices are read from node_modules, so a stale tree writes stale versions —
+ * a silent downgrade of every notice that drifted. npm's hidden lockfile
+ * records what is installed; an optional package absent from it is a platform
+ * build this machine skipped, not drift.
+ */
+function lockfileDrift() {
+  const locked = readJson(join(ROOT, 'package-lock.json')).packages
+  const hidden = join(ROOT, 'node_modules', '.package-lock.json')
+  if (!existsSync(hidden)) return ['node_modules (not installed)']
+  const installed = readJson(hidden).packages
+  return Object.entries(locked)
+    .filter(([path]) => path !== '')
+    .filter(([path, entry]) =>
+      path in installed ? installed[path].version !== entry.version : !entry.optional
+    )
+    .map(
+      ([path, entry]) =>
+        `${path} (locked ${entry.version}, installed ${installed[path]?.version ?? 'none'})`
+    )
+}
+
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  const drift = lockfileDrift()
+  if (drift.length) {
+    console.error(
+      `third-party-notices: node_modules does not match package-lock.json; run bin/deps-sync first.\n  ${drift.slice(0, 10).join('\n  ')}${drift.length > 10 ? `\n  …and ${drift.length - 10} more` : ''}`
+    )
+    process.exit(1)
+  }
   const { text, list } = buildNotices()
   writeFileSync(NOTICES_PATH, text)
   writeFileSync(LIST_PATH, list)
