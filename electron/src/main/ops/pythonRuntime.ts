@@ -468,9 +468,9 @@ class GoatCAD:
 
     The app knows it by the session id it sends on every call: the viewport it
     opens is this connection's one, and close() (run at exit, or by a with
-    block) takes that viewport off the user's canvas. Every call acts in the
-    workspace it is attached to: workspace_id, sent with each call, attaches a
-    session that is not attached yet, and gc.workspace.attach() moves it.
+    block) takes that viewport off the user's canvas. Every call acts in
+    workspace_id, sent with each call, else in the only workspace open; a
+    call's own workspace argument wins over it.
     """
 
     def __init__(

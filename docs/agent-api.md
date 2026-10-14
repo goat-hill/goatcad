@@ -239,31 +239,34 @@ rows and ends lay it again, as its handles do.
 
 ## Workspaces
 
-Where an agent acts is the workspace its connection is attached to, never the window a person is
-looking at (`main/workspaces.ts`). Several agents work in several projects at once, in windows or
-in the background, while the person works in another.
+Where an agent acts is the workspace its call names, never the window a person is looking at
+(`main/workspaces.ts`). Several agents work in several projects at once, in windows or in the
+background, while the person works in another.
 
 - **The model.** A workspace is a folder, a project in it, both or neither, and zero or more
   windows. A file is open once, in one window of one workspace, so a project is in one workspace.
   A workspace with no window keeps its documents in one hidden renderer; its first window is that
   renderer shown, so undo and unsaved edits carry over.
-- **Attaching.** Every design op, and every op that reads the project, needs an attached
-  workspace and refuses `no-workspace` with the open ones as candidates. `workspace.list`,
-  `workspace.start` and `workspace.attach` are the way in; parts ops need none. An agent tab
-  inside GoatCAD starts attached to its window's workspace (`GOATCAD_WORKSPACE`), as does a
-  script started there. Attaching again moves the connection and closes its viewport.
-- **Ids** (`ws_…`, `win_…`) last one app run; after a restart a call refuses until the
-  connection attaches again.
-- **Where a call acts.** A named document open in a window of the workspace goes to that window;
-  one named by a full path that another workspace holds, or lies in, is refused
-  `file-in-workspace` with its id. A document no tab holds opens behind the active tab of the
-  workspace's window, as before. Several windows: a verb that adds a tab takes `window`
-  (`window-required` otherwise). No default reads focus or the tab in front: an unnamed sheet is
-  the root sheet, else the only open one.
-- **Changing and closing.** `workspace.update`, `workspace.close` and `workspace.close_window`
-  refuse with unsaved edits (`discard` drops them). A workspace with no window that no agent has
-  been attached to for 10 minutes closes, or opens a window when it holds unsaved edits, so work
-  is never lost unseen.
+- **Which workspace a call acts in.** Every op takes an optional `workspace`, added once by
+  `defineOp` (`ops/registry.ts`); an op whose own `workspace` names its target keeps it. Else a
+  client's `X-GoatCAD-Workspace` header: an agent tab sends its window's (`GOATCAD_WORKSPACE`),
+  the Python client the one it connected with. Else the only workspace open. With none open the
+  call is refused `no-workspace`, and with several `workspace-required`, listing them: never a
+  guess, since one may be the person's own. Nothing is kept per connection, so subagents sharing
+  one connection each pass their own.
+- **Ids** (`ws_…`, `win_…`) last one app run; after a restart a call naming an old one is refused
+  `workspace-not-found` with the open ones.
+- **Where in it.** A named document open in a window of the workspace goes to that window; one
+  named by a full path that another workspace holds, or lies in, is refused `file-in-workspace`
+  with its id. A document no tab holds opens behind the active tab of the workspace's window, as
+  before. Several windows: a verb that adds a tab takes `window` (`window-required` otherwise). No
+  default reads focus or the tab in front: an unnamed sheet is the root sheet, else the only open
+  one.
+- **Lifetime.** A workspace with a window is the person's; it stays until they close it.
+  `workspace.update`, `workspace.close` and `workspace.close_window` refuse with unsaved edits
+  (`discard` drops them). A workspace with no window belongs to the connection that started it:
+  when that connection ends it closes, or opens a window when it holds unsaved edits, so work is
+  never lost unseen. A background launch quits once it has no window and no connection.
 - **Clients.** In-app tabs use the HTTP endpoint with the header. Outside, a client registers
   `goatcad mcp`, which starts the app in the background when it is not running. Python:
   `connect(workspace=…)`.

@@ -351,7 +351,6 @@ describe('protocol framing', () => {
         'project_create_file',
         'workspace_list',
         'workspace_start',
-        'workspace_attach',
         'workspace_update',
         'workspace_close',
         'workspace_open_window',

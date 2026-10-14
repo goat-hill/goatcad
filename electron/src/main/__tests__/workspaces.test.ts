@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { callerWorkspace, createWorkspaces, type Workspaces } from '../workspaces'
+import { createWorkspaces, resolveWorkspace, type Workspaces } from '../workspaces'
 
 const registry = (): Workspaces => {
   let count = 0
@@ -45,17 +45,18 @@ describe('workspaces', () => {
     expect(workspaces.holding('/elsewhere')).toBeNull()
   })
 
-  it('attaches connections, and drops them with their workspace', () => {
+  it('resolves the workspace a call names, else the only one open, and never guesses', () => {
     const workspaces = registry()
-    const ws = workspaces.create({ root: null, project: null, window: 1 })
-    workspaces.attach('c', ws.id)
-    workspaces.attach('ghost', 'ws_none')
-    expect(workspaces.attachedTo('c')).toBe(ws)
-    expect(workspaces.attachedTo('ghost')).toBeNull()
-    expect(callerWorkspace({ connection: 'nobody', workspace: ws.id }, workspaces)).toBe(ws)
-    expect(workspaces.row(ws, () => []).connections).toBe(1)
-    workspaces.leave(1)
-    expect(workspaces.attachedTo('c')).toBeNull()
+    expect(resolveWorkspace(undefined, workspaces)).toMatchObject({ error: 'no-workspace' })
+    const mine = workspaces.create({ root: '/p', project: null, window: 1 })
+    expect(resolveWorkspace(undefined, workspaces)).toEqual({ workspace: mine })
+    const theirs = workspaces.create({ root: '/q', project: null, window: 2 })
+    expect(resolveWorkspace(undefined, workspaces)).toMatchObject({
+      error: 'workspace-required',
+      candidates: [mine.id, theirs.id]
+    })
+    expect(resolveWorkspace(theirs.id, workspaces)).toEqual({ workspace: theirs })
+    expect(resolveWorkspace('ws_gone', workspaces)).toMatchObject({ error: 'workspace-not-found' })
   })
 
   it('lists a workspace with no window as having none', () => {
@@ -70,8 +71,7 @@ describe('workspaces', () => {
       id: ws.id,
       root: '/p',
       project: { path: '/p/canary.kicad_pro', name: 'canary' },
-      windows: [],
-      connections: 0
+      windows: []
     })
     workspaces.reveal(ws.id)
     expect(workspaces.row(ws, () => ['/p/a.kicad_sch']).windows).toEqual([

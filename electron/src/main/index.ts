@@ -73,6 +73,7 @@ import type { SampleCatalog, SampleListResult, SampleOpenResult } from '../prelo
 import {
   activeAgentConnections,
   mcpLaunch,
+  onAgentConnectionEnd,
   registerPartsMcpIpc,
   setWorkspaceService,
   startPartsMcp,
@@ -81,7 +82,6 @@ import {
 import {
   askWindow,
   designWindowReady,
-  endAgentConnection,
   expectDesignWindow,
   setDesignWindowSource
 } from './partsMcpBridge'
@@ -552,17 +552,21 @@ const openTargets = (
   ]
 }
 
-/** How long a background launch waits with no window and no agent before it quits. */
-const BACKGROUND_IDLE_MS = 10 * 60_000
+/** How long a background launch waits for its first client before it quits. */
+const BACKGROUND_FIRST_CLIENT_MS = 60_000
 
-/** A background launch quits once it has had no window and no agent connection for a while. */
-const quitWhenIdle = (): void => {
-  let idleSince = Date.now()
-  const timer = setInterval(() => {
-    if (windowMap.size > 0 || activeAgentConnections() > 0) idleSince = Date.now()
-    else if (Date.now() - idleSince >= BACKGROUND_IDLE_MS) app.quit()
-  }, 30_000)
-  timer.unref()
+/**
+ * A background launch lives while something uses it: a window, or an agent
+ * connection. It checks when either ends, and once after the launch, so an app
+ * started for a client that never came does not stay.
+ */
+const quitWhenUnused = (): void => {
+  const check = (): void => {
+    if (windowMap.size === 0 && activeAgentConnections() === 0) app.quit()
+  }
+  onAgentConnectionEnd(check)
+  app.on('browser-window-created', (_, win) => win.once('closed', () => setImmediate(check)))
+  setTimeout(check, BACKGROUND_FIRST_CLIENT_MS).unref()
 }
 
 /** A window the person can see: one of a workspace that has windows. */
@@ -570,40 +574,6 @@ const shownWindow = (): BrowserWindow | null =>
   [...windowMap.values()].find(
     (win) => !win.isDestroyed() && !workspaces.ofWindow(win.id)?.hidden
   ) ?? null
-
-/** How long a workspace with no window may go without an agent attached. */
-const HIDDEN_IDLE_MS = 10 * 60_000
-
-/**
- * A workspace with no window lives while an agent works in it. Once none has
- * been attached for `HIDDEN_IDLE_MS` it closes, or, with unsaved edits, opens
- * a window so the person finds the work rather than losing it.
- */
-const reapIdleWorkspaces = (): void => {
-  const idleSince = new Map<string, number>()
-  const timer = setInterval(() => {
-    const now = Date.now()
-    for (const workspace of workspaces.all()) {
-      if (!workspace.hidden || workspaces.row(workspace, () => []).connections > 0) {
-        idleSince.delete(workspace.id)
-        continue
-      }
-      const since = idleSince.get(workspace.id) ?? now
-      idleSince.set(workspace.id, since)
-      if (now - since < HIDDEN_IDLE_MS) continue
-      idleSince.delete(workspace.id)
-      const win = windowMap.get(workspace.windows[0])
-      if (!win || win.isDestroyed()) continue
-      void askWindow(win.id, { kind: 'unsaved-files' }).then((answer) => {
-        if (win.isDestroyed()) return
-        const unsaved = answer.ok ? ((answer.payload as { unsaved?: string[] }).unsaved ?? []) : []
-        if (unsaved.length) revealWindow(win)
-        else win.close()
-      })
-    }
-  }, 60_000)
-  timer.unref()
-}
 
 const focusWindow = (win: BrowserWindow): void => {
   if (win.isMinimized()) win.restore()
@@ -702,7 +672,7 @@ const start = (): void => {
     // quit once nobody has used it for a while.
     if (mode === 'background') {
       app.dock?.hide()
-      quitWhenIdle()
+      quitWhenUnused()
     } else openStartupWindows(launchTargets)
 
     // Self-update for direct installs (main/updater.ts). The setting is read
@@ -715,8 +685,6 @@ const start = (): void => {
         openStartupWindows([])
       }
     })
-
-    reapIdleWorkspaces()
   })
 }
 
@@ -1990,8 +1958,8 @@ function registerIpcHandlers(): void {
   // Started for the process, not per window, and non-fatal: a taken port means
   // no agent surface, never a launch failure.
   registerPartsMcpIpc()
-  // Where an agent acts is the workspace its connection is attached to, never
-  // the focused window (`workspaces.ts`); this module owns the windows.
+  // Where an agent acts is the workspace its call names, else the only one
+  // open, never the focused window (`workspaces.ts`); this module owns the windows.
   setWorkspaceService(
     createWorkspaceService(workspaces, {
       open: (init, { hidden, join }) =>
@@ -2018,8 +1986,7 @@ function registerIpcHandlers(): void {
         const win = windowMap.get(window)
         if (win && !win.isDestroyed()) win.webContents.send('tab:remove', path)
       },
-      ask: askWindow,
-      leave: endAgentConnection
+      ask: askWindow
     })
   )
   // Nothing to reconcile after it starts: an agent tab is told the live URL
@@ -2285,7 +2252,7 @@ if (command) {
   app.quit()
 } else {
   app.on('window-all-closed', () => {
-    // A background launch waits out its idle time instead (`quitWhenIdle`).
+    // A background launch quits once nothing uses it (`quitWhenUnused`).
     if (process.platform !== 'darwin' && mode !== 'background') {
       app.quit()
     }

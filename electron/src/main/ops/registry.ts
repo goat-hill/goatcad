@@ -97,8 +97,21 @@ export interface RegisteredOp {
  *  means it never reaches the window. */
 export type DesignRequestResult = { ok: true; request: McpDesignRequest } | OpFailure
 
+/**
+ * The argument every op takes beside its own: the workspace to act in
+ * (`Caller.workspace`, `main/workspaces.ts`). Taken out here, so a handler never
+ * sees it; an op whose own `workspace` names its target keeps that meaning.
+ */
+const WORKSPACE_ARG = {
+  type: 'string',
+  description: 'The workspace to act in, an id from workspace_list. Required when several are open.'
+}
+
 export function defineOp<I>(spec: OpSpec<I>): RegisteredOp {
   const description = [spec.summary, spec.guidance].filter(Boolean).join(' ')
+  const json = spec.input.json
+  const properties = (json.properties ?? {}) as Record<string, unknown>
+  const ownWorkspace = 'workspace' in properties
   return {
     name: spec.name,
     mcpName: spec.name.replace(/\./g, '_'),
@@ -109,9 +122,24 @@ export function defineOp<I>(spec: OpSpec<I>): RegisteredOp {
     examples: spec.examples ?? [],
     lists: spec.lists ?? [],
     ...(spec.batchOps ? { batchOps: spec.batchOps } : {}),
-    inputSchema: spec.input.json,
+    inputSchema: ownWorkspace
+      ? json
+      : { ...json, properties: { ...properties, workspace: WORKSPACE_ARG } },
     description,
-    async invoke(rawArgs, ctx) {
+    async invoke(givenArgs, givenCtx) {
+      let rawArgs = givenArgs
+      let ctx = givenCtx
+      if (!ownWorkspace && 'workspace' in givenArgs) {
+        const { workspace, ...rest } = givenArgs
+        if (typeof workspace !== 'string' || !workspace.trim())
+          return invalidArgs(
+            '`workspace` must be a workspace id.',
+            '/workspace',
+            'Pass an id from workspace_list, or omit it when one workspace is open.'
+          )
+        rawArgs = rest
+        ctx = { ...givenCtx, workspace: workspace.trim() }
+      }
       const parsed = spec.input.parse(rawArgs, '')
       if (!parsed.ok) {
         const { path, message } = parsed.issue

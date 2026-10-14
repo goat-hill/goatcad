@@ -23,7 +23,7 @@ import { BrowserWindow, ipcMain } from 'electron'
 import type { McpDesignReply, McpDesignRequest, McpOpenViewportRequest } from '../preload/mcpTypes'
 import { pickDesignWindow, type DesignWindowState } from './designWindow'
 import { createAgentViewportRoutes } from './agentViewportRoutes'
-import { callerWorkspace, workspaces } from './workspaces'
+import { resolveWorkspace, workspaces, type Workspace } from './workspaces'
 import type { Caller } from './ops/context'
 
 /**
@@ -64,25 +64,19 @@ const liveWindow = (id: number | null): BrowserWindow | null => {
   return win && !win.isDestroyed() ? win : null
 }
 
-type Target = BrowserWindow | DesignOutcome
+type Target = { win: BrowserWindow; workspace: Workspace } | DesignOutcome
 
 /** Which window answers: the one holding the viewport a request names, else
  *  the window of the caller's workspace that holds the document
  *  (`designWindow.ts`). Never the focused one. */
 const targetWindow = (request: McpDesignRequest, caller: Caller): Target => {
-  const workspace = callerWorkspace(caller)
-  if (!workspace && caller.workspace !== undefined && !caller.connection)
-    return {
-      ok: false,
-      error: 'workspace-not-found',
-      detail: `No workspace is called ${caller.workspace}.`,
-      candidates: workspaces.all().map((open) => open.id)
-    }
-  if (!workspace) return noWorkspace()
+  const resolved = resolveWorkspace(caller.workspace)
+  if (!('workspace' in resolved)) return { ok: false, ...resolved }
+  const { workspace } = resolved
   const viewport = (request as { viewport?: unknown }).viewport
   const holding =
     typeof viewport === 'string' ? liveWindow(viewportRoutes.windowOf(viewport)) : null
-  if (holding && workspace.windows.includes(holding.id)) return holding
+  if (holding && workspace.windows.includes(holding.id)) return { win: holding, workspace }
   const states = windowStates?.() ?? []
   const picked = pickDesignWindow(
     request as unknown as Record<string, unknown>,
@@ -99,7 +93,7 @@ const targetWindow = (request: McpDesignRequest, caller: Caller): Target => {
   const win =
     liveWindow(picked?.window ?? null) ??
     workspace.windows.map(liveWindow).find((live) => live !== null)
-  return win ?? NO_WINDOW
+  return win ? { win, workspace } : NO_WINDOW
 }
 
 /** A `window` names where a tab goes; it is main's to read, not the renderer's. */
@@ -108,24 +102,6 @@ const withoutWindow = (request: McpDesignRequest): McpDesignRequest => {
   const copy: Record<string, unknown> = { ...request }
   delete copy.window
   return copy as unknown as McpDesignRequest
-}
-
-/** No workspace attached: the refusal lists the ones there are to attach to. */
-const noWorkspace = (): DesignOutcome => {
-  const ids = workspaces.all().map((workspace) => workspace.id)
-  return {
-    ok: false,
-    error: 'no-workspace',
-    detail: ids.length
-      ? `This connection is attached to no workspace. Open now: ${workspaces
-          .all()
-          .map(
-            (workspace) => `${workspace.id} (${workspace.project ?? workspace.root ?? 'no folder'})`
-          )
-          .join(', ')}.`
-      : 'This connection is attached to no workspace, and none is open.',
-    candidates: ids
-  }
 }
 
 /**
@@ -205,8 +181,8 @@ export async function requestDesign(
   const target = targetWindow(request, caller)
   if ('ok' in target) return target
   if (request.kind === 'open-viewport' && request.viewport === undefined)
-    return openViewport(request, target)
-  return send(target, withoutWindow(request))
+    return openViewport(request, target.win, target.workspace)
+  return send(target.win, withoutWindow(request))
 }
 
 /** Ask one window directly, for the workspace service (`workspaceService.ts`). */
@@ -241,10 +217,11 @@ const NO_WINDOW: DesignOutcome = {
  */
 const openViewport = async (
   request: McpOpenViewportRequest,
-  win: BrowserWindow
+  win: BrowserWindow,
+  workspace: Workspace
 ): Promise<DesignOutcome> => {
   const { connection, ...rest } = request
-  const id = viewportRoutes.idFor(connection)
+  const id = viewportRoutes.idFor(connection, workspace.id)
   const holder = liveWindow(viewportRoutes.windowOf(id))
   if (connection !== undefined && holder && holder.id !== win.id)
     await send(holder, {
@@ -255,23 +232,24 @@ const openViewport = async (
   const outcome = await send(win, { ...rest, id })
   const answered = outcome.ok ? (outcome.payload as { viewport?: unknown } | null) : null
   if (typeof answered?.viewport === 'string')
-    viewportRoutes.opened(answered.viewport, win.id, connection)
+    viewportRoutes.opened(answered.viewport, win.id, connection, workspace.id)
   return outcome
 }
 
 /**
- * An agent connection ended (`mcpSessions.ts`): its viewport closes, and
- * any routing in it ends.
+ * An agent connection ended (`mcpSessions.ts`): its viewports close, and
+ * any routing in them ends.
  */
 export function endAgentConnection(connection: string): void {
-  const held = viewportRoutes.end(connection)
-  const win = held ? liveWindow(held.window) : null
-  if (held && win)
-    void send(win, {
-      kind: 'close-viewport',
-      viewport: held.id,
-      reason: 'Its client disconnected.'
-    })
+  for (const held of viewportRoutes.end(connection)) {
+    const win = liveWindow(held.window)
+    if (win)
+      void send(win, {
+        kind: 'close-viewport',
+        viewport: held.id,
+        reason: 'Its client disconnected.'
+      })
+  }
 }
 
 const send = async (win: BrowserWindow, request: McpDesignRequest): Promise<DesignOutcome> => {

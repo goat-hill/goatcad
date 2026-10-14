@@ -90,8 +90,8 @@ describe('the Python client against a running server', () => {
   let configDir: string
   /** A config directory naming a trusted socket, beside a token Python cannot read. */
   let socketDir: string
-  /** Sessions attached by the workspace a client named. */
-  const attached: Array<[string, string]> = []
+  /** The workspace each call through the socket named. */
+  const named: Array<string | undefined> = []
   /** What reached the window: the design door answers every request with an empty success. */
   const designRequests: McpDesignRequest[] = []
   /** A second config directory whose token store is keyring-encrypted. */
@@ -133,8 +133,13 @@ describe('the Python client against a running server', () => {
       socketPath,
       trusted: true,
       sessions: createMcpSessions(),
-      attach: (connection, workspace) => void attached.push([connection, workspace]),
-      context: { parts: service }
+      context: {
+        parts: service,
+        design: async (_request, caller) => {
+          named.push(caller.workspace)
+          return { ok: true, payload: {} }
+        }
+      }
     })
     writeToken(socketDir, keyring, TOKEN)
     writeFileSync(
@@ -210,13 +215,18 @@ describe('the Python client against a running server', () => {
     expect(out).toContain('Settings > AI Integrations')
   })
 
-  it('connects through the user-only socket with no token, attaching the workspace it names', async () => {
+  it('connects through the user-only socket with no token, naming its workspace on each call', async () => {
     const out = await script(
-      'print(connect(workspace="ws_py", timeout=3).parts.status()["connectedCount"])',
+      [
+        'gc = connect(workspace="ws_py", timeout=3)',
+        'print(gc.parts.status()["connectedCount"])',
+        'gc.workspace.save()',
+        'gc.workspace.save(workspace="ws_other")'
+      ].join('\n'),
       { GOATCAD_CONFIG_DIR: socketDir }
     )
     expect(out).toBe('1')
-    expect(attached.at(-1)?.[1]).toBe('ws_py')
+    expect(named).toEqual(['ws_py', 'ws_other'])
   })
 
   it('connects with no arguments and calls an operation', async () => {

@@ -28,7 +28,7 @@ import { readDatasheet } from './datasheetLoader'
 import { cacheModel, type ModelCacheInput } from './partsMcpModelStore'
 import { loadStepFile } from './stepLoader'
 import type { OpEffect, WorkspaceService } from './ops/context'
-import { callerWorkspace, workspaces } from './workspaces'
+import { resolveWorkspace } from './workspaces'
 import {
   DEFAULT_MCP_PORT,
   MCP_PATH,
@@ -169,12 +169,20 @@ export function registerPartsMcpIpc(): void {
   })
 }
 
-/** Agent connections; one that ends takes its viewport and its attachment with it. */
+/** Agent connections; one that ends takes its viewports and its hidden workspaces with it. */
 const agentSessions = createMcpSessions()
+const endListeners = new Set<() => void>()
 agentSessions.onEnd((connection) => {
   endAgentConnection(connection)
-  workspaces.detach(connection)
+  void workspaceService?.release(connection).finally(() => {
+    for (const listener of endListeners) listener()
+  })
 })
+
+/** Run after each agent connection ends and its workspaces are released. */
+export const onAgentConnectionEnd = (listener: () => void): void => {
+  endListeners.add(listener)
+}
 
 /** Agent clients holding a connection open now, for the background launch's idle quit. */
 export const activeAgentConnections = (): number => agentSessions.active()
@@ -204,13 +212,13 @@ export async function startPartsMcp(
     const options = {
       token,
       sessions: agentSessions,
-      attach: (connection, workspace) => {
-        if (!workspaces.attachedTo(connection)) workspaces.attach(connection, workspace)
-      },
       context: {
         parts: partsService(),
         emit: applyEffect,
-        project: (caller) => callerWorkspace(caller)?.root ?? null,
+        project: (caller) => {
+          const resolved = resolveWorkspace(caller.workspace)
+          return 'workspace' in resolved ? resolved.workspace.root : null
+        },
         get workspaces() {
           return workspaceService
         },

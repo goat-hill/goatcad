@@ -45,9 +45,9 @@ export const TOKEN_ENV = 'GOATCAD_MCP_TOKEN'
 
 /**
  * The environment variable an agent tab carries its workspace id in
- * (`workspaces.ts`). Both CLIs send it as `X-GoatCAD-Workspace` on the session's
- * `initialize`, which attaches the session to the tab's workspace, and the
- * Python client attaches to it when a script started from the tab connects.
+ * (`workspaces.ts`). Both CLIs send it as `X-GoatCAD-Workspace` on every call, so
+ * the agent acts in the tab's workspace however many are open, and so does the
+ * Python client in a script started from the tab.
  */
 export const WORKSPACE_ENV = 'GOATCAD_WORKSPACE'
 

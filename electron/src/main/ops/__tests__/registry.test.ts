@@ -190,6 +190,43 @@ describe('the registry renders the surface that shipped', () => {
   })
 })
 
+describe('the workspace argument', () => {
+  const seen: Array<string | undefined> = []
+  const op = defineOp({
+    name: 'demo.where',
+    summary: 'Says where it ran.',
+    scope: 'app',
+    mutates: false,
+    input: s.object({ a: s.string().optional() }),
+    run: (args, ctx) => {
+      seen.push(ctx.workspace)
+      return succeed(args)
+    }
+  })
+  const ctx = { parts: {} as OpContext['parts'] }
+
+  it('is on every op, taken out before the handler, and wins over the header', async () => {
+    expect((op.inputSchema.properties as Record<string, unknown>).workspace).toBeDefined()
+    const answer = await op.invoke(
+      { a: 'x', workspace: 'ws_1' },
+      { ...ctx, workspace: 'ws_header' }
+    )
+    expect(answer).toEqual({ ok: true, value: { a: 'x' } })
+    expect(seen.at(-1)).toBe('ws_1')
+    await op.invoke({}, { ...ctx, workspace: 'ws_header' })
+    expect(seen.at(-1)).toBe('ws_header')
+    expect(await op.invoke({ workspace: '' }, ctx)).toMatchObject({
+      ok: false,
+      error: { code: 'invalid-args', path: '/workspace' }
+    })
+  })
+
+  it("keeps an op's own workspace argument, which names its target", () => {
+    const own = registry.get('workspace.close')!
+    expect(JSON.stringify(own.inputSchema)).toContain('A workspace id from workspace_list')
+  })
+})
+
 describe('discovery', () => {
   it('lists every operation with what a client needs to choose one', () => {
     const answer = discovery('/v1/ops')!

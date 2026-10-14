@@ -12,7 +12,7 @@ export const workspaceClose = defineOp({
   mutates: true,
   summary: 'Close a workspace and every window of it.',
   guidance:
-    'Refused while it has unsaved edits: save them with workspace_save, or pass discard: true and tell the user they were dropped. Connections attached to it are detached.',
+    'Refused while it has unsaved edits: save them with workspace_save, or pass discard: true and tell the user they were dropped.',
   input: s.object({
     workspace: s.string().trim().describe('A workspace id from workspace_list.'),
     discard: s

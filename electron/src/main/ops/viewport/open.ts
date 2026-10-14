@@ -153,7 +153,7 @@ export const viewportOpen = defineDesignOp({
   mutates: false,
   summary: "Open a labeled box on the user's canvas that shows where you work, or relabel one.",
   guidance:
-    "Answers a viewport id. Every render and every edit that sets layout takes it and an action, and refuses without them; the box frames what each call drew or changed. label is the box's first label; each later call's action (\"Route USB_DP\") replaces it with what is happening now. A connection holds one: calling this again relabels and moves it, answering the same id. A document no tab holds opens behind the active one; the user's view never moves. Close it with viewport_close when its block of work is done. It also closes after 10 idle minutes, when its tab closes, when your client disconnects, or when the user closes it; a later call naming it is told which.",
+    "Answers a viewport id. Every render and every edit that sets layout takes it and an action, and refuses without them; the box frames what each call drew or changed. label is the box's first label; each later call's action (\"Route USB_DP\") replaces it with what is happening now. A connection holds one per workspace: calling this again there relabels and moves it, answering the same id. A document no tab holds opens behind the active one; the user's view never moves. Close it with viewport_close when its block of work is done. It also closes after 10 idle minutes, when its tab closes, when your client disconnects, or when the user closes it; a later call naming it is told which.",
   input: s.object({
     board: s
       .string()

@@ -48,20 +48,26 @@ describe('agent sessions', () => {
 })
 
 describe('viewport routes', () => {
-  it('keeps one id per connection, unique across windows, and forgets it as the connection ends', () => {
+  it('keeps one id per connection and workspace, unique across windows, and forgets them as the connection ends', () => {
     const routes = createAgentViewportRoutes()
-    const mine = routes.idFor('c1')
-    routes.opened(mine, 1, 'c1')
-    expect(routes.idFor('c1')).toBe(mine)
-    const theirs = routes.idFor('c2')
-    routes.opened(theirs, 2, 'c2')
-    const anonymous = routes.idFor(undefined)
-    expect(new Set([mine, theirs, anonymous]).size).toBe(3)
+    const mine = routes.idFor('c1', 'ws_a')
+    routes.opened(mine, 1, 'c1', 'ws_a')
+    expect(routes.idFor('c1', 'ws_a')).toBe(mine)
+    // The same connection in another workspace: a subagent beside the first.
+    const beside = routes.idFor('c1', 'ws_b')
+    routes.opened(beside, 3, 'c1', 'ws_b')
+    const theirs = routes.idFor('c2', 'ws_a')
+    routes.opened(theirs, 2, 'c2', 'ws_a')
+    const anonymous = routes.idFor(undefined, 'ws_a')
+    expect(new Set([mine, beside, theirs, anonymous]).size).toBe(4)
     expect(routes.windowOf(theirs)).toBe(2)
-    expect(routes.end('c1')).toEqual({ id: mine, window: 1 })
-    expect(routes.end('c1')).toBeNull()
+    expect(routes.end('c1')).toEqual([
+      { id: mine, window: 1 },
+      { id: beside, window: 3 }
+    ])
+    expect(routes.end('c1')).toEqual([])
     // A closed one is still routed, so its window can say why it closed.
     expect(routes.windowOf(mine)).toBe(1)
-    expect(routes.idFor('c1')).not.toBe(mine)
+    expect(routes.idFor('c1', 'ws_a')).not.toBe(mine)
   })
 })

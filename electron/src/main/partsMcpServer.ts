@@ -59,9 +59,9 @@ const LINGER_MS = 2000
 export const SESSION_HEADER = 'mcp-session-id'
 
 /**
- * The workspace a client acts in, named by the client (`workspaces.ts`). It
- * attaches a session that is not attached yet, which is how an agent tab starts
- * in its own workspace; a client that keeps no session sends it on every call.
+ * The workspace a client acts in, named on every call (`workspaces.ts`): an agent
+ * tab sends its window's, and the Python client the one it connected with. A
+ * call's own `workspace` argument wins over it (`ops/registry.ts`).
  */
 export const WORKSPACE_HEADER = 'x-goatcad-workspace'
 
@@ -185,8 +185,6 @@ export interface PartsMcpServerOptions {
   trusted?: boolean
   /** Agent connections (`mcpSessions.ts`). Without it no session id is minted or read. */
   sessions?: McpSessions
-  /** Attach a session that is not attached yet to the workspace it names. */
-  attach?: (connection: string, workspace: string) => void
 }
 
 export interface PartsMcpServerHandle {
@@ -254,7 +252,7 @@ export async function handleRequest(
       req.method ?? 'GET',
       path,
       parsedBody,
-      withConnection(options.context, sessionOf(req, options), workspaceOf(req), options)
+      withConnection(options.context, sessionOf(req, options), workspaceOf(req))
     )
     sendJson(res, answer?.status ?? 404, answer?.body ?? { error: 'not found' })
     return
@@ -335,7 +333,7 @@ export async function handleRequest(
   const session =
     initializing && options.sessions ? options.sessions.mint() : sessionOf(req, options)
   if (initializing && session) res.setHeader(SESSION_HEADER, session)
-  const context = withConnection(options.context, session, workspaceOf(req), options)
+  const context = withConnection(options.context, session, workspaceOf(req))
 
   const responses = (
     await Promise.all(messages.map((message) => handleMcpMessage(message, context)))
@@ -362,22 +360,17 @@ const workspaceOf = (req: IncomingMessage): string | null => {
   return isSessionId(value) ? value : null
 }
 
-/** The context an operation runs in: the server's, with the call's connection,
- *  or for a client without one the workspace it names. A workspace named beside
- *  a session attaches the session, if it is not attached yet. */
+/** The context an operation runs in: the server's, with the call's connection
+ *  and the workspace its client names. */
 const withConnection = (
   context: OpContext,
   session: string | null,
-  workspace: string | null,
-  options: PartsMcpServerOptions
-): OpContext => {
-  if (session && workspace) options.attach?.(session, workspace)
-  return session
-    ? { ...context, connection: session }
-    : workspace
-      ? { ...context, workspace }
-      : context
-}
+  workspace: string | null
+): OpContext => ({
+  ...context,
+  ...(session ? { connection: session } : {}),
+  ...(workspace ? { workspace } : {})
+})
 
 /** Open the SSE stream and hold it, with a heartbeat, until the client drops it. */
 const holdStream = (

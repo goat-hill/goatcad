@@ -13,7 +13,7 @@
  * transport would; each answer goes back as one line. The session the
  * `initialize` mints rides on every later call, and a GET stream held for it
  * tells the app when the client is gone. `GOATCAD_WORKSPACE`, set by a GoatCAD
- * terminal tab, attaches the session to that tab's workspace (`workspaces.ts`).
+ * terminal tab, names that tab's workspace on every call (`workspaces.ts`).
  *
  * Electron-free: the launch and the token are injected, so a test relays to a
  * server on an ephemeral port.
@@ -31,7 +31,7 @@ export interface RelayOptions {
   launch(): void
   /** The stored token, for a port or pipe that asks for one. */
   token(): Promise<string | null>
-  /** A workspace id to attach the session to. */
+  /** A workspace id every call names. */
   workspace?: string
   input: NodeJS.ReadableStream
   output: NodeJS.WritableStream

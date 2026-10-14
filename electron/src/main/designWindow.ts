@@ -58,8 +58,7 @@ const holds = (state: DesignWindowState, named: string): boolean => {
 }
 
 /**
- * The window to ask, or a refusal, for a request from a connection attached to
- * `workspace`. Null when the workspace has no live window.
+ * The window to ask, or a refusal, for a request acting in `workspace`. Null when the workspace has no live window.
  */
 export const pickDesignWindow = (
   request: Record<string, unknown>,

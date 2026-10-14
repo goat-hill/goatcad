@@ -20,8 +20,9 @@ import { fail, succeed, type OpErrorCode, type OpOutcome } from './errors'
 export const DESIGN_REMEDY: Record<string, string> = {
   'no-window':
     'The workspace has no live renderer. Call workspace_list; workspace_start makes a new one.',
-  'no-workspace':
-    'This connection acts in no workspace yet; the candidates are the open ones. Call workspace_list, then workspace_attach with an id, or workspace_start with a folder or project.',
+  'no-workspace': 'No workspace is open. Start one with workspace_start on a folder or project.',
+  'workspace-required':
+    'Several workspaces are open and the call named none; the candidates are their ids. Pass workspace with one (workspace_list says which is which), or start your own with workspace_start.',
   'workspace-not-found':
     'No workspace has that id; ids last one app run. Call workspace_list for the open ones.',
   'window-not-found':
@@ -29,13 +30,11 @@ export const DESIGN_REMEDY: Record<string, string> = {
   'window-required':
     'The workspace has several windows; the candidates are their ids. Pass window with one.',
   'file-in-workspace':
-    'Another workspace holds that file or its project; the candidate is its id. Call workspace_attach with it to work there.',
+    'Another workspace holds that file or its project; the candidate is its id. Pass it as workspace to work there.',
   'file-in-window':
     'That file is open in another window of this workspace; the candidate is its id. Pass that window, or close the file there first.',
-  'no-connection':
-    'This client sends no Mcp-Session-Id, so it cannot be attached. Send one, or name the workspace on every call with the X-GoatCAD-Workspace header.',
   'project-in-workspace':
-    'Another workspace already holds that project or folder; the candidate is its id. Call workspace_attach with it.',
+    'Another workspace already holds that project or folder; the candidate is its id. Pass it as workspace to work there.',
   'no-bridge': 'This server cannot reach the app window. Report it; no argument works around it.',
   'no-schematic':
     'No sheet was named, none is open, and the project has no root sheet (the one named after the project, or its only one). Pass sheet with a file name, or ask the user which design they mean.',
@@ -249,13 +248,13 @@ export const DESIGN_REMEDY: Record<string, string> = {
 export const DESIGN_CODE: Record<string, OpErrorCode> = {
   'no-window': 'no-document',
   'no-workspace': 'refused',
+  'workspace-required': 'invalid-args',
   'workspace-not-found': 'not-found',
   'window-not-found': 'not-found',
   'window-required': 'invalid-args',
   'file-in-workspace': 'conflict',
   'file-in-window': 'conflict',
   'project-in-workspace': 'conflict',
-  'no-connection': 'refused',
   'no-bridge': 'internal',
   'no-schematic': 'no-document',
   'sheet-not-found': 'not-found',

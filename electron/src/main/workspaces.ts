@@ -8,9 +8,10 @@
  * shown still has one renderer, hidden, holding its documents; its first window
  * is that renderer shown, so undo and unsaved edits carry over.
  *
- * An agent connection (`mcpSessions.ts`) attaches to one workspace and every
- * call it makes acts there. Nothing here reads focus: which window the person
- * is looking at never decides where an agent writes.
+ * A call acts in the workspace it names (`workspace`, or a client's
+ * `X-GoatCAD-Workspace` header), else in the only one open; with several open
+ * and none named it is refused (`resolveWorkspace`). Nothing here reads focus:
+ * which window the person is looking at never decides where an agent writes.
  *
  * Pure and Electron-free: `index.ts` owns the windows and tells this module what
  * they hold; `partsMcpBridge.ts` asks it where a request goes.
@@ -43,7 +44,6 @@ export interface WorkspaceRow {
   project: { path: string; name: string } | null
   /** Empty when the workspace has no window. */
   windows: WindowRow[]
-  connections: number
 }
 
 export interface Workspaces {
@@ -76,9 +76,9 @@ export interface Workspaces {
   /** The BrowserWindow id behind a `win_…` id. */
   windowById(id: string): number | null
   windowKey(window: number): string
-  attach(connection: string, id: string): void
-  detach(connection: string): void
-  attachedTo(connection: string | undefined): Workspace | null
+  /** The connection that started a workspace owns it; a hidden one goes when that connection does. */
+  own(id: string, connection: string): void
+  ownedBy(connection: string): Workspace[]
   row(workspace: Workspace, files: (window: number) => string[]): WorkspaceRow
 }
 
@@ -112,7 +112,7 @@ export const createWorkspaces = (
   const byId = new Map<string, Workspace>()
   const byWindow = new Map<number, Workspace>()
   const windowKeys = new Map<number, string>()
-  const attached = new Map<string, string>()
+  const owners = new Map<string, string>()
 
   const windowKey = (window: number): string => {
     let key = windowKeys.get(window)
@@ -139,7 +139,7 @@ export const createWorkspaces = (
 
   const end = (workspace: Workspace): void => {
     byId.delete(workspace.id)
-    for (const [connection, id] of attached) if (id === workspace.id) attached.delete(connection)
+    owners.delete(workspace.id)
   }
 
   return {
@@ -203,20 +203,15 @@ export const createWorkspaces = (
       return null
     },
     windowKey,
-    attach(connection, id) {
-      if (byId.has(id)) attached.set(connection, id)
+    own(id, connection) {
+      if (byId.has(id)) owners.set(id, connection)
     },
-    detach(connection) {
-      attached.delete(connection)
-    },
-    attachedTo(connection) {
-      if (connection === undefined) return null
-      const id = attached.get(connection)
-      return id === undefined ? null : (byId.get(id) ?? null)
-    },
+    ownedBy: (connection) =>
+      [...owners].flatMap(([id, owner]) => {
+        const workspace = owner === connection ? byId.get(id) : undefined
+        return workspace ? [workspace] : []
+      }),
     row(workspace, files) {
-      let connections = 0
-      for (const id of attached.values()) if (id === workspace.id) connections += 1
       return {
         id: workspace.id,
         root: workspace.root,
@@ -228,8 +223,7 @@ export const createWorkspaces = (
           : null,
         windows: workspace.hidden
           ? []
-          : workspace.windows.map((window) => ({ id: windowKey(window), files: files(window) })),
-        connections
+          : workspace.windows.map((window) => ({ id: windowKey(window), files: files(window) }))
       }
     }
   }
@@ -238,10 +232,36 @@ export const createWorkspaces = (
 /** The app's workspaces, one set per process. */
 export const workspaces = createWorkspaces()
 
-/** The workspace a call acts in: the one it names for itself, else its connection's. */
-export const callerWorkspace = (
-  caller: { connection?: string; workspace?: string },
+/**
+ * The workspace a call acts in: the one it names, else the only one open. Two
+ * or more open and none named is refused rather than guessed, since one of them
+ * may be the person's own.
+ */
+export const resolveWorkspace = (
+  named: string | undefined,
   registry: Workspaces = workspaces
-): Workspace | null =>
-  (caller.workspace !== undefined ? registry.get(caller.workspace) : null) ??
-  registry.attachedTo(caller.connection)
+): { workspace: Workspace } | { error: string; detail: string; candidates: string[] } => {
+  const open = registry.all()
+  const ids = open.map((workspace) => workspace.id)
+  if (named !== undefined) {
+    const workspace = registry.get(named)
+    return workspace
+      ? { workspace }
+      : {
+          error: 'workspace-not-found',
+          detail: `No workspace is called ${named}.`,
+          candidates: ids
+        }
+  }
+  if (open.length === 1) return { workspace: open[0] }
+  const listed = open
+    .map((workspace) => `${workspace.id} (${workspace.project ?? workspace.root ?? 'no folder'})`)
+    .join(', ')
+  return open.length === 0
+    ? { error: 'no-workspace', detail: 'No workspace is open.', candidates: [] }
+    : {
+        error: 'workspace-required',
+        detail: `${open.length} workspaces are open: ${listed}. Pass workspace.`,
+        candidates: ids
+      }
+}

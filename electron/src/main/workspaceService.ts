@@ -1,5 +1,5 @@
 /**
- * The `workspace.*` ops' half in main: starting, attaching, retargeting and
+ * The `workspace.*` ops' half in main: starting, retargeting and
  * closing workspaces and their windows (`workspaces.ts`, `ops/workspace/`).
  *
  * Electron-free: `index.ts`, which owns the windows, supplies them as
@@ -9,9 +9,9 @@
 import { statSync } from 'node:fs'
 import { dirname } from 'node:path'
 import type { McpDesignRequest } from '../preload/mcpTypes'
-import type { Caller, DesignOutcome, WorkspaceService } from './ops/context'
+import type { DesignOutcome, WorkspaceService } from './ops/context'
 import {
-  callerWorkspace,
+  resolveWorkspace,
   samePath,
   type Workspace,
   type WorkspaceRow,
@@ -34,8 +34,6 @@ export interface WorkspaceWindows {
   close(window: number): void
   removeTab(window: number, path: string): void
   ask(window: number, request: McpDesignRequest): Promise<DesignOutcome>
-  /** A connection left its workspace: its viewport closes. */
-  leave(connection: string): void
 }
 
 type Refusal = { ok: false; error: string; detail?: string; candidates?: string[] }
@@ -95,13 +93,6 @@ export const createWorkspaceService = (
     return { root: folder ?? null, project: project ?? null }
   }
 
-  const attachTo = (caller: Caller, workspace: Workspace): void => {
-    if (caller.connection === undefined) return
-    const before = registry.attachedTo(caller.connection)
-    if (before && before !== workspace) windows.leave(caller.connection)
-    registry.attach(caller.connection, workspace.id)
-  }
-
   /** Every unsaved document in these windows, asked of each renderer. */
   const unsaved = async (ids: readonly number[]): Promise<string[]> => {
     const paths: string[] = []
@@ -118,31 +109,33 @@ export const createWorkspaceService = (
   return {
     list: () => registry.all().map(row),
 
-    attached(caller) {
-      const workspace = callerWorkspace(caller, registry)
-      return workspace ? row(workspace) : null
+    resolve(caller) {
+      const resolved = resolveWorkspace(caller.workspace, registry)
+      return 'workspace' in resolved
+        ? { ok: true, value: row(resolved.workspace) }
+        : { ok: false, ...resolved }
     },
 
-    async start(caller, args) {
+    async start(args, owner) {
       const placed = place(args.root, args.project, null)
       if ('ok' in placed) return placed
       const window = windows.open({ ...placed, tabs: [] }, { hidden: !args.openWindow })
       const workspace = registry.ofWindow(window)
       if (!workspace) return refuse('no-window', 'The new workspace has no window.')
-      attachTo(caller, workspace)
+      if (owner !== undefined) registry.own(workspace.id, owner)
       return { ok: true, value: row(workspace) }
     },
 
-    attach(caller, id) {
-      const workspace = registry.get(id)
-      if (!workspace) return notFound(id)
-      if (caller.connection === undefined)
-        return refuse(
-          'no-connection',
-          'This client sends no session id, so it cannot be attached to anything.'
-        )
-      attachTo(caller, workspace)
-      return { ok: true, value: row(workspace) }
+    async release(connection) {
+      for (const workspace of registry.ownedBy(connection)) {
+        if (!workspace.hidden) continue
+        const [window] = workspace.windows
+        // Work nobody has seen is shown rather than thrown away.
+        if ((await unsaved([window])).length) {
+          windows.show(window)
+          registry.reveal(workspace.id)
+        } else windows.close(window)
+      }
     },
 
     async update(args) {

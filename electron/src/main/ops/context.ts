@@ -76,8 +76,9 @@ export interface Caller {
   /** The agent connection the call came on (`mcpSessions.ts`): its MCP session, or
    *  the Python client's id. Absent when the caller sends none. */
   connection?: string
-  /** A workspace the call names for itself (`partsMcpServer.ts`, `WORKSPACE_HEADER`),
-   *  for a client that keeps no connection. Wins over the connection's. */
+  /** The workspace the call names: its `workspace` argument (`ops/registry.ts`),
+   *  else the client's `X-GoatCAD-Workspace` header (`partsMcpServer.ts`). Absent,
+   *  the only open workspace is meant (`workspaces.ts`, `resolveWorkspace`). */
   workspace?: string
 }
 
@@ -93,14 +94,17 @@ export type WorkspaceOutcome<T> =
 /** What the workspace ops reach (`workspaces.ts`); the app serves it, since it owns the windows. */
 export interface WorkspaceService {
   list(): WorkspaceRow[]
-  /** A new workspace; attaches the caller. */
+  /** A new workspace, owned by `owner`, the starting connection: one with no
+   *  window goes when that connection ends (`release`). */
   start(
-    caller: Caller,
-    args: { root?: string; project?: string; openWindow: boolean }
+    args: { root?: string; project?: string; openWindow: boolean },
+    owner?: string
   ): Promise<WorkspaceOutcome<WorkspaceRow>>
-  attach(caller: Caller, workspace: string): WorkspaceOutcome<WorkspaceRow>
-  /** The caller's workspace, or null. */
-  attached(caller: Caller): WorkspaceRow | null
+  /** A connection ended: each workspace with no window it started closes, or
+   *  shows its window when it holds unsaved edits. */
+  release(connection: string): Promise<void>
+  /** The workspace a call acts in, or why it has none (`resolveWorkspace`). */
+  resolve(caller: Caller): WorkspaceOutcome<WorkspaceRow>
   update(args: {
     workspace: string
     root?: string
@@ -119,8 +123,8 @@ export interface OpContext extends Caller {
   /** Raised for the app to act on. Collected rather than performed here so this
    *  tree stays pure and the server decides what a "window" even is. */
   emit?: (effect: OpEffect) => void
-  /** The folder of the caller's workspace, null when it has none or the caller
-   *  is attached to none. Injected for the same reason `emit` is. */
+  /** The folder of the caller's workspace, null when it has none or none
+   *  resolves. Injected for the same reason `emit` is. */
   project?: (caller: Caller) => string | null
   workspaces?: WorkspaceService
   /** The library index, already built and already incrementally maintained by

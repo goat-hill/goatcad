@@ -369,7 +369,6 @@ describe('over the wire', () => {
 describe('agent connections', () => {
   const asked: McpDesignRequest[] = []
   const callers: Caller[] = []
-  const attached: Array<[string, string]> = []
   const ended: string[] = []
   let sessions: ReturnType<typeof createMcpSessions>
   let held: PartsMcpServerHandle
@@ -382,7 +381,6 @@ describe('agent connections', () => {
       token: TOKEN,
       port: 0,
       sessions,
-      attach: (connection, workspace) => void attached.push([connection, workspace]),
       context: {
         parts: service,
         design: async (request, caller) => {
@@ -427,12 +425,17 @@ describe('agent connections', () => {
     expect(asked.at(-1)).not.toHaveProperty('connection')
   })
 
-  it('attaches a session to the workspace it names, and names it per call without one', async () => {
+  it('names the workspace its client sends on every call, and lets the argument win', async () => {
     await openViewport({ 'mcp-session-id': 'tab-1', 'x-goatcad-workspace': 'ws_tab' })
-    expect(attached).toContainEqual(['tab-1', 'ws_tab'])
-    expect(callers.at(-1)).toEqual({ connection: 'tab-1' })
+    expect(callers.at(-1)).toEqual({ connection: 'tab-1', workspace: 'ws_tab' })
     await openViewport({ 'x-goatcad-workspace': 'ws_tab' })
     expect(callers.at(-1)).toEqual({ workspace: 'ws_tab' })
+    await fetch(`${base}/v1/ops/viewport.open`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', ...auth, 'x-goatcad-workspace': 'ws_tab' },
+      body: JSON.stringify({ board: 'b.kicad_pcb', label: 'x', workspace: 'ws_mine' })
+    })
+    expect(callers.at(-1)).toEqual({ workspace: 'ws_mine' })
   })
 
   it('takes a client-made id over /v1 as its connection', async () => {

@@ -26,14 +26,12 @@ interface Fake {
 
 let registry: Workspaces
 let fakes: Map<number, Fake>
-let left: string[]
 let service: WorkspaceService
 
 beforeEach(() => {
   let count = 0
   registry = createWorkspaces({ newId: (prefix) => `${prefix}_${++count}` })
   fakes = new Map()
-  left = []
   let windowId = 0
   const windows: WorkspaceWindows = {
     open(init, { hidden, join }) {
@@ -58,17 +56,13 @@ beforeEach(() => {
       fake.asked.push(request)
       if (request.kind === 'unsaved-files') return { ok: true, payload: { unsaved: fake.unsaved } }
       return { ok: true, payload: { project: null } }
-    },
-    leave: (connection) => void left.push(connection)
+    }
   }
   service = createWorkspaceService(registry, windows)
 })
 
-const started = async (
-  args: Parameters<WorkspaceService['start']>[1],
-  connection = 'c'
-): Promise<WorkspaceRow> => {
-  const answer = await service.start({ connection }, args)
+const started = async (args: Parameters<WorkspaceService['start']>[0]): Promise<WorkspaceRow> => {
+  const answer = await service.start(args)
   if (!answer.ok) throw new Error(answer.error)
   return answer.value
 }
@@ -79,10 +73,9 @@ describe('the workspace service', () => {
     expect(row).toMatchObject({
       root: canary,
       project: { name: 'canary' },
-      windows: [],
-      connections: 1
+      windows: []
     })
-    expect(service.attached({ connection: 'c' })?.id).toBe(row.id)
+    expect(service.resolve({})).toMatchObject({ ok: true, value: { id: row.id } })
     expect([...fakes.values()][0].shown).toBe(false)
   })
 
@@ -92,27 +85,47 @@ describe('the workspace service', () => {
       { project: join(canary, 'canary.kicad_pro'), openWindow: false },
       { root: canary, openWindow: false }
     ])
-      await expect(service.start({ connection: 'd' }, args)).resolves.toMatchObject({
+      await expect(service.start(args)).resolves.toMatchObject({
         ok: false,
         error: 'project-in-workspace',
         candidates: [first.id]
       })
     await expect(
-      service.start({}, { project: join(canary, 'missing.kicad_pro'), openWindow: false })
+      service.start({ project: join(canary, 'missing.kicad_pro'), openWindow: false })
     ).resolves.toMatchObject({ ok: false, error: 'file-not-found' })
   })
 
-  it('attaches by id, closing the viewport left behind', async () => {
+  it('resolves a call by the workspace it names once several are open', async () => {
     const a = await started({ root: canary, openWindow: true })
-    const b = await started({ root: pedal, openWindow: true }, 'other')
-    expect(service.attach({ connection: 'c' }, b.id)).toMatchObject({ ok: true })
-    expect(left).toEqual(['c'])
-    expect(service.attach({ connection: 'c' }, 'ws_nope')).toMatchObject({
+    const b = await started({ root: pedal, openWindow: true })
+    expect(service.resolve({})).toMatchObject({ ok: false, error: 'workspace-required' })
+    expect(service.resolve({ workspace: b.id })).toMatchObject({ ok: true, value: { id: b.id } })
+    expect(service.resolve({ workspace: 'ws_nope' })).toMatchObject({
       ok: false,
       error: 'workspace-not-found',
       candidates: [a.id, b.id]
     })
-    expect(service.attach({}, a.id)).toMatchObject({ ok: false, error: 'no-connection' })
+  })
+
+  it('closes the hidden workspaces a connection started when it ends, showing any with unsaved edits', async () => {
+    const clean = await service.start({ root: canary, openWindow: false }, 'agent')
+    const dirty = await service.start({ root: pedal, openWindow: false }, 'agent')
+    if (!clean.ok || !dirty.ok) throw new Error('not started')
+    const [dirtyWindow] = registry.get(dirty.value.id)!.windows
+    fakes.get(dirtyWindow)!.unsaved = ['/pedal.kicad_sch']
+    await service.release('someone-else')
+    expect(registry.all()).toHaveLength(2)
+    await service.release('agent')
+    expect(registry.get(clean.value.id)).toBeNull()
+    expect(registry.get(dirty.value.id)).toMatchObject({ hidden: false })
+    expect(fakes.get(dirtyWindow)!.shown).toBe(true)
+  })
+
+  it('leaves a workspace with a window to the person when its connection ends', async () => {
+    const shown = await service.start({ root: canary, openWindow: true }, 'agent')
+    if (!shown.ok) throw new Error('not started')
+    await service.release('agent')
+    expect(registry.get(shown.value.id)).not.toBeNull()
   })
 
   it('shows a background workspace as its first window, with what it holds', async () => {

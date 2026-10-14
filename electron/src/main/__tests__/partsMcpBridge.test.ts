@@ -89,7 +89,7 @@ const replyTo = (win: FakeWindow, reply: Record<string, unknown>): void => {
 
 let connections = 0
 
-/** One workspace over these windows, and a connection attached to it. */
+/** One workspace over these windows, and a caller naming it. */
 const inWorkspace = (
   windows: FakeWindow[],
   options: { hidden?: boolean; root?: string } = {}
@@ -102,15 +102,13 @@ const inWorkspace = (
     hidden: options.hidden
   })
   for (const win of rest) workspaces.join(workspace.id, win.id)
-  const connection = `conn-${++connections}`
-  workspaces.attach(connection, workspace.id)
-  return { connection, workspace: workspace.id }
+  return { connection: `conn-${++connections}`, workspace: workspace.id }
 }
 
-/** Only the connection, as an MCP session asks. */
-const as = (caller: Caller): Caller => ({ connection: caller.connection })
-
 beforeEach(() => {
+  // The app's one registry: each test starts with nothing open.
+  for (const open of workspaces.all())
+    for (const window of [...open.windows]) workspaces.leave(window)
   handlers.clear()
   focused = null
   all = []
@@ -126,7 +124,7 @@ describe('the design bridge', () => {
   it('sends to the window of the attached workspace and resolves with its payload', async () => {
     const win = makeWindow()
     all = [win]
-    const caller = as(inWorkspace([win]))
+    const caller = inWorkspace([win])
 
     const pending = requestDesign({ kind: 'describe-schematic' }, caller)
     expect(win.sent[0].channel).toBe('mcp:design-request')
@@ -142,7 +140,7 @@ describe('the design bridge', () => {
     const win = makeWindow({ minimized: true })
     all = [win]
 
-    const pending = requestDesign({ kind: 'describe-schematic' }, as(inWorkspace([win])))
+    const pending = requestDesign({ kind: 'describe-schematic' }, inWorkspace([win]))
     expect(win.restored).toBe(1)
     expect(win.shown).toBe(0)
     replyTo(win, { ok: true, payload: {} })
@@ -154,7 +152,7 @@ describe('the design bridge', () => {
     // few seconds is a focus steal from the terminal the person is typing in.
     const hidden = makeWindow({ visible: false })
     all = [hidden]
-    const first = requestDesign({ kind: 'describe-schematic' }, as(inWorkspace([hidden])))
+    const first = requestDesign({ kind: 'describe-schematic' }, inWorkspace([hidden]))
     expect(hidden.shownInactive).toBe(1)
     expect(hidden.shown).toBe(0)
     replyTo(hidden, { ok: true, payload: {} })
@@ -162,7 +160,7 @@ describe('the design bridge', () => {
 
     const visible = makeWindow()
     all = [visible]
-    const second = requestDesign({ kind: 'describe-schematic' }, as(inWorkspace([visible])))
+    const second = requestDesign({ kind: 'describe-schematic' }, inWorkspace([visible]))
     expect(visible.shown + visible.shownInactive + visible.restored).toBe(0)
     replyTo(visible, { ok: true, payload: {} })
     await second
@@ -174,7 +172,7 @@ describe('the design bridge', () => {
     all = [theirs, mine]
     inWorkspace([theirs])
     focused = theirs
-    const pending = requestDesign({ kind: 'describe-schematic' }, as(inWorkspace([mine])))
+    const pending = requestDesign({ kind: 'describe-schematic' }, inWorkspace([mine]))
     expect(theirs.sent).toHaveLength(0)
     expect(mine.sent).toHaveLength(1)
     replyTo(mine, { ok: true, payload: {} })
@@ -186,7 +184,7 @@ describe('the design bridge', () => {
     all = [unseen]
     const pending = requestDesign(
       { kind: 'describe-schematic' },
-      as(inWorkspace([unseen], { hidden: true }))
+      inWorkspace([unseen], { hidden: true })
     )
     expect(unseen.shown + unseen.shownInactive + unseen.restored).toBe(0)
     expect(unseen.sent).toHaveLength(1)
@@ -205,7 +203,7 @@ describe('the design bridge', () => {
       { id: mine.id, key: 'win_b', workspace: caller.workspace, root: '/p', tabPaths: [] }
     ])
     await expect(
-      requestDesign({ kind: 'describe-schematic', sheet: '/q/main.kicad_sch' }, as(caller))
+      requestDesign({ kind: 'describe-schematic', sheet: '/q/main.kicad_sch' }, caller)
     ).resolves.toMatchObject({
       ok: false,
       error: 'file-in-workspace',
@@ -228,35 +226,53 @@ describe('the design bridge', () => {
     const dead = makeWindow({ destroyed: true })
     const live = makeWindow()
     all = [dead, live]
-    const pending = requestDesign({ kind: 'describe-schematic' }, as(inWorkspace([dead, live])))
+    const pending = requestDesign({ kind: 'describe-schematic' }, inWorkspace([dead, live]))
     expect(dead.sent).toHaveLength(0)
     expect(live.sent).toHaveLength(1)
     replyTo(live, { ok: true, payload: {} })
     await pending
   })
 
-  it('refuses a connection attached to no workspace, listing the open ones', async () => {
+  it('acts in the only workspace open when a call names none', async () => {
     const win = makeWindow()
     all = [win]
-    const { workspace } = inWorkspace([win])
-    const answer = await requestDesign({ kind: 'describe-schematic' }, { connection: 'stray' })
-    expect(answer).toMatchObject({ ok: false, error: 'no-workspace' })
-    expect(answer.ok ? [] : answer.candidates).toContain(workspace)
-    expect(win.sent).toHaveLength(0)
+    inWorkspace([win])
+    const pending = requestDesign({ kind: 'describe-schematic' }, { connection: 'any' })
+    expect(win.sent).toHaveLength(1)
+    replyTo(win, { ok: true, payload: {} })
+    await pending
+  })
+
+  it('refuses a call naming none when several are open, listing them', async () => {
+    const a = makeWindow()
+    const b = makeWindow()
+    all = [a, b]
+    const first = inWorkspace([a])
+    const second = inWorkspace([b])
+    const answer = await requestDesign({ kind: 'describe-schematic' }, { connection: 'any' })
+    expect(answer).toMatchObject({
+      ok: false,
+      error: 'workspace-required',
+      candidates: [first.workspace, second.workspace]
+    })
+    expect(a.sent.length + b.sent.length).toBe(0)
+    await expect(
+      requestDesign({ kind: 'describe-schematic' }, { workspace: 'ws_gone' })
+    ).resolves.toMatchObject({ ok: false, error: 'workspace-not-found' })
   })
 
   it('answers no-window when the workspace has no live window', async () => {
     const win = makeWindow({ destroyed: true })
     all = [win]
     await expect(
-      requestDesign({ kind: 'describe-schematic' }, as(inWorkspace([win])))
+      requestDesign({ kind: 'describe-schematic' }, inWorkspace([win]))
     ).resolves.toMatchObject({ ok: false, error: 'no-window' })
   })
 
   it('correlates concurrent requests by id rather than by order', async () => {
     const win = makeWindow()
     all = [win]
-    const caller = as(inWorkspace([win]))
+    const caller = inWorkspace([win])
 
     const first = requestDesign({ kind: 'describe-schematic' }, caller)
     const second = requestDesign(
@@ -278,7 +294,7 @@ describe('the design bridge', () => {
   it('passes a refusal through as a typed error', async () => {
     const win = makeWindow()
     all = [win]
-    const caller = as(inWorkspace([win]))
+    const caller = inWorkspace([win])
     const pending = requestDesign(
       { kind: 'place-symbol', libId: 'Nope:Nope', at: { x: 0, y: 0 } },
       caller
@@ -294,7 +310,7 @@ describe('the design bridge', () => {
   it('ignores a reply for an id it is not holding', async () => {
     const win = makeWindow()
     all = [win]
-    const caller = as(inWorkspace([win]))
+    const caller = inWorkspace([win])
     const pending = requestDesign({ kind: 'describe-schematic' }, caller)
     handlers.get('mcp:design-reply')!({}, { id: 'design-not-mine', ok: true, payload: 'wrong' })
     replyTo(win, { ok: true, payload: 'right' })
@@ -305,7 +321,7 @@ describe('the design bridge', () => {
     vi.useFakeTimers()
     const win = makeWindow()
     all = [win]
-    const caller = as(inWorkspace([win]))
+    const caller = inWorkspace([win])
     const pending = requestDesign({ kind: 'describe-schematic' }, caller)
     vi.advanceTimersByTime(DESIGN_TIMEOUT_MS + 1)
     await expect(pending).resolves.toMatchObject({ ok: false, error: 'timeout' })
@@ -315,7 +331,7 @@ describe('the design bridge', () => {
     vi.useFakeTimers()
     const win = makeWindow()
     all = [win]
-    const caller = as(inWorkspace([win]))
+    const caller = inWorkspace([win])
     const pending = requestDesign({ kind: 'describe-schematic' }, caller)
     vi.advanceTimersByTime(DESIGN_TIMEOUT_MS + 1)
     replyTo(win, { ok: true, payload: 'too late' })
@@ -325,7 +341,7 @@ describe('the design bridge', () => {
   it('fails everything in flight when the app closes', async () => {
     const win = makeWindow()
     all = [win]
-    const caller = as(inWorkspace([win]))
+    const caller = inWorkspace([win])
     const pending = requestDesign({ kind: 'describe-schematic' }, caller)
     abortDesignRequests()
     await expect(pending).resolves.toMatchObject({ ok: false, error: 'app-closing' })
@@ -336,8 +352,6 @@ describe('the design bridge', () => {
     const b = makeWindow()
     all = [a, b]
     const { workspace } = inWorkspace([a, b])
-    workspaces.attach('conn-a', workspace)
-    workspaces.attach('conn-b', workspace)
     setDesignWindowSource(() => [
       { id: a.id, key: 'win_a', workspace, root: null, tabPaths: ['/p/x.kicad_pcb'] },
       { id: b.id, key: 'win_b', workspace, root: null, tabPaths: ['/p/y.kicad_sch'] }

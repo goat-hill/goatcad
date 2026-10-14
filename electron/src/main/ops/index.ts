@@ -27,7 +27,6 @@ import { projectClose } from './project/close'
 import { projectCreateFile } from './project/createFile'
 import { workspaceList } from './workspace/list'
 import { workspaceStart } from './workspace/start'
-import { workspaceAttach } from './workspace/attach'
 import { workspaceUpdate } from './workspace/update'
 import { workspaceClose } from './workspace/close'
 import { workspaceOpenWindow } from './workspace/openWindow'
@@ -132,7 +131,6 @@ import {
 const core = [
   workspaceList,
   workspaceStart,
-  workspaceAttach,
   workspaceUpdate,
   workspaceClose,
   workspaceOpenWindow,

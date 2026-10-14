@@ -405,8 +405,8 @@ describe('the renderer, on shapes the registry does not have yet', () => {
     expect(python.indexOf('must: str,')).toBeLessThan(python.indexOf('maybe: str | None = None,'))
   })
 
-  it('omits the bare star when there is nothing to keyword-separate', () => {
-    expect(probe(s.object({}))).toContain('    def verb(\n        self,\n    ) -> Any:')
+  it('gives an op with no arguments of its own the workspace one, keyword-only', () => {
+    expect(probe(s.object({}))).toContain('        *,\n        workspace: str | None = None,')
   })
 
   it('makes every argument keyword-only, so a new optional one is not breaking', () => {

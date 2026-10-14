@@ -22,7 +22,8 @@ describe('the stdio relay', () => {
   let dir: string
   let socketServer: PartsMcpServerHandle
   let portServer: PartsMcpServerHandle
-  const attached: Array<[string, string]> = []
+  /** The workspace each design call named. */
+  const named: Array<string | undefined> = []
   const ended: string[] = []
 
   beforeAll(async () => {
@@ -32,9 +33,13 @@ describe('the stdio relay', () => {
     const options = {
       token: TOKEN,
       sessions,
-      attach: (connection: string, workspace: string) =>
-        void attached.push([connection, workspace]),
-      context: { parts: service }
+      context: {
+        parts: service,
+        design: async (_request: unknown, caller: { workspace?: string }) => {
+          named.push(caller.workspace)
+          return { ok: true as const, payload: {} }
+        }
+      }
     }
     socketServer = await startPartsMcpServer({
       ...options,
@@ -101,21 +106,25 @@ describe('the stdio relay', () => {
   const session = [
     { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
     { jsonrpc: '2.0', method: 'notifications/initialized' },
-    { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'parts_status', arguments: {} } }
+    {
+      jsonrpc: '2.0',
+      id: 2,
+      method: 'tools/call',
+      params: { name: 'workspace_save', arguments: {} }
+    }
   ]
 
-  it('relays a session over the socket, attaching it to the workspace it names', async () => {
+  it('relays a session over the socket, naming its workspace on every call', async () => {
     const { answers, launched } = await relayed(session, { socket: true })
     expect(launched).toBe(0)
     // Two answers: the notification has none.
     expect(answers).toHaveLength(2)
     expect(answers[0]).toMatchObject({ id: 1, result: { serverInfo: { name: 'goatcad' } } })
     expect(answers[1]).toMatchObject({ id: 2, result: { isError: false } })
-    const [connection, workspace] = attached.at(-1)!
-    expect(workspace).toBe('ws_tab')
+    expect(named.at(-1)).toBe('ws_tab')
     // stdin closing ends the session.
     await new Promise((done) => setTimeout(done, 30))
-    expect(ended).toContain(connection)
+    expect(ended).toHaveLength(1)
   })
 
   it('falls back to the port with the token when there is no socket', async () => {
