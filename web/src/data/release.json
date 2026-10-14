@@ -1,10 +1,10 @@
 {
-  "version": "0.1.18",
-  "notesUrl": "https://github.com/goat-hill/goatcad/releases/tag/v0.1.18",
+  "version": "1.0.0",
+  "notesUrl": "https://github.com/goat-hill/goatcad/releases/tag/v1.0.0",
   "assets": {
-    "mac": "https://download.goatcad.com/releases/4f7013dc33ab2a013631d219/goatcad-0.1.18-arm64.dmg",
-    "win": "https://download.goatcad.com/releases/4f7013dc33ab2a013631d219/goatcad-0.1.18-setup.exe",
-    "linux": "https://download.goatcad.com/releases/4f7013dc33ab2a013631d219/goatcad-0.1.18.AppImage",
-    "linuxDeb": "https://download.goatcad.com/releases/4f7013dc33ab2a013631d219/goatcad_0.1.18_amd64.deb"
+    "mac": "https://download.goatcad.com/releases/4f7013dc33ab2a013631d219/goatcad-1.0.0-arm64.dmg",
+    "win": "https://download.goatcad.com/releases/4f7013dc33ab2a013631d219/goatcad-1.0.0-setup.exe",
+    "linux": "https://download.goatcad.com/releases/4f7013dc33ab2a013631d219/goatcad-1.0.0.AppImage",
+    "linuxDeb": "https://download.goatcad.com/releases/4f7013dc33ab2a013631d219/goatcad_1.0.0_amd64.deb"
   }
 }
