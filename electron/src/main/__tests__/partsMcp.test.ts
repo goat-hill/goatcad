@@ -247,6 +247,7 @@ describe('protocol framing', () => {
         modulePath: '/config/python/goatcad.py',
         examplePath: '/config/python/example_block.py',
         boardExamplePath: '/config/python/example_board.py',
+        guidePath: '/config/python/GUIDE.md',
         snippet: '',
         operationCount: 1
       })
@@ -254,6 +255,7 @@ describe('protocol framing', () => {
     const text = resultOf<InitializeResult>(withClient).instructions
     expect(text).toContain('/config/python/goatcad.py')
     expect(text).toContain('/config/python/example_board.py')
+    expect(text).toContain('/config/python/GUIDE.md')
     const without = await handleMcpMessage(initialize, ctx())
     expect(resultOf<InitializeResult>(without).instructions).not.toContain('The client is at')
   })
@@ -2275,6 +2277,7 @@ describe('app_scripting', () => {
           modulePath: '/config/python/goatcad.py',
           examplePath: '/config/python/example_block.py',
           boardExamplePath: '/config/python/example_board.py',
+          guidePath: '/config/python/GUIDE.md',
           snippet: 'import sys\nsys.path.insert(0, "/config/python")\nfrom goatcad import connect',
           operationCount: 22
         })

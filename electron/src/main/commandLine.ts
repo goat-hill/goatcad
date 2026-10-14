@@ -10,7 +10,7 @@
  */
 import { join } from 'node:path'
 import { app } from 'electron'
-import { PYTHON_DIR } from './agentScripting'
+import { PYTHON_DIR, PYTHON_GUIDE_FILE } from './agentScripting'
 import { readEndpoint } from './mcpEndpoint'
 import { claudeCode, codex, SERVER_NAME } from './partsMcpClients'
 import { DEFAULT_MCP_PORT, MCP_PATH } from './partsMcpServer'
@@ -88,6 +88,11 @@ const agentsHelp = (): string => {
     ),
     '',
     `Worked examples sit beside it in ${pythonPath}.`,
+    '',
+    `Next, read ${join(pythonPath, PYTHON_GUIDE_FILE)} before the first call.`,
+    'It is the client in a few thousand tokens: how to work, and every',
+    'operation with its arguments; goatcad.py is the full detail, and INIT.md',
+    'beside them how to start a project. The app rewrites them as it starts.',
     ''
   ].join('\n')
 }

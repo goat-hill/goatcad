@@ -184,6 +184,7 @@ import os
 import socket
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 import uuid
 from pathlib import Path
@@ -633,6 +634,11 @@ class GoatCAD:
     def ops(self) -> list[dict]:
         """Every operation this app has, with its summary and scope."""
         return self._get("/v1/ops").get("ops", [])
+
+    def describe(self, op: str) -> dict:
+        """One operation in full: guidance, input schema and examples, by its name
+        ("schematic.place_symbol"). GUIDE.md beside this file lists every name."""
+        return self._get("/v1/ops/" + urllib.parse.quote(op))
 
     def schema(self) -> dict:
         """Every input schema, versioned. What this file was generated from."""

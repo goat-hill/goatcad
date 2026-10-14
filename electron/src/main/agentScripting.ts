@@ -22,6 +22,7 @@ import { join } from 'node:path'
 import { registry } from './ops'
 import { renderPythonClient } from './ops/pythonClient'
 import { PYTHON_BOARD_EXAMPLE, PYTHON_EXAMPLE } from './ops/pythonRuntime'
+import { PYTHON_INIT_FILE, renderPythonGuide, renderPythonInit } from './pythonGuide'
 
 /** Directory added to `sys.path`; `goatcad.py` sits inside it. */
 export const PYTHON_DIR = 'python'
@@ -30,6 +31,8 @@ export const PYTHON_MODULE = 'goatcad.py'
 export const PYTHON_EXAMPLE_FILE = 'example_block.py'
 /** The board's: computed placement and tracks as one step, one refill, one check. */
 export const PYTHON_BOARD_EXAMPLE_FILE = 'example_board.py'
+/** The client's spec in a few thousand tokens: how to work and every operation (`pythonGuide.ts`). */
+export const PYTHON_GUIDE_FILE = 'GUIDE.md'
 
 export interface ScriptingInfo {
   /** The directory to put on `sys.path`. */
@@ -40,6 +43,8 @@ export interface ScriptingInfo {
   examplePath: string
   /** The board's worked example. */
   boardExamplePath: string
+  /** The client's spec: how to work, every operation's signature, starting a project. */
+  guidePath: string
   /** Two lines that make it importable, ready to paste. */
   snippet: string
   operationCount: number
@@ -52,6 +57,7 @@ export const scriptingInfo = (configDir: string): ScriptingInfo => {
     modulePath: join(pythonPath, PYTHON_MODULE),
     examplePath: join(pythonPath, PYTHON_EXAMPLE_FILE),
     boardExamplePath: join(pythonPath, PYTHON_BOARD_EXAMPLE_FILE),
+    guidePath: join(pythonPath, PYTHON_GUIDE_FILE),
     snippet: [
       'import sys',
       `sys.path.insert(0, ${JSON.stringify(pythonPath)})`,
@@ -97,7 +103,9 @@ export const writePythonClient = (configDir: string): void => {
     }
     const files: Array<[string, string]> = [
       [info.examplePath, renderPythonExample(info.pythonPath)],
-      [info.boardExamplePath, renderPythonExample(info.pythonPath, PYTHON_BOARD_EXAMPLE)]
+      [info.boardExamplePath, renderPythonExample(info.pythonPath, PYTHON_BOARD_EXAMPLE)],
+      [info.guidePath, renderPythonGuide(registry.list(), info.pythonPath)],
+      [join(info.pythonPath, PYTHON_INIT_FILE), renderPythonInit(registry.list())]
     ]
     const stale = files.filter(([path, text]) => read(path) !== text)
     if (existing === source && !stale.length) return

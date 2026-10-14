@@ -144,6 +144,7 @@ export interface OpContext extends Caller {
     modulePath: string
     examplePath: string
     boardExamplePath: string
+    guidePath: string
     snippet: string
     operationCount: number
   } | null

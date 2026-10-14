@@ -37,7 +37,7 @@ export const appScripting = defineOp({
       language: 'python',
       ...info,
       guidance:
-        "Read examplePath (a schematic block) or boardExamplePath (a board) first, then run the snippet. Errors carry the tools' `fix`. `with gc.transaction():` (a sheet) or `with gc.transaction(board=True):` (items edits only) makes one undo step; dry_run=True previews a batch."
+        "Read guidePath first: every operation's signature and summary, and how to work. Then examplePath (a schematic block) or boardExamplePath (a board), then run the snippet. Errors carry the tools' `fix`. `with gc.transaction():` (a sheet) or `with gc.transaction(board=True):` (items edits only) makes one undo step; dry_run=True previews a batch."
     })
   }
 })
