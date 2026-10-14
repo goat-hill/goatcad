@@ -18,6 +18,10 @@ const DEFAULT_S: Record<ParitySuite, number> = { board: 30, fill: 60, incrementa
  * twice its measured time (seconds measured in a comment).
  */
 const SLOW_S: Partial<Record<ParitySuite, Record<string, number>>> = {
+  board: {
+    // 30, the demos' copy; the QA copy, 7.
+    'vme-wren.kicad_pcb': 60
+  },
   fill: {
     // 57, the demos' copy.
     'vme-wren.kicad_pcb': 120,

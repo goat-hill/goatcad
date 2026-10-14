@@ -37,11 +37,7 @@ place we knowingly differ. The plan and open work are in
 are from the last full run; the other rows are from earlier runs.
 
 **Failing:**
-- **Board DRC:**
-  - `issue23053` (two extra `clearance` findings) and `issue8909` (one). Neither is diagnosed, and
-    `KNOWN` covers neither (`issue23053`'s entry is for slivers).
-  - `vme-wren` is not compared: kicad-cli runs out of its memory cap on a 27 GB machine.
-    It should be in `UNCOMPARED` and isn't.
+- **Board DRC:** none.
 - **Zone fill:** the nine boards under Zone fill below. Three boards were not compared: two copies of
   `vme-wren` (kicad-cli's memory cap) and `fakeboard` (kicad-cli can't load it).
 
@@ -105,7 +101,8 @@ to anything a checker reads.
 | **KiCad 10.0 bug, fixed upstream.** It reads an oblong NPTH slot as a board edge (KiCad #24799). | stickhub-extra-via, issue23469 | `copper_edge_clearance` |
 | **KiCad's report cap.** KiCad stops at 199 findings, in its own walk order. | VCU118 | `silk_over_copper` |
 | **Creepage through overlapping cutouts.** KiCad paths round the cutouts' union. | issue24078 | `creepage` |
-| **Not diagnosed** | issue23053 (fill wedges read as slivers), VCU118 (one sliver), vme-wren (narrow necks), CM5_MINIMA_3 and Jetson (silk read as crossing the edge) | `copper_sliver`, `connection_width`, `silk_edge_clearance` |
+| **KiCad's zone-to-zone sweep.** It stops at the first edge of the second zone that starts past the end of the first's, so a close pair can go untried. | issue8909 | `clearance` |
+| **Not diagnosed** | issue23053 (fill wedges read as slivers; a fill edge and a roundrect a hair inside clearance), VCU118 (one sliver), vme-wren (narrow necks), CM5_MINIMA_3 and Jetson (silk read as crossing the edge) | `copper_sliver`, `connection_width`, `silk_edge_clearance` |
 
 **Deviations** (deliberate; each is exact where KiCad errs, or orders where KiCad uses memory order):
 

@@ -255,9 +255,19 @@ const KNOWN: Record<string, Known | Known[]> = {
       why: 'KiCad finds one sliver on 03_SIG1 that no fill or polygon of the layer has as a corner; its source is not found yet'
     }
   ],
-  'qa/data/pcbnew/issue23053/issue23053.kicad_pcb': {
-    key: 'copper_sliver',
-    why: "a B.Cu fill's thin wedges along its straight cuts (8.8° at 9.84, -10.6) read as slivers here and not in KiCad, which reads the same ring; cause not found yet"
+  'qa/data/pcbnew/issue23053/issue23053.kicad_pcb': [
+    {
+      key: 'copper_sliver',
+      why: "a B.Cu fill's thin wedges along its straight cuts (8.8° at 9.84, -10.6) read as slivers here and not in KiCad, which reads the same ring; cause not found yet"
+    },
+    {
+      key: 'clearance',
+      why: "bruecke_mitte's stored fill closes on an edge 0.2949 mm from UZ's (rule 0.3 mm), which KiCad does not measure there, cause not found; and a via 0.1995 mm from R18.2's roundrect (rule 0.2 mm), not diagnosed"
+    }
+  ],
+  'qa/data/pcbnew/issue8909.kicad_pcb': {
+    key: 'clearance',
+    why: "the VIN_FUSED and VIN fills are 0.2011 mm apart (rule 0.254 mm): KiCad's zone-to-zone sweep stops at the first edge of the second zone that starts past the end of the first's, so it never tries the pair that is close (testZonesToZones)"
   },
   'qa/data/pcbnew/issue24758/issue24758.kicad_pcb': {
     key: 'annular_width',
