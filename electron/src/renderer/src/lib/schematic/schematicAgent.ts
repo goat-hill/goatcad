@@ -415,26 +415,21 @@ export function findSheetInTree(
  *
  * Accepts an absolute path or a bare file name, because a model that has seen
  * `schematic_describe` output has the path and one that has not has only a name.
- * With nothing named it takes the sheet in front of the user, else the only
- * schematic they have open, else the project's root sheet (`rootPath`), as a
- * board op takes the project's board — **never a guess between several open
- * tabs**, since picking the wrong one writes to the wrong sheet.
+ * With nothing named it takes the project's root sheet (`rootPath`), as a board
+ * op takes the project's board, else the only schematic open — **never the tab
+ * in front, and never a guess between several open tabs**: which tab a person
+ * is looking at must not decide where an agent writes (`main/workspaces.ts`).
  */
 export function resolveAgentSheet(
   sheet: string | undefined,
   context: {
     openTabs: readonly SheetCandidate[]
-    activePath: string | null
     files: readonly SheetTreeNode[]
     rootPath?: string | null
   }
 ): string | null {
   const open = context.openTabs.filter((tab) => isSchematic(tab.path))
-  if (!sheet) {
-    if (context.activePath && isSchematic(context.activePath)) return context.activePath
-    if (open.length === 1) return open[0].path
-    return context.rootPath ?? null
-  }
+  if (!sheet) return context.rootPath ?? (open.length === 1 ? open[0].path : null)
 
   const wanted = sheet.toLowerCase()
   const byPath = open.find((tab) => tab.path.toLowerCase() === wanted)

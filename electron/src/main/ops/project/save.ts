@@ -1,13 +1,4 @@
-/**
- * `project.save` — write open tabs with unsaved edits to disk.
- *
- * Every other mutation lands
- * on a dirty tab where Ctrl+Z reverses it; this is the one that crosses that
- * line, and it exists because the scripted loop cannot ask — a script that
- * wants `kicad-cli` on the result needs a file. The guard is the answer: it
- * lists exactly what was written, and the guidance tells the model that most
- * edits are not its to save. Works for any document kind a tab can hold.
- */
+/** `project.save` — the old name of `workspace.save`, kept for one release. */
 import { defineDesignOp } from '../registry'
 import { s } from '../schema'
 
@@ -15,9 +6,7 @@ export const projectSave = defineDesignOp({
   name: 'project.save',
   scope: 'project',
   mutates: true,
-  summary: 'Write open tabs with unsaved edits to disk: the named files, or every dirty one.',
-  guidance:
-    'Save only when the user asks or the next step needs the file on disk (kicad-cli, a script), and say which; unsaved edits stay undoable for the user. Any open document saves: schematic, board, library, text. The answer lists what was written and what is still unsaved; tell the user.',
+  summary: 'Deprecated: use workspace_save, which this is.',
   input: s.object({
     files: s
       .array(s.string().trim())

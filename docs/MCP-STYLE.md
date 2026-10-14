@@ -34,8 +34,9 @@ The same fact has the same name and shape in every op and on every document: she
 and footprint.
 
 - Names are camelCase (`maxPixels`, `dryRun`), and a name says what the value is, not its type.
-- **Which document**: `sheet` (a sheet file; default the open sheet, else the project's root
-  sheet) or `board` (a board file; default the project's one board).
+- **Which document**: `sheet` (a sheet file; default the project's root sheet, else the only
+  open one) or `board` (a board file; default the project's one board). A default never reads
+  the tab in front: which tab a person looks at must not decide where an agent writes.
 - **Which definition**: `symbol` or `footprint`, a library id `Nickname:Name`, or a placed
   reference with `sheet` or `board` for the design's copy. Every op that reads, writes, checks,
   renders, copies or deletes one takes it this way. Only an op that makes a new one takes `name`

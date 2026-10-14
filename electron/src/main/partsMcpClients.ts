@@ -38,6 +38,14 @@ export const promptCommand = (name: string): string => `/mcp__${SERVER_NAME}__${
  */
 export const TOKEN_ENV = 'GOATCAD_MCP_TOKEN'
 
+/**
+ * The environment variable an agent tab carries its workspace id in
+ * (`workspaces.ts`). Both CLIs send it as `X-GoatCAD-Workspace` on the session's
+ * `initialize`, which attaches the session to the tab's workspace, and the
+ * Python client attaches to it when a script started from the tab connects.
+ */
+export const WORKSPACE_ENV = 'GOATCAD_WORKSPACE'
+
 export type McpClientId = 'claude-code' | 'codex'
 
 export interface McpClient {
@@ -105,7 +113,14 @@ export const MCP_CLIENTS: McpClient[] = [claudeCode, codex]
  */
 export const claudeMcpConfig = (url: string): Record<string, unknown> => ({
   mcpServers: {
-    [SERVER_NAME]: { type: 'http', url, headers: { Authorization: `Bearer \${${TOKEN_ENV}}` } }
+    [SERVER_NAME]: {
+      type: 'http',
+      url,
+      headers: {
+        Authorization: `Bearer \${${TOKEN_ENV}}`,
+        'X-GoatCAD-Workspace': `\${${WORKSPACE_ENV}}`
+      }
+    }
   }
 })
 
@@ -131,5 +146,6 @@ export const writeClaudeMcpConfigFile = (dir: string, url: string): string => {
  */
 export const codexMcpOverrides = (url: string): string[] => [
   `mcp_servers.${SERVER_NAME}.url="${url}"`,
-  `mcp_servers.${SERVER_NAME}.bearer_token_env_var="${TOKEN_ENV}"`
+  `mcp_servers.${SERVER_NAME}.bearer_token_env_var="${TOKEN_ENV}"`,
+  `mcp_servers.${SERVER_NAME}.env_http_headers={"X-GoatCAD-Workspace"="${WORKSPACE_ENV}"}`
 ]

@@ -9,13 +9,13 @@
  * on the sheet.
  */
 import type { IndexRecord } from '../libraryIndexTypes'
-import type { OpContext } from './context'
+import { callerOf, type OpContext } from './context'
 import { fail, nearest, refused, type OpFailure, type OpOutcome } from './errors'
 
 export const libraryRecords = async (ctx: OpContext): Promise<IndexRecord[] | null> => {
   if (!ctx.library) return null
   const system = await ctx.library.system()
-  const projectPath = ctx.project?.() ?? null
+  const projectPath = ctx.project?.(callerOf(ctx)) ?? null
   const project = projectPath ? ctx.library.project(projectPath) : []
   if (!project.length) return system
   const byId = new Map(system.map((record) => [`${record.type}:${record.id}`, record]))

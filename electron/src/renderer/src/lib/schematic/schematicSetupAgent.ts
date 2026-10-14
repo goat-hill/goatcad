@@ -55,7 +55,7 @@ export const createSchematicSetupAgent = (
     if (!file)
       return {
         error: 'no-project',
-        detail: 'No project is open; project_open one first.'
+        detail: 'The workspace has no project; set one with workspace_update.'
       }
     const text = await ctx.readText(file)
     return text === null

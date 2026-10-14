@@ -25,7 +25,7 @@ export const bomGet = defineDesignOp({
     fields: s
       .array(s.string().trim())
       .describe(
-        'Columns after Reference, which is always first. Default Value, Footprint, Datasheet, MPN, Manufacturer. Generated columns, with or without ${}: QUANTITY (parts per row); DNP, EXCLUDE_FROM_BOM, EXCLUDE_FROM_BOARD ("yes"/"no"); Sheet; MODEL, whether the footprint\'s 3D model file is on this machine: resolved, missing, not-installed, none (no model linked), unknown (no such footprint), or empty (no footprint). MODEL reads the saved footprint, so a model attached on an unsaved tab shows after project_save.'
+        'Columns after Reference, which is always first. Default Value, Footprint, Datasheet, MPN, Manufacturer. Generated columns, with or without ${}: QUANTITY (parts per row); DNP, EXCLUDE_FROM_BOM, EXCLUDE_FROM_BOARD ("yes"/"no"); Sheet; MODEL, whether the footprint\'s 3D model file is on this machine: resolved, missing, not-installed, none (no model linked), unknown (no such footprint), or empty (no footprint). MODEL reads the saved footprint, so a model attached on an unsaved tab shows after workspace_save.'
       )
       .optional(),
     groupBy: s

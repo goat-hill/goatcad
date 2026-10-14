@@ -14,6 +14,7 @@
  * in the project's conventions (`board-intent.md`), where the user can read
  * and change it.
  */
+import { callerOf } from '../context'
 import { defineOp } from '../registry'
 import { s } from '../schema'
 import { fail, refused, succeed, type OpOutcome } from '../errors'
@@ -109,7 +110,7 @@ export const footprintCacheModel = defineOp({
         message: 'This build of the server has no model store.'
       })
     }
-    const projectPath = ctx.project?.() ?? null
+    const projectPath = ctx.project?.(callerOf(ctx)) ?? null
     if (!projectPath) {
       return fail({
         code: 'no-document',

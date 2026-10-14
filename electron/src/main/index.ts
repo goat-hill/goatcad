@@ -66,11 +66,19 @@ import type { SampleCatalog, SampleListResult, SampleOpenResult } from '../prelo
 import {
   mcpLaunch,
   registerPartsMcpIpc,
-  setProjectResolver,
+  setWorkspaceService,
   startPartsMcp,
   stopPartsMcp
 } from './partsMcpIpc'
-import { setDesignWindowSource } from './partsMcpBridge'
+import {
+  askWindow,
+  designWindowReady,
+  endAgentConnection,
+  expectDesignWindow,
+  setDesignWindowSource
+} from './partsMcpBridge'
+import { workspaces } from './workspaces'
+import { createWorkspaceService } from './workspaceService'
 import { writeClaudeMcpConfigFile } from './partsMcpClients'
 import type { ProjectChangeBatch } from '../preload/projectChangeTypes'
 import type { FabExportPayload, FabExportResult } from '../preload/fabTypes'
@@ -130,6 +138,9 @@ const sessionState = new Map<number, WindowSession>()
  */
 const closeApproved = new Set<number>()
 
+/** Windows an agent opened (`workspace.start`, `workspace.open_window`): no Welcome tab. */
+const agentOpened = new Set<number>()
+
 /**
  * Terminal-tab shells. Output is addressed to the window currently showing the
  * session rather than broadcast: a tab dragged between windows re-points its
@@ -154,7 +165,11 @@ const terminals = new TerminalSessionManager(
     mcp: () => mcpLaunch(),
     claudeMcpConfig: (url) =>
       writeClaudeMcpConfigFile(join(app.getPath('userData'), 'agent-hooks'), url),
-    theme: () => config().get().theme
+    theme: () => config().get().theme,
+    workspace: (owner) => {
+      const win = BrowserWindow.getAllWindows().find((w) => w.webContents.id === owner)
+      return win ? (workspaces.ofWindow(win.id)?.id ?? null) : null
+    }
   }
 )
 // Where an agent tab's hooks report what it is doing (§3.12). One loopback
@@ -214,8 +229,17 @@ const boundsAreOnScreen = (bounds: WindowBounds): boolean =>
  */
 const WINDOW_BACKGROUND: Record<AppTheme, string> = { dark: '#151c19', light: '#f0f8f4' }
 
-function createProjectWindow(session: Partial<WindowSession> = {}): BrowserWindow {
+/**
+ * A window on a workspace (`workspaces.ts`): a new one's, or another window of
+ * `workspace`. A `hidden` window is a workspace with no window: its renderer
+ * runs unseen until a window is opened on it.
+ */
+function createProjectWindow(
+  session: Partial<WindowSession> = {},
+  options: { workspace?: string; hidden?: boolean; agent?: boolean } = {}
+): BrowserWindow {
   const theme = config().get().theme
+  const hidden = options.hidden === true
   const bounds = session.bounds && boundsAreOnScreen(session.bounds) ? session.bounds : undefined
 
   const win = new BrowserWindow({
@@ -243,15 +267,28 @@ function createProjectWindow(session: Partial<WindowSession> = {}): BrowserWindo
       plugins: true,
       // The renderer applies the theme before its first paint from this,
       // rather than painting dark until its config read comes back.
-      additionalArguments: [`--goatcad-theme=${theme}`]
+      additionalArguments: [`--goatcad-theme=${theme}`],
+      // Unseen, it still answers agents at full speed; shown, it throttles again.
+      ...(hidden ? { backgroundThrottling: false } : {})
     }
   })
 
   if (session.maximized) win.maximize()
 
-  const init = windowInitFor(session, config().get().showWelcomeOnStartup)
+  const init = windowInitFor(session, config().get().showWelcomeOnStartup && !options.agent)
 
   windowMap.set(win.id, win)
+  if (options.agent) agentOpened.add(win.id)
+  if (options.workspace && workspaces.get(options.workspace))
+    workspaces.join(options.workspace, win.id)
+  else
+    workspaces.create({
+      root: session.projectPath ?? null,
+      project: session.activeProjectPath ?? null,
+      window: win.id,
+      hidden
+    })
+  expectDesignWindow(win.id)
   // Seed the live state: it is what the renderer asks for on load
   // (`window:get-init`), and what a window closed before its renderer reports
   // back still round-trips.
@@ -264,6 +301,7 @@ function createProjectWindow(session: Partial<WindowSession> = {}): BrowserWindo
   })
 
   win.on('ready-to-show', () => {
+    if (workspaces.ofWindow(win.id)?.hidden) return
     performance.mark('launch:window-shown')
     win.show()
   })
@@ -282,7 +320,8 @@ function createProjectWindow(session: Partial<WindowSession> = {}): BrowserWindo
       !win.webContents.isCrashed()
     ) {
       event.preventDefault()
-      win.webContents.send('window:confirm-close')
+      if (workspaces.ofWindow(win.id)?.hidden) closeHiddenWindow(win)
+      else win.webContents.send('window:confirm-close')
       return
     }
     if (!quitSessionCaptured) captureSession()
@@ -295,6 +334,9 @@ function createProjectWindow(session: Partial<WindowSession> = {}): BrowserWindo
   win.on('closed', () => {
     windowMap.delete(win.id)
     sessionState.delete(win.id)
+    workspaces.leave(win.id)
+    designWindowReady(win.id)
+    agentOpened.delete(win.id)
     // Another window stays open: the persisted set drops this one now. The last
     // window's close keeps the snapshot its 'close' took, as a quit does.
     if (!quitSessionCaptured && windowMap.size > 0) captureSession()
@@ -368,12 +410,55 @@ const liveBounds = (win: BrowserWindow): Pick<WindowSession, 'bounds' | 'maximiz
  */
 const captureSession = (): void => {
   const sessions: WindowSession[] = []
+  // Windows of one workspace share a number, so a restart restores them as one.
+  const groups = new Map<string, number>()
   for (const [id, win] of windowMap) {
     const state = sessionState.get(id)
-    if (!state) continue
-    sessions.push({ ...state, ...liveBounds(win) })
+    const workspace = workspaces.ofWindow(id)
+    // A workspace with no window is an agent's, and goes with the run.
+    if (!state || workspace?.hidden) continue
+    const group = workspace ? (groups.get(workspace.id) ?? groups.size) : undefined
+    if (workspace) groups.set(workspace.id, group!)
+    sessions.push({
+      ...state,
+      ...liveBounds(win),
+      ...(group !== undefined && workspace!.windows.length > 1 ? { workspace: group } : {})
+    })
   }
   config().update({ session: sessions })
+}
+
+/**
+ * A workspace with no window, closing: quit, `workspace.close`, or no agent left.
+ * Unsaved edits would need a prompt nobody can see, so the window is shown
+ * first and asks as any window does; with none it just closes.
+ */
+const closeHiddenWindow = (win: BrowserWindow): void => {
+  void askWindow(win.id, { kind: 'unsaved-files' }).then((answer) => {
+    if (win.isDestroyed()) return
+    const unsaved = answer.ok ? ((answer.payload as { unsaved?: string[] }).unsaved ?? []) : []
+    if (unsaved.length === 0) {
+      closeApproved.add(win.id)
+      win.close()
+      // The veto cancelled any quit this close was part of; carry it on.
+      if (quitRequested) app.quit()
+      return
+    }
+    revealWindow(win)
+    win.webContents.send('window:confirm-close')
+  })
+}
+
+/** Show a workspace's hidden renderer: its first window. */
+const revealWindow = (win: BrowserWindow): void => {
+  const workspace = workspaces.ofWindow(win.id)
+  if (workspace?.hidden) {
+    workspaces.reveal(workspace.id)
+    win.webContents.setBackgroundThrottling(true)
+  }
+  if (win.isMinimized()) win.restore()
+  win.show()
+  if (!quitSessionCaptured) captureSession()
 }
 
 let quitSessionCaptured = false
@@ -398,18 +483,67 @@ const openStartupWindows = (files: readonly string[]): void => {
 
   const restored = sanitizeSessions(config().get().session, fs.existsSync)
   if (restored.length > 0) {
-    for (const session of restored) createProjectWindow(session)
+    const groups = new Map<number, string>()
+    for (const session of restored) {
+      const joined = session.workspace === undefined ? undefined : groups.get(session.workspace)
+      const win = createProjectWindow(session, joined ? { workspace: joined } : {})
+      const workspace = workspaces.ofWindow(win.id)
+      if (session.workspace !== undefined && workspace && !joined)
+        groups.set(session.workspace, workspace.id)
+    }
     return
   }
 
   createProjectWindow()
 }
 
+/** The first window of the workspace holding a folder, shown if it had none. */
 const findWindowForProject = (projectPath: string): BrowserWindow | null => {
-  for (const [id, win] of windowMap) {
-    if (sessionState.get(id)?.projectPath === projectPath) return win
-  }
-  return null
+  const workspace = workspaces.holding(projectPath)
+  const win = workspace ? windowMap.get(workspace.windows[0]) : undefined
+  if (!win || win.isDestroyed()) return null
+  if (workspace!.hidden) revealWindow(win)
+  return win
+}
+
+/** A window the person can see: one of a workspace that has windows. */
+const shownWindow = (): BrowserWindow | null =>
+  [...windowMap.values()].find(
+    (win) => !win.isDestroyed() && !workspaces.ofWindow(win.id)?.hidden
+  ) ?? null
+
+/** How long a workspace with no window may go without an agent attached. */
+const HIDDEN_IDLE_MS = 10 * 60_000
+
+/**
+ * A workspace with no window lives while an agent works in it. Once none has
+ * been attached for `HIDDEN_IDLE_MS` it closes, or, with unsaved edits, opens
+ * a window so the person finds the work rather than losing it.
+ */
+const reapIdleWorkspaces = (): void => {
+  const idleSince = new Map<string, number>()
+  const timer = setInterval(() => {
+    const now = Date.now()
+    for (const workspace of workspaces.all()) {
+      if (!workspace.hidden || workspaces.row(workspace, () => []).connections > 0) {
+        idleSince.delete(workspace.id)
+        continue
+      }
+      const since = idleSince.get(workspace.id) ?? now
+      idleSince.set(workspace.id, since)
+      if (now - since < HIDDEN_IDLE_MS) continue
+      idleSince.delete(workspace.id)
+      const win = windowMap.get(workspace.windows[0])
+      if (!win || win.isDestroyed()) continue
+      void askWindow(win.id, { kind: 'unsaved-files' }).then((answer) => {
+        if (win.isDestroyed()) return
+        const unsaved = answer.ok ? ((answer.payload as { unsaved?: string[] }).unsaved ?? []) : []
+        if (unsaved.length) revealWindow(win)
+        else win.close()
+      })
+    }
+  }, 60_000)
+  timer.unref()
 }
 
 const focusWindow = (win: BrowserWindow): void => {
@@ -519,8 +653,10 @@ const start = (): void => {
     startUpdater({ enabled: () => config().get().checkForUpdates })
 
     app.on('activate', function () {
-      if (BrowserWindow.getAllWindows().length === 0) openStartupWindows([])
+      if (!shownWindow()) openStartupWindows([])
     })
+
+    reapIdleWorkspaces()
   })
 }
 
@@ -538,7 +674,7 @@ function registerIpcHandlers(): void {
     const win = BrowserWindow.fromWebContents(event.sender)
     const live = win ? sessionState.get(win.id) : undefined
     return live
-      ? windowInitFor(live, config().get().showWelcomeOnStartup)
+      ? windowInitFor(live, config().get().showWelcomeOnStartup && !agentOpened.has(win!.id))
       : { projectPath: null, tabs: [], activeTabPath: null, showWelcome: false }
   })
 
@@ -547,12 +683,20 @@ function registerIpcHandlers(): void {
   setDesignWindowSource(() =>
     [...windowMap.entries()]
       .filter(([, win]) => !win.isDestroyed())
-      .map(([id, win]) => ({
-        id,
-        focused: win.isFocused(),
-        projectPath: sessionState.get(id)?.projectPath ?? null,
-        tabPaths: (sessionState.get(id)?.tabs ?? []).map((tab) => tab.path)
-      }))
+      .flatMap(([id]) => {
+        const workspace = workspaces.ofWindow(id)
+        return workspace
+          ? [
+              {
+                id,
+                key: workspaces.windowKey(id),
+                workspace: workspace.id,
+                root: workspace.root,
+                tabPaths: (sessionState.get(id)?.tabs ?? []).map((tab) => tab.path)
+              }
+            ]
+          : []
+      })
   )
 
   ipcMain.on('session:update', (event, session: unknown) => {
@@ -561,6 +705,10 @@ function registerIpcHandlers(): void {
     const normalized = normalizeSession(session)
     if (!normalized) return
     sessionState.set(win.id, normalized)
+    workspaces.report(win.id, {
+      root: normalized.projectPath,
+      project: normalized.activeProjectPath ?? null
+    })
     // Persisted as it changes (the config write is debounced), not only on
     // close: a restart that never closes a window — a dev-mode main rebuild, a
     // crash — still reopens the tabs and project as they were. A quit has
@@ -681,13 +829,22 @@ function registerIpcHandlers(): void {
     return []
   })
 
-  ipcMain.handle('window:new', (_, projectPath?: string, tabs?: TabState[]) => {
-    createProjectWindow({
-      projectPath: projectPath ?? null,
-      tabs: Array.isArray(tabs)
-        ? tabs.filter((tab) => typeof tab?.name === 'string' && typeof tab?.path === 'string')
-        : []
-    })
+  // A tab dragged out of a window opens a window of that window's workspace; a
+  // plain New Window is a workspace of its own.
+  ipcMain.handle('window:new', (event, projectPath?: string, tabs?: TabState[]) => {
+    const moved = Array.isArray(tabs)
+      ? tabs.filter((tab) => typeof tab?.name === 'string' && typeof tab?.path === 'string')
+      : []
+    const source = BrowserWindow.fromWebContents(event.sender)
+    const workspace = source && moved.length > 0 ? workspaces.ofWindow(source.id) : null
+    createProjectWindow(
+      {
+        projectPath: projectPath ?? null,
+        ...(workspace?.project ? { activeProjectPath: workspace.project } : {}),
+        tabs: moved
+      },
+      workspace ? { workspace: workspace.id } : {}
+    )
   })
 
   // macOS only: the renderer hides its own menu bar there and pushes the tree
@@ -1757,20 +1914,38 @@ function registerIpcHandlers(): void {
   // Started for the process, not per window, and non-fatal: a taken port means
   // no agent surface, never a launch failure.
   registerPartsMcpIpc()
-  // Which project an agent is asking about: the focused window's, falling back
-  // to any window with one open. Wrong the moment two windows hold different
-  // boards — a `project` argument is the fix (workstream §8.5) — but right for
-  // the ordinary case of one project at a time.
-  setProjectResolver(() => {
-    const focused = BrowserWindow.getFocusedWindow()
-    const preferred = focused ? sessionState.get(focused.id)?.projectPath : null
-    if (preferred) return preferred
-    for (const win of BrowserWindow.getAllWindows()) {
-      const path = sessionState.get(win.id)?.projectPath
-      if (path) return path
-    }
-    return null
-  })
+  // Where an agent acts is the workspace its connection is attached to, never
+  // the focused window (`workspaces.ts`); this module owns the windows.
+  setWorkspaceService(
+    createWorkspaceService(workspaces, {
+      open: (init, { hidden, join }) =>
+        createProjectWindow(
+          {
+            projectPath: init.root,
+            ...(init.project ? { activeProjectPath: init.project } : {}),
+            tabs: init.tabs.map((path) => ({ name: basename(path), path }))
+          },
+          { hidden, agent: true, ...(join ? { workspace: join } : {}) }
+        ).id,
+      show: (window) => {
+        const win = windowMap.get(window)
+        if (win && !win.isDestroyed()) revealWindow(win)
+      },
+      tabs: (window) => (sessionState.get(window)?.tabs ?? []).map((tab) => tab.path),
+      close: (window) => {
+        const win = windowMap.get(window)
+        if (!win || win.isDestroyed()) return
+        closeApproved.add(window)
+        win.close()
+      },
+      removeTab: (window, path) => {
+        const win = windowMap.get(window)
+        if (win && !win.isDestroyed()) win.webContents.send('tab:remove', path)
+      },
+      ask: askWindow,
+      leave: endAgentConnection
+    })
+  )
   // Nothing to reconcile after it starts: an agent tab is told the live URL
   // and token when it launches.
   // A harness instance beside a running GoatCAD needs its own port, as it has
@@ -2071,8 +2246,9 @@ if (!app.requestSingleInstanceLock()) {
       openFilesInApp(files)
       return
     }
-    const [win] = BrowserWindow.getAllWindows()
+    const win = shownWindow()
     if (win) focusWindow(win)
+    else createProjectWindow()
   })
 
   app.on('open-file', (event, filePath) => {

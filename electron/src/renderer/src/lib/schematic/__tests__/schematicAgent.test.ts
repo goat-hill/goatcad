@@ -285,83 +285,46 @@ describe('resolving the sheet an agent means', () => {
     { name: 'p', path: '/p', children: [{ name: 'usb.kicad_sch', path: '/p/sub/usb.kicad_sch' }] }
   ]
 
-  test('takes the sheet in front of the user when none is named', () => {
-    expect(
-      resolveAgentSheet(undefined, { openTabs: tabs, activePath: '/p/power.kicad_sch', files })
-    ).toBe('/p/power.kicad_sch')
+  test('takes the root sheet when none is named, never the tab in front', () => {
+    const root = '/p/main.kicad_sch'
+    for (const openTabs of [[], tabs])
+      expect(resolveAgentSheet(undefined, { openTabs, files, rootPath: root })).toBe(root)
+  })
+
+  test('falls back to the only schematic open when the project has no root sheet', () => {
+    expect(resolveAgentSheet(undefined, { openTabs: [tabs[0], tabs[2]], files })).toBe(
+      '/p/main.kicad_sch'
+    )
   })
 
   test('refuses to guess between several open sheets', () => {
     // Picking the wrong one writes to the wrong board, which is the one failure
     // here that a user cannot see coming.
-    expect(
-      resolveAgentSheet(undefined, { openTabs: tabs, activePath: '/p/board.kicad_pcb', files })
-    ).toBeNull()
-  })
-
-  test('falls back to the only schematic open when the active tab is not one', () => {
-    const single = [tabs[0], tabs[2]]
-    expect(
-      resolveAgentSheet(undefined, { openTabs: single, activePath: '/p/board.kicad_pcb', files })
-    ).toBe('/p/main.kicad_sch')
-  })
-
-  test("falls back to the project's root sheet when no open tab resolves", () => {
-    const root = '/p/main.kicad_sch'
-    expect(
-      resolveAgentSheet(undefined, { openTabs: [], activePath: null, files, rootPath: root })
-    ).toBe(root)
-    // Several open sheets, none in front: the root, never one of the tabs.
-    expect(
-      resolveAgentSheet(undefined, {
-        openTabs: tabs,
-        activePath: '/p/board.kicad_pcb',
-        files,
-        rootPath: root
-      })
-    ).toBe(root)
-    // The sheet in front still wins.
-    expect(
-      resolveAgentSheet(undefined, {
-        openTabs: tabs,
-        activePath: '/p/power.kicad_sch',
-        files,
-        rootPath: root
-      })
-    ).toBe('/p/power.kicad_sch')
-    expect(
-      resolveAgentSheet(undefined, { openTabs: [], activePath: null, files, rootPath: null })
-    ).toBeNull()
+    expect(resolveAgentSheet(undefined, { openTabs: tabs, files })).toBeNull()
   })
 
   test('matches an open tab by path or by bare file name', () => {
-    expect(
-      resolveAgentSheet('/p/main.kicad_sch', { openTabs: tabs, activePath: null, files })
-    ).toBe('/p/main.kicad_sch')
-    expect(resolveAgentSheet('POWER.kicad_sch', { openTabs: tabs, activePath: null, files })).toBe(
+    expect(resolveAgentSheet('/p/main.kicad_sch', { openTabs: tabs, files })).toBe(
+      '/p/main.kicad_sch'
+    )
+    expect(resolveAgentSheet('POWER.kicad_sch', { openTabs: tabs, files })).toBe(
       '/p/power.kicad_sch'
     )
   })
 
   test('finds a sheet in the project tree that is not open yet', () => {
-    expect(resolveAgentSheet('usb.kicad_sch', { openTabs: tabs, activePath: null, files })).toBe(
+    expect(resolveAgentSheet('usb.kicad_sch', { openTabs: tabs, files })).toBe(
       '/p/sub/usb.kicad_sch'
     )
   })
 
   test('will not resolve a name that is not a schematic', () => {
-    expect(resolveAgentSheet('board.kicad_pcb', { openTabs: tabs, activePath: null, files })).toBe(
-      null
-    )
-    expect(
-      resolveAgentSheet('/p/board.kicad_pcb', { openTabs: tabs, activePath: null, files })
-    ).toBe(null)
+    expect(resolveAgentSheet('board.kicad_pcb', { openTabs: tabs, files })).toBe(null)
+    expect(resolveAgentSheet('/p/board.kicad_pcb', { openTabs: tabs, files })).toBe(null)
   })
 
   test('answers null for a name nothing matches', () => {
-    expect(resolveAgentSheet('nope.kicad_sch', { openTabs: tabs, activePath: null, files })).toBe(
-      null
-    )
+    expect(resolveAgentSheet('nope.kicad_sch', { openTabs: tabs, files })).toBe(null)
   })
 })
 

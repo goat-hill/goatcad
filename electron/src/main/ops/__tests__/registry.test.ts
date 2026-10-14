@@ -159,7 +159,12 @@ describe('the registry renders the surface that shipped', () => {
       'symbol.create',
       'symbol.delete',
       'symbol.redo',
-      'symbol.undo'
+      'symbol.undo',
+      'workspace.close',
+      'workspace.close_file',
+      'workspace.close_window',
+      'workspace.create_file',
+      'workspace.save'
     ])
   })
 
@@ -192,8 +197,8 @@ describe('discovery', () => {
     const body = answer.body as { ops: Array<{ name: string; scope: string; mutates: boolean }> }
     expect(body.ops).toHaveLength(registry.list().length)
     expect(body.ops[0]).toEqual({
-      name: 'parts.status',
-      summary: registry.get('parts.status')!.summary,
+      name: 'workspace.list',
+      summary: registry.get('workspace.list')!.summary,
       scope: 'app',
       mutates: false
     })

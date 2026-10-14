@@ -151,7 +151,7 @@ export const isFailure = (value: unknown): value is OpFailure =>
 
 /** What every export's guidance says about the board it reads. */
 export const SAVED_BOARD =
-  "Writes from the board's saved file: refused while its tab has unsaved edits (project_save) or stale zone fills (board_refill, then project_save). The answer lists each file's path, size and summary, not its content."
+  "Writes from the board's saved file: refused while its tab has unsaved edits (workspace_save) or stale zone fills (board_refill, then workspace_save). The answer lists each file's path, size and summary, not its content."
 
 /** The Gerber arguments as the writer takes them; the schema bounds precision to 5 or 6. */
 export const gerberFormat = ({

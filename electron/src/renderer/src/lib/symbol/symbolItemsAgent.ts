@@ -138,7 +138,7 @@ const READ_GUIDANCE =
   'Millimeters in the symbol frame, y down. Change an item with items_update and symbol, sending only the record keys that change.'
 
 const LIBRARY_WRITE_GUIDANCE =
-  "One undo step on the library's tab, now unsaved; project_save writes it. Placed symbols keep their own copies until updated from the library."
+  "One undo step on the library's tab, now unsaved; workspace_save writes it. Placed symbols keep their own copies until updated from the library."
 
 const SHEET_COPY_GUIDANCE =
   "One undo step on the sheet's tab, now unsaved; every placement on this sheet drawn from this copy changes. The library is untouched."

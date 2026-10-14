@@ -21,9 +21,9 @@ import type {
 import type { IndexRecord } from '../libraryIndexTypes'
 import type { McpDesignRequest } from '../../preload/mcpTypes'
 import type { DatasheetAttempt, DatasheetCandidate, DatasheetRecord } from '../partsMcpDatasheets'
-import type { ProjectResolver } from '../partsMcpProject'
 import type { DatasheetReadRequest, DatasheetReadResult } from '../datasheetReader'
 import type { ModelCacheInput, ModelCacheOutcome } from '../partsMcpModelStore'
+import type { WindowRow, WorkspaceRow } from '../workspaces'
 
 /**
  * What these operations need from `PartsService` — a structural subset, so a
@@ -71,16 +71,58 @@ export type DesignOutcome =
   | { ok: true; payload: unknown }
   | { ok: false; error: string; detail?: string; candidates?: string[] }
 
-export interface OpContext {
-  parts: PartsService
+/** Who is calling: the connection, and the workspace a call named for itself. */
+export interface Caller {
   /** The agent connection the call came on (`mcpSessions.ts`): its MCP session, or
    *  the Python client's id. Absent when the caller sends none. */
   connection?: string
+  /** A workspace the call names for itself (`partsMcpServer.ts`, `WORKSPACE_HEADER`),
+   *  for a client that keeps no connection. Wins over the connection's. */
+  workspace?: string
+}
+
+export const callerOf = (ctx: OpContext): Caller => ({
+  ...(ctx.connection !== undefined ? { connection: ctx.connection } : {}),
+  ...(ctx.workspace !== undefined ? { workspace: ctx.workspace } : {})
+})
+
+/** A workspace op's answer: its value, or a refusal shaped like a window's (`ops/design.ts`). */
+export type WorkspaceOutcome<T> =
+  { ok: true; value: T } | { ok: false; error: string; detail?: string; candidates?: string[] }
+
+/** What the workspace ops reach (`workspaces.ts`); the app serves it, since it owns the windows. */
+export interface WorkspaceService {
+  list(): WorkspaceRow[]
+  /** A new workspace; attaches the caller. */
+  start(
+    caller: Caller,
+    args: { root?: string; project?: string; openWindow: boolean }
+  ): Promise<WorkspaceOutcome<WorkspaceRow>>
+  attach(caller: Caller, workspace: string): WorkspaceOutcome<WorkspaceRow>
+  /** The caller's workspace, or null. */
+  attached(caller: Caller): WorkspaceRow | null
+  update(args: {
+    workspace: string
+    root?: string
+    project?: string
+  }): Promise<WorkspaceOutcome<WorkspaceRow>>
+  close(workspace: string, discard: boolean): Promise<WorkspaceOutcome<{ closed: string }>>
+  openWindow(workspace: string, files: string[]): Promise<WorkspaceOutcome<WindowRow>>
+  closeWindow(
+    window: string,
+    discard: boolean
+  ): Promise<WorkspaceOutcome<{ closed: string; workspaceClosed: boolean }>>
+}
+
+export interface OpContext extends Caller {
+  parts: PartsService
   /** Raised for the app to act on. Collected rather than performed here so this
    *  tree stays pure and the server decides what a "window" even is. */
   emit?: (effect: OpEffect) => void
-  /** Which project the app has open. Injected for the same reason `emit` is. */
-  project?: ProjectResolver
+  /** The folder of the caller's workspace, null when it has none or the caller
+   *  is attached to none. Injected for the same reason `emit` is. */
+  project?: (caller: Caller) => string | null
+  workspaces?: WorkspaceService
   /** The library index, already built and already incrementally maintained by
    *  `libraryIndex.ts`. Read, never rebuilt from here. */
   library?: {
@@ -90,7 +132,7 @@ export interface OpContext {
   /** Ask the window to read or edit the open design (`partsMcpBridge.ts`). The
    *  one capability that cannot be served from main at all — see that module
    *  for why the AST layer's living in the renderer decides this. */
-  design?: (request: McpDesignRequest) => Promise<DesignOutcome>
+  design?: (request: McpDesignRequest, caller: Caller) => Promise<DesignOutcome>
   /** Where the Python client was written, and how to import it
    *  (`agentScripting.ts`). Injected because the path is Electron's to know. */
   scripting?: () => {

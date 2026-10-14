@@ -8,20 +8,28 @@
 import { contextGuidance, INTENT_FILE, readProjectContext } from '../../partsMcpProject'
 import { defineOp } from '../registry'
 import { s } from '../schema'
-import { succeed } from '../errors'
+import { refused, succeed } from '../errors'
+import { callerOf } from '../context'
+import { DESIGN_REMEDY } from '../design'
 
 export const projectContext = defineOp({
   name: 'project.context',
   scope: 'app',
   mutates: false,
   summary:
-    "Read the project's board-intent.md: purpose, assembly, quantity, sourcing, budget and conventions.",
+    "Read the workspace project's board-intent.md: purpose, assembly, quantity, sourcing, budget and conventions.",
   guidance:
     'Call before recommending parts and before the first design edit: assembly method and quantity decide packages and price breaks, and the conventions say how sheets are drawn and parts chosen. The content is returned verbatim. A missing file means the constraints are unwritten, not absent; say that anything you assume is a guess. missingSections lists the conventions headings the file lacks; agentsHasSection is whether AGENTS.md in the project root links board-intent.md.',
   input: s.object({}),
   run(_args, ctx) {
+    const workspace = ctx.workspaces?.attached(callerOf(ctx))
+    if (ctx.workspaces && !workspace)
+      return refused('This connection acts in no workspace.', DESIGN_REMEDY['no-workspace'], {
+        kind: 'no-workspace',
+        candidates: ctx.workspaces.list().map((row) => row.id)
+      })
     const context = ctx.project
-      ? readProjectContext(ctx.project)
+      ? readProjectContext(() => ctx.project?.(callerOf(ctx)) ?? null)
       : {
           projectPath: null,
           intentPath: null,

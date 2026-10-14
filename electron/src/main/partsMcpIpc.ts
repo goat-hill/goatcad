@@ -27,8 +27,8 @@ import {
 import { readDatasheet } from './datasheetLoader'
 import { cacheModel } from './partsMcpModelStore'
 import { loadStepFile } from './stepLoader'
-import type { OpEffect } from './ops/context'
-import type { ProjectResolver } from './partsMcpProject'
+import type { OpEffect, WorkspaceService } from './ops/context'
+import { callerWorkspace, workspaces } from './workspaces'
 import {
   DEFAULT_MCP_PORT,
   MCP_PATH,
@@ -50,13 +50,13 @@ let activeToken: string | null = null
  *  (`mcpToken.ts`). Shown until the next replacement, since every manual
  *  registration just stopped working and nothing else would say why. */
 let tokenReset = false
-/** Which project the app has open. Set by `index.ts`, which owns window state —
+/** The workspace ops' service. Set by `index.ts`, which owns the windows —
  *  injected rather than imported, so this module does not depend on the module
  *  that imports it. */
-let resolveProject: ProjectResolver = () => null
+let workspaceService: WorkspaceService | undefined
 
-export const setProjectResolver = (resolver: ProjectResolver): void => {
-  resolveProject = resolver
+export const setWorkspaceService = (service: WorkspaceService): void => {
+  workspaceService = service
 }
 
 /**
@@ -158,9 +158,12 @@ export function registerPartsMcpIpc(): void {
   })
 }
 
-/** Agent connections; one that ends takes its viewport with it. */
+/** Agent connections; one that ends takes its viewport and its attachment with it. */
 const agentSessions = createMcpSessions()
-agentSessions.onEnd(endAgentConnection)
+agentSessions.onEnd((connection) => {
+  endAgentConnection(connection)
+  workspaces.detach(connection)
+})
 
 /**
  * Start the server, or report why it could not start.
@@ -188,10 +191,16 @@ export async function startPartsMcp(
       token,
       port,
       sessions: agentSessions,
+      attach: (connection, workspace) => {
+        if (!workspaces.attachedTo(connection)) workspaces.attach(connection, workspace)
+      },
       context: {
         parts: partsService(),
         emit: applyEffect,
-        project: () => resolveProject(),
+        project: (caller) => callerWorkspace(caller)?.root ?? null,
+        get workspaces() {
+          return workspaceService
+        },
         scripting: () => scriptingInfo(app.getPath('userData')),
         // Read-only views of the index the app already maintains; nothing here
         // triggers a scan the Libraries panel would not have triggered anyway.

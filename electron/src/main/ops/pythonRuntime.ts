@@ -443,13 +443,18 @@ class GoatCAD:
 
     The app knows it by the session id it sends on every call: the viewport it
     opens is this connection's one, and close() (run at exit, or by a with
-    block) takes that viewport off the user's canvas.
+    block) takes that viewport off the user's canvas. Every call acts in the
+    workspace it is attached to: workspace_id, sent with each call, attaches a
+    session that is not attached yet, and gc.workspace.attach() moves it.
     """
 
-    def __init__(self, base_url: str, token: str, timeout: float = 30.0) -> None:
+    def __init__(
+        self, base_url: str, token: str, timeout: float = 30.0, workspace_id: str | None = None
+    ) -> None:
         self.base_url = base_url.rstrip("/")
         self.token = token
         self.timeout = timeout
+        self.workspace_id = workspace_id
         self.session = uuid.uuid4().hex
         self._called = False
         self._open: Transaction | None = None
@@ -465,7 +470,10 @@ class GoatCAD:
         return False
 
     def _headers(self) -> dict:
-        return {"authorization": "Bearer " + self.token, "mcp-session-id": self.session}
+        headers = {"authorization": "Bearer " + self.token, "mcp-session-id": self.session}
+        if self.workspace_id:
+            headers["x-goatcad-workspace"] = self.workspace_id
+        return headers
 
     def close(self) -> None:
         """End this connection: its viewport closes. Later calls start a new one."""
@@ -722,18 +730,20 @@ def _stored_token(token_file: Path) -> str:
     return stored["data"]
 
 
-def connect(timeout: float = 30.0) -> GoatCAD:
-    """Find the running app and connect to it.
+def connect(workspace: str | None = None, timeout: float = 30.0) -> GoatCAD:
+    """Find the running app and connect to it, acting in a workspace.
 
-    Takes no arguments on purpose. The app publishes its address in its own
-    config directory as it starts, and hands the token to every agent tab in
-    GOATCAD_MCP_TOKEN, so a script that has to be told where to look is a
-    script someone had to configure.
+    The app publishes its address in its own config directory as it starts,
+    and hands every terminal tab its workspace in GOATCAD_WORKSPACE and every
+    agent tab the token in GOATCAD_MCP_TOKEN, so a script started there needs
+    no arguments. Elsewhere, pass workspace: an id from gc.workspace.list(), or
+    call gc.workspace.start() on the connection.
     """
+    workspace = workspace or os.environ.get("GOATCAD_WORKSPACE") or None
     url = os.environ.get("GOATCAD_URL")
     token = os.environ.get("GOATCAD_MCP_TOKEN")
     if url and token:
-        return GoatCAD(url, token, timeout)
+        return GoatCAD(url, token, timeout, workspace)
 
     directory = _config_dir()
     endpoint_file = directory / "mcp-endpoint.json"
@@ -746,5 +756,5 @@ def connect(timeout: float = 30.0) -> GoatCAD:
     endpoint = json.loads(endpoint_file.read_text())
     if not token:
         token = _stored_token(token_file)
-    return GoatCAD(url or endpoint["baseUrl"], token, timeout)
+    return GoatCAD(url or endpoint["baseUrl"], token, timeout, workspace)
 `

@@ -75,8 +75,11 @@ import {
   DESIGN_TIMEOUT_MS,
   endAgentConnection,
   registerDesignBridge,
-  requestDesign
+  requestDesign,
+  setDesignWindowSource
 } from '../partsMcpBridge'
+import { workspaces } from '../workspaces'
+import type { Caller } from '../ops/context'
 
 /** Answer the request the bridge just sent, as the renderer would. */
 const replyTo = (win: FakeWindow, reply: Record<string, unknown>): void => {
@@ -84,10 +87,34 @@ const replyTo = (win: FakeWindow, reply: Record<string, unknown>): void => {
   handlers.get('mcp:design-reply')?.({}, { id: last.envelope.id, ...reply })
 }
 
+let connections = 0
+
+/** One workspace over these windows, and a connection attached to it. */
+const inWorkspace = (
+  windows: FakeWindow[],
+  options: { hidden?: boolean; root?: string } = {}
+): Caller & { workspace: string } => {
+  const [first, ...rest] = windows
+  const workspace = workspaces.create({
+    root: options.root ?? null,
+    project: null,
+    window: first.id,
+    hidden: options.hidden
+  })
+  for (const win of rest) workspaces.join(workspace.id, win.id)
+  const connection = `conn-${++connections}`
+  workspaces.attach(connection, workspace.id)
+  return { connection, workspace: workspace.id }
+}
+
+/** Only the connection, as an MCP session asks. */
+const as = (caller: Caller): Caller => ({ connection: caller.connection })
+
 beforeEach(() => {
   handlers.clear()
   focused = null
   all = []
+  setDesignWindowSource(() => [])
   registerDesignBridge()
 })
 
@@ -96,12 +123,12 @@ afterEach(() => {
 })
 
 describe('the design bridge', () => {
-  it('sends to the focused window and resolves with its payload', async () => {
+  it('sends to the window of the attached workspace and resolves with its payload', async () => {
     const win = makeWindow()
-    focused = win
     all = [win]
+    const caller = as(inWorkspace([win]))
 
-    const pending = requestDesign({ kind: 'describe-schematic' })
+    const pending = requestDesign({ kind: 'describe-schematic' }, caller)
     expect(win.sent[0].channel).toBe('mcp:design-request')
     expect(win.sent[0].envelope.request).toEqual({ kind: 'describe-schematic' })
 
@@ -113,10 +140,9 @@ describe('the design bridge', () => {
     // An edit the user cannot see is an edit they cannot undo, which would make
     // the whole safety argument for agent writes false.
     const win = makeWindow({ minimized: true })
-    focused = win
     all = [win]
 
-    const pending = requestDesign({ kind: 'describe-schematic' })
+    const pending = requestDesign({ kind: 'describe-schematic' }, as(inWorkspace([win])))
     expect(win.restored).toBe(1)
     expect(win.shown).toBe(0)
     replyTo(win, { ok: true, payload: {} })
@@ -127,28 +153,72 @@ describe('the design bridge', () => {
     // `show()` activates the app on macOS, which with an agent calling every
     // few seconds is a focus steal from the terminal the person is typing in.
     const hidden = makeWindow({ visible: false })
-    focused = hidden
     all = [hidden]
-    const first = requestDesign({ kind: 'describe-schematic' })
+    const first = requestDesign({ kind: 'describe-schematic' }, as(inWorkspace([hidden])))
     expect(hidden.shownInactive).toBe(1)
     expect(hidden.shown).toBe(0)
     replyTo(hidden, { ok: true, payload: {} })
     await first
 
     const visible = makeWindow()
-    focused = visible
     all = [visible]
-    const second = requestDesign({ kind: 'describe-schematic' })
+    const second = requestDesign({ kind: 'describe-schematic' }, as(inWorkspace([visible])))
     expect(visible.shown + visible.shownInactive + visible.restored).toBe(0)
     replyTo(visible, { ok: true, payload: {} })
     await second
   })
 
-  it('falls back to a background window when none is focused', async () => {
+  it('never follows focus into another workspace', async () => {
+    const theirs = makeWindow()
+    const mine = makeWindow()
+    all = [theirs, mine]
+    inWorkspace([theirs])
+    focused = theirs
+    const pending = requestDesign({ kind: 'describe-schematic' }, as(inWorkspace([mine])))
+    expect(theirs.sent).toHaveLength(0)
+    expect(mine.sent).toHaveLength(1)
+    replyTo(mine, { ok: true, payload: {} })
+    await pending
+  })
+
+  it('keeps a workspace with no window unseen', async () => {
+    const unseen = makeWindow({ visible: false })
+    all = [unseen]
+    const pending = requestDesign(
+      { kind: 'describe-schematic' },
+      as(inWorkspace([unseen], { hidden: true }))
+    )
+    expect(unseen.shown + unseen.shownInactive + unseen.restored).toBe(0)
+    expect(unseen.sent).toHaveLength(1)
+    replyTo(unseen, { ok: true, payload: {} })
+    await pending
+  })
+
+  it('refuses a file another workspace holds, naming it', async () => {
+    const theirs = makeWindow()
+    const mine = makeWindow()
+    all = [theirs, mine]
+    const other = inWorkspace([theirs], { root: '/q' })
+    const caller = inWorkspace([mine], { root: '/p' })
+    setDesignWindowSource(() => [
+      { id: theirs.id, key: 'win_a', workspace: other.workspace, root: '/q', tabPaths: [] },
+      { id: mine.id, key: 'win_b', workspace: caller.workspace, root: '/p', tabPaths: [] }
+    ])
+    await expect(
+      requestDesign({ kind: 'describe-schematic', sheet: '/q/main.kicad_sch' }, as(caller))
+    ).resolves.toMatchObject({
+      ok: false,
+      error: 'file-in-workspace',
+      candidates: [other.workspace]
+    })
+    expect(theirs.sent).toHaveLength(0)
+  })
+
+  it('names the workspace it acts in on each call when the client has no connection', async () => {
     const win = makeWindow()
-    focused = null
     all = [win]
-    const pending = requestDesign({ kind: 'describe-schematic' })
+    const { workspace } = inWorkspace([win])
+    const pending = requestDesign({ kind: 'describe-schematic' }, { workspace })
     expect(win.sent).toHaveLength(1)
     replyTo(win, { ok: true, payload: {} })
     await pending
@@ -157,29 +227,42 @@ describe('the design bridge', () => {
   it('skips a destroyed window rather than sending into it', async () => {
     const dead = makeWindow({ destroyed: true })
     const live = makeWindow()
-    focused = dead
     all = [dead, live]
-    const pending = requestDesign({ kind: 'describe-schematic' })
+    const pending = requestDesign({ kind: 'describe-schematic' }, as(inWorkspace([dead, live])))
     expect(dead.sent).toHaveLength(0)
     expect(live.sent).toHaveLength(1)
     replyTo(live, { ok: true, payload: {} })
     await pending
   })
 
-  it('answers no-window when there is nothing to ask', async () => {
-    await expect(requestDesign({ kind: 'describe-schematic' })).resolves.toMatchObject({
-      ok: false,
-      error: 'no-window'
-    })
+  it('refuses a connection attached to no workspace, listing the open ones', async () => {
+    const win = makeWindow()
+    all = [win]
+    const { workspace } = inWorkspace([win])
+    const answer = await requestDesign({ kind: 'describe-schematic' }, { connection: 'stray' })
+    expect(answer).toMatchObject({ ok: false, error: 'no-workspace' })
+    expect(answer.ok ? [] : answer.candidates).toContain(workspace)
+    expect(win.sent).toHaveLength(0)
+  })
+
+  it('answers no-window when the workspace has no live window', async () => {
+    const win = makeWindow({ destroyed: true })
+    all = [win]
+    await expect(
+      requestDesign({ kind: 'describe-schematic' }, as(inWorkspace([win])))
+    ).resolves.toMatchObject({ ok: false, error: 'no-window' })
   })
 
   it('correlates concurrent requests by id rather than by order', async () => {
     const win = makeWindow()
-    focused = win
     all = [win]
+    const caller = as(inWorkspace([win]))
 
-    const first = requestDesign({ kind: 'describe-schematic' })
-    const second = requestDesign({ kind: 'place-symbol', libId: 'Device:R', at: { x: 0, y: 0 } })
+    const first = requestDesign({ kind: 'describe-schematic' }, caller)
+    const second = requestDesign(
+      { kind: 'place-symbol', libId: 'Device:R', at: { x: 0, y: 0 } },
+      caller
+    )
     expect(win.sent).toHaveLength(2)
     expect(win.sent[0].envelope.id).not.toBe(win.sent[1].envelope.id)
 
@@ -194,9 +277,12 @@ describe('the design bridge', () => {
 
   it('passes a refusal through as a typed error', async () => {
     const win = makeWindow()
-    focused = win
     all = [win]
-    const pending = requestDesign({ kind: 'place-symbol', libId: 'Nope:Nope', at: { x: 0, y: 0 } })
+    const caller = as(inWorkspace([win]))
+    const pending = requestDesign(
+      { kind: 'place-symbol', libId: 'Nope:Nope', at: { x: 0, y: 0 } },
+      caller
+    )
     replyTo(win, { ok: false, error: 'unknown-symbol', detail: 'Nope:Nope' })
     await expect(pending).resolves.toEqual({
       ok: false,
@@ -207,9 +293,9 @@ describe('the design bridge', () => {
 
   it('ignores a reply for an id it is not holding', async () => {
     const win = makeWindow()
-    focused = win
     all = [win]
-    const pending = requestDesign({ kind: 'describe-schematic' })
+    const caller = as(inWorkspace([win]))
+    const pending = requestDesign({ kind: 'describe-schematic' }, caller)
     handlers.get('mcp:design-reply')!({}, { id: 'design-not-mine', ok: true, payload: 'wrong' })
     replyTo(win, { ok: true, payload: 'right' })
     await expect(pending).resolves.toEqual({ ok: true, payload: 'right' })
@@ -218,9 +304,9 @@ describe('the design bridge', () => {
   it('times out rather than hanging a tool call forever', async () => {
     vi.useFakeTimers()
     const win = makeWindow()
-    focused = win
     all = [win]
-    const pending = requestDesign({ kind: 'describe-schematic' })
+    const caller = as(inWorkspace([win]))
+    const pending = requestDesign({ kind: 'describe-schematic' }, caller)
     vi.advanceTimersByTime(DESIGN_TIMEOUT_MS + 1)
     await expect(pending).resolves.toMatchObject({ ok: false, error: 'timeout' })
   })
@@ -228,9 +314,9 @@ describe('the design bridge', () => {
   it('does not settle twice when a late reply follows a timeout', async () => {
     vi.useFakeTimers()
     const win = makeWindow()
-    focused = win
     all = [win]
-    const pending = requestDesign({ kind: 'describe-schematic' })
+    const caller = as(inWorkspace([win]))
+    const pending = requestDesign({ kind: 'describe-schematic' }, caller)
     vi.advanceTimersByTime(DESIGN_TIMEOUT_MS + 1)
     replyTo(win, { ok: true, payload: 'too late' })
     await expect(pending).resolves.toMatchObject({ ok: false, error: 'timeout' })
@@ -238,9 +324,9 @@ describe('the design bridge', () => {
 
   it('fails everything in flight when the app closes', async () => {
     const win = makeWindow()
-    focused = win
     all = [win]
-    const pending = requestDesign({ kind: 'describe-schematic' })
+    const caller = as(inWorkspace([win]))
+    const pending = requestDesign({ kind: 'describe-schematic' }, caller)
     abortDesignRequests()
     await expect(pending).resolves.toMatchObject({ ok: false, error: 'app-closing' })
   })
@@ -249,36 +335,50 @@ describe('the design bridge', () => {
     const a = makeWindow()
     const b = makeWindow()
     all = [a, b]
-    focused = a
+    const { workspace } = inWorkspace([a, b])
+    workspaces.attach('conn-a', workspace)
+    workspaces.attach('conn-b', workspace)
+    setDesignWindowSource(() => [
+      { id: a.id, key: 'win_a', workspace, root: null, tabPaths: ['/p/x.kicad_pcb'] },
+      { id: b.id, key: 'win_b', workspace, root: null, tabPaths: ['/p/y.kicad_sch'] }
+    ])
     const sentLast = (win: FakeWindow): unknown => win.sent.at(-1)?.envelope.request
 
-    const opening = requestDesign({
-      kind: 'open-viewport',
-      board: 'x.kicad_pcb',
-      label: 'Placing',
-      connection: 'conn-a'
-    })
+    const opening = requestDesign(
+      {
+        kind: 'open-viewport',
+        board: 'x.kicad_pcb',
+        label: 'Placing',
+        connection: 'conn-a'
+      },
+      { connection: 'conn-a' }
+    )
     const asked = sentLast(a) as { id: string }
     expect(asked).not.toHaveProperty('connection')
     expect(asked.id).toMatch(/^viewport-\d+$/)
     replyTo(a, { ok: true, payload: { viewport: asked.id } })
     await opening
 
-    // Closing it from another window's focus still reaches the window holding it.
-    focused = b
-    const closing = requestDesign({ kind: 'close-viewport', viewport: asked.id })
+    // Closing it reaches the window holding it.
+    const closing = requestDesign(
+      { kind: 'close-viewport', viewport: asked.id },
+      { connection: 'conn-a' }
+    )
     expect(b.sent).toHaveLength(0)
     expect(sentLast(a)).toEqual({ kind: 'close-viewport', viewport: asked.id })
     replyTo(a, { ok: true, payload: { closed: asked.id } })
     await closing
 
-    // The same connection opening in the focused window moves its one there, same id.
-    const moving = requestDesign({
-      kind: 'open-viewport',
-      sheet: 'y.kicad_sch',
-      label: 'Wiring',
-      connection: 'conn-a'
-    })
+    // The same connection opening on a document of the other window moves its one there, same id.
+    const moving = requestDesign(
+      {
+        kind: 'open-viewport',
+        sheet: 'y.kicad_sch',
+        label: 'Wiring',
+        connection: 'conn-a'
+      },
+      { connection: 'conn-a' }
+    )
     expect(sentLast(a)).toEqual({
       kind: 'close-viewport',
       viewport: asked.id,
@@ -296,14 +396,17 @@ describe('the design bridge', () => {
     await moving
 
     // Another connection gets its own id.
-    const other = requestDesign({
-      kind: 'open-viewport',
-      board: 'x.kicad_pcb',
-      label: 'Routing',
-      connection: 'conn-b'
-    })
-    expect((sentLast(b) as { id: string }).id).not.toBe(asked.id)
-    replyTo(b, { ok: true, payload: { viewport: (sentLast(b) as { id: string }).id } })
+    const other = requestDesign(
+      {
+        kind: 'open-viewport',
+        board: 'x.kicad_pcb',
+        label: 'Routing',
+        connection: 'conn-b'
+      },
+      { connection: 'conn-b' }
+    )
+    expect((sentLast(a) as { id: string }).id).not.toBe(asked.id)
+    replyTo(a, { ok: true, payload: { viewport: (sentLast(a) as { id: string }).id } })
     await other
 
     // The connection ending closes its viewport where it is.
@@ -315,6 +418,6 @@ describe('the design bridge', () => {
     })
     replyTo(b, { ok: true, payload: {} })
     endAgentConnection('conn-a')
-    expect(b.sent).toHaveLength(3)
+    expect(b.sent).toHaveLength(2)
   })
 })

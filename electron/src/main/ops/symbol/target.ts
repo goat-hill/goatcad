@@ -19,7 +19,7 @@ export const placedSheetArg = s
   .string()
   .trim()
   .describe(
-    `With a reference: the sheet the symbol is placed on. ${SHEET_FILE}. Omit for the open sheet, else the root sheet.`
+    `With a reference: the sheet the symbol is placed on. ${SHEET_FILE}. Omit for the root sheet, else the only open sheet.`
   )
   .optional()
 

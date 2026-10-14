@@ -464,6 +464,10 @@ const api = {
       ipcRenderer.off('mcp:design-request', listener)
     }
   },
+  /** The window answers design requests from now on; main holds them until then. */
+  mcpDesignReady: (): void => {
+    ipcRenderer.send('mcp:design-ready')
+  },
   /** Reply to one request. `send`, not `invoke`: the window is the responder
    *  here, and main is already holding the promise keyed on the envelope id. */
   sendMcpDesignReply: (reply: McpDesignReply): void => {

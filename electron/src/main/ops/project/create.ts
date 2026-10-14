@@ -13,7 +13,7 @@ export const projectCreate = defineDesignOp({
   summary:
     'Create a KiCad project in a folder: project file, root sheet and board, optionally with stackup and profile.',
   guidance:
-    "A folder that already holds a project is refused with its name; one holding schematics needs adopt or blank: true. copperLayers and profile set the board's stackup, rules and Default class as Board Setup would; change them later with board_update_setup. Files are written to disk at once, with no undo. The project opens only in a window with no folder or this folder; otherwise the user opens it.",
+    "A folder that already holds a project is refused with its name; one holding schematics needs adopt or blank: true. copperLayers and profile set the board's stackup, rules and Default class as Board Setup would; change them later with board_update_setup. Files are written to disk at once, with no undo. The project becomes the workspace's when the folder is the workspace's own or it has none; for a new folder, start a workspace on it first (workspace_start with root).",
   input: s.object({
     name: s
       .string()
@@ -22,7 +22,7 @@ export const projectCreate = defineDesignOp({
     folder: s
       .string()
       .trim()
-      .describe('Absolute folder path. Default: the folder this window has open.')
+      .describe("Absolute folder path. Default: the workspace's folder.")
       .optional(),
     adopt: s
       .string()

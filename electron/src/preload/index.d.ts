@@ -281,6 +281,7 @@ interface GoatCADAPI {
   mcpSurface: () => Promise<McpSurface>
   mcpRegenerateToken: () => Promise<McpActionResult>
   onMcpDesignRequest: (callback: (envelope: McpDesignEnvelope) => void) => () => void
+  mcpDesignReady: () => void
   sendMcpDesignReply: (reply: McpDesignReply) => void
   onPartsOpenSettings: (callback: (provider: PartsProviderId | null) => void) => () => void
   onPartsCredentialsChanged: (callback: (statuses: PartsCredentialStatus[]) => void) => () => void

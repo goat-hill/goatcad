@@ -697,6 +697,20 @@ export interface McpOpenRequest {
   kind: 'open-file'
   /** Absolute path or bare name of a file the project tree lists. */
   file: string
+  /** The `win_…` id of the window to open it in; main routes by it and drops it. */
+  window?: string
+}
+
+/** Point the window at a folder and project (`workspace.update`); refused with unsaved edits. */
+export interface McpSetWorkspaceRequest {
+  kind: 'set-workspace'
+  root: string
+  project: string | null
+}
+
+/** The window's documents with unsaved edits, which main asks before it closes one for an agent. */
+export interface McpUnsavedFilesRequest {
+  kind: 'unsaved-files'
 }
 
 /** Close an open tab. Refused while it holds unsaved edits unless `discard`. */
@@ -1152,6 +1166,8 @@ export interface McpCreateFileRequest {
   fileKind: 'schematic' | 'board' | 'symbol_library' | 'footprint_library'
   /** The file stem; the extension comes from `fileKind`. */
   name: string
+  /** The `win_…` id of the window to open it in; main routes by it and drops it. */
+  window?: string
 }
 
 /** Board Setup's sections as records (`lib/board/boardSetup.ts`). */
@@ -1753,6 +1769,8 @@ export type McpDesignRequest =
   | McpCopyFootprintRequest
   | McpSaveRequest
   | McpOpenRequest
+  | McpSetWorkspaceRequest
+  | McpUnsavedFilesRequest
   | McpCloseRequest
   | McpCreateSymbolRequest
   | McpDeleteSymbolRequest

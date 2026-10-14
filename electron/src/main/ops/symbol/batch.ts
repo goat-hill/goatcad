@@ -52,7 +52,7 @@ export const makeSymbolBatch = (inner: OpRegistry): RegisteredOp =>
         .string()
         .trim()
         .describe(
-          `With a reference: the sheet it is placed on. ${SHEET_FILE}. Omit for the open sheet, else the root sheet.`
+          `With a reference: the sheet it is placed on. ${SHEET_FILE}. Omit for the root sheet, else the only open sheet.`
         )
         .optional(),
       ops: s

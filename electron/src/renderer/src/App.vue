@@ -2137,7 +2137,6 @@ const placedSymbolDefinition = async (
 > => {
   const path = resolveAgentSheet(sheet, {
     openTabs: fileTabs.value,
-    activePath: activeTabPath.value,
     files: files.value,
     rootPath: rootSchematicPath()
   })
@@ -2708,6 +2707,9 @@ const exportNetlist = async (): Promise<void> => {
   if (!result.success) alert(t('app.netlist.errors.write', { error: result.error }))
 }
 
+/** Settles once the window's folder and projects are read, which agent requests wait for. */
+let designReady: Promise<void> = Promise.resolve()
+
 const handleDesignRequest = async (envelope: McpDesignEnvelope): Promise<void> => {
   const reply = (result: Omit<McpDesignReply, 'id'>): void =>
     window.api.sendMcpDesignReply({ id: envelope.id, ...result })
@@ -2755,6 +2757,36 @@ const handleDesignRequest = async (envelope: McpDesignEnvelope): Promise<void> =
 
     // Opening and closing tabs are App's own — tabs live here — and take any
     // document kind, so they are served before the sheet resolution below.
+    if (envelope.request.kind === 'unsaved-files') {
+      return reply({ ok: true, payload: { unsaved: editorArea.value?.unsavedPaths() ?? [] } })
+    }
+    if (envelope.request.kind === 'set-workspace') {
+      const unsaved = editorArea.value?.unsavedPaths() ?? []
+      if (unsaved.length)
+        return reply({
+          ok: false,
+          error: 'unsaved-edits',
+          detail: `The workspace has unsaved edits: ${unsaved.join(', ')}.`,
+          candidates: unsaved
+        })
+      const { root, project } = envelope.request
+      let listing: FileItem[]
+      try {
+        listing = (await window.api.readDirectory(root)) as FileItem[]
+      } catch {
+        return reply({
+          ok: false,
+          error: 'file-not-found',
+          detail: `${root} is not a folder this app can read.`
+        })
+      }
+      const name = root.split(/[\\/]/).filter(Boolean).pop() ?? root
+      await loadProject({ path: root, name, files: listing }, project ?? undefined)
+      return reply({
+        ok: true,
+        payload: { root: projectPath.value, project: activeProject.value?.path ?? null }
+      })
+    }
     if (envelope.request.kind === 'create-project') {
       return replyPayload(await createProjectForAgent(envelope.request))
     }
@@ -2897,7 +2929,6 @@ const handleDesignRequest = async (envelope: McpDesignEnvelope): Promise<void> =
 
     const path = resolveAgentSheet(envelope.request.sheet, {
       openTabs: fileTabs.value,
-      activePath: activeTabPath.value,
       files: files.value,
       rootPath: rootSchematicPath()
     })
@@ -3027,11 +3058,16 @@ onMounted(async (): Promise<void> => {
     // editor back for a directory walk plus `git status` is what made a
     // restored project sit behind a blank panel. Both fill in on their own.
     if (init.projectPath) {
-      void refreshDirectory()
       // Re-detected rather than trusted wholesale: the workspace may have
       // gained or lost projects since this window last closed. The remembered
       // pick is a preference applied on top of that.
-      void detectProjects(init.projectPath, init.activeProjectPath)
+      designReady = Promise.all([
+        refreshDirectory(),
+        detectProjects(init.projectPath, init.activeProjectPath)
+      ]).then(
+        () => undefined,
+        (err) => console.error('Failed to read the workspace', err)
+      )
     }
   } else {
     console.error('Failed to initialize window', initResult.reason)
@@ -3045,10 +3081,12 @@ onMounted(async (): Promise<void> => {
     openSettingsTab('parts')
   })
 
-  // Read/edit requests from an MCP client.
+  // Read/edit requests from an MCP client, answered once the folder is read:
+  // an agent may ask the moment it starts a workspace (`main/partsMcpBridge.ts`).
   const cleanupMcpDesign = window.api.onMcpDesignRequest((envelope) => {
-    void handleDesignRequest(envelope)
+    void designReady.then(() => handleDesignRequest(envelope))
   })
+  void designReady.then(() => window.api.mcpDesignReady())
 
   const cleanupConfig = window.api.onConfigChanged((config) => {
     showWelcomeOnStartup.value = config.showWelcomeOnStartup

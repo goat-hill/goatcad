@@ -11,6 +11,7 @@ import {
   promptCommand,
   SERVER_NAME,
   TOKEN_ENV,
+  WORKSPACE_ENV,
   writeClaudeMcpConfigFile
 } from '../partsMcpClients'
 
@@ -25,7 +26,10 @@ describe('the launch-time definition for Claude Code', () => {
         [SERVER_NAME]: {
           type: 'http',
           url: URL_NOW,
-          headers: { Authorization: `Bearer \${${TOKEN_ENV}}` }
+          headers: {
+            Authorization: `Bearer \${${TOKEN_ENV}}`,
+            'X-GoatCAD-Workspace': `\${${WORKSPACE_ENV}}`
+          }
         }
       }
     })
@@ -48,7 +52,8 @@ describe('the launch-time definition for Codex', () => {
     const overrides = codexMcpOverrides(URL_NOW)
     expect(overrides).toEqual([
       `mcp_servers.${SERVER_NAME}.url="${URL_NOW}"`,
-      `mcp_servers.${SERVER_NAME}.bearer_token_env_var="${TOKEN_ENV}"`
+      `mcp_servers.${SERVER_NAME}.bearer_token_env_var="${TOKEN_ENV}"`,
+      `mcp_servers.${SERVER_NAME}.env_http_headers={"X-GoatCAD-Workspace"="${WORKSPACE_ENV}"}`
     ])
   })
 })

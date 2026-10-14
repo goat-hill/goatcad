@@ -11,7 +11,7 @@ import { defineOp } from '../registry'
 import { s } from '../schema'
 import { refused } from '../errors'
 import { design } from '../design'
-import type { OpContext } from '../context'
+import { callerOf, type OpContext } from '../context'
 import { readFootprintStyle, readProjectContext, type FootprintStyle } from '../../partsMcpProject'
 import { FOOTPRINT_PAD_ROWS } from './get'
 
@@ -85,7 +85,9 @@ export const padSchema = s.object({
 
 /** The project's footprint choices, as the intent file states them. */
 export const projectFootprintStyle = (ctx: OpContext): FootprintStyle =>
-  readFootprintStyle(ctx.project ? readProjectContext(ctx.project).content : null)
+  readFootprintStyle(
+    ctx.project ? readProjectContext(() => ctx.project?.(callerOf(ctx)) ?? null).content : null
+  )
 
 export const footprintCreate = defineOp({
   name: 'footprint.create',

@@ -57,6 +57,7 @@ export const scriptingInfo = (configDir: string): ScriptingInfo => {
       `sys.path.insert(0, ${JSON.stringify(pythonPath)})`,
       'from goatcad import connect',
       '',
+      '# In a GoatCAD terminal tab; elsewhere connect(workspace="ws_…") with an id from workspace_list.',
       'gc = connect()',
       'print(gc.schematic.describe())'
     ].join('\n'),

@@ -16,7 +16,7 @@ import type {
   DatasheetRecord
 } from '../../partsMcpDatasheets'
 import type { PartRecord } from '../../../preload/partsTypes'
-import type { OpContext } from '../context'
+import { callerOf, type OpContext } from '../context'
 import { defineOp } from '../registry'
 import { s } from '../schema'
 import { fail, notFound, refused, succeed, type OpOutcome } from '../errors'
@@ -164,7 +164,7 @@ export const partsCacheDatasheet = defineOp({
         message: 'This build of the server has no datasheet store.'
       })
     }
-    const projectPath = ctx.project?.() ?? null
+    const projectPath = ctx.project?.(callerOf(ctx)) ?? null
     if (!projectPath) {
       return fail({
         code: 'no-document',
