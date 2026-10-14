@@ -89,7 +89,8 @@ Every window is an isolated renderer; anything touching the OS, another window, 
 - **Library tables**: footprint table in `libraries.json`, the global symbol tier in `symbol-libraries.json`; the project symbol tier is KiCad's own `sym-lib-table` (`lib/kicad/symbolLibraryTable.ts`), and the project shadows global on a nickname clash.
 - **File associations** (`electron-builder.yml` ↔ `KICAD_EXTENSIONS` in `main/launchArgs.ts`): register only unambiguously-ECAD types. Never generic ones (images, STEP/WRL). All OS entry paths (argv, `second-instance`, macOS `open-file`) funnel through `parseFileArgs` → `groupOpenTargets`. Opening a file makes its containing directory the project folder.
 - **Title bar and menus split by platform, as in VS Code**: Windows/Linux get a frameless window drawn by `TitleBar.vue`, and macOS gets `titleBarStyle: 'hidden'` plus the system menu bar with no wordmark. The menu tree is declared once in `TitleBar.vue` (`SECTION_IDS` feeds both surfaces), serialized by `lib/nativeMenu.ts`, and arranged by `main/appMenu.ts`. **Which menu roles are used is a correctness question**, because a macOS accelerator takes the key before the page does (see the `appMenu.ts` header for which roles are used and why, and `clearApplicationMenu` for Windows/Linux). Commands with a shortcut are replayed as synthetic keydowns, so the menu never does less than the key.
-- **Launch precedence**: files from the OS, then the restored session, then a single welcome window. The window pulls its `Partial<WindowSession>` over `window:get-init`.
+- **Launch precedence**: files and folders from the OS, then the restored session, then a single welcome window. The window pulls its `Partial<WindowSession>` over `window:get-init`. `--background` opens none and quits after 10 idle minutes with no window and no agent connection; `mcp` and `help` run a command instead of the app (`launchArgs.ts` `launchMode`, `commandLine.ts`), before the single-instance lock.
+- **Workspaces** (`main/workspaces.ts`): a window belongs to one workspace (a folder and its active project), a tab dragged out joins its source's, and a session groups a workspace's windows (`WindowSession.workspace`). A workspace an agent started with no window is a hidden renderer, left out of the session; Open Folder, Recents, the OS and a restore that name its folder show it rather than open the folder twice (`workspace:open-elsewhere`).
 - **Session restore** (`main/index.ts` `captureSession`/`sanitizeSessions`): each renderer reports over `session:update`, but only after its init has been applied. Each report is persisted as it arrives (the config write is debounced), so a restart that closes no window — a dev-mode main rebuild, a crash — reopens the latest state, and `window:get-init` answers from the window's live state (`windowInitFor`), so a renderer reload comes back as the window was, not as it was created. A quit's snapshot is final; windows closing after it do not shrink it. `activeProjectPath` is a preference re-checked against detection (projects.md §3), not a restore.
 - **Virtual tabs** (`lib/tabs.ts`, `goatcad://…`): Welcome, Settings, Manufacture (per board, reachable only from the PCB properties panel), Components and Schematic Setup (per design root). They are tabs rather than modals or drawers, so the IDE shell is always mounted. Only one of each opens; opening it again focuses it. These tabs are not files: they are absent from `SAVABLE_TYPES` and from the agent's `fileTabs`. **Child tabs** (`tabParent`): Board Setup, Components, Manufacture, Schematic Setup and design copies belong to one design file's tab. App keeps each after its parent (`nestChildTabs`), which the strip draws as one family; a child closes with its parent, opens it when it arrives alone, and moves windows with it. Board Setup, Components and design copies are views on the parent's document, so their unsaved mark is the parent's; Ctrl+S on any child saves the parent. Sample projects come from the `goat-hill/goatcad-sample-projects` repo at runtime (`main/sampleProjects.ts`), not from the release.
 - **Theme**: `data-theme` on the root, with `assets/base.css` as the palette source. `theme.ts` owns the KiCad layer display palettes. Exports keep `KICAD_LAYER_COLORS` unchanged.
@@ -338,16 +339,16 @@ Agent ops over the same service: §3.11.
 - **CAD is a hand-off.** Neither API serves a model file, so `PartCadAvailability` is `handoff`: open the vendor's page.
 
 **The MCP server** (`partsMcpServer.ts`, `partsMcp.ts`, `partsMcpIpc.ts`; op registry in `ops/`, §3.11):
-- **Process-wide.** One loopback listener, started at app-ready, so windows and agents share one quota and one OAuth token.
-- **Four fences.** It binds to `127.0.0.1`, requires the bearer on **every** request (token in `mcpToken.ts`), rejects a browser `Origin`, and caps the body.
-- **A connection is a session** (`mcpSessions.ts`): an MCP client's `Mcp-Session-Id`, minted on `initialize`, or the id the Python client sends under the same header. Ops read it as `ctx.connection`. It ends on a DELETE, or when its GET stream (held open, sending nothing but a heartbeat) stays closed for a few seconds. A client that sends no id has no connection.
-- **Nothing is registered with a client.** An in-app agent tab gets the URL and token on its command line and in its environment (`partsMcpClients.ts`). Settings shows the manual registration line and never writes a client's config.
+- **Process-wide.** One loopback listener, started at app-ready, so windows and agents share one quota and one OAuth token. The same handlers also listen on a user-only socket (`mcpEndpoint.ts`, `socketPathFor`), and `goatcad-endpoint.json` names both.
+- **Four fences.** It binds to `127.0.0.1`, requires the bearer on **every** request (token in `mcpToken.ts`), rejects a browser `Origin`, and caps the body. On Linux and macOS the socket file's 0600 mode stands in for the first two, so a call there needs no token; a Windows pipe takes the token.
+- **A connection is a session** (`mcpSessions.ts`): an MCP client's `Mcp-Session-Id`, minted on `initialize`, or the id the Python client sends under the same header. Ops read it as `ctx.connection`. It ends on a DELETE, or when its GET stream (held open, sending nothing but a heartbeat) stays closed for a few seconds. A client that sends no id has no connection. A connection acts in the workspace it is attached to (`workspaces.ts`, agent-api.md "Workspaces"); `X-GoatCAD-Workspace` attaches a session that is not attached yet, or names the workspace per call for a client without one.
+- **Nothing is registered by the app.** An in-app agent tab gets the URL, the token and its window's workspace (`GOATCAD_WORKSPACE`) on its command line and in its environment (`partsMcpClients.ts`). Outside the app a client registers the executable itself as a stdio server, `goatcad mcp` (`mcpRelay.ts`, `commandLine.ts`), which relays to the socket and starts the app with `--background` when nothing answers; Settings and `goatcad help agents` print the line and never write a client's config.
 - **Read ids back from the tools.** The agent passes ids a tool returned, never recalled ones: `parts_list_filters` before `parts_search_category`, library nicknames before symbols (`partsMcpLibrary.ts`). `parts_cache_datasheet` takes no URL; it resolves from the distributors' listing for that MPN.
 - **Project files** (committed, with provenance in `index.json`):
   - Datasheets go in `<project>/datasheets/` (`partsMcpDatasheet*.ts`).
   - Models go in `<project>/<project>.3dshapes/` (`partsMcpModel*.ts`). The caller supplies the address, so the store records the stated source beside the actual host. Every file is parsed before it is kept.
   - `parts_read_datasheet` reads PDFs via pdfium wasm on a worker (`datasheetReader.ts`, `datasheetLoader.ts`).
-- **Design ops go through the window, not main** (`partsMcpBridge.ts`). The AST lives in the renderer, dirty buffers never cross IPC (§3.9), and edits must be undoable (RULES.md §8). A write lands as an undoable step on a dirty tab, which is the consent mechanism. It never changes the active tab or focuses the window. The per-sheet session and doors are in §3.13 and `lib/schematic/sheetAgent.ts`.
+- **Design ops go through a window of the caller's workspace, not main** (`partsMcpBridge.ts`). The AST lives in the renderer, dirty buffers never cross IPC (§3.9), and edits must be undoable (RULES.md §8). A write lands as an undoable step on a dirty tab, which is the consent mechanism. It never changes the active tab or focuses the window, and which window has focus never decides where it goes. The per-sheet session and doors are in §3.13 and `lib/schematic/sheetAgent.ts`.
 
 ### 3.11 The agent operation registry
 
@@ -378,8 +379,8 @@ running app, with a worked example for a schematic block and one for a board. A 
 pages with `offset` pinned to the `revision` it answered (`lib/queryPage.ts`), and the Python client
 reads such an op whole and raises `Truncated` on a page it did not ask for (`PYTHON_WHOLE_READS`), and splits a by-id read past its cap into calls of the cap (`PYTHON_CHUNKED_READS`). A session learns
 where it is from the MCP handshake's instructions, which carry its path (`partsMcp.ts`); a GoatCAD
-terminal already hands a script the token. `mcpEndpoint.ts` publishes the address beside the bearer token. `/v1` sits behind the
-same bearer as `/mcp` (§3.10's fences). An MCP tool's name is the op's with `_` for the dot; there
+terminal already hands a script the token and its workspace. `mcpEndpoint.ts` publishes the address and the socket, and the client
+prefers the socket, which needs no token on Linux and macOS. `/v1` sits behind the same fences as `/mcp` (§3.10). An MCP tool's name is the op's with `_` for the dot; there
 is no other. `registry.test.ts` holds the shipped tool list additive-only.
 The schema DSL is `ops/schema.ts`, in-repo by RULES.md §4. It yields the handler's type, the
 published JSON Schema and the validator. Main validates before anything crosses the bridge, and
@@ -394,7 +395,7 @@ optional `validate(args, ctx)` runs in main against the index first. It refuses 
 library has, and lets everything through when there's no index. `App.vue`'s `handleDesignRequest`
 offers the request to each **door** in turn: `lib/symbol/libraryAgent.ts`, `lib/board/boardAgent.ts`,
 `lib/fabExportAgent.ts`, `lib/footprint/footprintAgent.ts`, `lib/schematic/schematicSetupAgent.ts`, then App's own verbs
-(`project.create/create_file/open/close/save`), then a sheet
+(`project.create`, `workspace.create_file/open_file/close_file/save/update`), then a sheet
 (`lib/schematic/sheetAgent.ts`, pure helpers in `schematicAgent.ts` and `schematicItems.ts`; the drawing tools' items in `sheetGraphicItems.ts`). A door
 is a kind → handler map. App knows no single operation. Whether a handler needs a project is the
 handler's call, not the door's. A sheet door works over a `SheetAgentContext`, so the same handler
@@ -418,7 +419,7 @@ next call can act on it. `guidance` says what to read first and what gets refuse
 **The sheet session.** A design write lands in the tab's document session
 (`lib/schematic/sheetSession.ts`) whether or not that tab is in front. The mounted editor is a view
 over the session, not a second copy of the sheet. A document no tab holds opens behind the active
-one (`App.openFileInBackground`). Only `project.open` activates a tab, because intent is a verb and
+one (`App.openFileInBackground`). Only `workspace.open_file` activates a tab, because intent is a verb and
 not a side effect of a write. Two signals keep every reader current:
 - `openSheetsVersion` (`lib/schematic/openSheets.ts`) is bumped on every buffer write, and
   cross-sheet computeds depend on it.
@@ -525,7 +526,8 @@ there is no folder).
   path-mangled folder names collide), and minting a session id per directory (`/clear` makes it
   stale). **GoatCAD reads nothing under `~/.claude` or `~/.codex`, for any purpose**; the CLI's
   command line is the only contract. The launch also hands the agent the app's MCP server
-  (`partsMcpClients.ts`) — nothing is registered anywhere, so nothing goes stale.
+  (`partsMcpClients.ts`) — nothing is registered anywhere, so nothing goes stale — and every tab
+  its window's workspace in `GOATCAD_WORKSPACE`, so an agent or a script started there acts in it.
 - **The pty lives in main (`main/terminalSessions.ts`), keyed by the id the tab carries**, so a tab
   switch or a window move never kills it; only the user's close ends one. A mounting view replays
   the scrollback then streams. Output goes to the owning window; `terminal:attach` re-points it —
@@ -588,7 +590,7 @@ A window shows one editor group or two. Reasoning and open work:
   cross panes should take this shape.**
 - **A reveal keeps the user's zoom** (`lib/engine/bringIntoView.ts`): in sight → select; out of
   sight → pan (a cut, never a glide); too big → zoom out.
-- **Agent requests go to the window holding the document** (`main/designWindow.ts`).
+- **Agent requests go to the window of the caller's workspace holding the document** (`main/workspaces.ts`, `main/designWindow.ts`); several windows of one workspace are the normal schematic-and-board case.
 
 ### 3.15 View state outlives views — three homes, and which one a setting gets
 

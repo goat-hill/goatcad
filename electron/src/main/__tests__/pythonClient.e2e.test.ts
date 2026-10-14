@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { promisify } from 'node:util'
 import { startPartsMcpServer, type PartsMcpServerHandle } from '../partsMcpServer'
+import { createMcpSessions } from '../mcpSessions'
 import { buildEndpoint } from '../mcpEndpoint'
 import { writeToken } from '../mcpToken'
 import type { SecretCipher } from '../partsCredentials'
@@ -85,7 +86,12 @@ const keyring: SecretCipher = {
 
 describe('the Python client against a running server', () => {
   let server: PartsMcpServerHandle
+  let socketServer: PartsMcpServerHandle
   let configDir: string
+  /** A config directory naming a trusted socket, beside a token Python cannot read. */
+  let socketDir: string
+  /** Sessions attached by the workspace a client named. */
+  const attached: Array<[string, string]> = []
   /** What reached the window: the design door answers every request with an empty success. */
   const designRequests: McpDesignRequest[] = []
   /** A second config directory whose token store is keyring-encrypted. */
@@ -115,14 +121,37 @@ describe('the Python client against a running server', () => {
       buildEndpoint(server.port, '/mcp', '0.0.0', process.pid, Date.now())
     )
     writeToken(configDir, noKeyring, TOKEN)
-    writeFileSync(join(configDir, 'mcp-endpoint.json'), endpoint)
+    writeFileSync(join(configDir, 'goatcad-endpoint.json'), endpoint)
     encryptedDir = mkdtempSync(join(tmpdir(), 'goatcad-e2e-keyring-'))
     writeToken(encryptedDir, keyring, TOKEN)
-    writeFileSync(join(encryptedDir, 'mcp-endpoint.json'), endpoint)
+    writeFileSync(join(encryptedDir, 'goatcad-endpoint.json'), endpoint)
+
+    socketDir = mkdtempSync(join(tmpdir(), 'goatcad-e2e-socket-'))
+    const socketPath = join(socketDir, 'goatcad.sock')
+    socketServer = await startPartsMcpServer({
+      token: TOKEN,
+      socketPath,
+      trusted: true,
+      sessions: createMcpSessions(),
+      attach: (connection, workspace) => void attached.push([connection, workspace]),
+      context: { parts: service }
+    })
+    writeToken(socketDir, keyring, TOKEN)
+    writeFileSync(
+      join(socketDir, 'goatcad-endpoint.json'),
+      JSON.stringify(
+        buildEndpoint(server.port, '/mcp', '0.0.0', process.pid, Date.now(), {
+          path: socketPath,
+          trusted: true
+        })
+      )
+    )
   })
 
   afterAll(async () => {
     await server?.close()
+    await socketServer?.close()
+    rmSync(socketDir, { recursive: true, force: true })
     rmSync(configDir, { recursive: true, force: true })
     rmSync(encryptedDir, { recursive: true, force: true })
   })
@@ -179,6 +208,15 @@ describe('the Python client against a running server', () => {
     expect(out).toContain('encrypted')
     expect(out).toContain('GOATCAD_MCP_TOKEN')
     expect(out).toContain('Settings > AI Integrations')
+  })
+
+  it('connects through the user-only socket with no token, attaching the workspace it names', async () => {
+    const out = await script(
+      'print(connect(workspace="ws_py", timeout=3).parts.status()["connectedCount"])',
+      { GOATCAD_CONFIG_DIR: socketDir }
+    )
+    expect(out).toBe('1')
+    expect(attached.at(-1)?.[1]).toBe('ws_py')
   })
 
   it('connects with no arguments and calls an operation', async () => {

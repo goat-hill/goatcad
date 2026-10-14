@@ -220,13 +220,14 @@ mcp:
   addToFile: Add to {path} to use GoatCAD from a session started outside the app
   copy: Copy
   copied: Copied
-  # The bearer token, shown for a client that has no card of its own.
+  # The bearer token, for a client that talks to the local port itself rather
+  # than through the command on its card.
   tokenLabel: Token
   copyToken: Copy token
   tokenCopied: Token copied
   regenerate: Replace token
   # Shown after a launch that could not read the stored token (the keyring
   # refused, or the file was damaged) and minted a new one instead.
-  tokenReset: Token replaced at launch — the stored one could not be read. Copy the commands below again.
-  tokenReplaced: Token replaced — copy the commands below again.
+  tokenReset: Token replaced at launch — the stored one could not be read. A client given the old token needs this one.
+  tokenReplaced: Token replaced — a client given the old token needs this one.
   regenerateFailed: Could not restart the server with the new token.

@@ -59,23 +59,30 @@ describe('the launch-time definition for Codex', () => {
 })
 
 describe('the manual path', () => {
-  it('registers Claude Code at user scope, not the per-directory default', () => {
+  const relay = { command: '/Applications/GoatCAD.app/Contents/MacOS/GoatCAD', args: ['mcp'] }
+  const spaced = { command: 'C:\\Program Files\\GoatCAD\\GoatCAD.exe', args: ['mcp'] }
+
+  it('registers Claude Code at user scope, as this executable with mcp', () => {
     // `claude mcp add` defaults to `local` scope, which would recreate exactly
-    // the per-project coupling the design rejects.
-    const line = claudeCode.manualText(URL_NOW, 'tok')
+    // the per-project coupling the design rejects. No URL and no token: the
+    // relay finds the app, so the line never goes stale.
     expect(claudeCode.manual).toBe('command')
-    expect(line).toContain('--scope user')
-    expect(line).toContain('--transport http')
-    expect(line).toContain(URL_NOW)
-    expect(line).toContain('Bearer tok')
+    expect(claudeCode.manualText(relay)).toBe(
+      `claude mcp add --scope user ${SERVER_NAME} -- /Applications/GoatCAD.app/Contents/MacOS/GoatCAD mcp`
+    )
+    expect(claudeCode.manualText(spaced)).toContain(
+      '-- "C:\\Program Files\\GoatCAD\\GoatCAD.exe" mcp'
+    )
   })
 
-  it('gives Codex a config table, since its CLI cannot take a header inline', () => {
-    const snippet = codex.manualText(URL_NOW, 'tok')
+  it('gives Codex its config table with the command and arguments', () => {
+    const snippet = codex.manualText(relay)
     expect(codex.manual).toBe('snippet')
-    expect(snippet.split('\n')[0]).toBe(`[mcp_servers.${SERVER_NAME}]`)
-    expect(snippet).toContain(`url = "${URL_NOW}"`)
-    expect(snippet).toContain('Authorization = "Bearer tok"')
+    expect(snippet.split('\n')).toEqual([
+      `[mcp_servers.${SERVER_NAME}]`,
+      'command = "/Applications/GoatCAD.app/Contents/MacOS/GoatCAD"',
+      'args = ["mcp"]'
+    ])
   })
 
   it('names the file each client keeps its servers in', () => {

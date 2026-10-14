@@ -18,7 +18,13 @@
  *    header, which is the standard DNS-rebinding guard for local servers.
  * 4. Cap the body. An unbounded read on a public-ish socket is a way to spend
  *    someone's memory.
+ *
+ * The same handlers also listen on a socket only this user can open
+ * (`mcpEndpoint.ts`, `socketPathFor`). On Linux and macOS the socket file's mode
+ * is fence 1 and 2 at once, so a call there needs no token; a Windows named
+ * pipe has no such mode and takes the token like the port.
  */
+import { chmodSync, rmSync } from 'node:fs'
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http'
 import { handleMcpMessage, type JsonRpcRequest } from './partsMcp'
 import { V1_PREFIX } from './ops/discovery'
@@ -173,6 +179,10 @@ export interface PartsMcpServerOptions {
   context: OpContext
   port?: number
   host?: string
+  /** Listen on this socket path or pipe instead of a port. */
+  socketPath?: string
+  /** The socket admits only this user, so it takes calls without the token. */
+  trusted?: boolean
   /** Agent connections (`mcpSessions.ts`). Without it no session id is minted or read. */
   sessions?: McpSessions
   /** Attach a session that is not attached yet to the workspace it names. */
@@ -201,7 +211,7 @@ export async function handleRequest(
   }
 
   const presented = bearerFrom(req.headers.authorization)
-  if (!presented || !tokensMatch(presented, options.token)) {
+  if (!options.trusted && (!presented || !tokensMatch(presented, options.token))) {
     // No hint about which half was wrong, and the same answer for a missing
     // token as for a bad one.
     res.writeHead(401, { 'www-authenticate': 'Bearer', 'content-type': 'application/json' })
@@ -399,6 +409,7 @@ const holdStream = (
 export function startPartsMcpServer(options: PartsMcpServerOptions): Promise<PartsMcpServerHandle> {
   const host = options.host ?? '127.0.0.1'
   const port = options.port ?? DEFAULT_MCP_PORT
+  const socketPath = options.socketPath
 
   return new Promise((resolve, reject) => {
     const streams = new Set<ServerResponse>()
@@ -410,11 +421,13 @@ export function startPartsMcpServer(options: PartsMcpServerOptions): Promise<Par
     })
 
     server.once('error', reject)
-    server.listen(port, host, () => {
+    const onListening = (): void => {
       server.removeListener('error', reject)
+      // The mode is the fence on a socket file; a pipe has none to set.
+      if (socketPath && process.platform !== 'win32') chmodSync(socketPath, 0o600)
       const address = server.address()
       resolve({
-        port: typeof address === 'object' && address ? address.port : port,
+        port: typeof address === 'object' && address ? address.port : 0,
         close: () =>
           new Promise((done) => {
             server.close(() => done())
@@ -422,6 +435,12 @@ export function startPartsMcpServer(options: PartsMcpServerOptions): Promise<Par
             server.closeIdleConnections()
           })
       })
-    })
+    }
+    if (socketPath) {
+      // A crash leaves the file behind, and only the app holding the
+      // single-instance lock gets here, so it is ours to replace.
+      if (process.platform !== 'win32') rmSync(socketPath, { force: true })
+      server.listen(socketPath, onListening)
+    } else server.listen(port, host, onListening)
   })
 }

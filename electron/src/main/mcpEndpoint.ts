@@ -15,11 +15,34 @@
  * on stop, so its presence is a claim that the app is up — a claim a client
  * still has to verify, because a crash leaves the file behind. `pid` is there to
  * make that cheap; a refused connection is the real answer.
+ *
+ * Beside the loopback port it names a socket only this user can open (`socket`):
+ * the same handlers, without the token on Linux and macOS, where the file's
+ * mode is the fence. A Windows named pipe takes the token like the port.
  */
+import { createHash } from 'node:crypto'
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 
-const ENDPOINT_FILE = 'mcp-endpoint.json'
+const ENDPOINT_FILE = 'goatcad-endpoint.json'
+
+/** Past this a Unix socket path does not fit `sockaddr_un` on every platform. */
+const MAX_SOCKET_PATH = 100
+
+/**
+ * Where the user-only socket listens: a file in the config directory, or on
+ * Windows a pipe named for it, so a harness with its own config directory has
+ * its own. Null when the path would not fit.
+ */
+export const socketPathFor = (dir: string, platform: NodeJS.Platform): string | null => {
+  if (platform === 'win32')
+    return `\\\\.\\pipe\\goatcad-${createHash('sha256').update(dir).digest('hex').slice(0, 16)}`
+  const path = join(dir, 'goatcad.sock')
+  return Buffer.byteLength(path) <= MAX_SOCKET_PATH ? path : null
+}
+
+/** Whether a socket of `socketPathFor` lets its caller in without the token. */
+export const socketTrusted = (platform: NodeJS.Platform): boolean => platform !== 'win32'
 
 export interface McpEndpointFile {
   /** Full URL of the MCP endpoint, including the path. */
@@ -34,6 +57,10 @@ export interface McpEndpointFile {
    *  disagree. */
   appVersion: string
   startedAt: number
+  /** The user-only socket serving the same paths, or null without one. */
+  socket: string | null
+  /** Whether the socket takes calls without the token. */
+  socketTrusted: boolean
 }
 
 export const endpointPath = (dir: string): string => join(dir, ENDPOINT_FILE)
@@ -43,14 +70,17 @@ export const buildEndpoint = (
   path: string,
   appVersion: string,
   pid: number,
-  now: number
+  now: number,
+  socket: { path: string; trusted: boolean } | null = null
 ): McpEndpointFile => ({
   url: `http://127.0.0.1:${port}${path}`,
   baseUrl: `http://127.0.0.1:${port}`,
   port,
   pid,
   appVersion,
-  startedAt: now
+  startedAt: now,
+  socket: socket?.path ?? null,
+  socketTrusted: socket?.trusted ?? false
 })
 
 /** Publish the address. Never throws: a client that cannot find us is a

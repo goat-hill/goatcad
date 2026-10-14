@@ -25,7 +25,7 @@ import {
   fetchDatasheet
 } from './partsMcpDatasheetStore'
 import { readDatasheet } from './datasheetLoader'
-import { cacheModel } from './partsMcpModelStore'
+import { cacheModel, type ModelCacheInput } from './partsMcpModelStore'
 import { loadStepFile } from './stepLoader'
 import type { OpEffect, WorkspaceService } from './ops/context'
 import { callerWorkspace, workspaces } from './workspaces'
@@ -33,11 +33,19 @@ import {
   DEFAULT_MCP_PORT,
   MCP_PATH,
   startPartsMcpServer,
-  type PartsMcpServerHandle
+  type PartsMcpServerHandle,
+  type PartsMcpServerOptions
 } from './partsMcpServer'
 import { loadOrCreateToken, newToken, writeToken } from './mcpToken'
 import { MCP_CLIENTS, promptCommand } from './partsMcpClients'
-import { buildEndpoint, clearEndpoint, writeEndpoint } from './mcpEndpoint'
+import { relayCommand } from './commandLine'
+import {
+  buildEndpoint,
+  clearEndpoint,
+  socketPathFor,
+  socketTrusted,
+  writeEndpoint
+} from './mcpEndpoint'
 import { scriptingInfo, writePythonClient } from './agentScripting'
 import { registry } from './ops'
 import { MCP_PROMPTS } from './partsMcp'
@@ -45,6 +53,9 @@ import { toolInfo } from './ops/surface'
 import type { McpClientInfo, McpServerStatus, McpSurface } from '../preload/mcpTypes'
 
 let handle: PartsMcpServerHandle | null = null
+/** The same server on the user-only socket (`mcpEndpoint.ts`). */
+let socketHandle: PartsMcpServerHandle | null = null
+let socketAt: { path: string; trusted: boolean } | null = null
 let activeToken: string | null = null
 /** The stored token could not be read at launch and a fresh one replaced it
  *  (`mcpToken.ts`). Shown until the next replacement, since every manual
@@ -104,7 +115,7 @@ export function mcpStatus(): McpServerStatus {
     id: client.id,
     name: client.name,
     manual: client.manual,
-    manualText: url && activeToken ? client.manualText(url, activeToken) : null,
+    manualText: client.manualText(relayCommand()),
     configPath: client.configPath()
   }))
 
@@ -165,6 +176,9 @@ agentSessions.onEnd((connection) => {
   workspaces.detach(connection)
 })
 
+/** Agent clients holding a connection open now, for the background launch's idle quit. */
+export const activeAgentConnections = (): number => agentSessions.active()
+
 /**
  * Start the server, or report why it could not start.
  *
@@ -187,9 +201,8 @@ export async function startPartsMcp(
   const token = activeToken
 
   try {
-    handle = await startPartsMcpServer({
+    const options = {
       token,
-      port,
       sessions: agentSessions,
       attach: (connection, workspace) => {
         if (!workspaces.attachedTo(connection)) workspaces.attach(connection, workspace)
@@ -217,17 +230,19 @@ export async function startPartsMcp(
         },
         datasheetReader: { read: readDatasheet },
         models: {
-          cache: (projectPath, input) =>
+          cache: (projectPath: string, input: ModelCacheInput) =>
             cacheModel(projectPath, input, outboundFetch, loadStepFile, Date.now())
         }
       }
-    })
+    } satisfies PartsMcpServerOptions
+    handle = await startPartsMcpServer({ ...options, port })
+    socketAt = await startSocket(options)
     // Publish the address and the client together: an agent that finds one and
     // not the other has half a path to scripting the app.
     writePythonClient(app.getPath('userData'))
     writeEndpoint(
       app.getPath('userData'),
-      buildEndpoint(handle.port, MCP_PATH, app.getVersion(), process.pid, Date.now())
+      buildEndpoint(handle.port, MCP_PATH, app.getVersion(), process.pid, Date.now(), socketAt)
     )
     return { ok: true, port: handle.port }
   } catch (err) {
@@ -237,14 +252,36 @@ export async function startPartsMcp(
   }
 }
 
+/**
+ * The same server on the user-only socket. Never fatal: the port still serves,
+ * and a client falls back to it.
+ */
+const startSocket = async (
+  options: PartsMcpServerOptions
+): Promise<{ path: string; trusted: boolean } | null> => {
+  const path = socketPathFor(app.getPath('userData'), process.platform)
+  if (!path) return null
+  const trusted = socketTrusted(process.platform)
+  try {
+    socketHandle = await startPartsMcpServer({ ...options, socketPath: path, trusted })
+    return { path, trusted }
+  } catch (err) {
+    console.warn('[parts-mcp] no socket:', err instanceof Error ? err.message : String(err))
+    return null
+  }
+}
+
 export async function stopPartsMcp(): Promise<void> {
   const current = handle
+  const socket = socketHandle
   handle = null
+  socketHandle = null
+  socketAt = null
   // Withdraw the published address first: a client that reads it during the
   // close would otherwise connect to a socket that is already going.
   clearEndpoint(app.getPath('userData'))
   // Answer anything in flight before the socket goes: a tool call left hanging
   // on a closing app waits out its whole timeout for no reason.
   abortDesignRequests()
-  await current?.close()
+  await Promise.all([current?.close(), socket?.close()])
 }

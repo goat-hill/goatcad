@@ -36,7 +36,14 @@ import {
   type WindowSession
 } from './appConfig'
 import { clearApplicationMenu, focusWindowMenu, forgetWindowMenu, setWindowMenu } from './appMenu'
-import { groupOpenTargets, parseFileArgs, KICAD_EXTENSIONS } from './launchArgs'
+import {
+  groupOpenTargets,
+  launchMode,
+  parseFileArgs,
+  parseFolderArgs,
+  KICAD_EXTENSIONS,
+  type OpenTarget
+} from './launchArgs'
 import { loadStepFile } from './stepLoader'
 import { TerminalSessionManager } from './terminalSessions'
 import { AgentStatusServer } from './agentStatusServer'
@@ -64,6 +71,7 @@ import { outboundFetch } from './outboundFetch'
 import { downloadSample, fetchSampleCatalog } from './sampleProjects'
 import type { SampleCatalog, SampleListResult, SampleOpenResult } from '../preload/sampleTypes'
 import {
+  activeAgentConnections,
   mcpLaunch,
   registerPartsMcpIpc,
   setWorkspaceService,
@@ -77,7 +85,7 @@ import {
   expectDesignWindow,
   setDesignWindowSource
 } from './partsMcpBridge'
-import { workspaces } from './workspaces'
+import { samePath, workspaces } from './workspaces'
 import { createWorkspaceService } from './workspaceService'
 import { writeClaudeMcpConfigFile } from './partsMcpClients'
 import type { ProjectChangeBatch } from '../preload/projectChangeTypes'
@@ -108,6 +116,7 @@ import { APP_URL, appSchemePrivileges, registerAppProtocolHandler } from './appP
 import { buildZip } from './zip'
 import { canCheckForUpdates, checkForUpdatesNow, startUpdater } from './updater'
 import { registerFeedbackIpc } from './feedback'
+import { runCommandLine } from './commandLine'
 
 // Must precede any getPath('userData') call: it decides the config directory.
 // Launch milestones (`launch:*`) are read by bin/launch-timing; a mark costs microseconds.
@@ -124,6 +133,9 @@ registerMediaSchemePrivileges([appSchemePrivileges])
 if (process.env.GOATCAD_USER_DATA_DIR) {
   app.setPath('userData', process.env.GOATCAD_USER_DATA_DIR)
 }
+
+/** What this launch is for (`launchArgs.ts`); `background` is an agent's, with no window. */
+const mode = launchMode(process.argv, app.isPackaged)
 
 // Keep track of active windows
 const windowMap = new Map<number, BrowserWindow>()
@@ -184,17 +196,22 @@ const config = (): ConfigStore => {
   return configStore
 }
 
+// A command (`goatcad mcp`, `help`) is not the app: it draws nothing and keeps
+// no crash dumps of its own (`commandLine.ts`).
+const command = mode === 'mcp' || mode === 'help' || mode === 'help-agents' ? mode : null
+if (!command) {
+  startCrashDumps(is.dev)
+  watchProcessCrashes()
+}
+
 // A blocklisted driver (llvmpipe in a VM or under xvfb, older Mesa) otherwise
 // gets no WebGL at all, and a board that cannot render is broken anyway.
-if (process.platform === 'linux') app.commandLine.appendSwitch('ignore-gpu-blocklist')
-
-startCrashDumps(is.dev)
-watchProcessCrashes()
+if (process.platform === 'linux' && !command) app.commandLine.appendSwitch('ignore-gpu-blocklist')
 
 // Opt-in (Settings ▸ Appearance). Chromium's compositor and WebGL (through ANGLE)
 // use OpenGL on Linux by default; both switch together so they share one API.
 // Switches only apply before ready, so a change waits for a restart.
-if (process.platform === 'linux' && config().get().useVulkan) {
+if (process.platform === 'linux' && !command && config().get().useVulkan) {
   app.commandLine.appendSwitch('enable-features', 'Vulkan')
   app.commandLine.appendSwitch('use-angle', 'vulkan')
 }
@@ -471,9 +488,8 @@ let quitSessionCaptured = false
  */
 let quitRequested = false
 
-/** Open the windows a launch should start with: files > restored session > welcome. */
-const openStartupWindows = (files: readonly string[]): void => {
-  const targets = groupOpenTargets(files)
+/** Open the windows a launch should start with: files and folders > restored session > welcome. */
+const openStartupWindows = (targets: readonly OpenTarget[]): void => {
   if (targets.length > 0) {
     for (const target of targets) {
       createProjectWindow({ projectPath: target.projectPath, tabs: target.tabs })
@@ -485,7 +501,14 @@ const openStartupWindows = (files: readonly string[]): void => {
   if (restored.length > 0) {
     const groups = new Map<number, string>()
     for (const session of restored) {
-      const joined = session.workspace === undefined ? undefined : groups.get(session.workspace)
+      // A folder already open, an agent's in the background say, gains this
+      // window rather than a second workspace.
+      const holder = session.projectPath ? workspaces.holding(session.projectPath) : null
+      const sameFolder = holder?.root && samePath(holder.root, session.projectPath!) ? holder : null
+      if (sameFolder?.hidden) findWindowForProject(sameFolder.root!)
+      const joined =
+        sameFolder?.id ??
+        (session.workspace === undefined ? undefined : groups.get(session.workspace))
       const win = createProjectWindow(session, joined ? { workspace: joined } : {})
       const workspace = workspaces.ofWindow(win.id)
       if (session.workspace !== undefined && workspace && !joined)
@@ -504,6 +527,42 @@ const findWindowForProject = (projectPath: string): BrowserWindow | null => {
   if (!win || win.isDestroyed()) return null
   if (workspace!.hidden) revealWindow(win)
   return win
+}
+
+/** The files and folders an argv names, as windows to open. */
+const openTargets = (
+  argv: readonly string[],
+  cwd: string,
+  extraFiles: readonly string[] = []
+): OpenTarget[] => {
+  const options = { isPackaged: app.isPackaged, cwd, exists: fs.existsSync }
+  const isDirectory = (path: string): boolean => {
+    try {
+      return fs.statSync(path).isDirectory()
+    } catch {
+      return false
+    }
+  }
+  return [
+    ...groupOpenTargets([...extraFiles, ...parseFileArgs(argv, options)]),
+    ...parseFolderArgs(argv, { ...options, isDirectory }).map((projectPath) => ({
+      projectPath,
+      tabs: []
+    }))
+  ]
+}
+
+/** How long a background launch waits with no window and no agent before it quits. */
+const BACKGROUND_IDLE_MS = 10 * 60_000
+
+/** A background launch quits once it has had no window and no agent connection for a while. */
+const quitWhenIdle = (): void => {
+  let idleSince = Date.now()
+  const timer = setInterval(() => {
+    if (windowMap.size > 0 || activeAgentConnections() > 0) idleSince = Date.now()
+    else if (Date.now() - idleSince >= BACKGROUND_IDLE_MS) app.quit()
+  }, 30_000)
+  timer.unref()
 }
 
 /** A window the person can see: one of a workspace that has windows. */
@@ -552,8 +611,8 @@ const focusWindow = (win: BrowserWindow): void => {
 }
 
 /** Route OS file-open requests into the running app. */
-const openFilesInApp = (files: readonly string[]): void => {
-  for (const target of groupOpenTargets(files)) {
+const openFilesInApp = (targets: readonly OpenTarget[]): void => {
+  for (const target of targets) {
     const existing = findWindowForProject(target.projectPath)
     if (existing) {
       for (const tab of target.tabs) existing.webContents.send('tab:add', tab)
@@ -637,23 +696,24 @@ const start = (): void => {
 
     registerIpcHandlers()
 
-    const launchFiles = [
-      ...queuedOpenFiles,
-      ...parseFileArgs(process.argv, {
-        isPackaged: app.isPackaged,
-        cwd: process.cwd(),
-        exists: fs.existsSync
-      })
-    ]
+    const launchTargets = openTargets(process.argv, process.cwd(), queuedOpenFiles)
     queuedOpenFiles.length = 0
-    openStartupWindows(launchFiles)
+    // A background launch is an agent's: no window until one asks for it, and a
+    // quit once nobody has used it for a while.
+    if (mode === 'background') {
+      app.dock?.hide()
+      quitWhenIdle()
+    } else openStartupWindows(launchTargets)
 
     // Self-update for direct installs (main/updater.ts). The setting is read
     // at every check, so it is honored on the first one.
     startUpdater({ enabled: () => config().get().checkForUpdates })
 
     app.on('activate', function () {
-      if (!shownWindow()) openStartupWindows([])
+      if (!shownWindow()) {
+        app.dock?.show()
+        openStartupWindows([])
+      }
     })
 
     reapIdleWorkspaces()
@@ -827,6 +887,22 @@ function registerIpcHandlers(): void {
   ipcMain.handle('config:clear-recents', (): RecentEntry[] => {
     broadcastConfig({ ...config().update({ recents: [] }) })
     return []
+  })
+
+  // A project is open in one workspace: opening the folder another holds brings
+  // that one forward instead, with the file as its tab.
+  ipcMain.handle('workspace:open-elsewhere', (event, root: unknown, file: unknown) => {
+    if (typeof root !== 'string') return false
+    const asking = BrowserWindow.fromWebContents(event.sender)
+    const holder = workspaces.holding(root)
+    if (!holder || (asking && holder.windows.includes(asking.id))) return false
+    const win = windowMap.get(holder.windows[0])
+    if (!win || win.isDestroyed()) return false
+    if (holder.hidden) revealWindow(win)
+    else focusWindow(win)
+    if (typeof file === 'string')
+      win.webContents.send('tab:add', { name: basename(file), path: file })
+    return true
   })
 
   // A tab dragged out of a window opens a window of that window's workspace; a
@@ -2203,11 +2279,14 @@ function registerIpcHandlers(): void {
 // the running instance instead of starting a rival copy. Everything below is
 // registered only for the instance that owns the lock — a losing instance quits
 // immediately and must not touch the config the primary instance owns.
-if (!app.requestSingleInstanceLock()) {
+if (command) {
+  runCommandLine(command)
+} else if (!app.requestSingleInstanceLock()) {
   app.quit()
 } else {
   app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
+    // A background launch waits out its idle time instead (`quitWhenIdle`).
+    if (process.platform !== 'darwin' && mode !== 'background') {
       app.quit()
     }
   })
@@ -2237,18 +2316,19 @@ if (!app.requestSingleInstanceLock()) {
   })
 
   app.on('second-instance', (_event, argv, workingDirectory) => {
-    const files = parseFileArgs(argv, {
-      isPackaged: app.isPackaged,
-      cwd: workingDirectory,
-      exists: fs.existsSync
-    })
-    if (files.length > 0) {
-      openFilesInApp(files)
+    // An agent's launch finding the app running wants nothing shown.
+    if (launchMode(argv, app.isPackaged) === 'background') return
+    const targets = openTargets(argv, workingDirectory)
+    if (targets.length > 0) {
+      openFilesInApp(targets)
       return
     }
     const win = shownWindow()
     if (win) focusWindow(win)
-    else createProjectWindow()
+    else {
+      app.dock?.show()
+      openStartupWindows([])
+    }
   })
 
   app.on('open-file', (event, filePath) => {
@@ -2257,7 +2337,7 @@ if (!app.requestSingleInstanceLock()) {
       queuedOpenFiles.push(filePath)
       return
     }
-    openFilesInApp([filePath])
+    openFilesInApp(groupOpenTargets([filePath]))
   })
 
   start()

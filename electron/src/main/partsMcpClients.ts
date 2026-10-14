@@ -13,8 +13,10 @@
  *
  * What is left for a client to *store* is the manual path: a person
  * running the CLI in their own terminal, outside GoatCAD, registers the server
- * themselves with a line Settings shows them. We never write a client's config
- * file — `~/.claude.json` and `~/.codex/config.toml` are theirs.
+ * themselves with a line Settings shows them. It names this executable with
+ * `mcp` (`mcpRelay.ts`), not the URL and token, so it never goes stale either.
+ * We never write a client's config file — `~/.claude.json` and
+ * `~/.codex/config.toml` are theirs.
  *
  * Electron-free. The one file this writes is the app's own.
  */
@@ -52,12 +54,10 @@ export interface McpClient {
   id: McpClientId
   /** A product name — a proper noun, so not translated. */
   name: string
-  /**
-   * What the manual path copies: a shell command for a client whose CLI can
-   * take a header, or a config snippet for one whose CLI cannot.
-   */
+  /** What the manual path copies: a shell command, or a config snippet. */
   manual: 'command' | 'snippet'
-  manualText(url: string, token: string): string
+  /** The text for a server run as `relay`: this executable with `mcp`. */
+  manualText(relay: { command: string; args: string[] }): string
   /** The file the manual path ends up in. Shown, never written by us. */
   configPath(): string
 }
@@ -73,33 +73,30 @@ export const claudeCode: McpClient = {
   id: 'claude-code',
   name: 'Claude Code',
   manual: 'command',
-  manualText: (url, token) =>
-    `claude mcp add --scope user --transport http ${SERVER_NAME} ${url} --header "Authorization: Bearer ${token}"`,
+  manualText: ({ command, args }) =>
+    `claude mcp add --scope user ${SERVER_NAME} -- ${[command, ...args].map(shellWord).join(' ')}`,
   // Where `--scope user` writes.
   configPath: () => join(homedir(), '.claude.json')
 }
 
-/**
- * Codex.
- *
- * `codex mcp add` takes a bearer token only as an environment-variable *name*,
- * which a person's own terminal would then have to export every time — so the
- * manual path is the `config.toml` table instead, with the header inline.
- */
+/** Codex, as its `config.toml` table, which carries the command and its arguments as TOML. */
 export const codex: McpClient = {
   id: 'codex',
   name: 'Codex',
   manual: 'snippet',
-  manualText: (url, token) =>
+  manualText: ({ command, args }) =>
     [
       `[mcp_servers.${SERVER_NAME}]`,
-      `url = "${url}"`,
-      `http_headers = { Authorization = "Bearer ${token}" }`
+      `command = ${JSON.stringify(command)}`,
+      `args = ${JSON.stringify(args)}`
     ].join('\n'),
   configPath: () => join(homedir(), '.codex', 'config.toml')
 }
 
 export const MCP_CLIENTS: McpClient[] = [claudeCode, codex]
+
+/** A word as a POSIX shell or cmd.exe reads it: double-quoted when it holds a space. A path holds no quote. */
+const shellWord = (word: string): string => (/\s/.test(word) ? `"${word}"` : word)
 
 // ------------------------------------------------------------ launch config
 

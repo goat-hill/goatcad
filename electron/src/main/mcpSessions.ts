@@ -33,6 +33,8 @@ export interface McpSessions {
   /** The session ended: its client said so. */
   end(id: string): void
   onEnd(listener: (id: string) => void): () => void
+  /** Sessions holding a stream, or within the grace after their last closed. */
+  active(): number
 }
 
 export const createMcpSessions = (
@@ -84,6 +86,7 @@ export const createMcpSessions = (
     onEnd(listener) {
       listeners.add(listener)
       return () => listeners.delete(listener)
-    }
+    },
+    active: () => streams.size + leaving.size
   }
 }

@@ -780,10 +780,17 @@ const loadLibrariesTable = async (): Promise<void> => {
   }
 }
 
+/**
+ * A folder another workspace already holds opens there instead, its window
+ * brought forward: a project is open in one workspace (`main/workspaces.ts`).
+ */
+const openedElsewhere = (root: string, file?: string): Promise<boolean> =>
+  window.api.openInHoldingWorkspace(root, file)
+
 const handleOpenFolder = async (): Promise<void> => {
   try {
     const project = await window.api.openDirectory()
-    if (project) {
+    if (project && !(await openedElsewhere(project.path))) {
       loadProject(project as { path: string; name: string; files: FileItem[] })
     }
   } catch (err) {
@@ -801,7 +808,7 @@ const handleOpenFolder = async (): Promise<void> => {
 const handleOpenProject = async (): Promise<void> => {
   try {
     const picked = await window.api.openProjectDialog()
-    if (picked) {
+    if (picked && !(await openedElsewhere(picked.path))) {
       loadProject(
         picked as { path: string; name: string; files: FileItem[] },
         picked.projectFilePath
@@ -831,6 +838,8 @@ const recents = ref<RecentEntry[]>([])
  */
 const openRecentEntry = async (entry: RecentEntry): Promise<void> => {
   try {
+    if (await openedElsewhere(entry.workspaceRoot, entry.kind === 'file' ? entry.path : undefined))
+      return
     const listing = (await window.api.readDirectory(entry.workspaceRoot)) as FileItem[]
     if (!listing || listing.length === 0) {
       recents.value = await window.api.removeRecent(entry.path)
@@ -859,6 +868,8 @@ const handleOpenFileDialog = async (): Promise<void> => {
   try {
     const res = await window.api.openFileDialog()
     if (!res) return
+    const isProjectFile = res.fileName.toLowerCase().endsWith('.kicad_pro')
+    if (await openedElsewhere(res.projectPath, isProjectFile ? undefined : res.filePath)) return
     await loadProject({
       path: res.projectPath,
       name: res.projectName,
@@ -1134,6 +1145,7 @@ const openSampleProject = async (sample: {
 }): Promise<void> => {
   showSampleProjects.value = false
   try {
+    if (await openedElsewhere(sample.path)) return
     const projectFiles = (await window.api.readDirectory(sample.path)) as FileItem[]
     await loadProject(
       { path: sample.path, name: sample.name, files: projectFiles },

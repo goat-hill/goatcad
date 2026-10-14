@@ -1,5 +1,11 @@
 import { describe, test, expect } from 'vitest'
-import { groupOpenTargets, isKicadFile, parseFileArgs } from '../launchArgs'
+import {
+  groupOpenTargets,
+  isKicadFile,
+  launchMode,
+  parseFileArgs,
+  parseFolderArgs
+} from '../launchArgs'
 
 const exists = (): boolean => true
 
@@ -112,5 +118,34 @@ describe('groupOpenTargets', () => {
         tabs: [{ name: 'a.kicad_sch', path: '/proj/a.kicad_sch' }]
       }
     ])
+  })
+})
+
+describe('parseFolderArgs', () => {
+  const options = {
+    isPackaged: true,
+    cwd: '/work',
+    exists,
+    isDirectory: (path: string) => path === '/boards/canary' || path === '/work/pedal'
+  }
+
+  test('takes existing folders, after `open` or bare, resolved against the working directory', () => {
+    expect(parseFolderArgs(['exe', 'open', '/boards/canary'], options)).toEqual(['/boards/canary'])
+    expect(parseFolderArgs(['exe', 'pedal', '/p/a.kicad_sch', '--x'], options)).toEqual([
+      '/work/pedal'
+    ])
+  })
+})
+
+describe('launchMode', () => {
+  test('reads the verb the executable was run with', () => {
+    expect(launchMode(['exe', 'mcp'], true)).toBe('mcp')
+    expect(launchMode(['electron', '/app', 'mcp'], false)).toBe('mcp')
+    expect(launchMode(['exe', 'help', 'agents'], true)).toBe('help-agents')
+    expect(launchMode(['exe', '--help'], true)).toBe('help')
+    expect(launchMode(['exe', '--background'], true)).toBe('background')
+    expect(launchMode(['exe', '--ozone-platform=x11', '/p/a.kicad_sch'], true)).toBe('app')
+    // A file named like a verb is a file.
+    expect(launchMode(['exe', '/p/mcp'], true)).toBe('app')
   })
 })

@@ -178,8 +178,10 @@ export const PYTHON_WHOLE_READS: ReadonlySet<string> = new Set(['items.query'])
 export const PYTHON_CHUNKED_READS: ReadonlyMap<string, string> = new Map([['items.get', 'ids']])
 
 export const PYTHON_RUNTIME = `import atexit
+import http.client
 import json
 import os
+import socket
 import sys
 import urllib.error
 import urllib.request
@@ -438,6 +440,29 @@ class Transaction:
         return False
 
 
+class _UnixConnection(http.client.HTTPConnection):
+    """HTTP over the app's user-only socket, which needs no token."""
+
+    def __init__(self, path: str, timeout: float) -> None:
+        super().__init__("localhost", timeout=timeout)
+        self._path = path
+
+    def connect(self) -> None:
+        sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        sock.settimeout(self.timeout)
+        sock.connect(self._path)
+        self.sock = sock
+
+
+class _UnixHandler(urllib.request.HTTPHandler):
+    def __init__(self, path: str) -> None:
+        super().__init__()
+        self._path = path
+
+    def http_open(self, req):
+        return self.do_open(lambda host, timeout=30.0, **_: _UnixConnection(self._path, timeout), req)
+
+
 class GoatCAD:
     """A connection to the running app.
 
@@ -449,12 +474,22 @@ class GoatCAD:
     """
 
     def __init__(
-        self, base_url: str, token: str, timeout: float = 30.0, workspace_id: str | None = None
+        self,
+        base_url: str,
+        token: str,
+        timeout: float = 30.0,
+        workspace_id: str | None = None,
+        socket_path: str | None = None,
     ) -> None:
         self.base_url = base_url.rstrip("/")
         self.token = token
         self.timeout = timeout
         self.workspace_id = workspace_id
+        self._opener = (
+            urllib.request.build_opener(_UnixHandler(socket_path))
+            if socket_path
+            else urllib.request.build_opener()
+        )
         self.session = uuid.uuid4().hex
         self._called = False
         self._open: Transaction | None = None
@@ -470,7 +505,9 @@ class GoatCAD:
         return False
 
     def _headers(self) -> dict:
-        headers = {"authorization": "Bearer " + self.token, "mcp-session-id": self.session}
+        headers = {"mcp-session-id": self.session}
+        if self.token:
+            headers["authorization"] = "Bearer " + self.token
         if self.workspace_id:
             headers["x-goatcad-workspace"] = self.workspace_id
         return headers
@@ -484,7 +521,7 @@ class GoatCAD:
             self.base_url + "/mcp", headers=self._headers(), method="DELETE"
         )
         try:
-            urllib.request.urlopen(request, timeout=self.timeout).close()
+            self._opener.open(request, timeout=self.timeout).close()
         except (urllib.error.URLError, OSError):
             pass
         self.session = uuid.uuid4().hex
@@ -505,7 +542,7 @@ class GoatCAD:
         )
         self._called = True
         try:
-            with urllib.request.urlopen(request, timeout=self.timeout) as response:
+            with self._opener.open(request, timeout=self.timeout) as response:
                 body = json.loads(response.read().decode("utf-8"))
         except urllib.error.HTTPError as err:
             detail = err.read().decode("utf-8", "replace")
@@ -607,7 +644,7 @@ class GoatCAD:
             headers=self._headers(),
             method="GET",
         )
-        with urllib.request.urlopen(request, timeout=self.timeout) as response:
+        with self._opener.open(request, timeout=self.timeout) as response:
             return json.loads(response.read().decode("utf-8"))
 
     def transaction(
@@ -746,7 +783,7 @@ def connect(workspace: str | None = None, timeout: float = 30.0) -> GoatCAD:
         return GoatCAD(url, token, timeout, workspace)
 
     directory = _config_dir()
-    endpoint_file = directory / "mcp-endpoint.json"
+    endpoint_file = directory / "goatcad-endpoint.json"
     token_file = directory / "mcp-token"
     if not endpoint_file.exists():
         raise NotConnected(
@@ -754,6 +791,10 @@ def connect(workspace: str | None = None, timeout: float = 30.0) -> GoatCAD:
             "and make sure its MCP server is enabled in Settings."
         )
     endpoint = json.loads(endpoint_file.read_text())
+    # The user-only socket needs no token; a port, or a Windows pipe, does.
+    path = endpoint.get("socket")
+    if not url and path and endpoint.get("socketTrusted") and hasattr(socket, "AF_UNIX"):
+        return GoatCAD("http://localhost", token or "", timeout, workspace, path)
     if not token:
         token = _stored_token(token_file)
     return GoatCAD(url or endpoint["baseUrl"], token, timeout, workspace)
