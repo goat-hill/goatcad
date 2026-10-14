@@ -15,17 +15,14 @@
  * `PARITY_REPORT=<file>` keeps the full comparison.
  */
 import { describe, expect, test } from 'vitest'
-import { execFile } from 'child_process'
 import { randomUUID } from 'crypto'
 import { mkdtempSync, readFileSync, readdirSync, writeFileSync } from 'fs'
 import { tmpdir } from 'os'
 import { join } from 'path'
-import { promisify } from 'util'
 import { parseKicadFootprint } from '../kicad/footprint'
 import { FOOTPRINT_KICAD_KEYS, footprintChecks } from '../footprint/footprintChecks'
-import { requireKicadCli, kicadFootprintDir } from './kicadParity'
+import { requireKicadCli, kicadFootprintDir, runKicad } from './kicadParity'
 
-const run = promisify(execFile)
 const cli = requireKicadCli()
 const library = kicadFootprintDir(cli)
 if (!library) {
@@ -175,22 +172,18 @@ const compareBoard = async (
   writeFileSync(join(work, 'parity.kicad_pcb'), text)
   writeFileSync(join(work, 'parity.kicad_pro'), PROJECT)
   const report = join(work, 'drc.json')
-  await run(
-    cli,
-    [
-      'pcb',
-      'drc',
-      '--format',
-      'json',
-      '--severity-all',
-      '-o',
-      report,
-      join(work, 'parity.kicad_pcb')
-    ],
-    {
-      maxBuffer: 64 * 1024 * 1024
-    }
-  )
+  // Each kicad-cli in its own capped scope, not the suite's: six at once on a
+  // library of large BGAs pass the suite's memory cap together.
+  await runKicad(cli, [
+    'pcb',
+    'drc',
+    '--format',
+    'json',
+    '--severity-all',
+    '-o',
+    report,
+    join(work, 'parity.kicad_pcb')
+  ])
   const kicad = refs.map(() => new Set<string>())
   const violations = (JSON.parse(readFileSync(report, 'utf8')) as { violations: Violation[] })
     .violations
