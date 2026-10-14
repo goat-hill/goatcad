@@ -1,0 +1,29 @@
+#!/bin/bash
+# This worktree's GoatCAD, as the installed `goatcad` command, in the worktree's
+# own profile (.goatherd/goatcad/ at the worktree root), so it never collides with
+# an installed GoatCAD or another worktree: the single-instance lock, the agent
+# socket and the endpoint file all live in the profile.
+#
+#   ./bin/goatcad dev            the app with HMR (electron-vite dev)
+#   ./bin/goatcad                the built app (./bin/build first)
+#   ./bin/goatcad mcp            the stdio relay to whichever of those is running
+#   ./bin/goatcad help agents    the line that registers this worktree with Claude Code
+#
+# GOATCAD_USER_DATA_DIR overrides the profile; the port is always ephemeral.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh" >/dev/null
+fi
+cd "$(dirname "$0")/.."
+export GOATCAD_USER_DATA_DIR="${GOATCAD_USER_DATA_DIR:-$(cd .. && pwd)/.goatherd/goatcad}"
+export GOATCAD_MCP_PORT="${GOATCAD_MCP_PORT:-0}"
+mkdir -p "$GOATCAD_USER_DATA_DIR"
+if [ "$1" = "dev" ]; then
+  shift
+  exec npm run dev -- "$@"
+fi
+if [ ! -f out/main/index.js ]; then
+  echo "goatcad: no build in out/; run ./bin/build (or ./bin/goatcad dev)." >&2
+  exit 1
+fi
+exec ./node_modules/.bin/electron . "$@"

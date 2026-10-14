@@ -8,10 +8,11 @@
  * process reads it (`relayCommand`).
  */
 import { spawn } from 'node:child_process'
+import { join } from 'node:path'
 import { app, safeStorage } from 'electron'
 import { runRelay } from './mcpRelay'
 import { readToken } from './mcpToken'
-import { claudeCode, codex } from './partsMcpClients'
+import { claudeCode, codex, DEV_SERVER_NAME, SERVER_NAME } from './partsMcpClients'
 import type { LaunchMode } from './launchArgs'
 
 /**
@@ -24,8 +25,14 @@ export const executable = (): { command: string; args: string[] } => ({
   args: app.isPackaged ? [] : [app.getAppPath()]
 })
 
-/** What an MCP client registers: this executable with `mcp`. */
-export const relayCommand = (): { command: string; args: string[] } => {
+/**
+ * What an MCP client registers: this executable with `mcp`. An unpackaged
+ * build registers through `bin/goatcad`, which carries the worktree's profile,
+ * under a name of its own so it does not shadow an installed GoatCAD.
+ */
+export const relayCommand = (): { command: string; args: string[]; dev?: true } => {
+  if (!app.isPackaged)
+    return { command: join(app.getAppPath(), 'bin', 'goatcad'), args: ['mcp'], dev: true }
   const { command, args } = executable()
   return { command, args: [...args, 'mcp'] }
 }
@@ -64,7 +71,7 @@ const agentsHelp = (): string => {
     '',
     'Any other client: run that command as a stdio MCP server. It starts',
     'GoatCAD in the background if it is not running. Then restart the session;',
-    'the tools are mcp__goatcad__*, and workspace_list is the first call.',
+    `the tools are mcp__${relay.dev ? DEV_SERVER_NAME : SERVER_NAME}__*, and workspace_list is the first call.`,
     ''
   ].join('\n')
 }

@@ -73,6 +73,10 @@ Run from `electron/`. `npm` is not on `PATH`: use the `bin/` wrappers, never `np
   - `launch-timing` and `board-timing` measure performance (`--record` adds a row to `perf/*-history.html`);
   - `reset` gives a fresh-install profile.
   - `./bin/dev` blocks the shell, so it is the maintainer's command.
+  - `./bin/goatcad` is this worktree's build as the `goatcad` command, in the worktree's own
+    profile (`.goatherd/goatcad/`), beside an installed GoatCAD or another worktree:
+    `./bin/goatcad dev` runs the app with HMR, `./bin/goatcad mcp` relays to it, and
+    `./bin/goatcad help agents` prints the line that registers it as `goatcad-dev`.
 - **Validation loop:**
   1. Run `pre-cm-checks` as you edit.
   2. Stop and ask for review. Say which kind it needs: the diff, the approach, or QA in the app.

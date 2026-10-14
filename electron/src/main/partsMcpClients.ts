@@ -28,6 +28,9 @@ import { join } from 'node:path'
  *  and prompts `/mcp__goatcad__<name>`, so this is user-visible and must not drift. */
 export const SERVER_NAME = 'goatcad'
 
+/** A development build's name, so its tools (`mcp__goatcad-dev__*`) sit beside an installed one's. */
+export const DEV_SERVER_NAME = 'goatcad-dev'
+
 /** A prompt as a user types it in Claude Code, `/mcp__<server>__<prompt>`; its `/`
  *  menu lists it as `/goatcad:<name> (MCP)`. */
 export const promptCommand = (name: string): string => `/mcp__${SERVER_NAME}__${name}`
@@ -56,8 +59,8 @@ export interface McpClient {
   name: string
   /** What the manual path copies: a shell command, or a config snippet. */
   manual: 'command' | 'snippet'
-  /** The text for a server run as `relay`: this executable with `mcp`. */
-  manualText(relay: { command: string; args: string[] }): string
+  /** The text for a server run as `relay`: this executable with `mcp`; `dev` is a worktree's build. */
+  manualText(relay: { command: string; args: string[]; dev?: boolean }): string
   /** The file the manual path ends up in. Shown, never written by us. */
   configPath(): string
 }
@@ -73,8 +76,9 @@ export const claudeCode: McpClient = {
   id: 'claude-code',
   name: 'Claude Code',
   manual: 'command',
-  manualText: ({ command, args }) =>
-    `claude mcp add --scope user ${SERVER_NAME} -- ${[command, ...args].map(shellWord).join(' ')}`,
+  // A worktree's build registers for that folder only, beside an installed GoatCAD's.
+  manualText: ({ command, args, dev }) =>
+    `claude mcp add ${dev ? `--scope local ${DEV_SERVER_NAME}` : `--scope user ${SERVER_NAME}`} -- ${[command, ...args].map(shellWord).join(' ')}`,
   // Where `--scope user` writes.
   configPath: () => join(homedir(), '.claude.json')
 }
@@ -84,9 +88,9 @@ export const codex: McpClient = {
   id: 'codex',
   name: 'Codex',
   manual: 'snippet',
-  manualText: ({ command, args }) =>
+  manualText: ({ command, args, dev }) =>
     [
-      `[mcp_servers.${SERVER_NAME}]`,
+      `[mcp_servers.${dev ? DEV_SERVER_NAME : SERVER_NAME}]`,
       `command = ${JSON.stringify(command)}`,
       `args = ${JSON.stringify(args)}`
     ].join('\n'),
