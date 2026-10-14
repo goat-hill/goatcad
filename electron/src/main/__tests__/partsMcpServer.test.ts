@@ -10,7 +10,7 @@ import {
   tokensMatch,
   type PartsMcpServerHandle
 } from '../partsMcpServer'
-import type { PartsService } from '../ops/context'
+import type { Caller, PartsService } from '../ops/context'
 import { createMcpSessions } from '../mcpSessions'
 import type { McpDesignRequest } from '../../preload/mcpTypes'
 import type { JsonRpcResponse } from '../partsMcp'
@@ -368,6 +368,7 @@ describe('over the wire', () => {
 
 describe('agent connections', () => {
   const asked: McpDesignRequest[] = []
+  const callers: Caller[] = []
   const ended: string[] = []
   let sessions: ReturnType<typeof createMcpSessions>
   let held: PartsMcpServerHandle
@@ -382,8 +383,9 @@ describe('agent connections', () => {
       sessions,
       context: {
         parts: service,
-        design: async (request) => {
+        design: async (request, caller) => {
           asked.push(request)
+          callers.push(caller)
           return { ok: true, payload: { viewport: 'viewport-1' } }
         }
       }
@@ -421,6 +423,19 @@ describe('agent connections', () => {
     // No session, no connection: the open is anonymous.
     await openViewport({})
     expect(asked.at(-1)).not.toHaveProperty('connection')
+  })
+
+  it('names the workspace its client sends on every call, and lets the argument win', async () => {
+    await openViewport({ 'mcp-session-id': 'tab-1', 'x-goatcad-workspace': 'ws_tab' })
+    expect(callers.at(-1)).toEqual({ connection: 'tab-1', workspace: 'ws_tab' })
+    await openViewport({ 'x-goatcad-workspace': 'ws_tab' })
+    expect(callers.at(-1)).toEqual({ workspace: 'ws_tab' })
+    await fetch(`${base}/v1/ops/viewport.open`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', ...auth, 'x-goatcad-workspace': 'ws_tab' },
+      body: JSON.stringify({ board: 'b.kicad_pcb', label: 'x', workspace: 'ws_mine' })
+    })
+    expect(callers.at(-1)).toEqual({ workspace: 'ws_mine' })
   })
 
   it('takes a client-made id over /v1 as its connection', async () => {

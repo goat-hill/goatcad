@@ -16,5 +16,5 @@ export const sheetFileArg = (prefix = ''): OptionalSchema<string> =>
   s
     .string()
     .trim()
-    .describe(`${prefix}${SHEET_FILE}. Default: the open sheet, else the root sheet.`)
+    .describe(`${prefix}${SHEET_FILE}. Default: the root sheet, else the only open sheet.`)
     .optional()

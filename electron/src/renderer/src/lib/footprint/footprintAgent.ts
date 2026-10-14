@@ -155,10 +155,10 @@ const READ_GUIDANCE =
   "Millimeters in the footprint's frame, y down. Edit with items_update on these ids, sending only the keys that change."
 
 const WRITE_GUIDANCE =
-  "One undo step on the footprint's tab, now unsaved; project_save writes it. render_footprint shows the change."
+  "One undo step on the footprint's tab, now unsaved; workspace_save writes it. render_footprint shows the change."
 
 const BOARD_COPY_GUIDANCE =
-  "One undo step on the board's own copy, on the board's tab, now unsaved; project_save writes it. The library is untouched. render_footprint with board shows the copy."
+  "One undo step on the board's own copy, on the board's tab, now unsaved; workspace_save writes it. The library is untouched. render_footprint with board shows the copy."
 
 /** A resolved footprint as an answer names it. */
 type Located = { file: string; scope: string; board?: string }

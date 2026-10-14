@@ -10,6 +10,7 @@
  * makes reading by the page rather than by the document the natural path.
  */
 import { isAbsolute, join } from 'node:path'
+import { callerOf } from '../context'
 import { defineOp } from '../registry'
 import { s } from '../schema'
 import { fail, internal, invalidArgs, notFound, refused, succeed, type OpOutcome } from '../errors'
@@ -176,7 +177,7 @@ export const partsReadDatasheet = defineOp({
         'Call with mpn or path and depth alone.'
       )
     }
-    const projectPath = ctx.project?.() ?? null
+    const projectPath = ctx.project?.(callerOf(ctx)) ?? null
     let file: string
     if (args.mpn) {
       if (!ctx.datasheets || !projectPath) {

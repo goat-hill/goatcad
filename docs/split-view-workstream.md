@@ -114,11 +114,11 @@ paid for in the zoom. A pane the user never framed (`viewFramedByUser`) gets a f
 
 ## 7. Two windows
 
-Dragging a tab out opens a window (`window:new`); a drop on another window's strip transfers it
-(`tab:transfer`); a drag across the split inside one window is a membership change. Agent design
-requests go to the window that **unambiguously holds the document** (`main/designWindow.ts`) — by the
-file the request names, else the one other window on the workspace with a design open — never
-guessing between two holders.
+Dragging a tab out opens a window of the same workspace (`window:new`); a drop on another window's
+strip transfers it (`tab:transfer`); a drag across the split inside one window is a membership change.
+Agent design requests go to the window of the caller's workspace that holds the document
+(`main/designWindow.ts`) — by the file the request names, else the one window of it with a design
+open — never by focus (agent-api.md "Workspaces").
 
 ## 8. Open
 

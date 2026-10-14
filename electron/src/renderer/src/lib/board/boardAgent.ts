@@ -516,7 +516,7 @@ const DEFAULT_ROUTE_VIEW: RouteViewState = {
 /** Board mm round what a write changed, in its viewport's frame: the neighbors show. */
 const WRITE_FRAME_MARGIN_MM = 2
 
-const WRITE_GUIDANCE = 'One undo step on the board tab, now unsaved; project_save writes it.'
+const WRITE_GUIDANCE = 'One undo step on the board tab, now unsaved; workspace_save writes it.'
 
 /** What a board picture says when its own zone fills had not all landed in time (`AgentCapture.unfinishedFills`). */
 const unfinishedNote = (fills: number): string =>
@@ -4208,7 +4208,7 @@ export const createBoardAgent = (ctx: BoardAgentContext): BoardAgent => {
           'arrived lists each route that landed, from its start to the copper it reached, the track length laid, mm, and created, the ids its landing wrote. dropped lists each left as it was: no-net, joined (no ratsnest line ends on it) or stopped (the finish did not reach to, the copper it headed for; route it with route_begin).',
           ...(landings.length
             ? [
-                'Each landing is its own undo step on the board tab, now unsaved; project_save writes it.',
+                'Each landing is its own undo step on the board tab, now unsaved; workspace_save writes it.',
                 checksGuidance(before !== null)
               ]
             : [])

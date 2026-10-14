@@ -36,7 +36,14 @@ import {
   type WindowSession
 } from './appConfig'
 import { clearApplicationMenu, focusWindowMenu, forgetWindowMenu, setWindowMenu } from './appMenu'
-import { groupOpenTargets, parseFileArgs, KICAD_EXTENSIONS } from './launchArgs'
+import {
+  groupOpenTargets,
+  launchMode,
+  parseFileArgs,
+  parseFolderArgs,
+  KICAD_EXTENSIONS,
+  type OpenTarget
+} from './launchArgs'
 import { loadStepFile } from './stepLoader'
 import { TerminalSessionManager } from './terminalSessions'
 import { AgentStatusServer } from './agentStatusServer'
@@ -64,13 +71,22 @@ import { outboundFetch } from './outboundFetch'
 import { downloadSample, fetchSampleCatalog } from './sampleProjects'
 import type { SampleCatalog, SampleListResult, SampleOpenResult } from '../preload/sampleTypes'
 import {
+  activeAgentConnections,
   mcpLaunch,
+  onAgentConnectionEnd,
   registerPartsMcpIpc,
-  setProjectResolver,
+  setWorkspaceService,
   startPartsMcp,
   stopPartsMcp
 } from './partsMcpIpc'
-import { setDesignWindowSource } from './partsMcpBridge'
+import {
+  askWindow,
+  designWindowReady,
+  expectDesignWindow,
+  setDesignWindowSource
+} from './partsMcpBridge'
+import { samePath, workspaces } from './workspaces'
+import { createWorkspaceService } from './workspaceService'
 import { writeClaudeMcpConfigFile } from './partsMcpClients'
 import type { ProjectChangeBatch } from '../preload/projectChangeTypes'
 import type { FabExportPayload, FabExportResult } from '../preload/fabTypes'
@@ -100,6 +116,7 @@ import { APP_URL, appSchemePrivileges, registerAppProtocolHandler } from './appP
 import { buildZip } from './zip'
 import { canCheckForUpdates, checkForUpdatesNow, startUpdater } from './updater'
 import { registerFeedbackIpc } from './feedback'
+import { runCommandLine } from './commandLine'
 
 // Must precede any getPath('userData') call: it decides the config directory.
 // Launch milestones (`launch:*`) are read by bin/launch-timing; a mark costs microseconds.
@@ -117,6 +134,9 @@ if (process.env.GOATCAD_USER_DATA_DIR) {
   app.setPath('userData', process.env.GOATCAD_USER_DATA_DIR)
 }
 
+/** What this launch is for (`launchArgs.ts`); `background` is an agent's, with no window. */
+const mode = launchMode(process.argv, app.isPackaged)
+
 // Keep track of active windows
 const windowMap = new Map<number, BrowserWindow>()
 
@@ -129,6 +149,9 @@ const sessionState = new Map<number, WindowSession>()
  * `window:close-confirmed`, which re-issues `close()` with the id in this set.
  */
 const closeApproved = new Set<number>()
+
+/** Windows an agent opened (`workspace.start`, `workspace.open_window`): no Welcome tab. */
+const agentOpened = new Set<number>()
 
 /**
  * Terminal-tab shells. Output is addressed to the window currently showing the
@@ -154,7 +177,11 @@ const terminals = new TerminalSessionManager(
     mcp: () => mcpLaunch(),
     claudeMcpConfig: (url) =>
       writeClaudeMcpConfigFile(join(app.getPath('userData'), 'agent-hooks'), url),
-    theme: () => config().get().theme
+    theme: () => config().get().theme,
+    workspace: (owner) => {
+      const win = BrowserWindow.getAllWindows().find((w) => w.webContents.id === owner)
+      return win ? (workspaces.ofWindow(win.id)?.id ?? null) : null
+    }
   }
 )
 // Where an agent tab's hooks report what it is doing (§3.12). One loopback
@@ -169,17 +196,22 @@ const config = (): ConfigStore => {
   return configStore
 }
 
+// A command (`goatcad help`) is not the app: it draws nothing and keeps
+// no crash dumps of its own (`commandLine.ts`).
+const command = mode === 'help' || mode === 'help-agents' ? mode : null
+if (!command) {
+  startCrashDumps(is.dev)
+  watchProcessCrashes()
+}
+
 // A blocklisted driver (llvmpipe in a VM or under xvfb, older Mesa) otherwise
 // gets no WebGL at all, and a board that cannot render is broken anyway.
-if (process.platform === 'linux') app.commandLine.appendSwitch('ignore-gpu-blocklist')
-
-startCrashDumps(is.dev)
-watchProcessCrashes()
+if (process.platform === 'linux' && !command) app.commandLine.appendSwitch('ignore-gpu-blocklist')
 
 // Opt-in (Settings ▸ Appearance). Chromium's compositor and WebGL (through ANGLE)
 // use OpenGL on Linux by default; both switch together so they share one API.
 // Switches only apply before ready, so a change waits for a restart.
-if (process.platform === 'linux' && config().get().useVulkan) {
+if (process.platform === 'linux' && !command && config().get().useVulkan) {
   app.commandLine.appendSwitch('enable-features', 'Vulkan')
   app.commandLine.appendSwitch('use-angle', 'vulkan')
 }
@@ -214,8 +246,17 @@ const boundsAreOnScreen = (bounds: WindowBounds): boolean =>
  */
 const WINDOW_BACKGROUND: Record<AppTheme, string> = { dark: '#151c19', light: '#f0f8f4' }
 
-function createProjectWindow(session: Partial<WindowSession> = {}): BrowserWindow {
+/**
+ * A window on a workspace (`workspaces.ts`): a new one's, or another window of
+ * `workspace`. A `hidden` window is a workspace with no window: its renderer
+ * runs unseen until a window is opened on it.
+ */
+function createProjectWindow(
+  session: Partial<WindowSession> = {},
+  options: { workspace?: string; hidden?: boolean; agent?: boolean } = {}
+): BrowserWindow {
   const theme = config().get().theme
+  const hidden = options.hidden === true
   const bounds = session.bounds && boundsAreOnScreen(session.bounds) ? session.bounds : undefined
 
   const win = new BrowserWindow({
@@ -243,15 +284,28 @@ function createProjectWindow(session: Partial<WindowSession> = {}): BrowserWindo
       plugins: true,
       // The renderer applies the theme before its first paint from this,
       // rather than painting dark until its config read comes back.
-      additionalArguments: [`--goatcad-theme=${theme}`]
+      additionalArguments: [`--goatcad-theme=${theme}`],
+      // Unseen, it still answers agents at full speed; shown, it throttles again.
+      ...(hidden ? { backgroundThrottling: false } : {})
     }
   })
 
   if (session.maximized) win.maximize()
 
-  const init = windowInitFor(session, config().get().showWelcomeOnStartup)
+  const init = windowInitFor(session, config().get().showWelcomeOnStartup && !options.agent)
 
   windowMap.set(win.id, win)
+  if (options.agent) agentOpened.add(win.id)
+  if (options.workspace && workspaces.get(options.workspace))
+    workspaces.join(options.workspace, win.id)
+  else
+    workspaces.create({
+      root: session.projectPath ?? null,
+      project: session.activeProjectPath ?? null,
+      window: win.id,
+      hidden
+    })
+  expectDesignWindow(win.id)
   // Seed the live state: it is what the renderer asks for on load
   // (`window:get-init`), and what a window closed before its renderer reports
   // back still round-trips.
@@ -264,6 +318,7 @@ function createProjectWindow(session: Partial<WindowSession> = {}): BrowserWindo
   })
 
   win.on('ready-to-show', () => {
+    if (workspaces.ofWindow(win.id)?.hidden) return
     performance.mark('launch:window-shown')
     win.show()
   })
@@ -282,7 +337,8 @@ function createProjectWindow(session: Partial<WindowSession> = {}): BrowserWindo
       !win.webContents.isCrashed()
     ) {
       event.preventDefault()
-      win.webContents.send('window:confirm-close')
+      if (workspaces.ofWindow(win.id)?.hidden) closeHiddenWindow(win)
+      else win.webContents.send('window:confirm-close')
       return
     }
     if (!quitSessionCaptured) captureSession()
@@ -295,6 +351,9 @@ function createProjectWindow(session: Partial<WindowSession> = {}): BrowserWindo
   win.on('closed', () => {
     windowMap.delete(win.id)
     sessionState.delete(win.id)
+    workspaces.leave(win.id)
+    designWindowReady(win.id)
+    agentOpened.delete(win.id)
     // Another window stays open: the persisted set drops this one now. The last
     // window's close keeps the snapshot its 'close' took, as a quit does.
     if (!quitSessionCaptured && windowMap.size > 0) captureSession()
@@ -368,12 +427,55 @@ const liveBounds = (win: BrowserWindow): Pick<WindowSession, 'bounds' | 'maximiz
  */
 const captureSession = (): void => {
   const sessions: WindowSession[] = []
+  // Windows of one workspace share a number, so a restart restores them as one.
+  const groups = new Map<string, number>()
   for (const [id, win] of windowMap) {
     const state = sessionState.get(id)
-    if (!state) continue
-    sessions.push({ ...state, ...liveBounds(win) })
+    const workspace = workspaces.ofWindow(id)
+    // A workspace with no window is an agent's, and goes with the run.
+    if (!state || workspace?.hidden) continue
+    const group = workspace ? (groups.get(workspace.id) ?? groups.size) : undefined
+    if (workspace) groups.set(workspace.id, group!)
+    sessions.push({
+      ...state,
+      ...liveBounds(win),
+      ...(group !== undefined && workspace!.windows.length > 1 ? { workspace: group } : {})
+    })
   }
   config().update({ session: sessions })
+}
+
+/**
+ * A workspace with no window, closing: quit, `workspace.close`, or no agent left.
+ * Unsaved edits would need a prompt nobody can see, so the window is shown
+ * first and asks as any window does; with none it just closes.
+ */
+const closeHiddenWindow = (win: BrowserWindow): void => {
+  void askWindow(win.id, { kind: 'unsaved-files' }).then((answer) => {
+    if (win.isDestroyed()) return
+    const unsaved = answer.ok ? ((answer.payload as { unsaved?: string[] }).unsaved ?? []) : []
+    if (unsaved.length === 0) {
+      closeApproved.add(win.id)
+      win.close()
+      // The veto cancelled any quit this close was part of; carry it on.
+      if (quitRequested) app.quit()
+      return
+    }
+    revealWindow(win)
+    win.webContents.send('window:confirm-close')
+  })
+}
+
+/** Show a workspace's hidden renderer: its first window. */
+const revealWindow = (win: BrowserWindow): void => {
+  const workspace = workspaces.ofWindow(win.id)
+  if (workspace?.hidden) {
+    workspaces.reveal(workspace.id)
+    win.webContents.setBackgroundThrottling(true)
+  }
+  if (win.isMinimized()) win.restore()
+  win.show()
+  if (!quitSessionCaptured) captureSession()
 }
 
 let quitSessionCaptured = false
@@ -386,9 +488,8 @@ let quitSessionCaptured = false
  */
 let quitRequested = false
 
-/** Open the windows a launch should start with: files > restored session > welcome. */
-const openStartupWindows = (files: readonly string[]): void => {
-  const targets = groupOpenTargets(files)
+/** Open the windows a launch should start with: files and folders > restored session > welcome. */
+const openStartupWindows = (targets: readonly OpenTarget[]): void => {
   if (targets.length > 0) {
     for (const target of targets) {
       createProjectWindow({ projectPath: target.projectPath, tabs: target.tabs })
@@ -398,19 +499,81 @@ const openStartupWindows = (files: readonly string[]): void => {
 
   const restored = sanitizeSessions(config().get().session, fs.existsSync)
   if (restored.length > 0) {
-    for (const session of restored) createProjectWindow(session)
+    const groups = new Map<number, string>()
+    for (const session of restored) {
+      // A folder already open, an agent's in the background say, gains this
+      // window rather than a second workspace.
+      const holder = session.projectPath ? workspaces.holding(session.projectPath) : null
+      const sameFolder = holder?.root && samePath(holder.root, session.projectPath!) ? holder : null
+      if (sameFolder?.hidden) findWindowForProject(sameFolder.root!)
+      const joined =
+        sameFolder?.id ??
+        (session.workspace === undefined ? undefined : groups.get(session.workspace))
+      const win = createProjectWindow(session, joined ? { workspace: joined } : {})
+      const workspace = workspaces.ofWindow(win.id)
+      if (session.workspace !== undefined && workspace && !joined)
+        groups.set(session.workspace, workspace.id)
+    }
     return
   }
 
   createProjectWindow()
 }
 
+/** The first window of the workspace holding a folder, shown if it had none. */
 const findWindowForProject = (projectPath: string): BrowserWindow | null => {
-  for (const [id, win] of windowMap) {
-    if (sessionState.get(id)?.projectPath === projectPath) return win
-  }
-  return null
+  const workspace = workspaces.holding(projectPath)
+  const win = workspace ? windowMap.get(workspace.windows[0]) : undefined
+  if (!win || win.isDestroyed()) return null
+  if (workspace!.hidden) revealWindow(win)
+  return win
 }
+
+/** The files and folders an argv names, as windows to open. */
+const openTargets = (
+  argv: readonly string[],
+  cwd: string,
+  extraFiles: readonly string[] = []
+): OpenTarget[] => {
+  const options = { isPackaged: app.isPackaged, cwd, exists: fs.existsSync }
+  const isDirectory = (path: string): boolean => {
+    try {
+      return fs.statSync(path).isDirectory()
+    } catch {
+      return false
+    }
+  }
+  return [
+    ...groupOpenTargets([...extraFiles, ...parseFileArgs(argv, options)]),
+    ...parseFolderArgs(argv, { ...options, isDirectory }).map((projectPath) => ({
+      projectPath,
+      tabs: []
+    }))
+  ]
+}
+
+/** How long a background launch waits for its first client before it quits. */
+const BACKGROUND_FIRST_CLIENT_MS = 60_000
+
+/**
+ * A background launch lives while something uses it: a window, or an agent
+ * connection. It checks when either ends, and once after the launch, so an app
+ * started for a client that never came does not stay.
+ */
+const quitWhenUnused = (): void => {
+  const check = (): void => {
+    if (windowMap.size === 0 && activeAgentConnections() === 0) app.quit()
+  }
+  onAgentConnectionEnd(check)
+  app.on('browser-window-created', (_, win) => win.once('closed', () => setImmediate(check)))
+  setTimeout(check, BACKGROUND_FIRST_CLIENT_MS).unref()
+}
+
+/** A window the person can see: one of a workspace that has windows. */
+const shownWindow = (): BrowserWindow | null =>
+  [...windowMap.values()].find(
+    (win) => !win.isDestroyed() && !workspaces.ofWindow(win.id)?.hidden
+  ) ?? null
 
 const focusWindow = (win: BrowserWindow): void => {
   if (win.isMinimized()) win.restore()
@@ -418,8 +581,8 @@ const focusWindow = (win: BrowserWindow): void => {
 }
 
 /** Route OS file-open requests into the running app. */
-const openFilesInApp = (files: readonly string[]): void => {
-  for (const target of groupOpenTargets(files)) {
+const openFilesInApp = (targets: readonly OpenTarget[]): void => {
+  for (const target of targets) {
     const existing = findWindowForProject(target.projectPath)
     if (existing) {
       for (const tab of target.tabs) existing.webContents.send('tab:add', tab)
@@ -503,23 +666,24 @@ const start = (): void => {
 
     registerIpcHandlers()
 
-    const launchFiles = [
-      ...queuedOpenFiles,
-      ...parseFileArgs(process.argv, {
-        isPackaged: app.isPackaged,
-        cwd: process.cwd(),
-        exists: fs.existsSync
-      })
-    ]
+    const launchTargets = openTargets(process.argv, process.cwd(), queuedOpenFiles)
     queuedOpenFiles.length = 0
-    openStartupWindows(launchFiles)
+    // A background launch is an agent's: no window until one asks for it, and a
+    // quit once nobody has used it for a while.
+    if (mode === 'background') {
+      app.dock?.hide()
+      quitWhenUnused()
+    } else openStartupWindows(launchTargets)
 
     // Self-update for direct installs (main/updater.ts). The setting is read
     // at every check, so it is honored on the first one.
     startUpdater({ enabled: () => config().get().checkForUpdates })
 
     app.on('activate', function () {
-      if (BrowserWindow.getAllWindows().length === 0) openStartupWindows([])
+      if (!shownWindow()) {
+        app.dock?.show()
+        openStartupWindows([])
+      }
     })
   })
 }
@@ -538,7 +702,7 @@ function registerIpcHandlers(): void {
     const win = BrowserWindow.fromWebContents(event.sender)
     const live = win ? sessionState.get(win.id) : undefined
     return live
-      ? windowInitFor(live, config().get().showWelcomeOnStartup)
+      ? windowInitFor(live, config().get().showWelcomeOnStartup && !agentOpened.has(win!.id))
       : { projectPath: null, tabs: [], activeTabPath: null, showWelcome: false }
   })
 
@@ -547,12 +711,20 @@ function registerIpcHandlers(): void {
   setDesignWindowSource(() =>
     [...windowMap.entries()]
       .filter(([, win]) => !win.isDestroyed())
-      .map(([id, win]) => ({
-        id,
-        focused: win.isFocused(),
-        projectPath: sessionState.get(id)?.projectPath ?? null,
-        tabPaths: (sessionState.get(id)?.tabs ?? []).map((tab) => tab.path)
-      }))
+      .flatMap(([id]) => {
+        const workspace = workspaces.ofWindow(id)
+        return workspace
+          ? [
+              {
+                id,
+                key: workspaces.windowKey(id),
+                workspace: workspace.id,
+                root: workspace.root,
+                tabPaths: (sessionState.get(id)?.tabs ?? []).map((tab) => tab.path)
+              }
+            ]
+          : []
+      })
   )
 
   ipcMain.on('session:update', (event, session: unknown) => {
@@ -561,6 +733,10 @@ function registerIpcHandlers(): void {
     const normalized = normalizeSession(session)
     if (!normalized) return
     sessionState.set(win.id, normalized)
+    workspaces.report(win.id, {
+      root: normalized.projectPath,
+      project: normalized.activeProjectPath ?? null
+    })
     // Persisted as it changes (the config write is debounced), not only on
     // close: a restart that never closes a window — a dev-mode main rebuild, a
     // crash — still reopens the tabs and project as they were. A quit has
@@ -681,13 +857,38 @@ function registerIpcHandlers(): void {
     return []
   })
 
-  ipcMain.handle('window:new', (_, projectPath?: string, tabs?: TabState[]) => {
-    createProjectWindow({
-      projectPath: projectPath ?? null,
-      tabs: Array.isArray(tabs)
-        ? tabs.filter((tab) => typeof tab?.name === 'string' && typeof tab?.path === 'string')
-        : []
-    })
+  // A project is open in one workspace: opening the folder another holds brings
+  // that one forward instead, with the file as its tab.
+  ipcMain.handle('workspace:open-elsewhere', (event, root: unknown, file: unknown) => {
+    if (typeof root !== 'string') return false
+    const asking = BrowserWindow.fromWebContents(event.sender)
+    const holder = workspaces.holding(root)
+    if (!holder || (asking && holder.windows.includes(asking.id))) return false
+    const win = windowMap.get(holder.windows[0])
+    if (!win || win.isDestroyed()) return false
+    if (holder.hidden) revealWindow(win)
+    else focusWindow(win)
+    if (typeof file === 'string')
+      win.webContents.send('tab:add', { name: basename(file), path: file })
+    return true
+  })
+
+  // A tab dragged out of a window opens a window of that window's workspace; a
+  // plain New Window is a workspace of its own.
+  ipcMain.handle('window:new', (event, projectPath?: string, tabs?: TabState[]) => {
+    const moved = Array.isArray(tabs)
+      ? tabs.filter((tab) => typeof tab?.name === 'string' && typeof tab?.path === 'string')
+      : []
+    const source = BrowserWindow.fromWebContents(event.sender)
+    const workspace = source && moved.length > 0 ? workspaces.ofWindow(source.id) : null
+    createProjectWindow(
+      {
+        projectPath: projectPath ?? null,
+        ...(workspace?.project ? { activeProjectPath: workspace.project } : {}),
+        tabs: moved
+      },
+      workspace ? { workspace: workspace.id } : {}
+    )
   })
 
   // macOS only: the renderer hides its own menu bar there and pushes the tree
@@ -1757,20 +1958,37 @@ function registerIpcHandlers(): void {
   // Started for the process, not per window, and non-fatal: a taken port means
   // no agent surface, never a launch failure.
   registerPartsMcpIpc()
-  // Which project an agent is asking about: the focused window's, falling back
-  // to any window with one open. Wrong the moment two windows hold different
-  // boards — a `project` argument is the fix (workstream §8.5) — but right for
-  // the ordinary case of one project at a time.
-  setProjectResolver(() => {
-    const focused = BrowserWindow.getFocusedWindow()
-    const preferred = focused ? sessionState.get(focused.id)?.projectPath : null
-    if (preferred) return preferred
-    for (const win of BrowserWindow.getAllWindows()) {
-      const path = sessionState.get(win.id)?.projectPath
-      if (path) return path
-    }
-    return null
-  })
+  // Where an agent acts is the workspace its call names, else the only one
+  // open, never the focused window (`workspaces.ts`); this module owns the windows.
+  setWorkspaceService(
+    createWorkspaceService(workspaces, {
+      open: (init, { hidden, join }) =>
+        createProjectWindow(
+          {
+            projectPath: init.root,
+            ...(init.project ? { activeProjectPath: init.project } : {}),
+            tabs: init.tabs.map((path) => ({ name: basename(path), path }))
+          },
+          { hidden, agent: true, ...(join ? { workspace: join } : {}) }
+        ).id,
+      show: (window) => {
+        const win = windowMap.get(window)
+        if (win && !win.isDestroyed()) revealWindow(win)
+      },
+      tabs: (window) => (sessionState.get(window)?.tabs ?? []).map((tab) => tab.path),
+      close: (window) => {
+        const win = windowMap.get(window)
+        if (!win || win.isDestroyed()) return
+        closeApproved.add(window)
+        win.close()
+      },
+      removeTab: (window, path) => {
+        const win = windowMap.get(window)
+        if (win && !win.isDestroyed()) win.webContents.send('tab:remove', path)
+      },
+      ask: askWindow
+    })
+  )
   // Nothing to reconcile after it starts: an agent tab is told the live URL
   // and token when it launches.
   // A harness instance beside a running GoatCAD needs its own port, as it has
@@ -2028,11 +2246,14 @@ function registerIpcHandlers(): void {
 // the running instance instead of starting a rival copy. Everything below is
 // registered only for the instance that owns the lock — a losing instance quits
 // immediately and must not touch the config the primary instance owns.
-if (!app.requestSingleInstanceLock()) {
+if (command) {
+  runCommandLine(command)
+} else if (!app.requestSingleInstanceLock()) {
   app.quit()
 } else {
   app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
+    // A background launch quits once nothing uses it (`quitWhenUnused`).
+    if (process.platform !== 'darwin' && mode !== 'background') {
       app.quit()
     }
   })
@@ -2062,17 +2283,19 @@ if (!app.requestSingleInstanceLock()) {
   })
 
   app.on('second-instance', (_event, argv, workingDirectory) => {
-    const files = parseFileArgs(argv, {
-      isPackaged: app.isPackaged,
-      cwd: workingDirectory,
-      exists: fs.existsSync
-    })
-    if (files.length > 0) {
-      openFilesInApp(files)
+    // An agent's launch finding the app running wants nothing shown.
+    if (launchMode(argv, app.isPackaged) === 'background') return
+    const targets = openTargets(argv, workingDirectory)
+    if (targets.length > 0) {
+      openFilesInApp(targets)
       return
     }
-    const [win] = BrowserWindow.getAllWindows()
+    const win = shownWindow()
     if (win) focusWindow(win)
+    else {
+      app.dock?.show()
+      openStartupWindows([])
+    }
   })
 
   app.on('open-file', (event, filePath) => {
@@ -2081,7 +2304,7 @@ if (!app.requestSingleInstanceLock()) {
       queuedOpenFiles.push(filePath)
       return
     }
-    openFilesInApp([filePath])
+    openFilesInApp(groupOpenTargets([filePath]))
   })
 
   start()

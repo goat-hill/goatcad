@@ -21,7 +21,7 @@ export const appScripting = defineOp({
   mutates: false,
   summary: "Get the path and a snippet for this app's Python client, already on disk.",
   guidance:
-    'Use for more than a handful of edits, computed geometry, or a generate-check-fix loop: a script is one turn. The app writes the client into its config directory to match this version; put the returned path on sys.path and import it, nothing to install. It is standard-library only: for numpy or other packages, run the script in your own venv. Every tool is a method with the same argument names; connect() finds the running app. Sheet helpers: gc.pin("U1.VDD") reads a pin\'s position and free side; gc.place_beside("Device:C", "U1.VDD", value="100nF") places a passive one grid step out on the pin and wires it. Board: gc.transaction(board=...) makes a batch one undo step, and refill=True pours zones once at the end. Read the worked example you need first.',
+    'Use for more than a handful of edits, computed geometry, or a generate-check-fix loop: a script is one turn. The app writes the client into its config directory to match this version; put the returned path on sys.path and import it, nothing to install. It is standard-library only: for numpy or other packages, run the script in your own venv. Every tool is a method with the same argument names; connect() finds the running app; pass workspace=<id> outside a GoatCAD terminal tab. Sheet helpers: gc.pin("U1.VDD") reads a pin\'s position and free side; gc.place_beside("Device:C", "U1.VDD", value="100nF") places a passive one grid step out on the pin and wires it. Board: gc.transaction(board=...) makes a batch one undo step, and refill=True pours zones once at the end. Read the worked example you need first.',
   input: s.object({}),
   run(_args, ctx) {
     const info = ctx.scripting?.()
@@ -37,7 +37,7 @@ export const appScripting = defineOp({
       language: 'python',
       ...info,
       guidance:
-        "Read examplePath (a schematic block) or boardExamplePath (a board) first, then run the snippet. Errors carry the tools' `fix`. `with gc.transaction():` (a sheet) or `with gc.transaction(board=True):` (items edits only) makes one undo step; dry_run=True previews a batch."
+        "Read guidePath first: every operation's signature and summary, and how to work. Then examplePath (a schematic block) or boardExamplePath (a board), then run the snippet. Errors carry the tools' `fix`. `with gc.transaction():` (a sheet) or `with gc.transaction(board=True):` (items edits only) makes one undo step; dry_run=True previews a batch."
     })
   }
 })

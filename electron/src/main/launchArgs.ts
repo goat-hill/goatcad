@@ -54,6 +54,43 @@ export const parseFileArgs = (argv: readonly string[], options: ParseArgvOptions
   return files
 }
 
+/**
+ * Existing folders named on the command line, as `goatcad open <folder>` or a
+ * bare path: each opens its workspace's window, or a new one (`workspaces.ts`).
+ * The `open` word itself is skipped.
+ */
+export const parseFolderArgs = (
+  argv: readonly string[],
+  options: ParseArgvOptions & { isDirectory: (path: string) => boolean }
+): string[] => {
+  const start = options.isPackaged ? 1 : 2
+  const folders: string[] = []
+  for (const arg of argv.slice(start)) {
+    if (!arg || arg.startsWith('-') || arg === '.' || arg === 'open') continue
+    const folder = isAbsolute(arg) ? arg : resolve(options.cwd, arg)
+    if (!options.isDirectory(folder) || folders.includes(folder)) continue
+    folders.push(folder)
+  }
+  return folders
+}
+
+/**
+ * What a launch is for. `help` prints usage; `background` starts the app with no
+ * window, for agents (`--background`); `app` is everything else.
+ */
+export type LaunchMode = 'help' | 'help-agents' | 'background' | 'app'
+
+export const launchMode = (argv: readonly string[], isPackaged: boolean): LaunchMode => {
+  const args = argv.slice(isPackaged ? 1 : 2)
+  const first = args.find(
+    (arg) => !arg.startsWith('--') || arg === '--help' || arg === '--background'
+  )
+  if (first === 'help') return args.includes('agents') ? 'help-agents' : 'help'
+  if (args.includes('--help')) return 'help'
+  if (args.includes('--background')) return 'background'
+  return 'app'
+}
+
 /** A window to open for a set of files that share a project directory. */
 export interface OpenTarget {
   projectPath: string

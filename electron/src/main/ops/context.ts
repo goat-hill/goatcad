@@ -21,9 +21,9 @@ import type {
 import type { IndexRecord } from '../libraryIndexTypes'
 import type { McpDesignRequest } from '../../preload/mcpTypes'
 import type { DatasheetAttempt, DatasheetCandidate, DatasheetRecord } from '../partsMcpDatasheets'
-import type { ProjectResolver } from '../partsMcpProject'
 import type { DatasheetReadRequest, DatasheetReadResult } from '../datasheetReader'
 import type { ModelCacheInput, ModelCacheOutcome } from '../partsMcpModelStore'
+import type { WindowRow, WorkspaceRow } from '../workspaces'
 
 /**
  * What these operations need from `PartsService` — a structural subset, so a
@@ -71,16 +71,62 @@ export type DesignOutcome =
   | { ok: true; payload: unknown }
   | { ok: false; error: string; detail?: string; candidates?: string[] }
 
-export interface OpContext {
-  parts: PartsService
+/** Who is calling: the connection, and the workspace a call named for itself. */
+export interface Caller {
   /** The agent connection the call came on (`mcpSessions.ts`): its MCP session, or
    *  the Python client's id. Absent when the caller sends none. */
   connection?: string
+  /** The workspace the call names: its `workspace` argument (`ops/registry.ts`),
+   *  else the client's `X-GoatCAD-Workspace` header (`partsMcpServer.ts`). Absent,
+   *  the only open workspace is meant (`workspaces.ts`, `resolveWorkspace`). */
+  workspace?: string
+}
+
+export const callerOf = (ctx: OpContext): Caller => ({
+  ...(ctx.connection !== undefined ? { connection: ctx.connection } : {}),
+  ...(ctx.workspace !== undefined ? { workspace: ctx.workspace } : {})
+})
+
+/** A workspace op's answer: its value, or a refusal shaped like a window's (`ops/design.ts`). */
+export type WorkspaceOutcome<T> =
+  { ok: true; value: T } | { ok: false; error: string; detail?: string; candidates?: string[] }
+
+/** What the workspace ops reach (`workspaces.ts`); the app serves it, since it owns the windows. */
+export interface WorkspaceService {
+  list(): WorkspaceRow[]
+  /** A new workspace, owned by `owner`, the starting connection: one with no
+   *  window goes when that connection ends (`release`). */
+  start(
+    args: { root?: string; project?: string; openWindow: boolean },
+    owner?: string
+  ): Promise<WorkspaceOutcome<WorkspaceRow>>
+  /** A connection ended: each workspace with no window it started closes, or
+   *  shows its window when it holds unsaved edits. */
+  release(connection: string): Promise<void>
+  /** The workspace a call acts in, or why it has none (`resolveWorkspace`). */
+  resolve(caller: Caller): WorkspaceOutcome<WorkspaceRow>
+  update(args: {
+    workspace: string
+    root?: string
+    project?: string
+  }): Promise<WorkspaceOutcome<WorkspaceRow>>
+  close(workspace: string, discard: boolean): Promise<WorkspaceOutcome<{ closed: string }>>
+  openWindow(workspace: string, files: string[]): Promise<WorkspaceOutcome<WindowRow>>
+  closeWindow(
+    window: string,
+    discard: boolean
+  ): Promise<WorkspaceOutcome<{ closed: string; workspaceClosed: boolean }>>
+}
+
+export interface OpContext extends Caller {
+  parts: PartsService
   /** Raised for the app to act on. Collected rather than performed here so this
    *  tree stays pure and the server decides what a "window" even is. */
   emit?: (effect: OpEffect) => void
-  /** Which project the app has open. Injected for the same reason `emit` is. */
-  project?: ProjectResolver
+  /** The folder of the caller's workspace, null when it has none or none
+   *  resolves. Injected for the same reason `emit` is. */
+  project?: (caller: Caller) => string | null
+  workspaces?: WorkspaceService
   /** The library index, already built and already incrementally maintained by
    *  `libraryIndex.ts`. Read, never rebuilt from here. */
   library?: {
@@ -90,7 +136,7 @@ export interface OpContext {
   /** Ask the window to read or edit the open design (`partsMcpBridge.ts`). The
    *  one capability that cannot be served from main at all — see that module
    *  for why the AST layer's living in the renderer decides this. */
-  design?: (request: McpDesignRequest) => Promise<DesignOutcome>
+  design?: (request: McpDesignRequest, caller: Caller) => Promise<DesignOutcome>
   /** Where the Python client was written, and how to import it
    *  (`agentScripting.ts`). Injected because the path is Electron's to know. */
   scripting?: () => {
@@ -98,6 +144,7 @@ export interface OpContext {
     modulePath: string
     examplePath: string
     boardExamplePath: string
+    guidePath: string
     snippet: string
     operationCount: number
   } | null

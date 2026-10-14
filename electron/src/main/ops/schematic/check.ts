@@ -25,7 +25,7 @@ export const schematicCheck = defineDesignOp({
       .string()
       .trim()
       .describe(
-        `${SHEET_FILE}: answer its findings, on every instance of it, with counts.elsewhere for the rest. Default: the design's findings, from the open sheet, else the root sheet.`
+        `${SHEET_FILE}: answer its findings, on every instance of it, with counts.elsewhere for the rest. Default: the design's findings, from the root sheet, else the only open sheet.`
       )
       .optional(),
     codes: codesArg,

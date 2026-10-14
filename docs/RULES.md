@@ -72,7 +72,17 @@ Run from `electron/`. `npm` is not on `PATH`: use the `bin/` wrappers, never `np
   - `test-parity` compares against KiCad (see [kicad-parity.md](./kicad-parity.md#running-the-suites)).
   - `launch-timing` and `board-timing` measure performance (`--record` adds a row to `perf/*-history.html`);
   - `reset` gives a fresh-install profile.
-  - `./bin/dev` blocks the shell, so it is the maintainer's command.
+  - `./bin/dev` (the same as `./bin/goatcad dev`) blocks the shell, so it is the maintainer's command.
+  - `./bin/goatcad` is this worktree's build as the `goatcad` command, in the worktree's own
+    profile (`.goatherd/goatcad/`), beside an installed GoatCAD or another worktree:
+    `./bin/goatcad dev` runs the app with HMR, `./bin/goatcad --background` the built one with no
+    window, and `./bin/goatcad help agents` says how an agent reaches it: its HTTP MCP server
+    while it runs (registered at local scope, shadowing an installed GoatCAD's in that folder;
+    the port changes each launch), or the Python client in the profile. Nothing starts the app
+    for an agent. GoatHerd's App button runs `./bin/goatcad dev`, and its Claude button points the
+    session's Python client at the worktree's profile (`GOATCAD_CONFIG_DIR`).
+    `--shared-profile` on any of these runs in an installed GoatCAD's profile instead; one
+    GoatCAD runs per profile, so a launch there hands off to whichever is already running.
 - **Validation loop:**
   1. Run `pre-cm-checks` as you edit.
   2. Stop and ask for review. Say which kind it needs: the diff, the approach, or QA in the app.

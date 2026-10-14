@@ -1,0 +1,50 @@
+#!/bin/bash
+# This worktree's GoatCAD, as the installed `goatcad` command, in the worktree's
+# own profile (.goatherd/goatcad/ at the worktree root), so it never collides with
+# an installed GoatCAD or another worktree: the single-instance lock, the agent
+# socket, the endpoint file and the Python client all live in the profile.
+#
+#   ./bin/goatcad dev               the app with HMR (electron-vite dev)
+#   ./bin/goatcad                   the built app (./bin/build first)
+#   ./bin/goatcad --background      the built app with no window, for agents
+#   ./bin/goatcad help agents       how an agent reaches this worktree's app
+#
+# --shared-profile (anywhere in the arguments) runs in the shared profile instead (an
+# installed GoatCAD's: its keys, libraries and settings). One GoatCAD runs per
+# profile, so with another already running there, a launch hands off to it.
+#
+# GOATCAD_USER_DATA_DIR overrides the profile; the port is always ephemeral.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh" >/dev/null
+fi
+cd "$(dirname "$0")/.."
+shared=
+args=()
+for arg in "$@"; do
+  if [ "$arg" = "--shared-profile" ]; then
+    shared=1
+  else
+    args+=("$arg")
+  fi
+done
+set -- "${args[@]}"
+if [ -z "$shared" ]; then
+  export GOATCAD_USER_DATA_DIR="${GOATCAD_USER_DATA_DIR:-$(cd .. && pwd)/.goatherd/goatcad}"
+fi
+if [ -n "$GOATCAD_USER_DATA_DIR" ]; then
+  mkdir -p "$GOATCAD_USER_DATA_DIR"
+fi
+export GOATCAD_MCP_PORT="${GOATCAD_MCP_PORT:-0}"
+# A shell inside another electron-vite app (GoatHerd's terminals) inherits its dev
+# server's URL, which an unpackaged build would load instead of its own renderer.
+unset ELECTRON_RENDERER_URL NODE_ENV_ELECTRON_VITE
+if [ "$1" = "dev" ]; then
+  shift
+  exec npm run dev -- "$@"
+fi
+if [ ! -f out/main/index.js ]; then
+  echo "goatcad: no build in out/; run ./bin/build (or ./bin/goatcad dev)." >&2
+  exit 1
+fi
+exec ./node_modules/.bin/electron . "$@"

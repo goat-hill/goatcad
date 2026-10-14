@@ -12,7 +12,7 @@ import {
 } from './terminalAgents'
 import { STATUS_URL_ENV } from './agentActivity'
 import type { AppTheme } from './appConfig'
-import { codexMcpOverrides, TOKEN_ENV } from './partsMcpClients'
+import { codexMcpOverrides, TOKEN_ENV, WORKSPACE_ENV } from './partsMcpClients'
 import type {
   AgentActivity,
   TerminalKind,
@@ -40,6 +40,9 @@ export interface AgentHooks {
   claudeMcpConfig(url: string): string
   /** The app theme, so every session (not only an agent's) knows its background. */
   theme?(): AppTheme
+  /** The workspace of the window opening the tab (`workspaces.ts`), handed to every
+   *  session so an agent or a script started there acts in it. */
+  workspace?(owner: number | null): string | null
 }
 
 /**
@@ -69,7 +72,8 @@ const STRIPPED_ENV = [
   'ELECTRON_NO_ATTACH_CONSOLE',
   'ELECTRON_IS_DEV',
   'NODE_OPTIONS',
-  'GOATCAD_TEST_HOOKS'
+  'GOATCAD_TEST_HOOKS',
+  WORKSPACE_ENV
 ]
 
 /**
@@ -175,6 +179,8 @@ export class TerminalSessionManager {
     env.COLORFGBG = this.hooks?.theme?.() === 'light' ? '0;15' : '15;0'
     if (statusUrl) env[STATUS_URL_ENV] = statusUrl
     if (mcp) env[TOKEN_ENV] = mcp.token
+    const workspace = this.hooks?.workspace?.(owner) ?? null
+    if (workspace) env[WORKSPACE_ENV] = workspace
 
     const pty = spawn(file, args, { name: 'xterm-256color', cols: 80, rows: 24, cwd, env })
     const session: TerminalSession = {

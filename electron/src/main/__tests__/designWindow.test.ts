@@ -3,49 +3,85 @@ import { pickDesignWindow, type DesignWindowState } from '../designWindow'
 
 const win = (
   id: number,
-  focused: boolean,
+  workspace: string,
   tabPaths: string[],
-  projectPath: string | null = '/p'
-): DesignWindowState => ({ id, focused, projectPath, tabPaths })
+  root: string | null = '/p'
+): DesignWindowState => ({ id, key: `win_${id}`, workspace, root, tabPaths })
 
 describe('pickDesignWindow', () => {
-  it('keeps the default with one window', () => {
-    expect(pickDesignWindow({ sheet: 'main.kicad_sch' }, [win(1, true, [])])).toBeNull()
+  it("answers the workspace's window, whatever else is open", () => {
+    const windows = [win(1, 'other', ['/q/main.kicad_sch'], '/q'), win(2, 'ws', [])]
+    expect(pickDesignWindow({ kind: 'describe-schematic' }, 'ws', windows)).toEqual({ window: 2 })
   })
 
-  it('keeps the focused window when it holds the named file', () => {
-    const windows = [win(1, true, ['/p/main.kicad_sch']), win(2, false, ['/p/main.kicad_sch'])]
-    expect(pickDesignWindow({ sheet: 'main.kicad_sch' }, windows)).toBeNull()
+  it('is null for a workspace with no window', () => {
+    expect(pickDesignWindow({}, 'ws', [win(1, 'other', [])])).toBeNull()
   })
 
-  it('goes to the window holding the file when the focused one does not', () => {
-    const windows = [win(1, true, []), win(2, false, ['/p/sub/power.kicad_sch'])]
-    expect(pickDesignWindow({ sheet: 'sub/power.kicad_sch' }, windows)).toBe(2)
-    expect(pickDesignWindow({ sheet: 'power.kicad_sch' }, windows)).toBe(2)
-    expect(pickDesignWindow({ sheet: 'C:\\p\\sub\\power.kicad_sch' }, windows)).toBeNull()
+  it('goes to the window of the workspace holding the named file', () => {
+    const windows = [win(1, 'ws', []), win(2, 'ws', ['/p/sub/power.kicad_sch'])]
+    expect(pickDesignWindow({ sheet: 'sub/power.kicad_sch' }, 'ws', windows)).toEqual({ window: 2 })
+    expect(pickDesignWindow({ sheet: 'power.kicad_sch' }, 'ws', windows)).toEqual({ window: 2 })
   })
 
   it('does not match a name that is only a suffix of another', () => {
-    const windows = [win(1, true, []), win(2, false, ['/p/mypower.kicad_sch'])]
-    expect(pickDesignWindow({ sheet: 'power.kicad_sch' }, windows)).toBeNull()
+    const windows = [win(1, 'ws', []), win(2, 'ws', ['/p/mypower.kicad_sch'])]
+    expect(pickDesignWindow({ sheet: 'power.kicad_sch' }, 'ws', windows)).toEqual({ window: 1 })
   })
 
-  it('does not guess between two holders', () => {
-    const windows = [
-      win(1, true, []),
-      win(2, false, ['/p/main.kicad_sch']),
-      win(3, false, ['/p/main.kicad_sch'])
-    ]
-    expect(pickDesignWindow({ sheet: 'main.kicad_sch' }, windows)).toBeNull()
+  it('reads a bare name as its own workspace file, even when another holds one of that name', () => {
+    const windows = [win(1, 'other', ['/q/main.kicad_sch'], '/q'), win(2, 'ws', [])]
+    expect(pickDesignWindow({ sheet: 'main.kicad_sch' }, 'ws', windows)).toEqual({ window: 2 })
   })
 
-  it('sends an unnamed request from a design-less window to the design beside it', () => {
-    const windows = [win(1, true, []), win(2, false, ['/p/main.kicad_pcb'])]
-    expect(pickDesignWindow({ kind: 'describe-board' }, windows)).toBe(2)
+  it('refuses a full path another workspace holds or contains, naming it', () => {
+    const windows = [win(1, 'other', ['/q/main.kicad_sch'], '/q'), win(2, 'ws', [])]
+    for (const sheet of ['/q/main.kicad_sch', '/q/sub/power.kicad_sch'])
+      expect(pickDesignWindow({ sheet }, 'ws', windows)).toMatchObject({
+        refused: 'file-in-workspace',
+        candidates: ['other']
+      })
+    // A folder nested in another's is its own workspace's.
+    const nested = [win(1, 'other', [], '/q'), win(2, 'ws', [], '/q/inner')]
+    expect(pickDesignWindow({ sheet: '/q/inner/a.kicad_sch' }, 'ws', nested)).toEqual({ window: 2 })
   })
 
-  it('leaves an unnamed request alone across workspaces', () => {
-    const windows = [win(1, true, []), win(2, false, ['/q/main.kicad_pcb'], '/q')]
-    expect(pickDesignWindow({ kind: 'describe-board' }, windows)).toBeNull()
+  it('sends an unnamed request from a design-less first window to the design beside it', () => {
+    const windows = [win(1, 'ws', []), win(2, 'ws', ['/p/main.kicad_pcb'])]
+    expect(pickDesignWindow({ kind: 'describe-board' }, 'ws', windows)).toEqual({ window: 2 })
+  })
+
+  it('routes by a named window, refusing one it does not have or a file open in another', () => {
+    const windows = [win(1, 'ws', ['/p/a.kicad_sch']), win(2, 'ws', []), win(3, 'other', [])]
+    expect(
+      pickDesignWindow({ kind: 'open-file', file: 'b.kicad_pcb', window: 'win_2' }, 'ws', windows)
+    ).toEqual({ window: 2 })
+    expect(
+      pickDesignWindow({ kind: 'open-file', file: 'b.kicad_pcb', window: 'win_3' }, 'ws', windows)
+    ).toMatchObject({
+      refused: 'window-not-found',
+      candidates: ['win_1', 'win_2']
+    })
+    expect(
+      pickDesignWindow({ kind: 'open-file', file: 'a.kicad_sch', window: 'win_2' }, 'ws', windows)
+    ).toMatchObject({
+      refused: 'file-in-window',
+      candidates: ['win_1']
+    })
+  })
+
+  it('needs a window to open a tab in when there are several and none holds the file', () => {
+    const windows = [win(1, 'ws', ['/p/a.kicad_sch']), win(2, 'ws', [])]
+    expect(
+      pickDesignWindow({ kind: 'open-file', file: 'b.kicad_pcb' }, 'ws', windows)
+    ).toMatchObject({
+      refused: 'window-required'
+    })
+    expect(pickDesignWindow({ kind: 'open-file', file: 'a.kicad_sch' }, 'ws', windows)).toEqual({
+      window: 1
+    })
+    expect(
+      pickDesignWindow({ kind: 'open-file', file: 'b.kicad_pcb' }, 'ws', [windows[0]])
+    ).toEqual({ window: 1 })
   })
 })

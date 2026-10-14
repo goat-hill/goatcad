@@ -11,6 +11,7 @@ import {
   promptCommand,
   SERVER_NAME,
   TOKEN_ENV,
+  WORKSPACE_ENV,
   writeClaudeMcpConfigFile
 } from '../partsMcpClients'
 
@@ -25,7 +26,10 @@ describe('the launch-time definition for Claude Code', () => {
         [SERVER_NAME]: {
           type: 'http',
           url: URL_NOW,
-          headers: { Authorization: `Bearer \${${TOKEN_ENV}}` }
+          headers: {
+            Authorization: `Bearer \${${TOKEN_ENV}}`,
+            'X-GoatCAD-Workspace': `\${${WORKSPACE_ENV}}`
+          }
         }
       }
     })
@@ -48,29 +52,40 @@ describe('the launch-time definition for Codex', () => {
     const overrides = codexMcpOverrides(URL_NOW)
     expect(overrides).toEqual([
       `mcp_servers.${SERVER_NAME}.url="${URL_NOW}"`,
-      `mcp_servers.${SERVER_NAME}.bearer_token_env_var="${TOKEN_ENV}"`
+      `mcp_servers.${SERVER_NAME}.bearer_token_env_var="${TOKEN_ENV}"`,
+      `mcp_servers.${SERVER_NAME}.env_http_headers={"X-GoatCAD-Workspace"="${WORKSPACE_ENV}"}`
     ])
   })
 })
 
 describe('the manual path', () => {
-  it('registers Claude Code at user scope, not the per-directory default', () => {
+  const server = { url: URL_NOW, token: 'tok' }
+
+  it('registers Claude Code at user scope, by URL with the token', () => {
     // `claude mcp add` defaults to `local` scope, which would recreate exactly
-    // the per-project coupling the design rejects.
-    const line = claudeCode.manualText(URL_NOW, 'tok')
+    // the per-project coupling the design rejects. Nothing launches the app for
+    // the client: the URL answers only while it runs.
     expect(claudeCode.manual).toBe('command')
-    expect(line).toContain('--scope user')
-    expect(line).toContain('--transport http')
-    expect(line).toContain(URL_NOW)
-    expect(line).toContain('Bearer tok')
+    expect(claudeCode.manualText(server)).toBe(
+      `claude mcp add --transport http --scope user ${SERVER_NAME} ${URL_NOW} --header "Authorization: Bearer tok"`
+    )
   })
 
-  it('gives Codex a config table, since its CLI cannot take a header inline', () => {
-    const snippet = codex.manualText(URL_NOW, 'tok')
+  it('registers a development build for its folder only', () => {
+    // So it shadows an installed GoatCAD's registration there instead of replacing it.
+    expect(claudeCode.manualText({ ...server, dev: true })).toContain(
+      `--scope local ${SERVER_NAME} `
+    )
+  })
+
+  it('gives Codex its config table with the URL and the header', () => {
+    const snippet = codex.manualText(server)
     expect(codex.manual).toBe('snippet')
-    expect(snippet.split('\n')[0]).toBe(`[mcp_servers.${SERVER_NAME}]`)
-    expect(snippet).toContain(`url = "${URL_NOW}"`)
-    expect(snippet).toContain('Authorization = "Bearer tok"')
+    expect(snippet.split('\n')).toEqual([
+      `[mcp_servers.${SERVER_NAME}]`,
+      `url = "${URL_NOW}"`,
+      'http_headers = { Authorization = "Bearer tok" }'
+    ])
   })
 
   it('names the file each client keeps its servers in', () => {

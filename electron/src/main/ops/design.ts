@@ -14,14 +14,30 @@
  * cannot see, and a name it invented.
  */
 import type { McpDesignRequest } from '../../preload/mcpTypes'
-import type { OpContext } from './context'
+import { callerOf, type DesignOutcome, type OpContext } from './context'
 import { fail, succeed, type OpErrorCode, type OpOutcome } from './errors'
 
 export const DESIGN_REMEDY: Record<string, string> = {
-  'no-window': 'GoatCAD has no open window. Ask the user to open their project.',
+  'no-window':
+    'The workspace has no live renderer. Call workspace_list; workspace_start makes a new one.',
+  'no-workspace': 'No workspace is open. Start one with workspace_start on a folder or project.',
+  'workspace-required':
+    'Several workspaces are open and the call named none; the candidates are their ids. Pass workspace with one (workspace_list says which is which), or start your own with workspace_start.',
+  'workspace-not-found':
+    'No workspace has that id; ids last one app run. Call workspace_list for the open ones.',
+  'window-not-found':
+    "No window of this workspace has that id. Call workspace_list for each workspace's windows.",
+  'window-required':
+    'The workspace has several windows; the candidates are their ids. Pass window with one.',
+  'file-in-workspace':
+    'Another workspace holds that file or its project; the candidate is its id. Pass it as workspace to work there.',
+  'file-in-window':
+    'That file is open in another window of this workspace; the candidate is its id. Pass that window, or close the file there first.',
+  'project-in-workspace':
+    'Another workspace already holds that project or folder; the candidate is its id. Pass it as workspace to work there.',
   'no-bridge': 'This server cannot reach the app window. Report it; no argument works around it.',
   'no-schematic':
-    'No sheet was named, none is in front, and the project has no root sheet (the one named after the project, or its only one). Pass sheet with a file name, or ask the user which design they mean.',
+    'No sheet was named, none is open, and the project has no root sheet (the one named after the project, or its only one). Pass sheet with a file name, or ask the user which design they mean.',
   'sheet-not-found':
     'No sheet by that name is in the open project. Call schematic_describe with no arguments for the sheets.',
   'unknown-symbol':
@@ -56,9 +72,9 @@ export const DESIGN_REMEDY: Record<string, string> = {
   'board-unreadable':
     'The board file could not be read or parsed. Report the detail; a retry reads the same bytes.',
   'board-unsaved':
-    "The board's tab has unsaved edits and an export writes the saved file. Call project_save, then export again.",
+    "The board's tab has unsaved edits and an export writes the saved file. Call workspace_save, then export again.",
   'zones-stale':
-    'Zone fills are out of date and this call reads them; the detail says what for. Call board_refill (then project_save, before an export), then call again.',
+    'Zone fills are out of date and this call reads them; the detail says what for. Call board_refill (then workspace_save, before an export), then call again.',
   'profile-not-found':
     'No export profile has that id; the candidates exist, and export_profiles lists them.',
   'nothing-to-export':
@@ -101,7 +117,7 @@ export const DESIGN_REMEDY: Record<string, string> = {
     'The copper would short two nets. Route to a pad of the net you mean, or omit net to take it from the pads.',
   'board-changed': 'The board changed during the call; nothing was written. Call it again.',
   'project-exists':
-    'The folder already holds the project the candidates name. Open it with project_open.',
+    'The folder already holds the project the candidates name. Open it with workspace_open_file.',
   'files-exist':
     'The folder already holds the schematics the candidates name. Pass adopt with the root sheet, or blank: true for a new sheet beside them.',
   'no-project-file':
@@ -130,7 +146,7 @@ export const DESIGN_REMEDY: Record<string, string> = {
     'The write to disk failed; the detail says which file and why, and nothing after it was written. Tell the user.',
   'file-not-found': 'No file by that name is in the project tree; the candidates are real files.',
   'unsaved-edits':
-    'That tab has unsaved edits. Save it with project_save, or pass discard: true if the user wants them dropped.',
+    'There are unsaved edits. Save them with workspace_save, or pass discard: true if the user wants them dropped.',
   'unknown-footprint':
     'No footprint library has that id; ids are exact and case-sensitive. Pick a candidate or find it with footprint_search or footprint_list_library.',
   'unknown-check-code':
@@ -141,7 +157,8 @@ export const DESIGN_REMEDY: Record<string, string> = {
     "No part has a column by that name; the candidates are the design's columns. Add a new field by writing it with bom_update.",
   'field-spelling':
     'The design already has that field under another spelling. Use the spelling the candidates name.',
-  'no-project': 'No project is open to write into. Ask the user to open their project.',
+  'no-project':
+    'The workspace has no project. Set one with workspace_update, or create one with project_create.',
   'no-active-project':
     'The folder holds several projects and none is active. Ask the user to choose the active project in the sidebar.',
   'footprint-exists':
@@ -149,7 +166,7 @@ export const DESIGN_REMEDY: Record<string, string> = {
   'footprint-not-found':
     'No footprint of that name is in the project library; the candidates are the nearest it holds.',
   'footprint-unsaved':
-    "The footprint's tab has unsaved edits, which this would overwrite. Save them with project_save, or ask the user to revert the tab, then call again.",
+    "The footprint's tab has unsaved edits, which this would overwrite. Save them with workspace_save, or ask the user to revert the tab, then call again.",
   'blank-name': 'The name is empty. Name it the way the library names its neighbors.',
   'bad-name': 'The name is not a legal file name. Drop slashes, colons and similar characters.',
   'no-pads': 'The pad table is empty. Transcribe every pad from the land pattern drawing.',
@@ -165,7 +182,7 @@ export const DESIGN_REMEDY: Record<string, string> = {
     'The body is empty. Pass the top-view outline: a rect with positive size, or a polygon of three or more points.',
   'write-failed': 'The file could not be written; the detail says why. Tell the user.',
   'name-taken':
-    'The project already has a file or library of that name, the candidate. Pass another name, or open the file with project_open.',
+    'The project already has a file or library of that name, the candidate. Pass another name, or open the file with workspace_open_file.',
   'register-failed':
     "The file was written but the project's library table could not be updated; the detail says why. Tell the user.",
   'library-unparseable':
@@ -230,6 +247,14 @@ export const DESIGN_REMEDY: Record<string, string> = {
  */
 export const DESIGN_CODE: Record<string, OpErrorCode> = {
   'no-window': 'no-document',
+  'no-workspace': 'refused',
+  'workspace-required': 'invalid-args',
+  'workspace-not-found': 'not-found',
+  'window-not-found': 'not-found',
+  'window-required': 'invalid-args',
+  'file-in-workspace': 'conflict',
+  'file-in-window': 'conflict',
+  'project-in-workspace': 'conflict',
   'no-bridge': 'internal',
   'no-schematic': 'no-document',
   'sheet-not-found': 'not-found',
@@ -351,8 +376,12 @@ export const design = async (ctx: OpContext, request: McpDesignRequest): Promise
       fix: DESIGN_REMEDY['no-bridge']
     })
   }
-  const outcome = await ctx.design(request)
-  if (outcome.ok) return succeed(outcome.payload)
+  return designAnswer(await ctx.design(request, callerOf(ctx)))
+}
+
+/** A window's or the workspace service's answer as an operation outcome. */
+export const designAnswer = (outcome: DesignOutcome | { ok: true; value: unknown }): OpOutcome => {
+  if (outcome.ok) return succeed('value' in outcome ? outcome.value : outcome.payload)
   return fail({
     code: DESIGN_CODE[outcome.error] ?? 'internal',
     kind: outcome.error,

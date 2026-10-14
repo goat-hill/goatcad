@@ -5,8 +5,9 @@
  * Each window keeps its own boxes (`renderer/src/lib/agentViewports.ts`), so
  * main gives every viewport its id: unique across windows, so a request naming
  * one goes to the window that holds it. An agent connection (`mcpSessions.ts`)
- * keeps one id for its life; its next `viewport.open` reuses it, and its end
- * closes it.
+ * keeps one id per workspace it works in, so subagents sharing a connection,
+ * each in its own workspace, each keep a box; its next `viewport.open` there
+ * reuses it, and the connection's end closes them all.
  *
  * Pure and Electron-free: the bridge (`partsMcpBridge.ts`) sends the requests.
  */
@@ -17,13 +18,16 @@ const REMEMBERED = 256
 export interface AgentViewportRoutes {
   /** The window that holds (or last held) a viewport, or null. */
   windowOf(id: string): number | null
-  /** The id an open uses: the connection's own, else a new one. */
-  idFor(connection: string | undefined): string
+  /** The id an open uses: the connection's own in this workspace, else a new one. */
+  idFor(connection: string | undefined, workspace: string): string
   /** A window answered an open with this id. */
-  opened(id: string, window: number, connection: string | undefined): void
-  /** Forget a connection, answering its viewport and the window holding it. */
-  end(connection: string): { id: string; window: number } | null
+  opened(id: string, window: number, connection: string | undefined, workspace: string): void
+  /** Forget a connection, answering its viewports and the windows holding them. */
+  end(connection: string): { id: string; window: number }[]
 }
+
+/** A connection's box in one workspace. */
+const ownerKey = (connection: string, workspace: string): string => `${connection}\n${workspace}`
 
 export const createAgentViewportRoutes = (): AgentViewportRoutes => {
   const windows = new Map<string, number>()
@@ -32,21 +36,24 @@ export const createAgentViewportRoutes = (): AgentViewportRoutes => {
 
   return {
     windowOf: (id) => windows.get(id) ?? null,
-    idFor: (connection) =>
-      (connection !== undefined ? byConnection.get(connection) : undefined) ??
+    idFor: (connection, workspace) =>
+      (connection !== undefined ? byConnection.get(ownerKey(connection, workspace)) : undefined) ??
       `viewport-${++count}`,
-    opened(id, window, connection) {
+    opened(id, window, connection, workspace) {
       windows.delete(id)
       windows.set(id, window)
       if (windows.size > REMEMBERED) windows.delete(windows.keys().next().value!)
-      if (connection !== undefined) byConnection.set(connection, id)
+      if (connection !== undefined) byConnection.set(ownerKey(connection, workspace), id)
     },
     end(connection) {
-      const id = byConnection.get(connection)
-      if (id === undefined) return null
-      byConnection.delete(connection)
-      const window = windows.get(id)
-      return window === undefined ? null : { id, window }
+      const held: { id: string; window: number }[] = []
+      for (const [owner, id] of byConnection) {
+        if (!owner.startsWith(`${connection}\n`)) continue
+        byConnection.delete(owner)
+        const window = windows.get(id)
+        if (window !== undefined) held.push({ id, window })
+      }
+      return held
     }
   }
 }

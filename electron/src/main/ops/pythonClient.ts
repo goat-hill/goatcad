@@ -107,24 +107,32 @@ const className = (domain: string): string =>
 /** Required arguments a transaction fills from its own, so optional on a method. */
 const FILLED: ReadonlySet<string> = new Set(['viewport', 'action'])
 
+/**
+ * A method's keyword arguments, in the order its signature takes them: required
+ * first, then optional, since Python needs defaults last and a reader scanning a
+ * signature wants the mandatory ones at the front anyway. A required viewport or
+ * action counts as optional: inside a transaction the transaction's own fills it,
+ * and outside one the app refuses a call without it. The guide lists the same
+ * signature (`pythonGuide.ts`).
+ */
+export const methodParams = (op: RegisteredOp): Array<{ name: string; optional: boolean }> => {
+  const properties = (op.inputSchema.properties as Record<string, unknown>) ?? {}
+  const required = new Set((op.inputSchema.required as string[]) ?? [])
+  const optional = (name: string): boolean => !required.has(name) || FILLED.has(name)
+  return Object.keys(properties)
+    .sort((a, b) => Number(optional(a)) - Number(optional(b)))
+    .map((name) => ({ name, optional: optional(name) }))
+}
+
 const renderMethod = (op: RegisteredOp): string => {
   const verb = op.name.split('.')[1]
   const properties = (op.inputSchema.properties as Record<string, Record<string, unknown>>) ?? {}
   const required = new Set((op.inputSchema.required as string[]) ?? [])
-
-  // Required first, then optional: Python needs defaults last, and a reader
-  // scanning a signature wants the mandatory arguments at the front anyway.
-  const names = Object.keys(properties).sort((a, b) => {
-    const weight = (key: string): number => (required.has(key) && !FILLED.has(key) ? 0 : 1)
-    return weight(a) - weight(b)
-  })
-
-  // A required viewport or action stays optional here: inside a transaction the
-  // transaction's own fills it, and outside one the app refuses a call without it.
-  const optional = (name: string): boolean => !required.has(name) || FILLED.has(name)
-  const params = names.map((name) => {
+  const signature = methodParams(op)
+  const names = signature.map((param) => param.name)
+  const params = signature.map(({ name, optional }) => {
     const type = annotation(properties[name])
-    return optional(name) ? `        ${name}: ${type} | None = None,` : `        ${name}: ${type},`
+    return optional ? `        ${name}: ${type} | None = None,` : `        ${name}: ${type},`
   })
   // A list a script reads whole: a client-side flag, snake_case as the
   // transaction's are, so it never reads as a wire argument.

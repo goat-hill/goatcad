@@ -13,8 +13,12 @@
  *
  * What is left for a client to *store* is the manual path: a person
  * running the CLI in their own terminal, outside GoatCAD, registers the server
- * themselves with a line Settings shows them. We never write a client's config
- * file — `~/.claude.json` and `~/.codex/config.toml` are theirs.
+ * themselves with a line Settings shows them: the URL and the token. It goes
+ * stale when the token is replaced (Settings reprints it) or, in a development
+ * build, when the app restarts on another port. The app serves it only while it
+ * runs, and nothing starts the app for a client: the person starts it first.
+ * We never write a client's config file — `~/.claude.json` and
+ * `~/.codex/config.toml` are theirs.
  *
  * Electron-free. The one file this writes is the app's own.
  */
@@ -22,8 +26,10 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 
-/** The name the server is known by, in every client. Tools are `mcp__goatcad__*`
- *  and prompts `/mcp__goatcad__<name>`, so this is user-visible and must not drift. */
+/** The name the server is known by, in every client and every build. Tools are
+ *  `mcp__goatcad__*` and prompts `/mcp__goatcad__<name>`, so this is user-visible and
+ *  must not drift. A development build shares it: its registration is narrower in
+ *  scope, so it shadows an installed GoatCAD's where it applies. */
 export const SERVER_NAME = 'goatcad'
 
 /** A prompt as a user types it in Claude Code, `/mcp__<server>__<prompt>`; its `/`
@@ -38,18 +44,24 @@ export const promptCommand = (name: string): string => `/mcp__${SERVER_NAME}__${
  */
 export const TOKEN_ENV = 'GOATCAD_MCP_TOKEN'
 
+/**
+ * The environment variable an agent tab carries its workspace id in
+ * (`workspaces.ts`). Both CLIs send it as `X-GoatCAD-Workspace` on every call, so
+ * the agent acts in the tab's workspace however many are open, and so does the
+ * Python client in a script started from the tab.
+ */
+export const WORKSPACE_ENV = 'GOATCAD_WORKSPACE'
+
 export type McpClientId = 'claude-code' | 'codex'
 
 export interface McpClient {
   id: McpClientId
   /** A product name — a proper noun, so not translated. */
   name: string
-  /**
-   * What the manual path copies: a shell command for a client whose CLI can
-   * take a header, or a config snippet for one whose CLI cannot.
-   */
+  /** What the manual path copies: a shell command, or a config snippet. */
   manual: 'command' | 'snippet'
-  manualText(url: string, token: string): string
+  /** The text that registers the server at `url` with `token`; `dev` is a worktree's build. */
+  manualText(server: { url: string; token: string; dev?: boolean }): string
   /** The file the manual path ends up in. Shown, never written by us. */
   configPath(): string
 }
@@ -65,28 +77,25 @@ export const claudeCode: McpClient = {
   id: 'claude-code',
   name: 'Claude Code',
   manual: 'command',
-  manualText: (url, token) =>
-    `claude mcp add --scope user --transport http ${SERVER_NAME} ${url} --header "Authorization: Bearer ${token}"`,
+  // A worktree's build registers for that folder only, shadowing an installed
+  // GoatCAD's there rather than replacing it everywhere.
+  manualText: ({ url, token, dev }) =>
+    `claude mcp add --transport http --scope ${dev ? 'local' : 'user'} ${SERVER_NAME} ${url} --header "Authorization: Bearer ${token}"`,
   // Where `--scope user` writes.
   configPath: () => join(homedir(), '.claude.json')
 }
 
-/**
- * Codex.
- *
- * `codex mcp add` takes a bearer token only as an environment-variable *name*,
- * which a person's own terminal would then have to export every time — so the
- * manual path is the `config.toml` table instead, with the header inline.
- */
+/** Codex, as its `config.toml` table, which carries the URL and the header as TOML. */
 export const codex: McpClient = {
   id: 'codex',
   name: 'Codex',
   manual: 'snippet',
-  manualText: (url, token) =>
+  // One config file for every folder: a worktree's build's table replaces an installed one's.
+  manualText: ({ url, token }) =>
     [
       `[mcp_servers.${SERVER_NAME}]`,
-      `url = "${url}"`,
-      `http_headers = { Authorization = "Bearer ${token}" }`
+      `url = ${JSON.stringify(url)}`,
+      `http_headers = { Authorization = ${JSON.stringify(`Bearer ${token}`)} }`
     ].join('\n'),
   configPath: () => join(homedir(), '.codex', 'config.toml')
 }
@@ -105,7 +114,14 @@ export const MCP_CLIENTS: McpClient[] = [claudeCode, codex]
  */
 export const claudeMcpConfig = (url: string): Record<string, unknown> => ({
   mcpServers: {
-    [SERVER_NAME]: { type: 'http', url, headers: { Authorization: `Bearer \${${TOKEN_ENV}}` } }
+    [SERVER_NAME]: {
+      type: 'http',
+      url,
+      headers: {
+        Authorization: `Bearer \${${TOKEN_ENV}}`,
+        'X-GoatCAD-Workspace': `\${${WORKSPACE_ENV}}`
+      }
+    }
   }
 })
 
@@ -131,5 +147,6 @@ export const writeClaudeMcpConfigFile = (dir: string, url: string): string => {
  */
 export const codexMcpOverrides = (url: string): string[] => [
   `mcp_servers.${SERVER_NAME}.url="${url}"`,
-  `mcp_servers.${SERVER_NAME}.bearer_token_env_var="${TOKEN_ENV}"`
+  `mcp_servers.${SERVER_NAME}.bearer_token_env_var="${TOKEN_ENV}"`,
+  `mcp_servers.${SERVER_NAME}.env_http_headers={"X-GoatCAD-Workspace"="${WORKSPACE_ENV}"}`
 ]

@@ -95,6 +95,9 @@ export interface WindowSession {
   activeProjectPath?: string | null
   /** The editor split, when the window had one; absent means a single group. */
   editorLayout?: SavedEditorLayout
+  /** Windows of one workspace share this number, so a restart restores them as one
+   *  (`workspaces.ts`); absent for a workspace's only window. */
+  workspace?: number
   /**
    * @deprecated Moved to `AppConfig.panelLayout`, which is global rather than
    * per-window — a panel size is a preference, not window state. Still PARSED
@@ -411,6 +414,10 @@ export const normalizeSession = (value: unknown): WindowSession | null => {
   const bounds = normalizeBounds(value.bounds)
   const activeProjectPath = asString(value.activeProjectPath)
   const editorLayout = normalizeEditorLayout(value.editorLayout, tabs)
+  const workspace =
+    typeof value.workspace === 'number' && Number.isInteger(value.workspace) && value.workspace >= 0
+      ? value.workspace
+      : undefined
   return {
     projectPath,
     tabs,
@@ -419,7 +426,8 @@ export const normalizeSession = (value: unknown): WindowSession | null => {
     ...(bounds ? { bounds } : {}),
     ...(asBoolean(value.maximized, false) ? { maximized: true } : {}),
     ...(activeProjectPath ? { activeProjectPath } : {}),
-    ...(editorLayout ? { editorLayout } : {})
+    ...(editorLayout ? { editorLayout } : {}),
+    ...(workspace !== undefined ? { workspace } : {})
     // The two legacy panel sizes are deliberately NOT carried through: they are
     // promoted into `panelLayout` once, by `adoptLegacySessionPanelSizes`
     // reading the raw session, and re-emitting them here would keep a second

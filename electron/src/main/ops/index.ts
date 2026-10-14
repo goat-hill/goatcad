@@ -25,6 +25,16 @@ import { projectOpen } from './project/open'
 import { projectCreate } from './project/create'
 import { projectClose } from './project/close'
 import { projectCreateFile } from './project/createFile'
+import { workspaceList } from './workspace/list'
+import { workspaceStart } from './workspace/start'
+import { workspaceUpdate } from './workspace/update'
+import { workspaceClose } from './workspace/close'
+import { workspaceOpenWindow } from './workspace/openWindow'
+import { workspaceCloseWindow } from './workspace/closeWindow'
+import { workspaceOpenFile } from './workspace/openFile'
+import { workspaceCloseFile } from './workspace/closeFile'
+import { workspaceSave } from './workspace/save'
+import { workspaceCreateFile } from './workspace/createFile'
 import { symbolListLibraries } from './symbol/listLibraries'
 import { symbolListLibrary } from './symbol/listLibrary'
 import { symbolSearch } from './symbol/search'
@@ -119,6 +129,16 @@ import {
  * remember: the name simply is not there to find.
  */
 const core = [
+  workspaceList,
+  workspaceStart,
+  workspaceUpdate,
+  workspaceClose,
+  workspaceOpenWindow,
+  workspaceCloseWindow,
+  workspaceOpenFile,
+  workspaceCloseFile,
+  workspaceSave,
+  workspaceCreateFile,
   partsStatus,
   appScripting,
   projectContext,

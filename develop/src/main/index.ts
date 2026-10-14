@@ -6,6 +6,7 @@ import { join, resolve } from 'node:path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { applyAppMenu } from './appMenu'
+import { goatcadCommand, goatcadProfileDir } from './goatcadProfile'
 import { gitDiffOverview, listGitFiles, readGitPatch } from './gitDiff'
 import { PtyManager } from './ptys'
 import { getQuota } from './quota'
@@ -94,10 +95,17 @@ function startSession(request: PtyStartRequest): PtyStartResult {
       const hooks = writeClaudeHooksFile(join(app.getPath('userData'), 'hooks'), hookPort)
       const resume = hasClaudeTranscripts(worktree) ? 'claude --continue' : 'claude'
       const { file, args } = shellCommand(`${resume} --settings "${hooks}"`)
-      return { id: ptys.start({ file, args, cwd: worktree }) }
+      // Its Python client finds this worktree's GoatCAD, not another's (goatcadProfile.ts).
+      const env = goatcadCommand(worktree)
+        ? { GOATCAD_CONFIG_DIR: goatcadProfileDir(worktree) }
+        : undefined
+      return { id: ptys.start({ file, args, cwd: worktree, env }) }
     }
     case 'app': {
-      const { file, args } = shellCommand('npm run dev')
+      // In the worktree's own profile, where its Claude session's client looks.
+      const { file, args } = shellCommand(
+        goatcadCommand(worktree) ? './bin/goatcad dev' : 'npm run dev'
+      )
       return {
         id: ptys.start({
           file,

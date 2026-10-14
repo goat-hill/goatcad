@@ -166,13 +166,13 @@ export const createFabExportAgent = (ctx: FabExportAgentContext): FabExportAgent
     if (ctx.unsaved(path))
       return {
         error: 'board-unsaved',
-        detail: `${basenameOf(path)} has unsaved edits and an export writes the saved file. Call project_save first.`
+        detail: `${basenameOf(path)} has unsaved edits and an export writes the saved file. Call workspace_save first.`
       }
     const stale = ctx.staleZones(path)
     if (stale.size)
       return {
         error: 'zones-stale',
-        detail: `The zone fills on ${basenameOf(path)} are stale. Call board_refill, then project_save.`
+        detail: `The zone fills on ${basenameOf(path)} are stale. Call board_refill, then workspace_save.`
       }
     const text = await ctx.readText(path)
     if (text === null) return { error: 'board-unreadable', detail: path }

@@ -464,6 +464,14 @@ const api = {
       ipcRenderer.off('mcp:design-request', listener)
     }
   },
+  /** Open a folder (and a file in it) in the workspace already holding it, if
+   *  another does; true when it did (`main/workspaces.ts`). */
+  openInHoldingWorkspace: (root: string, file?: string): Promise<boolean> =>
+    ipcRenderer.invoke('workspace:open-elsewhere', root, file),
+  /** The window answers design requests from now on; main holds them until then. */
+  mcpDesignReady: (): void => {
+    ipcRenderer.send('mcp:design-ready')
+  },
   /** Reply to one request. `send`, not `invoke`: the window is the responder
    *  here, and main is already holding the promise keyed on the envelope id. */
   sendMcpDesignReply: (reply: McpDesignReply): void => {

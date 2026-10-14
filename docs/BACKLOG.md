@@ -14,6 +14,10 @@ done or no longer wanted; when an area becomes active, move its lines into a wor
 - Select similar: everything sharing the selection's kind and value, footprint or net.
 - Visual diff as a read-only diff mode of each editor, in place of the diff tab's own canvases (`BoardDiffViewport.vue`, `VisualDiffView.vue`), so view hotkeys, toolbars and panels come for free.
 
+## Agent interface
+- Documents in main or a worker rather than a hidden renderer, so a background workspace costs no Chromium process.
+- One document in two views (two windows) without a second copy.
+
 ## Design health
 - One-click fixes on a drawer row, each also an agent op and tested to clear its finding every time — ERC: a PWR_FLAG on an undriven rail, a no-connect, annotate, update a symbol from its library; DRC: refill, trim a dangling track, widen a track to its class, remove a duplicate via.
 
