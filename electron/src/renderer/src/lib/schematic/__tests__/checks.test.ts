@@ -258,9 +258,9 @@ describe('electrical rules', () => {
     ).toEqual([])
   })
 
-  test("an unannotated part's input is not asked for a driver until it is annotated", () => {
+  test("an unannotated part's input is asked for a driver like any other (KiCad 10.0.7)", () => {
     const body = [part('Logic:IN', 'U?', 100, 100), wire(100, 100, 110, 100)].join(' ')
-    expect(electricalChecks(check(body)).filter((r) => r.code === 'input-undriven')).toEqual([])
+    expect(electricalChecks(check(body)).filter((r) => r.code === 'input-undriven')).toHaveLength(1)
   })
 
   test('leaves one output alone', () => {

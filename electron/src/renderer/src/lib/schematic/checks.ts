@@ -210,11 +210,8 @@ const undrivenNet = (net: SchematicNet): CheckResult | null => {
   const rail = types.has('power_in')
   const driven = rail ? types.has('power_out') : [...types].some((type) => DRIVERS.has(type))
   if (driven) return null
-  // An unannotated part's pins wait on its annotation: kicad-cli asks no driver of them.
-  const sinks = net.pins.filter(
-    (entry) =>
-      !entry.reference.endsWith('?') &&
-      (rail ? entry.pin.electricalType === 'power_in' : DRIVEN.has(entry.pin.electricalType))
+  const sinks = net.pins.filter((entry) =>
+    rail ? entry.pin.electricalType === 'power_in' : DRIVEN.has(entry.pin.electricalType)
   )
   if (!sinks.length) return null
   const finding = netFinding(net, sinks)
