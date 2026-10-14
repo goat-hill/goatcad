@@ -457,6 +457,13 @@ const SYMBOL_VARIABLES = new Set([
   'FOOTPRINT_LIBRARY',
   'FOOTPRINT_NAME',
   'OP',
+  // A simulation field the part does not set reads empty (`SCH_SYMBOL::ResolveTextVar`).
+  'SIM.DEVICE',
+  'SIM.LIBRARY',
+  'SIM.NAME',
+  'SIM.PARAMS',
+  'SIM.PINS',
+  'SIM.TYPE',
   'SHORT_REFERENCE',
   'SYMBOL_DESCRIPTION',
   'SYMBOL_KEYWORDS',

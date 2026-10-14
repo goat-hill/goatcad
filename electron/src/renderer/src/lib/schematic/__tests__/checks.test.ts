@@ -981,6 +981,26 @@ describe('every rule selects what it reports', () => {
   })
 })
 
+describe('a bus label meeting a sheet port', () => {
+  const run = (label: string, pin: string): string[] => {
+    const schematic = parseKicadSchematic(
+      doc(`(bus (pts (xy 50 50) (xy 70 50)) (uuid "b"))
+        (global_label "${label}" (shape input) (at 50 50 0) (uuid "g"))
+        (sheet (at 70 40) (size 10 20) (uuid "box")
+          (property "Sheetname" "S" (at 70 40 0)) (property "Sheetfile" "s.kicad_sch" (at 70 40 0))
+          (pin "${pin}" input (at 70 50 180) (uuid "p")))`)
+    )
+    const sheets = [{ sheetPath: '/', namePath: '/', schematic }]
+    return connectionChecks(buildConnectivity(sheets), sheets).map((r) => r.code)
+  }
+
+  test("conflicts with no member in common, but not where the pin's members match across", () => {
+    // KiCad 10.0.7 renames the pin's members to the label's where they match.
+    expect(run('CON_[1..8]', 'LED[0..7]')).not.toContain('bus-to-bus-conflict')
+    expect(run('A[0..1]', 'B{X Y}')).toContain('bus-to-bus-conflict')
+  })
+})
+
 describe('connection rules on a label or sheet pin with nothing wired', () => {
   const run = (body: string): CheckResult[] => {
     const schematic = parseKicadSchematic(doc(body))

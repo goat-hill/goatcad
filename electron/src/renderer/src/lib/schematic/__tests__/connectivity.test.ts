@@ -574,6 +574,21 @@ describe('buses', () => {
     ])
   })
 
+  test("a global label's bus names its members globally, over a local label", () => {
+    const parent = parseKicadSchematic(
+      sheetDoc(
+        `(bus (pts (xy 10 10) (xy 20 10)))
+         (global_label "DATA[0..1]" (shape input) (at 12 10 0))
+         ${wire(0, 30, 10, 30)} (label "DATA0" (at 0 30 0))
+         ${wire(0, 40, 10, 40)} (label "DATA1" (at 0 40 0))`
+      )
+    )
+    const c = buildConnectivity([
+      { sheetPath: `/${parent.uuid}`, namePath: '/', schematic: parent }
+    ])
+    expect(c.nets.map((net) => net.name).sort()).toEqual(['DATA0', 'DATA1'])
+  })
+
   test('a group bus joins by member name, and a bus label names no net', () => {
     const parent = parentWith(
       'SFP0{TX RX}',

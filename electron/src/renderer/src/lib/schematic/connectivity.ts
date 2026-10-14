@@ -340,8 +340,9 @@ type Item = BaseItem &
         onBus?: boolean
       }
     // A net a bus carries: joins the net of its name on its sheet, and the
-    // member it matches on every bus joined to it.
-    | { kind: 'bus_member' }
+    // member it matches on every bus joined to it. A global label's bus makes
+    // its members global names (`global`), as KiCad names them.
+    | { kind: 'bus_member'; global?: string }
   )
 
 /** Omit that distributes over a discriminated union (plain Omit collapses it). */
@@ -831,13 +832,24 @@ export function buildConnectivity(
           busPorts.add(`${sheets[piece.sheet].sheetPath}|${member.name}`)
         }
       }
+      const global = piece.driver.source === 'global_label'
       for (const member of piece.driver.bus.members) {
-        const item = addItem({ sheet: piece.sheet, kind: 'bus_member', points: [] })
+        const item = addItem({
+          sheet: piece.sheet,
+          kind: 'bus_member',
+          points: [],
+          ...(global ? { global: member.name } : {})
+        })
         piece.members.push(item.id)
         const key = `${piece.sheet}|${member.name}`
         const bucket = sheetLocalNames.get(key)
         if (bucket) bucket.push(item.id)
         else sheetLocalNames.set(key, [item.id])
+        if (global) {
+          const named = globalNames.get(member.name)
+          if (named) named.push(item.id)
+          else globalNames.set(member.name, [item.id])
+        }
       }
     }
     const busByRoot = new Map<number, SchematicBus>()
@@ -1197,8 +1209,10 @@ export function buildConnectivity(
           noConnectPoints ??= new Set()
           noConnectPoints.add(sheetKey(item.sheet, item.points[0]))
           break
-        case 'bus_entry':
         case 'bus_member':
+          if (item.global) candidates.push({ name: item.global, source: 'global_label', depth: 0 })
+          break
+        case 'bus_entry':
           break
       }
     }

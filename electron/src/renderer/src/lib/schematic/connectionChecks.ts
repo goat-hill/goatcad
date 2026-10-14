@@ -24,6 +24,7 @@ import {
   type Point
 } from '../kicad/schematic'
 import { findChild, getFirstAtomValue } from '../kicad/sexpr'
+import { matchBusMember, parseBusName } from './busNames'
 import { asMm } from './schematicAgent'
 import { noConnectId } from './schematicItems'
 
@@ -590,7 +591,10 @@ const onLine = (point: Point, points: readonly Point[]): boolean =>
 
 /**
  * A bus's global label and its sheet port (a sheet pin or hierarchical label)
- * that carry no member in common: the bus means two different things.
+ * that carry no member in common: the bus means two different things. A
+ * sheet pin's members take the label's where they match across the sheet
+ * boundary (`matchBusMember`), as KiCad 10.0.7 renames every copy of the
+ * port's bus, so a pin with any such member is no conflict.
  */
 const busToBus = (connectivity: SchematicConnectivity): CheckResult[] => {
   const first = once()
@@ -603,6 +607,10 @@ const busToBus = (connectivity: SchematicConnectivity): CheckResult[] => {
     if (!label || !port) continue
     const members = new Set(label.members)
     if (port.members.some((member) => members.has(member))) continue
+    const labelBus = port.source === 'sheet_pin' ? parseBusName(label.text) : null
+    const portBus = labelBus ? parseBusName(port.text) : null
+    if (labelBus && portBus?.members.some((member) => matchBusMember(labelBus, member) >= 0))
+      continue
     if (!first(label.id ?? `${bus.sheetPath}|${label.text}`)) continue
     const targets = [label.id, port.id].filter((id): id is string => !!id)
     results.push({
