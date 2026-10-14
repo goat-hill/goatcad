@@ -1,0 +1,178 @@
+pill:
+  clean: Contrôles
+  title: Contrôle des règles de conception
+  errors: '{count} erreur | {count} erreurs | {count} erreurs'
+  warnings: '{count} avertissement | {count} avertissements | {count} avertissements'
+drawer:
+  title: Problèmes
+  performance: Performances
+  settings: Paramètres
+  close: Fermer la liste des problèmes
+  rerun: Relancer tous les contrôles
+  clean: Les contrôles n’ont trouvé aucun problème.
+  checking: Vérification du circuit imprimé…
+  pending: Les contrôles n’ont pas encore été exécutés. Relancez-les pour lister les problèmes.
+  needs: '{actual}, requis {limit}'
+  allows: '{actual}, autorisé {limit}'
+  byRule: '{text} ({rule})'
+  markers: Marqueurs sur le canevas
+  markersAll: Tous
+  markersErrors: Erreurs uniquement
+  markersOff: Aucun
+  count: '{count} résultat | {count} résultats | {count} résultats'
+  excluded: Exclus dans KiCad
+  excludedHint: Résultats nommés par les exclusions KiCad du projet. Ils ne sont pas comptés, et les agents ne les voient pas. Les Options du CI et la Configuration de la schématique listent toutes les exclusions.
+  severity:
+    error: Erreur
+    warning: Avertissement
+performance:
+  empty: Rien n’a encore été exécuté sur ce circuit imprimé.
+  total: Total
+  ms: '{ms} ms'
+  seconds: '{s} s'
+  more: '{count} étape de plus | {count} étapes de plus | {count} étapes de plus'
+  fewer: Moins d’étapes
+  tasks:
+    refill: Remplissage des zones
+    check: Contrôles de conception
+    ratsnest: Chevelu
+  scope:
+    all: toutes les zones
+    whole: circuit imprimé entier
+    since: autour de la modification
+  autoZoneFill: Remplissage auto des zones
+  autoDrc: DRC auto
+  mode:
+    greedy: Glouton
+    full: Complet
+    'off': Désactivé
+rules:
+  unconnectedPin: Pin non connectée
+  unconnectedWireEnd: Extrémité de fil dans le vide
+  offGrid: Hors de la grille de connexion
+  pinConflict: Pins qui ne devraient pas partager un net
+  inputUndriven: Entrée non pilotée
+  wireDangling: Fil connecté à rien
+  labelDangling: Label qui ne connecte rien
+  labelSinglePin: Label sur un net à une seule pin
+  noConnectConnected: Indicateur de non-connexion sur une pin câblée
+  noConnectDangling: Indicateur de non-connexion ne marquant rien
+  multipleNetNames: Deux noms sur un même fil
+  labelMultipleWires: Label reliant plusieurs fils
+  netNotBusMember: Net non membre de son bus
+  busToBusConflict: Bus et port sans membre commun
+  busToNetConflict: Net et bus sur un même fil
+  unconnectedSheetPort: Pin de feuille ou label hiérarchique connecté à rien
+  unannotated: Pièce non annotée
+  duplicateReference: Deux pièces avec la même référence
+  extraUnits: Unité que la pièce n’a pas
+  unitValueMismatch: Unités avec des valeurs différentes
+  missingUnit: Unité non placée
+  missingPowerPin: Unité non placée avec des pins d’alimentation
+  missingInputPin: Unité non placée avec des pins d’entrée
+  missingBidiPin: Unité non placée avec des pins bidirectionnelles
+  differentUnitFootprint: Unités avec des empreintes différentes
+  differentUnitNet: Pin partagée sur deux nets
+  duplicateSheetName: Deux feuilles avec le même nom
+  similarLabels: Labels ne différant que par la casse
+  similarPower: Noms d’alimentation ne différant que par la casse
+  similarLabelAndPower: Label et nom d’alimentation ne différant que par la casse
+  sameLocalGlobalLabel: Nom utilisé en local et en global
+  groundPinNotGround: Pin de masse hors de la masse
+  stackedPinName: Numéro de pin empilée mal formé
+  fieldNameWhitespace: Nom de champ avec des espaces parasites
+  undefinedNetclass: Classe d’équipotentielle non définie
+  unresolvedVariable: Variable texte définie nulle part
+  singleGlobalLabel: Label global utilisé une seule fois
+  fourWayJunction: Quatre éléments en un même point
+  symbolLibraryIssue: Librairie de symboles inaccessible
+  footprintLinkIssue: Empreinte inaccessible
+  footprintFilter: Empreinte hors de ses filtres
+  powerInputUndriven: Rail d’alimentation non piloté
+  sheetPinUnmatched: Pin de feuille sans label hiérarchique
+  hierarchicalLabelUnmatched: Label hiérarchique sans pin de feuille
+  symbolLibraryMismatch: Symbole en retard sur sa librairie
+  padsOverlap: Pads qui se chevauchent
+  netTieShort: Cuivre reliant des pads hors d’un net tie
+  netTieGroups: Groupe de net tie nommant un pad manquant
+  silkClippedByMask: Sérigraphie tronquée par le masque de soudure
+  padstack: Pad douteux
+  padstackInvalid: Pad non valide
+  throughHolePadWithoutHole: Pad traversant sans trou
+  malformedCourtyard: Zone d’occupation non fermée
+  holesCoLocated: Trous percés en un même point
+  holeToHole: Trous percés qui se touchent
+  silkWidth: Largeur de sérigraphie (KLC)
+  referenceText: Style du texte de référence (KLC)
+  valueText: Style du texte de valeur (KLC)
+  missingCourtyard: Aucune zone d’occupation (KLC)
+  courtyardEnclosure: La zone d’occupation n’entoure pas la pièce (KLC)
+  footprintTypeMismatch: Type de placement ne correspondant pas aux pads (KLC)
+  duplicatePin: Deux pins partagent un numéro
+  powerSymbol: Le symbole d’alimentation ne nomme pas de net
+  powerSymbolHiddenPin: Pin de symbole d’alimentation masquée
+  hiddenPowerPin: Pin d’entrée d’alimentation masquée
+  offGridPin: Pin hors de la grille
+  referencePrefix: Préfixe de référence non numérotable
+  zeroSizeGraphic: Forme de taille nulle
+  customRules: Règles utilisateur non appliquées
+  copperClearance: Cuivre trop proche
+  copperShort: Cuivre de deux nets en contact
+  tracksCrossing: Pistes qui se croisent
+  trackOnPostMachinedLayer: Piste sur une couche backdrillée ou post-usinée
+  holeClearance: Trou trop proche du cuivre
+  holesTooClose: Trous percés trop proches
+  copperEdgeClearance: Cuivre trop proche du contour du CI
+  unconnectedItems: Connexion non routée
+  trackWidth: Piste trop étroite
+  viaDiameter: Via trop petite
+  annularWidth: Trop peu de cuivre autour d’un trou
+  drillOutOfRange: Trou trop petit pour être percé
+  microviaDrillOutOfRange: Trou de microvia trop petit pour être percé
+  courtyardsOverlap: Zones d’occupation qui se chevauchent
+  pthInsideCourtyard: Trou métallisé dans une autre zone d’occupation
+  npthInsideCourtyard: Trou non métallisé dans une autre zone d’occupation
+  invalidOutline: Contour du CI non fermé
+  itemsNotAllowed: Élément dans une zone d’exclusion
+  zonesIntersect: Zones d’un même net qui se chevauchent à la même priorité
+  isolatedCopper: Îlot de zone sans connexion
+  starvedThermal: Trop peu de rayons de frein thermique
+  trackDangling: Extrémité de piste connectée à rien
+  viaDangling: Via connectée à rien
+  connectionWidth: Connexion cuivre trop étroite
+  copperSliver: Pointe de cuivre
+  textHeight: Texte trop petit
+  textThickness: Trait de texte trop fin
+  mirroredTextOnFront: Texte miroir sur une couche dessus
+  nonmirroredTextOnBack: Texte non miroir sur une couche dessous
+  textOnEdgeCuts: Texte sur la couche des contours du CI
+  drcError: Marqueur d’erreur de règles de conception dans un texte
+  drcWarning: Marqueur d’avertissement de règles de conception dans un texte
+  trackSegmentLength: Longueur de segment de piste hors limites
+  trackAngle: Angle de piste non autorisé
+  trackNotCenteredOnVia: Piste non centrée sur sa via
+  partTypeMismatch: Type d’empreinte ne correspondant pas à ses pads
+  footprint: Empreinte mal formée
+  noCourtyard: L’empreinte n’a pas de zone d’occupation
+  itemOnDisabledLayer: Élément sur une couche absente du circuit imprimé
+  assertionFailure: Échec d’une assertion de règle utilisateur
+  missingTuningProfile: La classe d’équipotentielle nomme un profil d’ajustage manquant
+  silkOverlap: Sérigraphie qui chevauche la sérigraphie
+  silkOverCopper: Sérigraphie tronquée par une ouverture de masque
+  silkEdgeClearance: Sérigraphie tronquée par le contour du CI
+  solderMaskBridge: Masque de soudure trop étroit entre nets
+  lengthOutOfRange: Longueur de net hors limites
+  skewOutOfRange: Décalage de longueur de net hors limites
+  tooManyVias: Nombre de vias hors limites
+  diffPairGap: Écart de paire différentielle hors limites
+  diffPairUncoupledLength: Paire différentielle découplée sur une trop grande longueur
+  creepage: Cuivre trop proche à la surface du circuit imprimé
+  libraryFootprintIssue: Empreinte introuvable dans sa librairie
+  libraryFootprintMismatch: L’empreinte diffère de sa copie en librairie
+  duplicateFootprints: Deux empreintes partagent une référence
+  missingFootprint: Pièce absente du circuit imprimé
+  extraFootprint: Empreinte absente de la schématique
+  footprintSymbolMismatch: L’empreinte diffère de son symbole
+  footprintSymbolFieldMismatch: Un champ de l’empreinte diffère de son symbole
+  footprintFiltersMismatch: Empreinte hors des filtres de son symbole
+  netConflict: Le net du pad diffère de la schématique

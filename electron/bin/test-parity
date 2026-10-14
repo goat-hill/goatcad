@@ -1,0 +1,57 @@
+#!/bin/bash
+# The checkers against an installed KiCad (design-health-workstream.md).
+#
+# Out of the default gate and never on CI: it needs KiCad on the machine
+# (KICAD_CLI, else the standard install, else kicad-cli on PATH) and takes
+# minutes. Without KiCad the suites report as skipped rather than passing — a
+# check that did not run must never look green. Arguments go to vitest, and
+# PARITY_FOOTPRINT_LIBS / PARITY_REPORT narrow and keep a run.
+#
+# KiCad's QA corpus holds stress-test schematics, so the run is bounded: at low
+# priority and, where systemd can, in a scope capped at PARITY_MEMORY_MAX (no
+# swap) and PARITY_CPU_QUOTA (default 400%). Past the cap the run is killed
+# rather than the machine stalling. Node would size its heap from that cap (a
+# third of it), too small for the largest boards, so the heap is set outright:
+# PARITY_HEAP_MB, by default a quarter of the machine's memory up to 8 GB, and
+# the scope's cap by default that plus 3 GB for the rest of the process.
+#
+# Our side of each board runs synchronously, where vitest's timeout cannot
+# reach, so each suite holds every board to a budget from inside the run
+# (`__tests__/parityBudget.ts`). Behind that, the whole run is killed past
+# PARITY_WALL_MIN minutes (default 40), for a loop that never yields.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+if [ -z "$PARITY_HEAP_MB" ]; then
+  if [ -r /proc/meminfo ]; then
+    total_mb=$(awk '/^MemTotal:/ { print int($2 / 1024) }' /proc/meminfo)
+  else
+    total_mb=$(( $(sysctl -n hw.memsize 2>/dev/null || echo 8589934592) / 1048576 ))
+  fi
+  PARITY_HEAP_MB=$(( total_mb / 4 ))
+  [ "$PARITY_HEAP_MB" -gt 8192 ] && PARITY_HEAP_MB=8192
+  [ "$PARITY_HEAP_MB" -lt 2048 ] && PARITY_HEAP_MB=2048
+fi
+# GNU timeout: `gtimeout` where coreutils is installed under that name (macOS).
+WALL=()
+for cmd in timeout gtimeout; do
+  if command -v "$cmd" >/dev/null 2>&1; then
+    WALL=("$cmd" --kill-after=30s "${PARITY_WALL_MIN:-40}m")
+    break
+  fi
+done
+[ ${#WALL[@]} -eq 0 ] && echo "test-parity: no timeout command here, so the run has no wall clock" >&2
+export NODE_OPTIONS="${NODE_OPTIONS:+$NODE_OPTIONS }--max-old-space-size=$PARITY_HEAP_MB"
+PARITY_MEMORY_MAX="${PARITY_MEMORY_MAX:-$(( PARITY_HEAP_MB + 3072 ))M}"
+# Probe by making a scope: `is-system-running` reads "degraded" once any unit
+# has failed — an earlier capped run killed for memory, say — and would drop the cap.
+if command -v systemd-run >/dev/null 2>&1 && systemd-run --user --scope --quiet true >/dev/null 2>&1; then
+  exec systemd-run --user --scope --quiet \
+    -p MemoryMax="$PARITY_MEMORY_MAX" -p MemorySwapMax=0 \
+    -p CPUQuota="${PARITY_CPU_QUOTA:-400%}" \
+    "${WALL[@]}" nice -n 10 npm run test:parity -- "$@"
+fi
+echo "test-parity: no systemd user scope here, so the run is not memory-capped" >&2
+exec "${WALL[@]}" nice -n 10 npm run test:parity -- "$@"

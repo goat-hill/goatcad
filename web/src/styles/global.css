@@ -1,0 +1,212 @@
+@import './tokens.css';
+
+/* Reset — minimal, only what the site actually needs. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Smooth for in-page jumps only: a clicked link has focus, a reload does not.
+   Set on html unconditionally, the browser also animates its scroll restore
+   on reload, sweeping the page up past the hero before settling. */
+@media (prefers-reduced-motion: no-preference) {
+  html:focus-within {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Blanket brake. Individual components still opt out explicitly, but this
+     guarantees nothing animates if one is ever forgotten. */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-family);
+  font-size: var(--step-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  /* The app sets user-select: none because it is an IDE. A web page must stay
+     selectable — people copy install commands and file extensions off it. */
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.15;
+  color: var(--text-bright);
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* --accent-ink, not --accent: on a light background the copper fill color is
+   unreadable as text. It resolves to --accent in the dark theme. */
+a {
+  color: var(--accent-ink);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+a:hover {
+  color: var(--accent-ink-hover);
+  text-decoration: underline;
+}
+
+img,
+svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/*
+ * The primary CTA, shared by the hero and the docs install matrix — the same
+ * act should look the same everywhere. It lives here rather than in a component
+ * because two components render it; scoped copies drifted the moment the second
+ * one was written.
+ *
+ * A quietly premium treatment: vertical gradient, a 1px top highlight, a soft
+ * accent-tinted glow, and a slow specular sweep on hover. Everything derives
+ * from --accent through color-mix, so the pending accent (BRAND.md §3) still
+ * changes in exactly one place.
+ */
+.btn {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: var(--radius);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--accent) 88%, #fff),
+    var(--accent)
+  );
+  color: #151c19;
+  font-weight: 600;
+  border: 1px solid color-mix(in srgb, var(--accent) 70%, #000);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 35%, transparent),
+    0 1px 2px rgb(0 0 0 / 0.45),
+    0 8px 24px -8px color-mix(in srgb, var(--accent) 55%, transparent);
+  transition:
+    background var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
+}
+
+/* The sweep. Decorative, so it is the one thing on the site allowed to take
+   longer than --transition — and it is removed outright under reduced motion
+   rather than left to the blanket brake, which would only make it instant. */
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    color-mix(in srgb, #fff 45%, transparent) 48%,
+    transparent 62%
+  );
+  transform: translateX(-130%);
+  transition: transform 520ms ease-out;
+  pointer-events: none;
+}
+
+.btn:hover::after {
+  transform: translateX(130%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn::after {
+    display: none;
+  }
+}
+
+.btn:hover {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--accent-hover) 88%, #fff),
+    var(--accent-hover)
+  );
+  color: #151c19;
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 40%, transparent),
+    0 2px 4px rgb(0 0 0 / 0.45),
+    0 10px 28px -8px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 25%, transparent),
+    0 1px 2px rgb(0 0 0 / 0.45),
+    0 6px 18px -8px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border-strong);
+  box-shadow: none;
+}
+
+.btn-secondary:hover {
+  background: var(--bg-elevated);
+  color: var(--text-bright);
+  border-color: var(--accent);
+  box-shadow: none;
+}
+
+/* Visible focus for keyboard users on every interactive surface. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.page {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+/* Skip link — offscreen until focused. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: var(--bg-elevated);
+  color: var(--text-bright);
+  border-radius: 0 0 var(--radius) 0;
+}
+
+.skip-link:focus {
+  left: 0;
+}

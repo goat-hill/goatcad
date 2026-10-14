@@ -1,0 +1,578 @@
+commands:
+  editBoard: 编辑电路板
+  editStackup: 编辑叠层
+  applyProfile: 应用制造配置
+  applyStackup: 应用叠层
+  addDielectric: 添加介质层
+  removeLayer: 移除层
+  editItem: 编辑项目
+  routeTrack: 布线
+  dragTrack: 拖动走线
+  dragVia: 拖动过孔
+  dragArc: 拖动弧线
+  routePair: 差分对布线
+  tune: 调整长度
+  retune: 重新调整
+  updateTuningPatterns: 更新所有调整规则
+  removeTuningPattern: 移除 {count} 个调整规则
+  editTeardrops: 编辑泪滴
+  rebuildTeardrops: 重建泪滴
+  dragFootprint: 拖动 {count} 个封装
+  addVia: 添加过孔
+  placeFootprint: 放置 {reference}
+  changeTrackWidth: 更改走线宽度
+  changeViaSize: 更改过孔尺寸
+  addLine: 添加 {count} 条图线
+  addArc: 添加弧线
+  addRectangle: 添加矩形
+  addCircle: 添加圆形
+  addPolygon: 添加多边形
+  addText: 添加文本
+  addBezier: 添加曲线
+  addTextBox: 添加文本框
+  addPoint: 添加点
+  addZone: 添加填充区
+  editZone: 编辑填充区
+  editShape: 编辑形状
+  refillZones: 重新填充填充区
+  rotateFootprints: 旋转 {count} 个封装
+  rotateItems: 旋转 {count} 个项目
+  moveFootprint: 移动 {reference}
+  rotateFootprint: 旋转 {reference}
+  flipFootprints: 将 {count} 个封装换面
+  flipItems: 将 {count} 个项目换面
+  updateFootprints: 从库中更新 {count} 个封装
+  changeFootprints: 替换 {count} 个封装
+  fanout: 扇出 {reference}
+  cleanup: 清理走线和过孔
+  footprintFallback: 封装
+  editTrack: 编辑走线
+  editVia: 编辑过孔
+  lock: 锁定 {count} 个项目
+  unlock: 解锁 {count} 个项目
+  mirror: 镜像 {count} 个项目
+  placeGridOrigin: 放置栅格原点
+  resetGridOrigin: 重置栅格原点
+  placeDrillOrigin: 放置钻孔原点
+  resetDrillOrigin: 重置钻孔原点
+  breakTrack: 拆分走线
+  moveTracksToLayer: 将 {count} 条走线移到 {layer}
+edit:
+  cut: 剪切
+  copy: 复制
+  paste: 粘贴
+  duplicate: 创建副本
+  delete: 删除
+  rotate: 逆时针旋转
+  rotateClockwise: 顺时针旋转
+  flip: 换面
+  fanout: 扇出…
+  breakTrack: 拆分走线
+  trackLayerNext: 移到下一层
+  trackLayerPrev: 移到上一层
+tools:
+  flip: 换面
+  fanout: 扇出…
+fanout:
+  title: 扇出
+  style: 样式
+  direction: 方向
+  surfaceRows: 表层行数
+  surfaceRowsHint: 阵列外侧保留在表层布线、不打过孔的行数
+  styles:
+    auto: 自动
+    dogbone: 狗骨
+    under-pads: 盘中孔
+    inline: 对齐排列
+    staggered: 交错排列
+  directions:
+    out: 向外
+    in: 向内
+    ne: 东北
+    se: 东南
+    sw: 西南
+    nw: 西北
+  willPlace: 将放置 {count} 个过孔
+  placed: 已放置 {count} 个过孔
+  skipped: '已跳过 {count} 个：{reason}'
+  surface: '{count} 个留在表层'
+  refused: '{count} 个焊盘无法放置过孔'
+  skip:
+    no-net: 无网络
+    no-connect: 无连接
+    through-hole: 通孔
+    joined: 已连接到其网络
+    via: 已有过孔
+  apply: 扇出
+selection:
+  toggleLock: 锁定 / 解锁
+  selectConnection: 选中连接
+  selectNet: 选中网络
+  deleteFullTrack: 删除整条走线
+origins:
+  placeGrid: 栅格原点
+  resetGrid: 重置栅格原点
+  placeDrill: 钻孔/定位文件原点
+  resetDrill: 重置钻孔/定位文件原点
+loadingBoard: '正在加载电路板… {percent}%'
+viewRail:
+  zoneOutlines: 仅显示填充区轮廓
+  sketchTracks: 草图走线
+  sketchVias: 草图过孔
+  hideRatsnest: 隐藏飞线
+  boardArea: 电路板区域着色
+  flip: 翻转电路板
+  fpReferences: 封装位号
+  fpValues: 封装值
+  fpText: 封装文本
+  assembly: 装配叠加层
+parseError:
+  title: 无法解析电路板文件
+collision:
+  title: 布线器
+  buttonTitle: 布线器模式
+  explain:
+    highlight: 保持所有对象不动并标记间距违规，但除非允许 DRC 违规，否则不会放置。
+  settingsTitle: 设置
+  settings:
+    allowViolations:
+      name: 允许违反 DRC 规则
+      note: 即使穿过“高亮”所标记的间距违规，也照样放置走线。
+    freeAngle:
+      name: 自由角度模式
+      note: 走线以任意角度直接连到光标。
+    shoveVias:
+      name: 推挤过孔
+    jumpOverObstacles:
+      name: 绕过障碍物
+      note: 被推挤的走线遇到焊盘时会绕到其后方，而不是阻挡布线。
+    removeLoops:
+      name: 移除冗余走线
+      note: 新走线连接了旧走线已连接的对象时，将替换旧走线。
+    smartPads:
+      name: 优化焊盘连接
+      note: 走线以最整洁的出口进出焊盘，绝不以奇怪的角度。
+    smoothDragged:
+      name: 平滑拖动线段
+      note: 被拖动的线段会与相邻线段对齐，拐角会落在它们的交点上。
+    optimizeDragged:
+      name: 优化整条拖动的走线
+      note: 整理整条被拖动的走线，而不仅是拖动移动的部分。
+    autoPosture:
+      name: 使用鼠标路径设置走线形态
+      note: 走线以斜线还是直线开始，取决于鼠标离开点击处的方向。
+    startDiagonal:
+      name: 以斜线开始
+      note: 不使用鼠标路径时，走线以斜线开始；按 / 切换。
+    fixAllSegments:
+      name: 点击时固定所有线段
+      note: 点击会将整条走线固定到光标处。关闭时，最后一段保持自由。
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+  select: 选择
+  route: 布线
+  via: 过孔
+  layerPair:
+    title: 层对
+    top: 顶层
+    bottom: 底层
+    save: 保存为预设
+    remove: 移除预设
+    presets: 预设 (Shift+V 在勾选的预设间切换)
+    pickLayer: 放置过孔到层
+  hintKeys:
+    routeVia: 过孔
+    trackWidthNext: 宽度
+    trackWidthPrev: 更窄
+    viaSizeNext: 过孔尺寸
+    routePosture: 形态
+    dropVia: 放下过孔
+    tuneSpacing: 间距
+    tuneAmplitude: 幅度
+    tuneTighter: 更紧
+    tuneTaller: 更高
+    pairVia: 过孔对
+    pairSize: 差分对尺寸
+    routeKeys: 所有按键
+  keysCard:
+    title: 布线按键
+    titlePair: 差分对按键
+    titleTune: 长度调整按键
+    pairVia: 过孔对，朝差分对前进的方向
+    pairSize: 下一个 / 上一个差分对尺寸
+    via: 通孔过孔，朝布线前进的方向
+    posture: 切换走线形态
+    corner: 拐角模式
+    width: 加宽 / 变窄
+    viaSize: 增大 / 减小过孔
+    customSize: 自定义走线和过孔尺寸
+    finish: 完成布线到焊盘
+    end: 在此结束布线
+    unroute: 后退一次点击
+    mode: 布线器模式
+    layer: 下一层 / 上一层
+    blindVia: 跨越层对的盲孔或埋孔
+    microVia: 微孔
+    tuneSpacing: 增大 / 减小蛇形线间距
+    tuneAmplitude: 增大 / 减小蛇形线幅度
+    viaPickLayer: 过孔到从列表中选择的层 (通孔、盲孔)
+    layerPair: 下一个层对预设
+    cancel: 结束布线，保留已点击的部分
+    toggle: 显示或隐藏此卡片
+    sections:
+      route: 布线
+      sizes: 宽度和尺寸
+      vias: 过孔
+      layers: 层
+  trackWidthOp: '走线宽度：{size} mm'
+  viaSizeOp: '过孔尺寸：{size} mm'
+  sizes:
+    trackWidth: 走线宽度
+    trackWidthBetween: '走线宽度 · 规则 {min}–{max} mm'
+    trackWidthAtLeast: '走线宽度 · 规则 ≥ {min} mm'
+    viaSize: 过孔尺寸 (外径 / 钻孔)
+    viaSizeAtLeast: '过孔尺寸 (外径 / 钻孔) · 规则 ≥ {min} mm'
+    pairSize: 差分对宽度 / 间隙
+    custom: 自定义尺寸…
+    customTitle: 自定义尺寸
+    customViaDiameter: 过孔外径
+    customViaDrill: 过孔钻孔
+    customApply: 应用
+    netClass: '网络类 · {size} mm'
+    netClassIdle: 网络类
+    useConnected: 使用起始走线宽度
+    size: '{size} mm'
+    below: 低于规则
+    above: 高于规则
+    edit: 编辑尺寸…
+  routeMode: '碰撞模式：{mode}'
+  routeModes:
+    shove: 推挤
+    walkaround: 绕行
+    highlight: 高亮
+  cornerMode: '拐角模式：{mode}'
+  cornerFree: 自由
+  cornerRounded: '圆弧 {angle}°'
+  lineModeTitle: 绘线模式 — 45° / 90° / 自由 ({hotkey})
+  posture: 切换拐角形态
+  facts:
+    route: 布线
+    netClass: 网络类
+    width: 宽度
+    via: 过孔
+    viaDiameter: 过孔外径
+    viaDrill: 过孔内孔
+    widthOutside: '超出 {min}–{max} mm，来自'
+    continued: 延续
+    custom: 自定义
+    picked: 已选
+    profile: '{name} 配置'
+    pairRoute: 差分对布线
+    nets: 网络
+    gap: 间隙
+    viaGap: 过孔间隙
+    clearance: 间距
+    clearanceTo: 对象
+    length: 长度
+    lengthRule: 长度规则
+    lengthOver: '超过规则最大值 {max} mm'
+    lengthBetween: '{min}–{max}'
+    lengthAtMost: '≤ {max}'
+    lengthAtLeast: '≥ {min}'
+  line: 图线
+  arc: 弧线
+  rectangle: 矩形
+  circle: 圆形
+  polygon: 多边形
+  text: 文本
+  bezier: 曲线
+  textBox: 文本框
+  point: 点
+  polygonContinueHint: 点击第一个点以闭合
+  arcHint: 依次点击起点、终点，然后点击凸起处
+  bezierHint: 依次点击起点、终点，然后点击各控制点
+  zone: 填充区
+  zoneContinueHint: 点击第一个点以闭合
+  placeFootprint: 放置封装
+  refillTitle: 重新填充填充区 ({hotkey})
+  refill: 重新填充填充区
+  rerunChecks: 重新运行所有设计检查
+  fillProgress: '正在填充填充区… {settled} / {total}'
+  renderBuilding: 正在构建装配叠加层…
+viewport3d:
+  bottomViewTitle: 底视图
+  building: '正在构建电路板… {percent}%'
+  loadingModels: '正在加载模型… {settled} / {total}'
+  missingModelsDetail: 无法解析：
+  options:
+    layersGroup: 层
+    boardBody: 电路板主体
+    copper: 铜层
+    solderMask: 阻焊
+    solderPaste: 锡膏
+    silkscreen: 丝印
+    holes: 电镀孔
+    drawings: 注释和绘图
+    axes: 轴
+    gauge: 比例尺
+    models: 元件模型
+    modelsThroughHole: 通孔
+    modelsSmd: 贴片
+    modelsUnspecified: 未指定
+    modelsDnp: DNP
+    modelsNotInPosFiles: 不在位置文件中
+    reset: 恢复默认设置
+  presentation:
+    title: 呈现
+    projection: 投影
+    projections:
+      perspective: 透视
+      orthographic: 正交
+    lighting: 照明
+    lightings:
+      studio: 影棚
+      soft: 柔和
+      flat: 平光
+      dramatic: 戏剧
+    lightLevel: 亮度
+    background: 背景
+    backgrounds:
+      theme: 主题
+      transparent: 透明
+      white: 白色
+      black: 黑色
+  exportImage:
+    section: 导出
+    button: 导出图像…
+    menu: 3D 图像…
+    needs3d: 请先将电路板切换到 3D 视图
+    title: 导出图像
+    size: 尺寸
+    sizeView: '当前视图 ({width} × {height})'
+    sizePreset: '{width} × {height}'
+    sizeCustom: 自定义
+    width: 宽度
+    height: 高度
+    lockAspect: 保持比例
+    preview: 预览
+    copy: 复制图像
+    copied: 已复制到剪贴板
+    copyFailed: 无法复制图像
+    save: 保存图像…
+    failed: 无法导出图像
+footprintUpdate:
+  updateAction: 从库中更新封装…
+  changeAction: 替换封装…
+  options:
+    removeExtraTexts: 移除库封装中不存在的文本
+    resetTextLayers: 文本层和可见性
+    resetTextEffects: 文本大小和样式
+    resetTextPositions: 文本位置
+    resetTextContent: 字段文本
+    resetFabricationAttributes: 制造特性
+    resetClearanceOverrides: 间距覆盖
+    reset3DModels: 3D 模型
+  owned: '原理图仍指定 {footprint}'
+  droppedPads: '丢失的焊盘：{pads}'
+  addedPads: '新焊盘，无网络：{pads}'
+properties:
+  belowRule: '低于最小值 {size} mm，来自'
+  aboveRule: '高于最大值 {size} mm，来自'
+routeRun:
+  selected: 对选区布线
+  selectedFromEnd: 从另一端布线所选项
+  finishSelected: 尝试完成选区的布线 (自动布线)
+  fromOtherEnd: 从另一端进行布线
+  skip: 跳到下一个选中项
+routerMenu:
+  cancel: 取消
+  finish: 完成
+  undoSegment: 撤销上一段
+  attemptFinish: 尝试完成布线
+  viaThrough: 放置通孔过孔
+  viaBlind: 放置盲孔或埋孔
+  viaMicro: 放置微孔
+  viaPickThrough: 选择层并放置通孔过孔…
+  viaPickBlind: 选择层并放置盲/埋孔…
+  posture: 切换走线形态
+  corner: 走线拐角模式
+  cornerAngle: '{angle}°'
+  cornerArc: '圆弧 {angle}°'
+  sizes: 走线和过孔尺寸
+  mode: 布线器模式
+pair:
+  route: 差分对布线
+  dimensions: 差分对
+  dimensionsOp: 差分对尺寸…
+  width: 走线宽度
+  gap: 间隙
+  viaGap: 过孔间隙
+  coach: 点击差分对中的焊盘、过孔或走线
+tune:
+  length: 长度
+  skew: 偏差
+  min: 最小
+  max: 最大
+  meter:
+    pairLength: 差分对长度
+    delay: 时延
+    pairDelay: 差分对时延
+  target: 目标
+  noTarget: 尽可能长
+  status: 状态
+  statuses:
+    tuned: 已调整
+    too_short: 过短
+    too_long: 过长
+  settings: 长度调整
+  settingsPair: 差分对长度调整
+  settingsSkew: 偏差调整
+  settingsOp: 长度调整设置…
+  tools:
+    single: 调整单端走线长度
+    pair: 调整差分对走线长度
+    skew: 调整差分对偏差
+  coach:
+    start: 点击蛇形线开始处的走线
+    startPair: 点击差分对中蛇形线开始处的走线
+    lay: 沿走线移动，然后点击以放置蛇形线
+    noTrack: 此处没有走线
+    noMate: 旁边没有配对的走线
+    cannot: 蛇形线无法从此处开始
+    inPattern: 调整规则内的走线不能再次调整
+    selectFirst: 请先点击要调整的走线
+  targetField: 目标 (0 表示无)
+  overrideRules: 覆盖自定义规则
+  minAmplitude: 最小幅度
+  maxAmplitude: 最大幅度
+  spacing: 间距
+  cornerRadius: 圆角半径
+  singleSided: 单侧
+  mode: 调整模式
+  modes:
+    single: 单端走线
+    diff_pair: 差分对
+    diff_pair_skew: 偏差
+  initialSide: 第一个凸起
+  sides:
+    left: 左
+    right: 右
+    default: 默认
+  rounded: 圆角
+limits:
+  title: 限制
+  hint: 规则对所选项的要求，以及每个值的来源
+  constraint:
+    clearance: 间距
+    physical_clearance: 物理间距
+    hole_clearance: 孔间距
+    physical_hole_clearance: 物理孔间距
+    hole_to_hole: 孔到孔
+    zone_connection: 填充区连接
+    track_width: 走线宽度
+    via_diameter: 过孔直径
+    annular_width: 孔环宽度
+    hole_size: 孔尺寸
+  sameNet: 0，同一网络
+  unset: 无限制
+  min: '最小 {value}'
+  opt: '最佳 {value}'
+  max: '最大 {value}'
+  connection:
+    solid: 实心
+    thermal: '缓释热焊盘，间隙 {gap}，引线 {spoke}'
+    none: 未连接
+  steps: 判定过程
+  none: 这些项目没有共同的铜层，也没有孔。
+  noneOne: 此项目不受任何尺寸限制。
+  outcome:
+    net-tie: 网络连接点，0
+    override: 项目自身的值
+    board-minimum: 提高到电路板最小值
+    applied: 适用
+    condition-false: 条件不成立
+    layer-mismatch: 不在此层上
+    not-copper: 不是铜
+    no-hole: 无孔
+    disallow-mismatch: 禁止其他类型
+    local-clearance: 填充区自身的间距
+    fallback: 回退
+teardrops:
+  action: 编辑泪滴…
+  selectionAction: 编辑选中项的泪滴…
+  title: 编辑泪滴
+  actionGroup: 操作
+  actions:
+    add: 按默认值添加
+    set: 设置值
+    remove: 移除
+    removeAll: 全部移除
+  targets: 目标
+  target:
+    vias: 过孔
+    pthPads: 通孔焊盘
+    smdPads: SMD 焊盘
+    trackToTrack: 走线到走线
+  filter: 筛选
+  selectionOnly: '仅选中项目 ({count})'
+  roundOnly: 仅圆形焊盘
+  existingOnly: 仅现有泪滴
+  net: 网络
+  allNets: 所有网络
+  netClass: 类
+  allClasses: 所有类
+  layer: 层
+  allLayers: 所有层
+  values: 值
+  keep: 保持
+  'yes': 是
+  'no': 否
+  defaultsHint: 各形状的默认值位于 电路板配置 ▸ 泪滴。
+  confirm:
+    add: '为 {count} 个焊盘和过孔添加泪滴'
+    set: '设置 {count} 个焊盘和过孔的泪滴'
+    remove: '移除 {count} 个焊盘和过孔的泪滴'
+    removeAll: 移除所有泪滴
+cleanup:
+  action: 清理走线和过孔…
+  selectionAction: 清理选中项…
+  title: 清理走线和过孔
+  actions: 操作
+  refill: 在执行清理前后重新填充所有填充区
+  options:
+    shorts: 删除连接不同网络的走线
+    redundantVias: 删除冗余过孔
+    danglingVias: 删除仅在一个层上有连接的过孔
+    mergeTracks: 合并重叠的走线
+    danglingTracks: 删除一端悬空的走线
+    tracksInPads: 删除完全在焊盘内的走线
+  filter: 筛选项目
+  selectionOnly: '仅选中项目 ({count})'
+  net: 网络
+  allNets: 所有网络
+  layer: 层
+  allLayers: 所有铜层
+  loading: 正在查找更改…
+  clean: 没有需要清理的内容。
+  columns:
+    change: 更改
+    net: 网络
+    layer: 层
+    at: 坐标 (mm)
+  change:
+    shortingTrack: 移除短路两个网络的走线
+    shortingVia: 移除短路两个网络的过孔
+    redundantVia: 移除冗余过孔
+    duplicateTrack: 移除重复的走线
+    zeroLengthTrack: 移除零长度走线
+    trackInPad: 移除焊盘内的走线
+    danglingTrack: 移除两端未都连接的走线
+    danglingVia: 移除连接少于两层的过孔
+    mergeTracks: 合并重叠的走线
+  confirm: '应用 {count} 项更改'
+  fix: 移除
+  fixAll: 全部移除
+setSizes:
+  action: 按规则设置尺寸
+  undo: 按规则设置尺寸

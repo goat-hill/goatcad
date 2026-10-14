@@ -1,0 +1,52 @@
+menu:
+  file: 文件
+  edit: 编辑
+  new: 新建
+  needsProject: 请先打开一个项目文件夹
+  newProject: 新建项目…
+  newWindow: 新建窗口
+  openProject: 打开项目…
+  openFolder: 打开文件夹…
+  openFile: 打开文件…
+  openRecent: 打开最近
+  recentProjects: 项目
+  recentFiles: 文件和文件夹
+  noRecent: 无最近项目
+  clearRecent: 清除最近打开记录
+  save: 保存
+  saveAs: 另存为…
+  saveAll: 全部保存
+  schematicSetup: 原理图配置
+  components: 元件
+  boardSetup: 电路板配置
+  manufacture: 制造输出
+  export: 导出
+  exportNetlist: 网表…
+  exit: 退出
+  view: 视图
+  splitTab: 将标签页移到另一窗格
+  splitDirection: 切换左右/上下排列
+  focusOtherGroup: 聚焦另一窗格
+  toggleDevTools: 切换开发者工具
+  go: 转到
+  goBack: 后退
+  goForward: 前进
+  goLeaveSheet: 离开图纸
+  goPreviousSheet: 上一张图纸
+  goNextSheet: 下一张图纸
+  updatePcb: 从原理图更新 PCB…
+  needsSchematic: 请先打开一个包含原理图的项目
+  help: 帮助
+  welcome: 欢迎
+  keyboardShortcutsReference: 键盘快捷键参考
+  shareFeedback: 分享应用反馈…
+  aboutGoatCAD: 关于 GoatCAD
+windowTitle:
+  workspace: '{tabPrefix}{project}'
+  tabOnly: '{tab}'
+  default: GoatCAD
+  withApp: '{title} — GoatCAD'
+controls:
+  minimize: 最小化
+  maximize: 最大化
+  close: 关闭

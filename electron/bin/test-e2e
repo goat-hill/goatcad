@@ -1,0 +1,13 @@
+#!/bin/bash
+# The end-to-end suites that drive a real Python interpreter.
+#
+# Out of the default gate on purpose: they spawn subprocesses against a server
+# on this thread, so they are slower and they depend on what the machine has
+# installed. Without a python3/python on PATH the whole suite reports as
+# skipped rather than passing — a check that did not run must never look green.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+npm run test:e2e

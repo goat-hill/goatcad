@@ -1,0 +1,17 @@
+---
+import Home from '../../components/Home.astro'
+import { prefixedLocales, type Locale } from '../../i18n'
+
+/* Every language but English, which is the root page. Only these paths are
+   built, so an unknown prefix is a plain 404. */
+export function getStaticPaths() {
+  return prefixedLocales().map(({ locale, segment }) => ({
+    params: { locale: segment },
+    props: { locale }
+  }))
+}
+
+const { locale } = Astro.props as { locale: Locale }
+---
+
+<Home locale={locale} />

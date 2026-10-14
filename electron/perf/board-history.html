@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Board Performance</title>
+    <style>
+      :root {
+        --bg: #f0f8f4;
+        --surface: #ffffff;
+        --border: #d3e2db;
+        --text: #1a221f;
+        --muted: #5b6b64;
+        --faster: #1d7a46;
+        --slower: #b3392f;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #151c19;
+          --surface: #1a221f;
+          --border: #24302b;
+          --text: #dfe8e3;
+          --muted: #8a9a93;
+          --faster: #5cc38a;
+          --slower: #e0776c;
+        }
+      }
+      body {
+        margin: 0;
+        padding: 24px 16px 48px;
+        background: var(--bg);
+        color: var(--text);
+        font:
+          14px/1.5 system-ui,
+          sans-serif;
+      }
+      main {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 22px;
+        margin: 0 0 8px;
+      }
+      h2 {
+        font-size: 16px;
+        margin: 32px 0 4px;
+      }
+      p,
+      .spec {
+        color: var(--muted);
+        max-width: 80ch;
+      }
+      .spec {
+        margin: 0 0 8px;
+      }
+      .scroll {
+        overflow-x: auto;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: var(--surface);
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        font-variant-numeric: tabular-nums;
+      }
+      th,
+      td {
+        padding: 6px 10px;
+        border-bottom: 1px solid var(--border);
+        text-align: right;
+        white-space: nowrap;
+      }
+      th {
+        font-weight: 600;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      th:nth-child(-n + 4),
+      td:nth-child(-n + 4) {
+        text-align: left;
+      }
+      td.label {
+        white-space: normal;
+        min-width: 24ch;
+      }
+      td.key {
+        font-weight: 600;
+      }
+      .delta {
+        font-size: 12px;
+        margin-left: 6px;
+      }
+      .faster {
+        color: var(--faster);
+      }
+      .slower {
+        color: var(--slower);
+      }
+      code {
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Board performance</h1>
+      <p>
+        Recorded by <code>./bin/board-timing --record</code>, from <code>electron/</code>. Every row
+        is the same method: a fresh build launched with a fresh profile, KiCad's Jetson AGX Thor
+        demo opened on launch, then a pan, a zoom, a hover, a route into the largest footprint's
+        pads, a short trace laid off a passive's pad, and a click on that footprint and a drag of
+        it; one run per row. <em>Board shown</em> and <em>open settled</em> are ms since the main
+        process started; <em>settled</em> means the renderer's main thread stayed under 10% busy for
+        2 s. Frame columns are the 95th-percentile frame interval during the gesture (16.7 is 60
+        fps); <em>select</em> is click to the frame after it, the route columns each cursor move to
+        the frame that shows its route (pushed into the SoM connector's pads and abandoned), and
+        <em>trace → settled</em> a short track laid off a passive's pad until the refill and checks
+        it sets off are done. The design is named by its board file's git blob hash, and a row is
+        recorded only from a design folder with no local edits. Headless runs under xvfb with
+        software GL, so read CPU time and heap there and frame rate only from desktop runs
+        (<code>--visible</code>, real GPU). Rows compare only within one machine, display mode and
+        design, so each has its own table, newest first, each cell with its change from the row
+        below. A <code>*</code> on a commit means the app's sources differed from it; the label says
+        how.
+      </p>
+      <div id="series"></div>
+    </main>
+
+    <!-- The data. bin/board-timing --record appends to it; hand edits are fine. -->
+    <script type="application/json" id="board-data">
+      {
+        "machines": [
+          {
+            "id": "m1",
+            "cpu": "AMD Ryzen 7 8845HS w/ Radeon 780M Graphics",
+            "cores": 16,
+            "memoryGb": 27,
+            "os": "linux x64"
+          }
+        ],
+        "runs": [
+          {
+            "date": "2026-10-07",
+            "label": "before: 02fdd174 with the timing hooks (board:* marks, test-hook pads)",
+            "version": "0.1.14",
+            "commit": "02fdd174*",
+            "machine": "m1",
+            "display": "desktop",
+            "design": "jetson-agx-thor-baseboard",
+            "designSha": "2884cd5276",
+            "runs": 1,
+            "metrics": {
+              "board parsed": 5562.9,
+              "board shown": 7415.3,
+              "open settled": 39814.3,
+              "heap after open": 752,
+              "pan p95": 16.8,
+              "zoom p95": 16.7,
+              "hover p95": 16.7,
+              "route move p95": 232.5,
+              "route move worst": 233.6,
+              "route commit → settled": 20148.2,
+              "worst task after commit": 858,
+              "select": 158,
+              "drop → settled": 10385.4,
+              "worst task after drop": 857,
+              "heap after edit": 1707
+            }
+          },
+          {
+            "date": "2026-10-07",
+            "label": "after: hierarchy storm, packed-node unpacking, serialize-cache slices, linear fracture",
+            "version": "0.1.14",
+            "commit": "02fdd174*",
+            "machine": "m1",
+            "display": "desktop",
+            "design": "jetson-agx-thor-baseboard",
+            "designSha": "2884cd5276",
+            "runs": 1,
+            "metrics": {
+              "board parsed": 3847.2,
+              "board shown": 5943.5,
+              "open settled": 17107.9,
+              "heap after open": 687,
+              "pan p95": 16.7,
+              "zoom p95": 16.7,
+              "hover p95": 16.7,
+              "route move p95": 233.1,
+              "route move worst": 233.4,
+              "route commit → settled": 17873.2,
+              "worst task after commit": 835,
+              "select": 154,
+              "drop → settled": 10362.4,
+              "worst task after drop": 846,
+              "heap after edit": 978
+            }
+          }
+        ]
+      }
+    </script>
+    <script>
+      const data = JSON.parse(document.getElementById('board-data').textContent)
+      // [metric, heading, unit]; lower is better for every one.
+      const COLUMNS = [
+        ['board shown', 'board shown', 'ms'],
+        ['open settled', 'open settled', 'ms'],
+        ['open checked', 'open checked', 'ms'],
+        ['open refill', 'open refill', 'ms'],
+        ['open check', 'open check', 'ms'],
+        ['heap after open', 'heap', 'MB'],
+        ['pan p95', 'pan', 'ms'],
+        ['zoom p95', 'zoom', 'ms'],
+        ['hover p95', 'hover', 'ms'],
+        ['select', 'select', 'ms'],
+        ['route move p95', 'route move', 'ms'],
+        ['route move worst', 'route worst', 'ms'],
+        ['route commit → settled', 'trace → settled', 'ms'],
+        ['route commit → checked', 'trace → checked', 'ms'],
+        ['worst task after commit', 'worst task', 'ms'],
+        ['drop → settled', 'drop → settled', 'ms'],
+        ['drop → checked', 'drop → checked', 'ms'],
+        ['worst task after drop', 'worst task', 'ms'],
+        ['heap after edit', 'heap after edit', 'MB'],
+        ['worker heap after open', 'worker heap', 'MB'],
+        ['worker heap after edit', 'worker heap after edit', 'MB'],
+        ['renderer after open', 'renderer', 'MB'],
+        ['renderer after edit', 'renderer after edit', 'MB']
+      ]
+      const el = (tag, props = {}, ...children) => {
+        const node = Object.assign(document.createElement(tag), props)
+        node.append(...children)
+        return node
+      }
+      const round = (v) => (Math.abs(v) < 100 ? Math.round(v * 10) / 10 : Math.round(v))
+      const root = document.getElementById('series')
+      const series = new Map()
+      for (const run of data.runs) {
+        const key = `${run.machine} ${run.display} ${run.design} ${run.designSha}`
+        if (!series.has(key)) series.set(key, [])
+        series.get(key).push(run)
+      }
+      if (series.size === 0) root.append(el('p', { textContent: 'No runs recorded yet.' }))
+      for (const [key, runs] of series) {
+        const [machineId, display, design, sha] = key.split(' ')
+        const m = data.machines.find((x) => x.id === machineId)
+        root.append(
+          el('h2', { textContent: `${design} @ ${sha} · ${machineId} · ${display}` }),
+          el('div', {
+            className: 'spec',
+            textContent: m ? `${m.cpu}, ${m.cores} threads, ${m.memoryGb} GB, ${m.os}` : ''
+          })
+        )
+        const head = el(
+          'tr',
+          {},
+          ...['date', 'label', 'version', 'commit', ...COLUMNS.map((c) => `${c[1]} (${c[2]})`)].map(
+            (h) => el('th', { textContent: h })
+          )
+        )
+        const body = runs.map((run, i) => {
+          const prev = runs[i - 1]
+          const cells = COLUMNS.map(([name]) => {
+            const v = run.metrics[name]
+            const td = el('td', { textContent: v == null ? '—' : round(v) })
+            const before = prev?.metrics[name]
+            if (v != null && before != null && before !== 0) {
+              const change = (v - before) / before
+              td.append(
+                el('span', {
+                  className: `delta ${change < -0.05 ? 'faster' : change > 0.05 ? 'slower' : ''}`,
+                  textContent: `${v > before ? '+' : '−'}${round(Math.abs(v - before))}`
+                })
+              )
+            }
+            return td
+          })
+          return el(
+            'tr',
+            {},
+            el('td', { textContent: run.date }),
+            el('td', { className: 'label', textContent: run.label }),
+            el('td', { textContent: run.version }),
+            el('td', {}, el('code', { textContent: run.commit })),
+            ...cells
+          )
+        })
+        root.append(
+          el(
+            'div',
+            { className: 'scroll' },
+            el('table', {}, el('thead', {}, head), el('tbody', {}, ...body.reverse()))
+          )
+        )
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+#!/bin/bash
+# Record a demo video of the real app: build, launch via Playwright's Electron
+# driver, run a --script driver while grabbing page-level frames, encode to
+# mp4/gif with ffmpeg. See scripts/record.mjs for options (--out, --size,
+# --script, --open, --fps, --format, --dpr, --wait, --no-build).
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+# Display mode: headless by default (xvfb, invisible), or --visible to show the
+# app on the real desktop for debugging. record.mjs reads --visible too, to skip
+# the X11/Wayland pinning when visible.
+want_visible=false
+for a in "$@"; do [ "$a" = "--visible" ] && want_visible=true; done
+
+if [ "$want_visible" = true ]; then
+  exec node scripts/record.mjs "$@"
+elif command -v xvfb-run >/dev/null 2>&1; then
+  # Throwaway virtual display so nothing flashes on a real desktop.
+  exec xvfb-run -a node scripts/record.mjs "$@"
+else
+  echo "record: xvfb-run not found — running on the real \$DISPLAY. Install xvfb for headless, or pass --visible to opt in." >&2
+  exec node scripts/record.mjs "$@"
+fi

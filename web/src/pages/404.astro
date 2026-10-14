@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro'
+
+/*
+ * Builds to dist/404.html, which is what wrangler.jsonc's
+ * `not_found_handling: "404-page"` serves. Without this file that setting
+ * points at nothing and Cloudflare returns a bare unbranded 404.
+ */
+---
+
+<Base title="Page not found" description="That page doesn't exist.">
+  <section class="notfound page">
+    <p class="code">404</p>
+    <h1>This page wandered off.</h1>
+    <p class="lede">The goats have been notified. They seem unbothered.</p>
+    <p>
+      <a href="/">Back to safety</a>
+    </p>
+  </section>
+</Base>
+
+<style>
+  .notfound {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1rem;
+    min-height: 70vh;
+  }
+
+  .code {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+  }
+
+  h1 {
+    font-size: var(--step-h2);
+  }
+
+  .lede {
+    color: var(--text-muted);
+  }
+</style>

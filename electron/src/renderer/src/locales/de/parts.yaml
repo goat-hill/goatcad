@@ -1,0 +1,130 @@
+title: Bauteilsuche
+searchPlaceholder: Distributoren nach Teilenummer oder Stichwort durchsuchen
+search: Suchen
+
+modes:
+  universal: Alle
+
+browse:
+  all: Alle Kategorien
+  searchCategory: Diese Kategorie durchsuchen ({count} Bauteile)
+  backToCategories: Zurück zu den Kategorien
+  empty: Dieser Distributor veröffentlicht keine Kategorieliste.
+searching: Wird gesucht…
+cancel: Abbrechen
+cancelled: Suche abgebrochen.
+retry: Erneut versuchen
+emptyPrompt: Nach einer Herstellerteilenummer suchen, um zu sehen, wer sie auf Lager hat — zu
+  welchem Preis und mit welchem Datenblatt.
+noResults: Keine Bauteile passen zu dieser Suche.
+paging:
+  showing: '{from}–{to} von {total}'
+  none: Keine Ergebnisse
+  previous: Zurück
+  next: Weiter
+  perPage: Pro Seite
+
+groupCount: '{count} Bauteil | {count} Bauteile'
+quantity: Preis bei Menge
+providerFailed: '{name} konnte nicht durchsucht werden. {reason}'
+searchFailed: 'Die Suche konnte nicht ausgeführt werden: {error}'
+attribution: 'Preise, Lagerbestand und Produktdaten von {names}.'
+
+setup:
+  title: Distributor verbinden
+  body: DigiKey oder Mouser nach echten Herstellerbauteilen durchsuchen — Preise, Lagerbestand,
+    Datenblätter und Links zu CAD-Modellen. Dafür ist ein kostenloser API-Schlüssel des
+    Distributors nötig, den Sie in wenigen Minuten erhalten.
+  action: Distributor einrichten
+
+providers:
+  digikey:
+    steps:
+      - Melden Sie sich im Entwicklerportal von DigiKey an und legen Sie eine Production-App an —
+        keine Sandbox-App, die einen anderen Server verwendet.
+      - Wählen Sie in der Produktliste Product Information V4 aus. GoatCAD verwendet nur diese.
+      - Lassen Sie OAuth Callback leer. Das Feld gilt nur für Three-Legged OAuth, das GoatCAD
+        nicht verwendet.
+      - Kopieren Sie die Client ID und das Client Secret der App in die Felder unten.
+  mouser:
+    steps:
+      - Melden Sie sich im API-Hub von Mouser an.
+      - Beantragen Sie einen Schlüssel für die Search API. Mouser schickt ihn Ihnen per E-Mail.
+      - Fügen Sie den Schlüssel in das Feld unten ein.
+
+filters:
+  title: Filter
+  apply: Filter anwenden
+  pending: Noch nicht angewendet
+  availability: Verfügbarkeit
+  inStock: Auf Lager
+  rohs: RoHS-konform
+  hasDatasheet: Mit Datenblatt
+  has3dModel: Mit 3D-Modell
+  manufacturer: Hersteller
+  packaging: Verpackung
+  status: Status
+  series: Serie
+  searchWithin: In Ergebnissen suchen…
+  removeFilter: Diesen Filter entfernen
+  clearAll: Alle entfernen
+  findOption: Suchen…
+  noOptions: Keine passenden Optionen
+  scopeNote: Dieser Distributor unterstützt nur diese Filter. Durchsuchen Sie DigiKey direkt, um
+    nach Kategorie und Spezifikationen zu filtern.
+
+columns:
+  part: Herstellerteilenr.
+  mpn: Herstellerteilenr.
+  manufacturer: Hersteller
+  status: Status
+  seller: Distributor
+  stock: Bestand
+  price: Preis
+  packaging: Verpackung
+  sortBy: Nach {name} sortieren
+  expand: Details anzeigen
+
+part:
+  manufacturer: Hersteller
+  distributorPart: Distributor-Teilenr.
+  inStock: '{count} auf Lager'
+  stockUnknown: Bestand unbekannt
+  outOfStock: Nicht auf Lager
+  priceAt: "{price} {'@'} {quantity}"
+  noPrice: Kein Preis
+  moq: 'Min. {quantity}'
+  datasheet: Datenblatt
+  product: Bei {name} ansehen
+  cadOpen: Seite des CAD-Modells öffnen
+  cadCheck: Nach CAD-Modell suchen
+  cadNone: Kein CAD-Modell angegeben
+  parametersFrom: Spezifikationen von {name}
+
+lifecycle:
+  active: Aktiv
+  nrnd: Nicht für neue Designs
+  obsolete: Abgekündigt
+  unknown: Unbekannt
+
+fields:
+  apiKey: API-Schlüssel
+  clientId: Client ID
+  clientSecret: Client Secret
+
+errors:
+  no-credentials: Für diesen Distributor ist kein API-Schlüssel hinterlegt.
+  invalid-credentials: Dieser Distributor hat den API-Schlüssel abgelehnt. Prüfen Sie ihn und
+    versuchen Sie es erneut.
+  forbidden: Dieser API-Schlüssel ist nicht für die Bauteilsuche berechtigt. Prüfen Sie das
+    Abonnement im Entwicklerportal des Distributors.
+  rate-limited: Gerade zu viele Anfragen. Versuchen Sie es in {detail} Sekunden erneut.
+  quota-exhausted: Das heutige Anfragelimit für diesen Distributor ist aufgebraucht. Es wird um
+    Mitternacht UTC zurückgesetzt.
+  network: Der Distributor ist nicht erreichbar. Prüfen Sie Ihre Verbindung.
+  timeout: Der Distributor hat nicht rechtzeitig geantwortet. Er ist möglicherweise ausgelastet —
+    versuchen Sie es erneut.
+  provider-error: Der Distributor hat einen Fehler zurückgegeben.
+  bad-response: Die Antwort des Distributors konnte nicht gelesen werden.
+  storage-unavailable: Der Schlüssel wurde nicht gespeichert, weil der sichere Speicher dieses
+    Computers nicht verfügbar ist.

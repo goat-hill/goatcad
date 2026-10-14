@@ -1,0 +1,120 @@
+tabTitle: Configuración
+title: Configuración
+searchPlaceholder: Buscar en la configuración
+restoreDefaults: Restablecer valores predeterminados
+categories:
+  appearance: Apariencia
+  boardEditor: Editor de placas
+  libraries: Bibliotecas
+  parts: API de distribuidores
+  integrations: Integraciones de IA
+  about: Acerca de
+appearance:
+  theme: Tema
+  themeDark: Oscuro
+  themeLight: Claro
+  language: Idioma
+  gpu: Preferencia de rendimiento de la GPU
+  gpuAppliesToNewTabs: Se aplica a las pestañas nuevas
+  gpuDefault: Predeterminado del sistema
+  gpuLowPower: Ahorro de energía
+  gpuHighPerformance: Alto rendimiento
+  vulkan: Usar Vulkan
+  vulkanDescription: Dibuja la ventana y los lienzos del editor con Vulkan en lugar de OpenGL. Puede
+    ser más rápido con algunos controladores gráficos; desactívelo si la ventana se queda en blanco.
+  vulkanAppliesAfterRestart: Se aplica tras reiniciar GoatCAD
+boardEditor:
+  clearanceHeading: Contornos de holgura
+  pads: Pads
+  tracksAndVias: Pistas y vías
+  never: Nunca
+  whileRouting: Al enrutar
+  whileRoutingAndDragging: Al enrutar y arrastrar
+  always: Siempre
+libraries:
+  model3dDir: Directorio de modelos 3D de KiCad
+  model3dDirDescription:
+    Dónde se resuelve {variableName} en las rutas de modelos de las huellas. Déjelo
+    vacío para usar la instalación de KiCad detectada.
+  browse: Examinar…
+  clear: Borrar
+  detected: Detectado automáticamente
+  detectedNone: No se detectó ninguna instalación de KiCad en este equipo.
+  overridden: Sustituye la ubicación detectada
+  usingPath: 'Usando: {path}'
+  kicadImport: Bibliotecas de KiCad
+  kicadImportDescription: Importa las bibliotecas que añadió a KiCad. Se copian una vez y no se
+    mantienen sincronizadas, así que vuelva a ejecutarlo después de añadir una en KiCad.
+  kicadImportAction: Buscar bibliotecas
+  kicadImportBusy: Comprobando…
+  kicadImportNone: No se encontró ninguna configuración de KiCad en este equipo.
+  kicadImportUpToDate: No hay nada nuevo que importar.
+  kicadImportDone: 'Se importó {count} biblioteca. | Se importaron {count} bibliotecas. | Se importaron {count} bibliotecas.'
+  kicadImportFailed: 'No se pudo leer la configuración de KiCad: {error}'
+parts:
+  stepsHeading: Cómo obtener una clave
+  register: Obtener una clave de {name}
+  save: Guardar clave
+  saving: Guardando…
+  test: Probar conexión
+  remove: Quitar
+  connected: Conectado
+  notConnected: No conectado
+  unverified: Sin comprobar
+  checking: Comprobando…
+  notWorking: No funciona
+  cancel: Cancelar
+  verifiedAt: Comprobado {when}
+  justNow: Comprobado hace un momento
+  keyHint: 'Clave: {hint}'
+  usage: '{used} de {limit} solicitudes usadas hoy'
+  usageResets: Se restablece a medianoche UTC
+  noKeyring: Este equipo no tiene ningún llavero disponible, por lo que la clave no se puede
+    cifrar aquí y no se guardará.
+  saveFailed: 'No se pudo guardar la clave: {error}'
+about:
+  version: Versión {version}
+  runtime: Electron v{electron} · Chrome v{chrome}
+  checkForUpdates: Buscar actualizaciones automáticamente
+  checkNow: Comprobar ahora
+  checkResult:
+    checking: Comprobando…
+    available: Descargando actualización…
+    up-to-date: Actualizado
+    failed: No se pudo comprobar
+    unavailable: No disponible aquí
+agent:
+  label: Agente
+  description: Se abre con el botón de agente de la barra de actividad y retoma la última sesión de esta carpeta.
+  claude: Claude Code
+  codex: Codex
+mcp:
+  serverHeading: Servidor MCP
+  listening: Escuchando en {url}
+  notRunning: No está en ejecución; otro programa está usando el puerto local.
+  running: En ejecución
+  stopped: Detenido
+  promptsLabel: Prompts
+  toolsLabel: Herramientas
+  apiHeading: Prompts y herramientas
+  http: HTTP
+  scope: Ámbito
+  effect: Efecto
+  mutates: Edita el diseño
+  readsOnly: No edita el diseño
+  arguments: Argumentos
+  noArguments: Sin argumentos.
+  required: obligatorio
+  optional: opcional
+  examples: Ejemplos
+  runCommand: Ejecútelo en un terminal para usar GoatCAD desde una sesión iniciada fuera de la aplicación
+  addToFile: Añádalo a {path} para usar GoatCAD desde una sesión iniciada fuera de la aplicación
+  copy: Copiar
+  copied: Copiado
+  tokenLabel: Token
+  copyToken: Copiar token
+  tokenCopied: Token copiado
+  regenerate: Reemplazar token
+  tokenReset: Token reemplazado al iniciar; no se pudo leer el guardado. Vuelva a copiar los comandos de abajo.
+  tokenReplaced: Token reemplazado; vuelva a copiar los comandos de abajo.
+  regenerateFailed: No se pudo reiniciar el servidor con el nuevo token.

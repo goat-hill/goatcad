@@ -1,0 +1,184 @@
+name: Publish Release Downloads
+
+# Makes a published release real on goatcad.com (docs/RELEASES.md §8).
+# release.yml's build jobs already uploaded the installers to the R2 bucket
+# served at download.goatcad.com and held the update feeds back under
+# pending/<tag>/. Publishing moves those feeds into place, commits
+# web/src/data/release.json pointing at the installers, and deploys the site.
+# See docs/WEB.md §4.
+#
+# Trigger is `release: published`, NOT the tag push that release.yml uses. This
+# is load-bearing: release.yml builds a DRAFT, and nobody has reviewed what a
+# draft links to. Moving the site and the update feed on the tag would hand
+# every visitor and every install a build nobody has looked at. Publishing is
+# the human act that means "these files are real" — it is the only correct signal.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to put on the site (e.g. v1.2.0)'
+        required: true
+
+permissions:
+  contents: read
+
+env:
+  TAG: ${{ github.event.release.tag_name || inputs.tag }}
+  BUCKET: goatcad
+
+jobs:
+  promote:
+    # Prereleases too: their installers are already on R2 and downloadable by
+    # link; only the update feeds stay back.
+    runs-on: ubuntu-latest
+    outputs:
+      files: ${{ steps.files.outputs.files }}
+    env:
+      # A bucket-scoped R2 token, not CLOUDFLARE_API_TOKEN, which stays limited
+      # to deploying the site (docs/WEB.md §5).
+      AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_ENDPOINT: https://${{ secrets.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com
+    steps:
+      - name: Checkout the release scripts
+        uses: actions/checkout@v4
+        with:
+          # r2-release.sh reads the download folder from electron-builder.yml.
+          sparse-checkout: |
+            .github/scripts
+            electron/electron-builder.yml
+          sparse-checkout-cone-mode: false
+
+      - name: List what every platform uploaded
+        id: files
+        run: |
+          set -euo pipefail
+          files="$(bash .github/scripts/r2-release.sh files)"
+          echo "$files"
+          {
+            echo 'files<<END_OF_FILES'
+            echo "$files"
+            echo 'END_OF_FILES'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Promote the update feeds
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          prerelease="$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isPrerelease -q .isPrerelease)"
+          if [ "$prerelease" = "true" ]; then
+            # The feed names the newest build for every install; a prerelease must not claim it.
+            echo "Prerelease $TAG: update feeds stay under pending/."
+            exit 0
+          fi
+          bash .github/scripts/r2-release.sh promote
+
+  bump:
+    needs: promote
+    # A prerelease is not what we want to hand to a first-time visitor.
+    if: github.event_name == 'workflow_dispatch' || github.event.release.prerelease == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      # To start web-deploy.yml once release.json is committed, below.
+      actions: write
+    env:
+      FILES: ${{ needs.promote.outputs.files }}
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Find the download folder
+        run: echo "DOWNLOAD_FOLDER_URL=$(bash .github/scripts/r2-release.sh url-base)" >> "$GITHUB_ENV"
+
+      - name: Write release.json from the published release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs')
+
+            const tag = process.env.TAG
+            const base = process.env.DOWNLOAD_FOLDER_URL
+            const names = process.env.FILES.split('\n').map((n) => n.trim()).filter(Boolean)
+
+            // Only for the notes link. Re-fetched because workflow_dispatch has no
+            // release in its payload, which keeps both paths identical.
+            const { data: release } = await github.rest.repos.getReleaseByTag({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag
+            })
+
+            // Derive URLs from the files the build jobs actually uploaded instead
+            // of predicting electron-builder's filenames — those depend on config
+            // we can change without thinking about this workflow, so a predicted
+            // name would silently start 404ing.
+            const pick = (re) => {
+              const hits = names.filter((name) => re.test(name))
+              if (hits.length > 1) {
+                throw new Error(`Ambiguous build for ${re}: ${hits.join(', ')}`)
+              }
+              return hits[0] ? `${base}/${encodeURIComponent(hits[0])}` : null
+            }
+
+            const assets = {
+              mac: pick(/\.dmg$/i),
+              win: pick(/\.exe$/i),
+              linux: pick(/\.AppImage$/i)
+            }
+
+            // Secondary artifact: Debian/Ubuntu expect a package, but the
+            // AppImage is still the "any distro" answer, so a missing .deb
+            // degrades to absent instead of failing the release
+            // (docs/RELEASES.md §2, web/src/data/release.ts).
+            const deb = pick(/\.deb$/i)
+            if (deb) assets.linuxDeb = deb
+
+            // Fail loudly rather than ship a download button that 404s. If a
+            // platform is genuinely dropped, change this check deliberately.
+            const missing = ['mac', 'win', 'linux'].filter((os) => !assets[os])
+            if (missing.length) {
+              core.setFailed(
+                `Release ${tag} is missing builds for: ${missing.join(', ')}. ` +
+                  `Found: ${names.join(', ') || '(none)'}`
+              )
+              return
+            }
+
+            const data = {
+              version: tag.replace(/^v/, ''),
+              notesUrl: release.html_url,
+              assets
+            }
+
+            fs.writeFileSync('web/src/data/release.json', JSON.stringify(data, null, 2) + '\n')
+            core.info(`release.json -> ${JSON.stringify(data, null, 2)}`)
+
+      - name: Commit
+        id: commit
+        run: |
+          set -e
+          if git diff --quiet -- web/src/data/release.json; then
+            echo "release.json already current; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add web/src/data/release.json
+          git commit -m "web: point downloads at $TAG"
+          git push origin master
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+      # A push made with the workflow's own token starts no other workflow, so
+      # the commit above cannot reach web-deploy.yml through its web/** filter.
+      # Starting a workflow by name is the exception GitHub allows.
+      - name: Deploy the site
+        if: steps.commit.outputs.committed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run web-deploy.yml --ref master --repo "$GITHUB_REPOSITORY"

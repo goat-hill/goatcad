@@ -1,0 +1,20 @@
+#!/bin/bash
+# The pre-MERGE gate: prove the app still bundles. ~8s.
+#
+# Assumes bin/pre-cm-checks has passed on the commits being landed — this runs
+# `build:bundle` rather than `build`, because the latter chains a full typecheck
+# that pre-cm-checks already did (6.3s of the 10.4s it used to cost).
+#
+# If you are landing something that was never committed through pre-cm-checks,
+# run that first; this gate alone does not typecheck, lint or test.
+#
+# It builds to its own folder, never `out/`: a build empties its output folder
+# and renames every hashed chunk, so a dev app running from this worktree would
+# go on asking for workers the build had deleted.
+# Only whether it bundles matters here, so where the files land does not.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+npm run build:bundle -- --outDir node_modules/.cache/merge-check

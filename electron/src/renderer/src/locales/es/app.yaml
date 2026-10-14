@@ -1,0 +1,91 @@
+errors:
+  createFile: 'Error al crear el archivo: {error}'
+  deleteFile: 'Error al eliminar el archivo: {error}'
+  renameFile: 'Error al cambiar el nombre del archivo: {error}'
+  library: 'Error al actualizar las bibliotecas: {error}'
+  openRecent: No se pudo cargar el directorio seleccionado. Es posible que se haya movido o eliminado.
+  saveFile: 'Error al guardar el archivo: {error}'
+confirm:
+  deleteFile: '¿Mover «{name}» a la papelera?'
+  renameForward: "¿Cambiar el nombre de «{from}» a «{to}»?\n\nSe actualizará {count} archivo más para que lo siga:\n{files} | ¿Cambiar el nombre de «{from}» a «{to}»?\n\nSe actualizarán {count} archivos más para que lo sigan:\n{files} | ¿Cambiar el nombre de «{from}» a «{to}»?\n\nSe actualizarán {count} archivos más para que lo sigan:\n{files}"
+  renameForwardFile: '• {name} ({count} referencia de hoja) | • {name} ({count} referencias de hoja) | • {name} ({count} referencias de hoja)'
+  deleteFileReferenced: "¿Mover «{name}» a la papelera?\n\n{count} archivo hace referencia a él y quedará con un enlace de hoja colgante:\n{files} | ¿Mover «{name}» a la papelera?\n\n{count} archivos hacen referencia a él y quedarán con enlaces de hoja colgantes:\n{files} | ¿Mover «{name}» a la papelera?\n\n{count} archivos hacen referencia a él y quedarán con enlaces de hoja colgantes:\n{files}"
+  deleteImpactFile: '• {name} ({count} referencia de hoja) | • {name} ({count} referencias de hoja) | • {name} ({count} referencias de hoja)'
+unsaved:
+  message: '¿Desea guardar los cambios realizados en {name}?'
+  messageMany: '¿Desea guardar los cambios en los siguientes {count} archivos?'
+  detail: Si no los guarda, se perderán los cambios.
+  dontSave: No guardar
+  saveAll: Guardar todo
+branchPicker:
+  placeholder: Cambie de rama o escriba un nombre nuevo…
+  create: Crear la rama «{name}»
+  loading: Cargando ramas…
+  noBranches: No se encontraron ramas.
+quickOpen:
+  placeholder: Ir al archivo…
+  noResults: No se encontraron archivos coincidentes
+shortcuts:
+  title: Atajos de teclado
+  openFolder: Abrir carpeta
+  openProject: Abrir proyecto
+  goToFile: Ir al archivo
+  newSchematic: Nuevo esquema
+  newWindow: Nueva ventana
+  closeTab: Cerrar pestaña
+  nextTab: Pestaña siguiente
+  previousTab: Pestaña anterior
+  splitTab: Mover la pestaña al otro panel
+  splitDirection: Alternar paneles lado a lado / apilados
+  focusOtherGroup: Enfocar el otro panel
+  updatePcb: Actualizar placa desde esquema
+  save: Guardar
+  showExplorer: Mostrar Explorador
+  showLibraries: Mostrar Bibliotecas
+  openPartSearch: Abrir búsqueda de componentes
+  newTerminal: Nuevo terminal
+  openAgent: Abrir agente
+  openSettings: Abrir Configuración
+  gitFocusCommit: Escribir mensaje de commit
+  gitCommit: Commit (en el cuadro de mensaje)
+  gitStageAll: Preparar todos los cambios
+  gitPush: Push
+  gitPull: Pull
+  toggleDevTools: Alternar DevTools
+updatePcb:
+  title: Actualizar desde esquema
+  board: Placa
+  loading: Comparando esquema y placa…
+  upToDate: La placa ya coincide con el esquema.
+  options: Opciones
+  replace: Reemplazar las huellas por las especificadas en los símbolos
+  prune: Eliminar las huellas sin símbolos
+  fields: Actualizar los campos de las huellas desde los símbolos
+  columns:
+    reference: Referencia
+    value: Valor
+    footprint: Huella
+    change: Cambio
+  change:
+    added: Añadida
+    deleted: Eliminada
+    kept: No está en el esquema, se conserva
+    reference: referencia
+    value: valor
+    footprint: huella
+    nets: redes de los pads
+    fields: campos
+    attributes: atributos
+  skip:
+    noFootprint: No hay ninguna huella asignada
+    footprintNotFound: '{libId} no está en ninguna biblioteca'
+    noUuid: El símbolo no tiene UUID
+  confirm: Actualizar placa
+  errors:
+    noBoard: El proyecto no tiene placa (.kicad_pcb).
+    noSchematic: El proyecto no tiene un esquema raíz desde el que actualizar.
+    notAnnotated: 'Anote primero el esquema. Sin anotar: {references}'
+netlist:
+  errors:
+    noSchematic: El proyecto no tiene un esquema raíz que exportar.
+    write: 'No se pudo escribir la lista de redes: {error}'

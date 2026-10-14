@@ -1,0 +1,56 @@
+move: Mover elemento | Mover {count} elementos | Mover {count} elementos
+delete: Eliminar elemento | Eliminar {count} elementos | Eliminar {count} elementos
+rotate: Girar elemento | Girar {count} elementos | Girar {count} elementos
+mirror: Reflejar elemento | Reflejar {count} elementos | Reflejar {count} elementos
+paste: Pegar elemento | Pegar {count} elementos | Pegar {count} elementos
+duplicate: Duplicar elemento | Duplicar {count} elementos | Duplicar {count} elementos
+cut: Cortar elemento | Cortar {count} elementos | Cortar {count} elementos
+pasteLeavingOut: Pegar elemento ({dropped} omitidos) | Pegar {count} elementos ({dropped} omitidos) | Pegar {count} elementos ({dropped} omitidos)
+repeat: Repetir elemento | Repetir {count} elementos | Repetir {count} elementos
+addSymbol: Añadir símbolo
+addWire: Añadir cable
+addLabel: Añadir etiqueta
+addJunction: Añadir unión
+addNoConnect: Añadir marca de no conectado
+addText: Añadir texto
+addSheet: Añadir hoja
+addBus: Añadir bus
+addBusEntry: Añadir entrada de bus
+addDirectiveLabel: Añadir etiqueta de directiva
+addLine: Dibujar línea
+addRectangle: Dibujar rectángulo
+addCircle: Dibujar círculo
+addArc: Dibujar arco
+addBezier: Dibujar curva Bézier
+addRuleArea: Dibujar área de reglas
+addTable: Dibujar tabla
+addImage: Añadir imagen
+addTextBox: Añadir cuadro de texto
+changeUnit: Cambiar unidad
+swapUnits: Intercambiar unidades
+changeBodyStyle: Cambiar estilo del cuerpo
+incrementAnnotations: Incrementar anotación | Incrementar {count} anotaciones | Incrementar {count} anotaciones
+resizeSheet: Redimensionar hoja
+resizeGraphic: Redimensionar gráfico
+dragWireEnd: Arrastrar extremo de cable
+dragBusEnd: Arrastrar extremo de bus
+setPaper: Establecer tamaño de página
+addSheetPin: Añadir pin de hoja
+cleanup: Limpiar cables
+annotate: Anotar símbolo | Anotar {count} símbolos | Anotar {count} símbolos
+generateSymbol: Generar símbolo
+copySymbol: Copiar símbolo
+deleteSymbol: Eliminar símbolo
+boardSync: Sincronizar placa desde esquema
+bindPart: Vincular componente
+agentBatch: Edición del agente | {count} ediciones del agente | {count} ediciones del agente
+editComponents: Editar componente | Editar {count} componentes | Editar {count} componentes
+editFootprintItem: Editar elemento de huella
+addFootprintItem: Añadir elemento de huella
+editSymbolItem: Editar elemento de símbolo
+addSymbolItem: Añadir elemento de símbolo
+updateSymbols: Actualizar símbolo desde la biblioteca | Actualizar {count} símbolos desde la biblioteca | Actualizar {count} símbolos desde la biblioteca
+changeSymbols: Cambiar símbolo | Cambiar {count} símbolos | Cambiar {count} símbolos
+replaceText: Reemplazar texto | Reemplazar {count} textos | Reemplazar {count} textos
+align: Alinear elemento | Alinear {count} elementos | Alinear {count} elementos
+distribute: Distribuir elemento | Distribuir {count} elementos | Distribuir {count} elementos

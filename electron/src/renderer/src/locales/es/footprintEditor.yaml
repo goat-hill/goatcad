@@ -1,0 +1,130 @@
+commands:
+  editFootprintProperties: Editar propiedades de la huella
+  editPad: Editar pad {number}
+  editLine: Editar línea
+  editPolygon: Editar polígono
+  editRuleArea: Editar área de reglas
+  editShape: Editar forma
+  addPad: Añadir pad
+  addLine: Añadir línea
+  addArc: Añadir arco
+  addRectangle: Añadir rectángulo
+  addCircle: Añadir círculo
+  addPolygon: Añadir polígono
+  addText: Añadir texto
+  addBezier: Añadir curva
+  addTextBox: Añadir cuadro de texto
+  addPoint: Añadir punto
+  rotate: Girar
+  mirror: Reflejar
+  flip: Cambiar de lado
+  moveAnchor: Mover ancla de la huella
+  editModel: Editar modelo 3D
+  addModel: Vincular modelo 3D
+  removeModel: Eliminar modelo 3D
+edit:
+  cut: Cortar
+  copy: Copiar
+  paste: Pegar
+  duplicate: Duplicar
+  delete: Eliminar
+  rotate: Girar en sentido antihorario
+  rotateClockwise: Girar en sentido horario
+  flip: Cambiar de lado
+tools:
+  flip: Cambiar de lado
+  anchor: Colocar ancla de la huella
+  gridOrigin: Fijar origen de rejilla
+  resetGridOrigin: Restablecer origen de rejilla
+properties:
+  fromBoard: De la placa
+zoneConnect:
+  inherit: De la zona
+  solid: Sólida
+  thermal: Alivios térmicos
+  none: Ninguna
+  thermalTht: Alivios térmicos (solo THT)
+readonlyBanner:
+  title: Componente de biblioteca oficial de solo lectura
+  body: Este componente no se puede editar directamente. Hacer clic abajo para copiarlo al espacio de trabajo del proyecto.
+  exportComponentTitle: Exportar componente
+  exportPart: Exportar componente
+saveModal:
+  title: Opciones para guardar la huella
+  subtitle: Esta huella procede de una biblioteca de solo lectura. Guardar una copia en el proyecto para editarla.
+  saveLocalTitle: Guardar como huella local del proyecto
+  saveLocalDesc: Crear un archivo de huella `.kicad_mod` reutilizable en el directorio del espacio de trabajo.
+  saveLocalPlaceholder: nombre.kicad_mod
+propertiesPanel:
+  footprintProperties: Propiedades de la huella
+  descr: Descr.
+  model3d: Modelo 3D
+  modelPath: Ruta
+  modelOffset: Desplaz. (mm)
+  modelScale: Escala
+  modelRotate: Giro (°)
+  addModel: Vincular modelo 3D…
+  removeModel: Eliminar modelo 3D
+  browse: Examinar…
+  padInspector: Inspector del pad [{number}]
+  number: Número
+  type: Tipo
+  padTypes:
+    smd: SMD
+    throughHole: Pasante
+    npThroughHole: Pasante NP
+  shape: Forma
+  shapeTypes:
+    rect: Rectangular
+    circle: Circular
+    oval: Ovalado / píldora
+    roundrect: Rect. redondeado
+  drillSize: Tamaño taladro
+  roundRatio: Ratio redondeo
+  graphicInspector: Inspector de elemento gráfico
+  startX: Inicio X
+  startY: Inicio Y
+  endX: Fin X
+  endY: Fin Y
+  polygonInspector: Inspector de polígono
+  points: Puntos
+  fill: Relleno
+  fillTypes:
+    none: Ninguno (solo contorno)
+    solid: Sólido (relleno)
+    hatch: Rayado
+    reverseHatch: Rayado inverso
+    crossHatch: Rayado cruzado
+  ruleAreaInspector: Inspector de área de reglas
+  minThickness: Grosor mín.
+  hatchStyle: Estilo rayado
+  hatchStyleTypes:
+    none: Ninguno (solo contorno)
+    edge: Borde (rayado del borde)
+    full: Completo (rayado relleno)
+  hatchPitch: Paso rayado
+  selectHint: Seleccionar cualquier pad o línea gráfica del diseño 2D para inspeccionar y editar sus detalles directamente en esta barra lateral.
+viewRail:
+  sketchGraphics: Gráficos en boceto
+  sketchText: Texto en boceto
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+  pad: Pad
+  line: Línea
+  arc: Arco
+  rectangle: Rectángulo
+  circle: Círculo
+  polygon: Polígono
+  text: Texto
+  bezier: Curva
+  textBox: Cuadro de texto
+  point: Punto
+  lineModeTitle: Modo de línea — 45° / 90° / libre ({hotkey})
+  lineMode: 'Modo de línea: {mode}'
+  lineFree: libre
+viewport3d:
+  title: Vista previa 3D
+  noFootprintMsg: Abrir una huella para verla en 3D.
+  noModelMsg: No hay ningún modelo 3D vinculado a esta huella.
+  notFoundMsg: No se encontró el modelo 3D vinculado.

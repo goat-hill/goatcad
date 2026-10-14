@@ -1,0 +1,34 @@
+name: macOS signing credentials
+description: Import the Apple signing certificate and notarization key. macOS jobs only.
+
+# Shared by release.yml and mac-signing-check.yml — the check workflow's value is
+# that it exercises the same path a release takes.
+
+inputs:
+  certificate-p12-base64:
+    description: Developer ID Application .p12, base64-encoded (secret APPLE_CSC_LINK)
+    required: true
+  certificate-password:
+    description: Password for that .p12 (secret APPLE_CSC_KEY_PASSWORD)
+    required: true
+  api-key-base64:
+    description: App Store Connect .p8 API key, base64-encoded (secret APPLE_API_KEY)
+    required: true
+  api-key-id:
+    description: App Store Connect key ID (secret APPLE_API_KEY_ID)
+    required: true
+  api-issuer:
+    description: App Store Connect issuer ID (secret APPLE_API_ISSUER)
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: ${{ github.action_path }}/prepare.sh
+      env:
+        CERT_P12_BASE64: ${{ inputs.certificate-p12-base64 }}
+        CERT_PASSWORD: ${{ inputs.certificate-password }}
+        ASC_KEY_BASE64: ${{ inputs.api-key-base64 }}
+        ASC_KEY_ID: ${{ inputs.api-key-id }}
+        ASC_ISSUER: ${{ inputs.api-issuer }}

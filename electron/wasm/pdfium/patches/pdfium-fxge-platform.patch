@@ -1,0 +1,15 @@
+diff --git a/core/fxge/BUILD.gn b/core/fxge/BUILD.gn
+index 00c8cfe..1580ba7 100644
+--- a/core/fxge/BUILD.gn
++++ b/core/fxge/BUILD.gn
+@@ -171,7 +171,9 @@ source_set("fxge") {
+     ]
+   }
+ 
+-  if (is_linux || is_chromeos) {
++  # wasm has no platform layer of its own; the Linux one only needs POSIX
++  # file access and finds no system fonts, so pdfium's built-in ones serve.
++  if (is_linux || is_chromeos || is_wasm) {
+     sources += [ "linux/fx_linux_impl.cpp" ]
+   }
+ 

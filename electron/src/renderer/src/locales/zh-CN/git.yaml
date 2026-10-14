@@ -1,0 +1,81 @@
+pane:
+  title: Git
+  refresh: 刷新
+  switchBranch: 切换分支
+  noBranch: 无分支
+  pull: 拉取
+  push: 推送
+  publish: 发布分支
+  publishShort: 发布
+  noUpstream: 分支没有可拉取的上游
+  pushing: 正在推送…
+  pulling: 正在拉取…
+  pushed: 已推送
+  pulled: 已是最新
+  commitPlaceholder: 提交信息
+  commit: 提交
+  commitAll: 全部提交
+  commitAllHint: 暂存所有更改并提交
+  mergeChanges: 合并更改
+  stagedChanges: 暂存的更改
+  changes: 更改
+  noChanges: 无更改
+  openFile: 打开文件
+  addTo: 添加到
+  ignoreTracked: 已被跟踪。.gitignore 条目只会让 git 忽略新文件。
+  showSymbols: 显示已更改的符号
+  hideSymbols: 隐藏已更改的符号
+  loadingSymbols: 正在读取符号…
+  symbolsUnreadable: 无法读取此库的符号。
+  noSymbolChanges: 没有符号更改
+  stage: 暂存
+  unstage: 取消暂存
+  stageAll: 全部暂存
+  unstageAll: 全部取消暂存
+  discard: 放弃更改
+  discardAll: 放弃所有更改
+  markResolved: 标记为已解决
+  confirmDiscard: 放弃对 {name} 的更改？此操作无法撤销。
+  confirmDeleteUntracked: 删除未跟踪的文件 {name}？此操作无法撤销。
+  confirmDiscardAll: 放弃对 {count} 个文件的更改？未跟踪的文件将被删除。此操作无法撤销。
+  notARepo: 此文件夹不是 Git 仓库。
+  initRepo: 初始化仓库
+  initRepoHint: 在此文件夹中运行 git init
+  gitNotInstalled: 在此系统上未找到 Git。
+  statusError: 无法读取 Git 状态。
+error:
+  noRemote: 未配置远程仓库。请使用 git remote add 添加。
+  noUpstream: 分支没有上游。推送以发布它。
+  auth: Git 无法登录远程仓库。请设置 SSH 密钥或凭据助手，然后重试。
+  diverged: 分支和远程仓库都有更改。请在终端中合并或变基，然后重试。
+  rejected: 远程仓库有你本地没有的提交。请先拉取，再推送。
+  network: 无法连接到远程仓库。
+  conflictsBeforeCommit: 提交前请先解决并暂存冲突。
+diff:
+  tabWorking: '{name}（工作区）'
+  tabStaged: '{name}（已暂存）'
+  sideWorking: 工作区 vs. 暂存区
+  sideStaged: 暂存区 vs. 上次提交
+  split: 并排
+  unified: 内联
+  visual: 图形
+  text: 文本
+  openFile: 打开文件
+  stage: 暂存
+  unstage: 取消暂存
+  loading: 正在加载差异…
+  unreadable: 无法绘制此文件。切换到文本以查看更改内容。
+  unitTitle: 要显示此符号的哪个单元
+  noDifferences: 没有差异
+  binary: 二进制文件已更改，没有可比较的文本。
+  truncated: 显示差异的前 {count} 行。
+  notChanged: 此文件在此处已没有更改。
+  error: 无法读取差异：{error}
+  added: '+{count}'
+  removed: '−{count}'
+visual:
+  diff: 差异
+  before: 之前
+  after: 之后
+  noChanges: 图形没有变化。切换到文本以查看更改内容。
+  nothingOnSide: 此侧没有更改。

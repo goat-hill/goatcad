@@ -1,0 +1,81 @@
+pane:
+  title: Git
+  refresh: Actualiser
+  switchBranch: Changer de branche
+  noBranch: Aucune branche
+  pull: Tirer
+  push: Pousser
+  publish: Publier la branche
+  publishShort: Publier
+  noUpstream: La branche n’a pas d’amont depuis lequel tirer
+  pushing: Envoi…
+  pulling: Récupération…
+  pushed: Envoyé
+  pulled: À jour
+  commitPlaceholder: Message de commit
+  commit: Valider
+  commitAll: Tout valider
+  commitAllHint: Indexer toutes les modifications et valider
+  mergeChanges: Modifications de fusion
+  stagedChanges: Modifications indexées
+  changes: Modifications
+  noChanges: Aucune modification
+  openFile: Ouvrir le fichier
+  addTo: Ajouter à
+  ignoreTracked: Déjà suivi. Une entrée .gitignore empêche seulement git de remarquer les nouveaux fichiers.
+  showSymbols: Afficher les symboles modifiés
+  hideSymbols: Masquer les symboles modifiés
+  loadingSymbols: Lecture des symboles…
+  symbolsUnreadable: Impossible de lire les symboles de cette librairie.
+  noSymbolChanges: Aucun symbole modifié
+  stage: Indexer
+  unstage: Désindexer
+  stageAll: Tout indexer
+  unstageAll: Tout désindexer
+  discard: Abandonner les modifications
+  discardAll: Abandonner toutes les modifications
+  markResolved: Marquer comme résolu
+  confirmDiscard: Abandonner les modifications de {name} ? Cette action est irréversible.
+  confirmDeleteUntracked: Supprimer le fichier non suivi {name} ? Cette action est irréversible.
+  confirmDiscardAll: 'Abandonner les modifications de {count} fichier ? Cette action est irréversible. | Abandonner les modifications de {count} fichiers ? Les fichiers non suivis sont supprimés. Cette action est irréversible. | Abandonner les modifications de {count} fichiers ? Les fichiers non suivis sont supprimés. Cette action est irréversible.'
+  notARepo: Ce dossier n’est pas un dépôt Git.
+  initRepo: Initialiser le dépôt
+  initRepoHint: Exécuter git init dans ce dossier
+  gitNotInstalled: Git est introuvable sur ce système.
+  statusError: Impossible de lire l’état Git.
+error:
+  noRemote: Aucun dépôt distant configuré. Ajoutez-en un avec git remote add.
+  noUpstream: La branche n’a pas d’amont. Poussez-la pour la publier.
+  auth: Git n’a pas pu s’authentifier auprès du dépôt distant. Configurez une clé SSH ou un gestionnaire d’identifiants, puis réessayez.
+  diverged: La branche et le dépôt distant ont tous deux changé. Fusionnez ou rebasez dans un terminal, puis réessayez.
+  rejected: Le dépôt distant contient des commits que vous n’avez pas. Tirez d’abord, puis poussez.
+  network: Impossible de joindre le dépôt distant.
+  conflictsBeforeCommit: Résolvez et indexez les conflits avant de valider.
+diff:
+  tabWorking: '{name} (arbre de travail)'
+  tabStaged: '{name} (indexé)'
+  sideWorking: Arbre de travail / indexé
+  sideStaged: Indexé / dernier commit
+  split: Côte à côte
+  unified: En ligne
+  visual: Visuel
+  text: Texte
+  openFile: Ouvrir le fichier
+  stage: Indexer
+  unstage: Désindexer
+  loading: Chargement du diff…
+  unreadable: Impossible de dessiner ce fichier. Passez en mode Texte pour voir ce qui a changé.
+  unitTitle: Unité de ce symbole à afficher
+  noDifferences: Aucune différence
+  binary: Fichier binaire modifié. Aucun texte à comparer.
+  truncated: Affichage des {count} premières lignes du diff.
+  notChanged: Ce fichier n’a plus de modifications ici.
+  error: 'Impossible de lire le diff : {error}'
+  added: '+{count}'
+  removed: '−{count}'
+visual:
+  diff: Diff
+  before: Avant
+  after: Après
+  noChanges: Aucune modification du dessin. Passez en mode Texte pour voir ce qui a changé.
+  nothingOnSide: Aucune modification de ce côté.

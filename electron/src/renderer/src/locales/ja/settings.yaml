@@ -1,0 +1,115 @@
+tabTitle: 設定
+title: 設定
+searchPlaceholder: 設定を検索
+restoreDefaults: 既定値に戻す
+categories:
+  appearance: 外観
+  boardEditor: 基板エディター
+  libraries: ライブラリ
+  parts: 販売代理店 API
+  integrations: AI 連携
+  about: バージョン情報
+appearance:
+  theme: テーマ
+  themeDark: ダーク
+  themeLight: ライト
+  language: 言語
+  gpu: GPU の電力設定
+  gpuAppliesToNewTabs: 新しいタブに適用されます
+  gpuDefault: システムの既定
+  gpuLowPower: 省電力
+  gpuHighPerformance: 高パフォーマンス
+  vulkan: Vulkan を使用
+  vulkanDescription: ウィンドウとエディターのキャンバスを OpenGL の代わりに Vulkan で描画します。グラフィックドライバーによっては高速になります。ウィンドウが真っ白になる場合はオフにしてください。
+  vulkanAppliesAfterRestart: GoatCAD の再起動後に適用されます
+boardEditor:
+  clearanceHeading: クリアランスの輪郭
+  pads: パッド
+  tracksAndVias: 配線とビア
+  never: 表示しない
+  whileRouting: 配線中
+  whileRoutingAndDragging: 配線中とドラッグ中
+  always: 常に表示
+libraries:
+  model3dDir: KiCad 3D モデルディレクトリ
+  model3dDirDescription: フットプリントのモデルパス内の {variableName} の解決先です。空欄の場合は検出された KiCad のインストールを使用します。
+  browse: 参照…
+  clear: クリア
+  detected: 自動検出
+  detectedNone: このコンピューターで KiCad のインストールが検出されませんでした。
+  overridden: 検出された場所を上書き中
+  usingPath: '使用中：{path}'
+  kicadImport: KiCad のライブラリ
+  kicadImportDescription: KiCad に追加したライブラリをインポートします。一度だけコピーされ、同期はされないため、KiCad でライブラリを追加したら再実行してください。
+  kicadImportAction: ライブラリを確認
+  kicadImportBusy: 確認中…
+  kicadImportNone: このコンピューターで KiCad の設定が見つかりませんでした。
+  kicadImportUpToDate: 新しくインポートするものはありません。
+  kicadImportDone: '{count} 個のライブラリをインポートしました。'
+  kicadImportFailed: 'KiCad の設定を読み込めませんでした：{error}'
+parts:
+  stepsHeading: キーの取得方法
+  register: '{name} からキーを取得'
+  save: キーを保存
+  saving: 保存中…
+  test: 接続をテスト
+  remove: 削除
+  connected: 接続済み
+  notConnected: 未接続
+  unverified: 未確認
+  checking: 確認中…
+  notWorking: 動作していません
+  cancel: キャンセル
+  verifiedAt: '{when}に確認'
+  justNow: たった今確認
+  keyHint: 'キー：{hint}'
+  usage: '本日 {limit} 件中 {used} 件のリクエストを使用'
+  usageResets: UTC の午前 0 時にリセット
+  noKeyring: このコンピューターには利用可能なキーリングがないため、キーをここで暗号化できず、保存されません。
+  saveFailed: 'キーを保存できませんでした：{error}'
+about:
+  version: バージョン {version}
+  runtime: Electron v{electron} · Chrome v{chrome}
+  checkForUpdates: 自動的に更新を確認
+  checkNow: 今すぐ確認
+  checkResult:
+    checking: 確認中…
+    available: 更新をダウンロード中…
+    up-to-date: 最新です
+    failed: 確認できませんでした
+    unavailable: ここでは利用できません
+agent:
+  label: エージェント
+  description: アクティビティバーのエージェントボタンで開き、このフォルダーの前回のセッションを再開します。
+  claude: Claude Code
+  codex: Codex
+mcp:
+  serverHeading: MCP サーバー
+  listening: '{url} で待機中'
+  notRunning: 停止中 — ローカルポートが別のプログラムで使用されています。
+  running: 実行中
+  stopped: 停止
+  promptsLabel: プロンプト
+  toolsLabel: ツール
+  apiHeading: プロンプトとツール
+  http: HTTP
+  scope: スコープ
+  effect: 効果
+  mutates: 設計を編集します
+  readsOnly: 設計を編集しません
+  arguments: 引数
+  noArguments: 引数はありません。
+  required: 必須
+  optional: 任意
+  examples: 例
+  runCommand: アプリ外で開始したセッションから GoatCAD を使うには、ターミナルで実行してください
+  addToFile: アプリ外で開始したセッションから GoatCAD を使うには、{path} に追加してください
+  copy: コピー
+  copied: コピーしました
+  tokenLabel: トークン
+  copyToken: トークンをコピー
+  tokenCopied: トークンをコピーしました
+  regenerate: トークンを再発行
+  tokenReset: 起動時にトークンを再発行しました — 保存されたトークンを読み込めませんでした。下のコマンドをもう一度コピーしてください。
+  tokenReplaced: トークンを再発行しました — 下のコマンドをもう一度コピーしてください。
+  regenerateFailed: 新しいトークンでサーバーを再起動できませんでした。

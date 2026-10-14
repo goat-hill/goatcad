@@ -1,0 +1,41 @@
+searchPlaceholder: Filtrar…
+nav:
+  symbols: Símbolos
+  footprints: Huellas
+  models3d: Modelos 3D
+  models3dNote: Los modelos 3D se exploran a través de su huella.
+  system: 'Sistema ({n})'
+  systemPlain: Sistema
+  addLibrary: Añadir biblioteca
+  addSymbol: Añadir una biblioteca de símbolos…
+  addFootprint: Añadir una biblioteca de huellas…
+  models3dManaged: Las rutas de búsqueda de modelos 3D se gestionan mediante variables de entorno en Configuración.
+  remove: Quitar
+  hasSymbol: Tiene un símbolo asociado
+  hasFootprint: Tiene una huella asociada
+  has3dModel: Tiene un modelo 3D asociado
+download: Descargar las bibliotecas oficiales de KiCad
+downloading: Descargando…
+rebuildIndex: Reconstruir el índice de bibliotecas
+indexing: 'Indexando… {done}/{total}'
+indexingWait: Construyendo el índice de bibliotecas…
+resultsCapped: 'Se muestran las primeras {n} coincidencias por tipo; refine la búsqueda para acotarla.'
+noResults: Sin coincidencias.
+typeShort:
+  symbol: SÍM
+  footprint: HU
+  model: 3D
+add:
+  newSymbolLibrary: Nueva biblioteca de símbolos
+  newFootprintLibrary: Nueva biblioteca de huellas
+  addSymbolLibrary: Añadir biblioteca de símbolos
+  addFootprintLibrary: Añadir biblioteca de huellas
+  symbolExt: .kicad_sym
+  footprintExt: .pretty/
+  toProject: al proyecto…
+  toAllProjects: a todos los proyectos…
+  needsProject: No hay ningún proyecto activo
+  symbolFileTitle: Seleccione un archivo de biblioteca de símbolos (.kicad_sym)
+  footprintFolderTitle: Seleccione una carpeta de biblioteca de huellas (el nombre termina en .pretty)
+scanningEmptySymbols: 'No se encontraron archivos .kicad_sym en esa carpeta.'
+scanningEmptyFootprints: No se encontraron huellas en esa carpeta.

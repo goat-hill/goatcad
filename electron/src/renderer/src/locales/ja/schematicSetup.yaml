@@ -1,0 +1,6 @@
+title: 回路図の設定
+sections:
+  rules: エレクトリカル ルール
+  netClasses: ネットクラス
+  exclusions: 除外
+noProject: この設計にはプロジェクトファイルがないため、ルールの深刻度を保存できず、除外もありません。チェックは KiCad のデフォルト設定で実行されます。

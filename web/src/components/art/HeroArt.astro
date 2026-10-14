@@ -1,0 +1,1594 @@
+---
+/*
+ * The hero motif: goats on San Francisco-style hills at golden hour, among
+ * through-hole parts at boulder scale. Six little scenes, each with one idea
+ * that plays out on hover (CSS; a tap on touch screens, see the script):
+ *
+ *   LED + resistor         light  — the LED switches on
+ *   electrolytic + disc    joy    — the lookout on top wags its tail
+ *   speaker + transistor   sound  — waves ripple out; nanny and kid look up
+ *   pot + axial resistor   night  — the dial turns the sunset down to night
+ *   antenna tower          radio  — waves broadcast from the mast
+ *   nanny + kid            greet  — the kid turns, noses touch, tails wag
+ *
+ * Three rows: tower and sun on the far ridge; LED and the charging can on
+ * the mid hill; pot, goats and speaker in the foreground.
+ *
+ * Each scene is a `.spot` group with an invisible `.hit` rect sized to the
+ * scene, so a small part isn't a pixel-hunt. A scene plays while it is
+ * hovered (only where the SVG has `.can-hover`) or while it has `.is-on`.
+ * Touch screens have no hover, so the small inline script at the end turns
+ * scenes on and off by tap and drops `.can-hover` there (so the browser's
+ * sticky tap-hover can't hold a scene on). Without JS it's hover as before. The hero's art wrap is
+ * pointer-events: none; spots opt back in. Reactions that land outside the
+ * hovered group (goats, sun) go through `.hero-art:has(.spot-x:is(.is-on, .can-hover :hover))`.
+ *
+ * The parts are drawn like the goats: flat 2D side-view silhouettes, no
+ * outlines or gradients, a body tone plus one detail tone, leads in dulled
+ * copper. Anything shaded or 3D would sit apart from the goats.
+ *
+ * Keep notes here: template comments ship (WEB.md §2). Everything below is
+ * plain SVG + CSS so the port into the app's WelcomeView stays a copy
+ * (BRAND.md §4) — the frontmatter only computes coordinates and emits strings.
+ *
+ * The viewBox is wider than any hero, and the SVG is height-capped with
+ * `xMidYMax slice`, so narrow screens crop the sides and wide ones crop sky:
+ * the goats never balloon on a 4K monitor and never shrink to specks on a
+ * phone. Anything that must survive the crop lives in the middle ~900 units.
+ */
+
+type Pt = [number, number]
+type Seg = [number, number, number, number, number, number]
+interface Ridge {
+  start: Pt
+  segs: Seg[]
+}
+
+const W = 1600
+const H = 560
+
+// Ridge lines, left to right, as cubic Béziers. Closed into a filled hill by
+// `hill()`; sampled by `yAt()` so props and goats sit exactly on the surface.
+const far: Ridge = {
+  start: [0, 322],
+  segs: [
+    [70, 312, 120, 282, 168, 258],
+    [196, 244, 222, 238, 246, 250],
+    [262, 258, 272, 266, 290, 262],
+    [312, 252, 330, 236, 356, 244],
+    [400, 258, 440, 300, 540, 316],
+    [660, 336, 800, 330, 920, 322],
+    [1040, 314, 1110, 290, 1200, 282],
+    [1290, 274, 1360, 296, 1450, 300],
+    [1520, 303, 1570, 296, 1600, 294]
+  ]
+}
+
+const mid: Ridge = {
+  start: [0, 398],
+  segs: [
+    [60, 386, 120, 356, 196, 348],
+    [262, 341, 322, 356, 384, 376],
+    [470, 404, 570, 424, 700, 426],
+    [830, 428, 930, 410, 1010, 380],
+    [1080, 354, 1140, 324, 1236, 318],
+    [1316, 313, 1362, 326, 1420, 342],
+    [1486, 360, 1552, 362, 1600, 360]
+  ]
+}
+
+const near: Ridge = {
+  start: [0, 474],
+  segs: [
+    [120, 458, 250, 452, 370, 462],
+    [490, 472, 570, 492, 710, 494],
+    [850, 496, 960, 478, 1060, 452],
+    [1116, 437, 1166, 426, 1226, 428],
+    [1296, 430, 1360, 448, 1440, 464],
+    [1520, 478, 1570, 480, 1600, 480]
+  ]
+}
+
+const ridgePath = (r: Ridge): string =>
+  `M${r.start.join(' ')} ` +
+  r.segs.map((s) => `C${s.slice(0, 2)} ${s.slice(2, 4)} ${s.slice(4)}`).join(' ')
+
+const hill = (r: Ridge): string => `${ridgePath(r)} L${W} ${H} L0 ${H} Z`
+
+// Dense polyline of a ridge, for looking up the surface height at any x.
+const sample = (r: Ridge): Pt[] => {
+  const pts: Pt[] = [r.start]
+  let [x0, y0] = r.start
+  for (const [x1, y1, x2, y2, x3, y3] of r.segs) {
+    for (let i = 1; i <= 64; i++) {
+      const t = i / 64
+      const u = 1 - t
+      pts.push([
+        u * u * u * x0 + 3 * u * u * t * x1 + 3 * u * t * t * x2 + t * t * t * x3,
+        u * u * u * y0 + 3 * u * u * t * y1 + 3 * u * t * t * y2 + t * t * t * y3
+      ])
+    }
+    ;[x0, y0] = [x3, y3]
+  }
+  return pts
+}
+
+const yAt = (pts: Pt[], x: number): number => {
+  for (let i = 1; i < pts.length; i++) {
+    const [ax, ay] = pts[i - 1]
+    const [bx, by] = pts[i]
+    if (x >= ax && x <= bx) return ay + ((x - ax) / (bx - ax)) * (by - ay)
+  }
+  return pts[pts.length - 1][1]
+}
+
+const farPts = sample(far)
+const midPts = sample(mid)
+const nearPts = sample(near)
+const r1 = (n: number): number => Math.round(n * 10) / 10
+
+// The goat, drawn facing right with its hooves on y = 0 and centered on x = 0.
+// Inline rather than <use> so each goat's head, tail and stance are separate
+// CSS animation targets. Far-side legs are a darker tone for depth. Two heads:
+// alert (neck up) and grazing (neck reaching forward to the grass).
+const HEAD_UP = `
+    <path d="M5 -27 C8 -30 12 -35 15 -39 L18 -40 C21 -38 24 -35 26 -32 C27 -30.5 26 -29 24 -29.5 C22 -30 20 -31 18 -32 C16 -29 15 -25 14 -21 L8 -21 Z"></path>
+    <path d="M14.2 -38.2 C13.6 -44 10.4 -47.6 6 -47.2 C9.8 -45.6 12.8 -42 16.8 -38.6 Z"></path>
+    <path d="M15 -36 L9.5 -35 L15 -33.6 Z"></path>
+    <path d="M23 -29.8 L22 -25.4 L21 -30.6 Z"></path>
+    <circle class="eye" cx="19.5" cy="-36.4" r="0.9"></circle>
+    <path class="eye-shut" d="M18.3 -36.8 q1.2 1.4 2.4 0"></path>`
+const HEAD_GRAZE = `
+    <path d="M4 -27.5 C10 -28 15.5 -24 18.5 -18.5 L21.5 -17 C24 -13 25.5 -8 26.5 -4.5 C27 -3 25.5 -2 24 -2.8 C22.5 -4 21.5 -6 20.5 -8 C18.5 -10.5 16 -14 14 -18 L8 -21 Z"></path>
+    <path d="M18 -18.5 C16 -23.5 12 -25.5 8.5 -24.5 C12 -23 15 -21 20.5 -17.5 Z"></path>
+    <path d="M19.5 -15 L14 -12.5 L19 -13 Z"></path>
+    <path d="M23 -4.5 L19.5 -2 L22 -6 Z"></path>
+    <circle class="eye" cx="21.6" cy="-12.6" r="0.9"></circle>
+    <path class="eye-shut" d="M20.4 -13 q1.2 1.4 2.4 0"></path>`
+
+// A grazer also carries an alert head, hidden until something startles it.
+const goatHeads = (pose: 'up' | 'graze'): string =>
+  pose === 'up'
+    ? '<g class="head">' + HEAD_UP + '</g>'
+    : '<g class="head">' + HEAD_GRAZE + '</g><g class="head-alert">' + HEAD_UP + '</g>'
+
+const goatSvg = (pose: 'up' | 'graze'): string => `
+  <g class="stance">
+    <path class="far-legs" d="M13.5 -14 L14.5 0 M-14 -15 L-15.5 -7 L-14 0"></path>
+    <path class="tail" d="M-21.2 -24.6 L-24.4 -30.8 L-22.4 -31.4 L-19 -25.4 Z"></path>
+    <path d="M-21 -25.6 C-17 -28.4 -12.5 -28.2 -8 -27 C-2 -25.8 4 -26.8 8.5 -28.4 C13 -28.4 16 -24 16 -19 C16 -15 13 -13 10 -13 L5 -13 C-2 -12 -9 -12 -15 -13 C-19 -14 -22.5 -17 -22.5 -21 C-22.5 -23.6 -22.2 -25 -21 -25.6 Z"></path>
+    <path class="legs" d="M10 -14 L10.5 0 M-18 -15 L-19.5 -7 L-18 0"></path>
+    <path class="legs-folded" d="M9 -14.5 L10 -12 L18 -12.5 M-17 -14.5 L-21 -12 L-13 -11.5"></path>
+    ${goatHeads(pose)}
+  </g>
+`
+
+interface Goat {
+  cls: string
+  x: number
+  y: number
+  scale: number
+  pose: 'up' | 'graze'
+  flip?: boolean
+  // How long after dusk this goat nods off (ms), so they don't drop in unison.
+  nap: number
+}
+
+const goatTransform = (g: Goat): string =>
+  `translate(${r1(g.x)} ${r1(g.y)}) scale(${g.flip ? -g.scale : g.scale} ${g.scale})`
+
+// Where a sleeping goat's z's rise from: just above its tucked head. Drawn
+// outside the goat so a flipped goat doesn't mirror its z's.
+const zzzAt = (g: Goat): string =>
+  `translate(${r1(g.x + (g.flip ? -1 : 1) * 14 * g.scale)} ${r1(g.y - 30 * g.scale)}) scale(${r1(g.scale)})`
+
+// Parts stand in the pairs they're placed in on a real board. Each is drawn in
+// local units with its seating plane on y = 0, then set on a ridge by `on()`.
+const on = (pts: Pt[], x: number, scale = 1): string =>
+  `translate(${x} ${r1(yAt(pts, x))})${scale === 1 ? '' : ` scale(${scale})`}`
+
+// Spacing within a scene is one rule, not eyeballed: each part's outer
+// extent [left, right] in local units, leads included, and every neighbour
+// sits exactly GAP past the previous part's edge, scaled with the scene.
+type Extent = [number, number]
+const GAP = 12
+const EXTENT: Record<string, Extent> = {
+  led: [-14, 14],
+  resStanding: [-7, 11],
+  fence: [-34, 34],
+  pot: [-13, 13],
+  transistor: [-8, 8],
+  speaker: [-9, 16],
+  can: [-24, 24],
+  disc: [-11, 11]
+}
+// Centers for a scene's parts, the whole scene (outer edge to outer edge)
+// centered on cx.
+const row = (cx: number, scale: number, parts: Extent[]): number[] => {
+  const width = parts.reduce((w, [l, r]) => w + r - l, 0) + GAP * (parts.length - 1)
+  let edge = cx - (width * scale) / 2
+  return parts.map(([l, r]) => {
+    const x = edge - l * scale
+    edge += (r - l + GAP) * scale
+    return r1(x)
+  })
+}
+
+// Scenes are spread evenly across the view, not stacked into columns: each
+// sits in its own stretch of the width, placed by rule rather than by eye.
+// Pot and capacitor mirror at ±MID_STEP from the center (x = 800), the goats
+// hold the center with the speaker FG_STEP to their right, and the LED fills
+// the gap between the tower and the goats. The tower and sun are set by the
+// ridge they stand on.
+const CENTER = 800
+const MID_STEP = 400
+const FG_STEP = 180
+const TOWER_X = 470
+// The LED fills the widest gap left across the scene, halfway between the
+// tower and the goats.
+const LED_COL = (TOWER_X + CENTER) / 2
+
+// A 5 mm LED, unlit (domed lens over a flange, the lead frame showing
+// through), and beside it its current-limiting resistor, stood on end with the
+// top lead hairpinned down, the way it goes into a tight board.
+const [LED_X, LED_RES_X] = row(LED_COL, 1.25, [EXTENT.led, EXTENT.resStanding])
+
+// A small speaker and the TO-92 transistor that drives it, in the foreground
+// right beside the nanny and kid. Drawn side-on as the universal speaker
+// shape (magnet, flared cone, rim) facing left, so its sound goes at them.
+const [BUZZER_X, TRANSISTOR_X] = row(CENTER + FG_STEP, 1, [EXTENT.speaker, EXTENT.transistor])
+
+// A trimmer pot beside the axial-resistor fence: turn it down and it's night.
+// It keeps its distance from the goats and speaker, out in the left column
+// that mirrors the capacitor's.
+const [FENCE_X, POT_X] = row(CENTER - MID_STEP, 1, [EXTENT.fence, EXTENT.pot])
+
+// The electrolytic can the lookout stands on, with its disc decoupling cap,
+// on the crest of the mid hill — drawn at CAP_S since it's further off.
+// The can is drawn centered on x = 0.
+const CAP = { w: 48, h: 58 }
+const CAP_S = 0.8
+// The can's body, drawn from x = 0: a rounded rectangle pinched in near the
+// bottom by the crimp that seals the rubber bung in.
+const CAN_CRIMP = { y: -17, half: 4, depth: 3.5 }
+const canBody = (() => {
+  const { w, h } = CAP
+  const [top, bottom, r] = [-h - 4, -8, 3]
+  const { y, half, depth } = CAN_CRIMP
+  return (
+    `M${r} ${top} H${w - r} A${r} ${r} 0 0 1 ${w} ${top + r} V${y - half}` +
+    ` Q${w - depth * 2} ${y} ${w} ${y + half} V${bottom - r} A${r} ${r} 0 0 1 ${w - r} ${bottom}` +
+    ` H${r} A${r} ${r} 0 0 1 0 ${bottom - r} V${y + half} Q${depth * 2} ${y} 0 ${y - half}` +
+    ` V${top + r} A${r} ${r} 0 0 1 ${r} ${top} Z`
+  )
+})()
+const [CAP_X, DECOUPLE_X] = row(CENTER + MID_STEP, CAP_S, [EXTENT.can, EXTENT.disc])
+
+const goats: Goat[] = [
+  // The lookout, on top of the electrolytic can on the mid hill's crest.
+  {
+    cls: 'goat-lookout',
+    x: CAP_X,
+    y: yAt(midPts, CAP_X) - (CAP.h + 4) * CAP_S,
+    scale: 1.35 * CAP_S,
+    pose: 'up',
+    nap: 0
+  },
+  // A nanny grazing with her kid in the foreground valley.
+  // The pair together spans ~742–860: centered on the grid's middle column.
+  {
+    cls: 'goat-graze',
+    x: CENTER + 28,
+    y: yAt(nearPts, CENTER + 28) + 2,
+    scale: 1.4,
+    pose: 'graze',
+    flip: true,
+    nap: 450
+  },
+  {
+    cls: 'goat-kid',
+    x: CENTER - 36,
+    y: yAt(nearPts, CENTER - 36) + 2,
+    scale: 0.85,
+    pose: 'up',
+    flip: true,
+    nap: 900
+  }
+]
+
+// One axial resistor body for both resistors, whichever way it lies: drawn
+// lying along x, centered on the origin, 40 long, in on-screen units. End caps
+// bulge past the middle; three value bands at one end, tolerance at the other.
+const roundRect = (x: number, y: number, w: number, h: number, r: number): string =>
+  `M${x + r} ${y} H${x + w - r} A${r} ${r} 0 0 1 ${x + w} ${y + r} V${y + h - r}` +
+  ` A${r} ${r} 0 0 1 ${x + w - r} ${y + h} H${x + r} A${r} ${r} 0 0 1 ${x} ${y + h - r}` +
+  ` V${y + r} A${r} ${r} 0 0 1 ${x + r} ${y} Z`
+const RES_BODY = [
+  roundRect(-20, -7.5, 12, 15, 6),
+  roundRect(8, -7.5, 12, 15, 6),
+  'M-10 -5.5 H10 V5.5 H-10 Z'
+].join(' ')
+const RES_BANDS = 'M-14 -7.5 V7.5 M-5 -5.5 V5.5 M1 -5.5 V5.5 M14 -7.5 V7.5'
+
+// The fence rail: lying on its side, its leads bent down into the ground on
+// a round bend, the way pliers leave them.
+const res = { cx: FENCE_X, cy: r1(yAt(nearPts, FENCE_X) - 15) }
+const LEAD_BEND = 6
+const [leadL, leadR] = [FENCE_X + EXTENT.fence[0], FENCE_X + EXTENT.fence[1]]
+const resLeads = [
+  `M${leadL} ${r1(yAt(nearPts, leadL) + 4)} V${res.cy + LEAD_BEND}`,
+  `A${LEAD_BEND} ${LEAD_BEND} 0 0 1 ${leadL + LEAD_BEND} ${res.cy} H${res.cx - 20}`,
+  `M${res.cx + 20} ${res.cy} H${leadR - LEAD_BEND}`,
+  `A${LEAD_BEND} ${LEAD_BEND} 0 0 1 ${leadR} ${res.cy + LEAD_BEND} V${r1(yAt(nearPts, leadR) + 4)}`
+].join(' ')
+
+// Golden hour: the sun half-set behind the far ridge, right of center, with a
+// wide warm glow on the horizon. It's the light source the rest of the scene
+// answers to: backlit fog, the tower in silhouette.
+const SUN = { x: 1020, y: r1(yAt(farPts, 1020) - 12) }
+
+// Antenna tower on the far ridge's shoulder, drawn after Sutro Tower: legs
+// splayed at the ground taper to a narrow waist, flare a little to a wide
+// crossarm, and carry on straight up as three masts. Crossbars tie the legs
+// low, at the waist, and at a pale platform above it. Seen side-on, the third
+// leg stands in the middle, its mast the tallest. The legs are painted in
+// long white runs with red around every joint.
+// The ridge slopes under it, so each leg runs down to its own foot, buried
+// below the surface; the tower is drawn behind the hill so the ground covers
+// where the legs go in. Crossbars hang off the highest ground point.
+const tower = { x: TOWER_X, base: r1(Math.min(yAt(farPts, 450), yAt(farPts, 490))) }
+const towerTop = tower.base - 120
+const centerTop = towerTop - 6
+const towerFeet = [-15, 0, 15].map((dx) => r1(yAt(farPts, tower.x + dx) + 8))
+
+// Every crossbar and band sits exactly on the legs: the outer legs run from
+// their feet (x = ±15) to the waist (x = ±5), then flare to the crossarm
+// (x = ±11), so points on them are found rather than drawn at a fixed width.
+const FOOT = 15
+const WAIST = 5
+const ARM = 11
+const waistY = tower.base - 56
+const armY = tower.base - 86
+const legX = (side: -1 | 1, y: number): number => {
+  if (y < waistY) return r1(side * (WAIST + ((waistY - y) / (waistY - armY)) * (ARM - WAIST)))
+  const foot = side < 0 ? towerFeet[0] : towerFeet[2]
+  return r1(side * (FOOT - ((y - foot) / (waistY - foot)) * (FOOT - WAIST)))
+}
+// A run of an outer leg between two heights, bent at the waist if it spans it.
+const legRun = (side: -1 | 1, lo: number, hi: number): string => {
+  const ys = lo > waistY && hi < waistY ? [lo, waistY, hi] : [lo, hi]
+  return 'M' + ys.map((y) => `${legX(side, y)} ${r1(y)}`).join(' L')
+}
+const lowBarY = tower.base - 30
+const platformY = tower.base - 72
+// Crossbars reach a little past the legs, like the real one's box trusses.
+const bar = (y: number, over: number): string => `M${legX(-1, y) - over} ${y} H${legX(1, y) + over}`
+const towerRedBars = [bar(lowBarY, 3), bar(waistY, 3), `M${-ARM - 11} ${armY} H${ARM + 11}`].join(
+  ' '
+)
+const towerPlatform = bar(platformY, 3)
+// The legs whole, in white; the red is laid over them at each joint.
+const towerLegs = [
+  legRun(-1, towerFeet[0], armY),
+  legRun(1, towerFeet[2], armY),
+  `M0 ${towerFeet[1]} V${armY}`
+].join(' ')
+const RED_SPANS: [number, number][] = [
+  [tower.base + 24, tower.base - 8],
+  [lowBarY + 7, lowBarY - 9],
+  [waistY + 6, waistY - 7],
+  [armY + 7, armY]
+]
+const towerLegRed = RED_SPANS.flatMap(([lo, hi]) => [
+  legRun(-1, lo, hi),
+  legRun(1, lo, hi),
+  `M0 ${lo} V${hi}`
+]).join(' ')
+// Masts above the crossarm: thin, banded red and white by dashes.
+const towerMasts = [
+  `M${-ARM} ${armY} V${towerTop}`,
+  `M${ARM} ${armY} V${towerTop}`,
+  `M0 ${armY} V${centerTop}`
+].join(' ')
+
+// Hover targets, in viewBox units: [x, y, w, h] around each scene.
+const nearY = (x: number): number => r1(yAt(nearPts, x))
+const midY = (x: number): number => r1(yAt(midPts, x))
+const hit = {
+  led: [LED_X - 24, midY(LED_X) - 72, LED_RES_X - LED_X + 46, 80],
+  lookout: [CAP_X - 30, midY(CAP_X) - (CAP.h + 4) * CAP_S - 62, DECOUPLE_X - CAP_X + 50, 136],
+  buzzer: [BUZZER_X - 28, nearY(BUZZER_X) - 58, TRANSISTOR_X - BUZZER_X + 40, 64],
+  pot: [leadL - 8, res.cy - 33, POT_X - leadL + 28, nearY(POT_X) - res.cy + 39],
+  tower: [tower.x - 34, towerTop - 24, 68, tower.base - towerTop + 28],
+  goats: [CENTER - 60, nearY(CENTER) - 64, 136, 70]
+}
+
+// Fixed-seed pseudo-random in [0, 1): stable between builds, so the art never
+// shifts from one deploy to the next.
+const hash = (n: number): number => {
+  const v = Math.sin(n * 12.9898 + 78.233) * 43758.5453
+  return v - Math.floor(v)
+}
+
+// The sky turns as one, the way the real one does: sun, glow and stars
+// rotate SKY_TURN about a single pivot far up and to the right (the
+// celestial pole, for someone facing west). So the sun sets down and to the
+// right at a slant — about 20° off vertical, a touch gentler than San
+// Francisco's true ~38°, which read as too steep a slide — and the stars
+// wheel into place along the same arc. The moon makes its own entrance. CSS applies the
+// turn; the numbers live here and reach CSS as custom properties.
+const SKY_PIVOT = { x: 2570, y: -266 }
+const SKY_TURN = -3
+const turn = ([x, y]: number[], deg: number): number[] => {
+  const a = (deg * Math.PI) / 180
+  const dx = x - SKY_PIVOT.x
+  const dy = y - SKY_PIVOT.y
+  return [
+    r1(SKY_PIVOT.x + dx * Math.cos(a) - dy * Math.sin(a)),
+    r1(SKY_PIVOT.y + dx * Math.sin(a) + dy * Math.cos(a))
+  ]
+}
+// Where something must be drawn by day so the night's turn lands it at p.
+const beforeTurn = (p: number[]): number[] => turn(p, -SKY_TURN)
+
+// Night sky, shown when the pot turns the sunset down: [x, y, r] where each
+// star lands once the sky has turned. Scattered by the fixed hash, then kept
+// out of the text column (x 520–1080), off the moon, and clear above the far
+// ridge; drawn at its before-turn position.
+const MOON = { x: 1330, y: 160 }
+const stars: number[][] = Array.from({ length: 160 }, (_, i) => [
+  r1(hash(i * 3 + 1) * W),
+  r1(100 + hash(i * 3 + 2) * 190),
+  r1(0.6 + hash(i * 3 + 3) ** 3 * 1.1)
+])
+  .filter(([x, y]) => x < 520 || x > 1080)
+  .filter(([x, y]) => Math.hypot(x - MOON.x, y - MOON.y) > 38)
+  .filter(([x, y]) => y < yAt(farPts, x) - 18)
+  .slice(0, 46)
+  .map(([x, y, r]) => [...beforeTurn([x, y]), r])
+
+// Tufts of grass along the near ridge.
+const tufts = [110, 210, 520, 620, 690, 900, 1080, 1180, 1330, 1470].map((x) => ({
+  x,
+  y: r1(yAt(nearPts, x) + 1)
+}))
+
+// Fog rolling over the hills, left to right like the marine layer coming in.
+// Each bank is a cluster of soft billows (see `billows`), parked off the
+// left edge and carried across by CSS. `over` is the ridge it drifts
+// across: 'far' banks pass in front of the far ridge and tower, 'mid' banks in
+// front of the mid hill, both behind the goats. `rest` is where a bank holds
+// still under reduced motion.
+interface FogBank {
+  over: 'far' | 'mid'
+  y: number
+  rx: number
+  ry: number
+  dur: number
+  delay: number
+  rest: number
+}
+const FOG_START = -420
+const fogBanks: FogBank[] = [
+  { over: 'far', y: 262, rx: 230, ry: 32, dur: 150, delay: -40, rest: 640 },
+  { over: 'far', y: 290, rx: 320, ry: 30, dur: 125, delay: -95, rest: 1500 },
+  { over: 'far', y: 300, rx: 260, ry: 24, dur: 170, delay: -150, rest: 1100 },
+  { over: 'mid', y: 352, rx: 300, ry: 28, dur: 140, delay: -20, rest: 1250 },
+  { over: 'mid', y: 336, rx: 220, ry: 22, dur: 185, delay: -120, rest: 1850 }
+]
+// A bank is a row of round billows over a flat base: tallest mid-bank, each
+// billow sized by a fixed hash so the tops are lumpy but stable between
+// builds. The lumpy top is what reads as a cloud rolling over a hill; a single
+// stretched ellipse reads as smog.
+const billows = (b: FogBank, seed: number): number[][] => {
+  const n = Math.max(3, Math.round((2 * b.rx) / 120))
+  const puffs = Array.from({ length: n }, (_, i) => {
+    const t = i / (n - 1)
+    const r = b.ry * (1.1 + 1.3 * Math.sin(Math.PI * t)) * (0.85 + 0.3 * hash(seed * 31 + i))
+    return [r1((-b.rx + t * 2 * b.rx) * 0.8), r1(b.ry * 0.35 - r * 0.45), r1(r * 1.5), r1(r)]
+  })
+  return [[0, r1(b.ry * 0.35), b.rx, r1(b.ry * 0.7)], ...puffs]
+}
+const fogFor = (over: FogBank['over']): FogBank[] => fogBanks.filter((b) => b.over === over)
+---
+
+<svg
+  class="hero-art can-hover"
+  viewBox={`0 0 ${W} ${H}`}
+  preserveAspectRatio="xMidYMax slice"
+  aria-hidden="true"
+  focusable="false"
+  style={`--sky-turn: ${SKY_TURN}deg; --sky-pivot: ${SKY_PIVOT.x}px ${SKY_PIVOT.y}px`}
+>
+  <defs>
+    <linearGradient id="ha-far" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0.4" class="stop-far-top"></stop>
+      <stop offset="0.75" class="stop-far-bottom"></stop>
+    </linearGradient>
+    <linearGradient id="ha-mid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0.55" class="stop-mid-top"></stop>
+      <stop offset="0.9" class="stop-mid-bottom"></stop>
+    </linearGradient>
+    <linearGradient id="ha-near" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0.75" class="stop-near-top"></stop>
+      <stop offset="1" class="stop-near-bottom"></stop>
+    </linearGradient>
+    <radialGradient id="ha-fog">
+      <stop offset="0" class="stop-fog"></stop>
+      <stop offset="0.55" class="stop-fog-mid"></stop>
+      <stop offset="1" class="stop-fog-edge"></stop>
+    </radialGradient>
+    <radialGradient id="ha-halo">
+      <stop offset="0" class="stop-halo"></stop>
+      <stop offset="1" class="stop-halo-edge"></stop>
+    </radialGradient>
+    <radialGradient id="ha-glow">
+      <stop offset="0" class="stop-glow"></stop>
+      <stop offset="0.45" class="stop-glow-mid"></stop>
+      <stop offset="1" class="stop-glow-edge"></stop>
+    </radialGradient>
+  </defs>
+
+  <g class="sky-turn">
+    <ellipse
+      class="glow"
+      cx={SUN.x}
+      cy={SUN.y + 10}
+      rx="760"
+      ry="250"
+      fill="url(#ha-glow)"
+    ></ellipse>
+    <circle class="sun" cx={SUN.x} cy={SUN.y} r="34"></circle>
+  </g>
+
+  <g class="layer-far">
+    <g class="spot spot-tower">
+      <rect
+        class="hit"
+        x={hit.tower[0]}
+        y={hit.tower[1]}
+        width={hit.tower[2]}
+        height={hit.tower[3]}
+      ></rect>
+      <g class="tower" transform={`translate(${tower.x} 0)`}>
+        <path class="tower-legs" d={towerLegs}></path>
+        <path class="tower-red" d={towerLegRed}></path>
+        <path class="tower-platform" d={towerPlatform}></path>
+        <path class="tower-bars" d={towerRedBars}></path>
+        <path class="tower-masts" d={towerMasts}></path>
+        <path class="tower-masts tower-masts-red" d={towerMasts}></path>
+        <circle class="beacon b1" cx={-ARM} cy={towerTop} r="2"></circle>
+        <circle class="beacon b2" cx="0" cy={centerTop} r="2"></circle>
+        <circle class="beacon b3" cx={ARM} cy={towerTop} r="2"></circle>
+        <g class="radio" transform={`translate(0 ${centerTop})`}>
+          <path class="wave w1" d="M-7 -6 A9 9 0 0 0 -7 6 M7 -6 A9 9 0 0 1 7 6"></path>
+          <path class="wave w2" d="M-12 -10 A15 15 0 0 0 -12 10 M12 -10 A15 15 0 0 1 12 10"></path>
+          <path class="wave w3" d="M-17 -14 A21 21 0 0 0 -17 14 M17 -14 A21 21 0 0 1 17 14"></path>
+        </g>
+      </g>
+    </g>
+    <path class="ground" d={hill(far)} fill="url(#ha-far)"></path>
+  </g>
+
+  <g class="fog fog-far">
+    {fogFor('far').map((b) => (
+      <g
+        class="fog-bank"
+        transform={`translate(${FOG_START} ${b.y})`}
+        style={`--dur: ${b.dur}s; --delay: ${b.delay}s; --rest: ${b.rest}px`}
+      >
+        <g class="drift">
+          {billows(b, b.y + b.rx).map(([cx, cy, rx, ry]) => (
+            <ellipse cx={cx} cy={cy} rx={rx} ry={ry} fill="url(#ha-fog)" />
+          ))}
+        </g>
+      </g>
+    ))}
+  </g>
+
+  <g class="layer-mid">
+    <path class="ground" d={hill(mid)} fill="url(#ha-mid)"></path>
+
+    <g class="spot spot-led">
+      <rect class="hit" x={hit.led[0]} y={hit.led[1]} width={hit.led[2]} height={hit.led[3]}></rect>
+      <g class="led" transform={on(midPts, LED_X, 1.25)}>
+        <circle class="led-halo" cx="0" cy="-30" r="34" fill="url(#ha-halo)"></circle>
+        <path class="part-lead" d="M-5 4 V-12 M5 4 V-6 L8 -9 V-12"></path>
+        <rect class="part-body" x="-14" y="-17" width="28" height="5" rx="1"></rect>
+        <path class="led-lens" d="M-12 -17 V-40 A12 12 0 0 1 12 -40 V-17 Z"></path>
+        <path class="part-shade" d="M-7 -17 V-27 L-1 -29 V-17 Z M3 -17 V-30 H6 V-17 Z"></path>
+        <path
+          class="part-light"
+          d="M-8.5 -22 V-40 A8.5 8.5 0 0 1 -4 -47.5 A10 10 0 0 0 -6 -40 V-22 Z"
+        ></path>
+      </g>
+      <g class="res-standing" transform={on(midPts, LED_RES_X, 1.25)}>
+        <path class="part-lead" d="M0 4 V-13 M0 -45 V-49 A5 5 0 0 1 10 -49 V4"></path>
+        <g transform="translate(0 -29) rotate(-90) scale(0.8)">
+          <path class="part-body" d={RES_BODY}></path>
+          <path class="res-bands" d={RES_BANDS}></path>
+        </g>
+      </g>
+    </g>
+
+    <g class="spot spot-lookout">
+      <rect
+        class="hit"
+        x={hit.lookout[0]}
+        y={hit.lookout[1]}
+        width={hit.lookout[2]}
+        height={hit.lookout[3]}
+      ></rect>
+      <g transform={on(midPts, DECOUPLE_X, CAP_S)}>
+        <path class="part-lead" d="M-4 4 V-7 L-3 -10 M4 4 V-7 L3 -10"></path>
+        <path
+          class="disc-body"
+          d="M-3 -9 C-10 -9 -11 -16 -10 -20 C-9 -26 -4 -28 0 -28 C4 -28 9 -26 10 -20 C11 -16 10 -9 3 -9 Z"
+        ></path>
+      </g>
+      <g class="can" transform={on(midPts, CAP_X, CAP_S)}>
+        <g transform={`translate(${-CAP.w / 2} 0)`}>
+          <path class="part-lead" d="M16 -8 V6 M32 -8 V6"></path>
+          <rect class="part-shade" x="4" y="-10" width={CAP.w - 8} height="6"></rect>
+          <path class="part-body" d={canBody}></path>
+          <rect
+            class="part-light"
+            x="2"
+            y={-CAP.h - 6}
+            width={CAP.w - 4}
+            height="4"
+            rx="1.5"
+          ></rect>
+          <rect class="part-light" x={CAP.w - 15} y={-CAP.h} width="10" height={CAP.h - 12}></rect>
+          <path
+            class="can-minus"
+            d={`M${CAP.w - 13} ${-CAP.h + 10} h6 M${CAP.w - 13} ${-CAP.h + 22} h6 M${CAP.w - 13} ${-CAP.h + 34} h6`}
+          ></path>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <g class="fog fog-mid">
+    {fogFor('mid').map((b) => (
+      <g
+        class="fog-bank"
+        transform={`translate(${FOG_START} ${b.y})`}
+        style={`--dur: ${b.dur}s; --delay: ${b.delay}s; --rest: ${b.rest}px`}
+      >
+        <g class="drift">
+          {billows(b, b.y + b.rx).map(([cx, cy, rx, ry]) => (
+            <ellipse cx={cx} cy={cy} rx={rx} ry={ry} fill="url(#ha-fog)" />
+          ))}
+        </g>
+      </g>
+    ))}
+  </g>
+
+  <g class="layer-near">
+    <path class="ground" d={hill(near)} fill="url(#ha-near)"></path>
+
+    <g class="spot spot-pot">
+      <rect class="hit" x={hit.pot[0]} y={hit.pot[1]} width={hit.pot[2]} height={hit.pot[3]}></rect>
+      <g class="resistor">
+        <path class="part-lead" d={resLeads}></path>
+        <g transform={`translate(${res.cx} ${res.cy})`}>
+          <path class="part-body" d={RES_BODY}></path>
+          <path class="res-bands" d={RES_BANDS}></path>
+        </g>
+      </g>
+
+      <g class="pot" transform={on(nearPts, POT_X)}>
+        <path class="part-lead" d="M-7 4 V-8 M0 4 V-8 M7 4 V-8"></path>
+        <rect class="part-body" x="-13" y="-34" width="26" height="26" rx="3"></rect>
+        <circle class="part-light" cx="0" cy="-21" r="9"></circle>
+        <rect class="part-shade pot-slot" x="-1.5" y="-28" width="3" height="14" rx="1"></rect>
+      </g>
+    </g>
+
+    <g class="spot spot-buzzer">
+      <rect
+        class="hit"
+        x={hit.buzzer[0]}
+        y={hit.buzzer[1]}
+        width={hit.buzzer[2]}
+        height={hit.buzzer[3]}
+      ></rect>
+      <g transform={on(nearPts, TRANSISTOR_X)}>
+        <path class="part-lead" d="M-5 4 V-10 M0 4 V-10 M5 4 V-10"></path>
+        <path class="part-body" d="M-8 -9 V-22 Q-8 -29 0 -29 Q8 -29 8 -22 V-9 Z"></path>
+      </g>
+      <g class="speaker" transform={on(nearPts, BUZZER_X)}>
+        <path class="part-lead" d="M0 4 V-8 M10 4 V-11"></path>
+        <rect class="part-shade" x="7" y="-25" width="9" height="14" rx="1.5"></rect>
+        <path class="part-body" d="M7 -24 L-6 -31 L-6 -5 L7 -12 Z"></path>
+        <rect class="part-light" x="-9" y="-32" width="4" height="28" rx="2"></rect>
+        <g class="sound">
+          <path class="wave w1" d="M-13 -23 A7 7 0 0 0 -13 -13"></path>
+          <path class="wave w2" d="M-17 -27 A12 12 0 0 0 -17 -9"></path>
+          <path class="wave w3" d="M-21 -31 A17 17 0 0 0 -21 -5"></path>
+        </g>
+      </g>
+    </g>
+
+    <g class="spot spot-goats">
+      <rect
+        class="hit"
+        x={hit.goats[0]}
+        y={hit.goats[1]}
+        width={hit.goats[2]}
+        height={hit.goats[3]}
+      ></rect>
+    </g>
+
+    <g class="tufts">
+      {tufts.map((t) => (
+        <path d={`M${t.x} ${t.y} l-3 -8 M${t.x + 2} ${t.y} l0 -10 M${t.x + 4} ${t.y} l3 -7`} />
+      ))}
+    </g>
+  </g>
+
+  {goats.map((g) => (
+    <g
+      class={`goat ${g.cls}`}
+      transform={goatTransform(g)}
+      style={`--nap: ${g.nap}ms`}
+      set:html={goatSvg(g.pose)}
+    />
+  ))}
+
+  <rect class="night" width={W} height={H}></rect>
+  {goats.map((g) => (
+    <g class="zzz" transform={zzzAt(g)} style={`--nap: ${g.nap}ms`}>
+      <path class="z z1" d="M0 0 h4 l-4 4 h4" />
+      <g transform="translate(6 -8) scale(1.3)">
+        <path class="z z2" d="M0 0 h4 l-4 4 h4" />
+      </g>
+      <g transform="translate(13 -18) scale(1.6)">
+        <path class="z z3" d="M0 0 h4 l-4 4 h4" />
+      </g>
+    </g>
+  ))}
+  <g class="sky-turn">
+    <g class="stars">
+      {stars.map(([cx, cy, r], i) => (
+        <g
+          transform={`translate(${cx} ${cy})`}
+          style={`--tw: ${r1(1.6 + hash(i + 7) * 2.2)}s; --td: ${r1(-hash(i + 19) * 3)}s`}
+        >
+          <g class="star">
+            <circle r={r} />
+            {r >= 1.3 && (
+              <path
+                class="glint"
+                d="M0 -5 L0.6 -0.6 L5 0 L0.6 0.6 L0 5 L-0.6 0.6 L-5 0 L-0.6 -0.6 Z"
+              />
+            )}
+          </g>
+        </g>
+      ))}
+    </g>
+  </g>
+  <g class="moon-spot" transform={`translate(${MOON.x} ${MOON.y})`}>
+    <path class="moon" d="M0 -18 A18 18 0 1 0 0 18 A12.5 18 0 1 1 0 -18 Z"></path>
+  </g>
+</svg>
+
+<script>
+  // Touch screens have no hover: a tap turns a hover scene on (tap it again,
+  // or anywhere else, to turn it off; one at a time). Where hover exists this
+  // does nothing, and without JS the scenes are hover-only as before.
+  ;(() => {
+    if (!matchMedia('(hover: none)').matches) return
+    const art = document.querySelector('.hero-art')
+    if (!art) return
+    art.classList.remove('can-hover')
+    let on: Element | null = null
+    const set = (spot: Element | null) => {
+      if (on) on.classList.remove('is-on')
+      on = spot && spot !== on ? spot : null
+      if (on) on.classList.add('is-on')
+    }
+    // Listening on each scene (not just the document) is what makes iOS
+    // treat the SVG groups as tappable.
+    for (const spot of art.querySelectorAll('.spot')) {
+      spot.addEventListener('click', () => set(spot))
+    }
+    document.addEventListener('pointerdown', (e) => {
+      if (on && !on.contains(e.target as Node)) set(null)
+    })
+  })()
+</script>
+
+<style>
+  /* Colors: golden hour on the forest family (BRAND.md §2). The
+     top of the scene stays page-dark so it meets the text above; the land
+     lifts into real greens toward the horizon glow. Copper only through
+     --accent: the glow, sun, sound waves and fog tint all mix from it. The landing
+     page is pinned dark, so the land tones are literal values. */
+  .hero-art {
+    display: block;
+    width: 100%;
+    height: clamp(190px, 40vw, 640px);
+    --ha-far-top: #33463b;
+    --ha-far-bottom: #2a3b32;
+    --ha-mid-top: #243429;
+    --ha-mid-bottom: #1e2c24;
+    --ha-near-top: #1a261f;
+    --ha-near-bottom: #151c19;
+    --ha-warm: color-mix(in srgb, var(--accent) 60%, #c5d3cd);
+    --ha-glow: var(--accent);
+    --ha-sun: color-mix(in srgb, var(--accent) 55%, #fff4dc);
+    --ha-fog: color-mix(in srgb, var(--accent) 22%, #ffffff);
+    /* Sutro's international orange, dulled by distance and dusk: the copper
+       accent pulled toward brick red, then into the far ridge's green. */
+    --ha-tower: color-mix(
+      in srgb,
+      color-mix(in srgb, var(--accent) 30%, #b0341f) 62%,
+      var(--ha-far-top)
+    );
+    --ha-tower-white: color-mix(in srgb, var(--ha-goat) 42%, var(--ha-far-top));
+    --ha-tuft: #4f6653;
+    --ha-goat: #e6dece;
+    --ha-goat-far: #a59d8b;
+    --ha-goat-brown: #a07d5a;
+    --ha-goat-brown-far: #6f5840;
+    /* One tone for every part, near or far: a gray-green a step lighter
+       than every hill it stands on, so the parts read against all of them. */
+    --ha-part: #45544c;
+    --ha-part-shade: #323e38;
+    --ha-part-light: #7a8b81;
+    --ha-lead: color-mix(in srgb, var(--accent) 55%, #151c19);
+    /* When the first sound wave is up (see .wave): the goats hear it then. */
+    --hear: 320ms;
+    /* How long a goat takes to notice the LED come on. */
+    --notice: 250ms;
+    /* When the sun is down and the goats settle for the night. */
+    --dusk: 1000ms;
+  }
+
+  /* Phones: simplify rather than shrink. Shrunk whole, the scene is specks.
+     Instead show its middle — tower to lookout, x ≈ 350–1330, leaving each
+     a margin from the screen edge — at well over the shrunk size. The SVG is
+     sized wider than the screen and shifted; the hero clips it. */
+  @media (max-width: 600px) {
+    .hero-art {
+      /* global.css caps svg at 100% width; this crop needs it wider. */
+      max-width: none;
+      width: calc(100vw * 1600 / 980);
+      height: auto;
+      aspect-ratio: 1600 / 560;
+      margin-left: calc(-100vw * 350 / 980);
+    }
+    /* The pot scene sits at the crop's left edge, so on phones it steps in
+       toward the goats — night is the best scene, and on a phone it's a tap
+       away. */
+    .spot-pot {
+      transform: translate(100px, 13px);
+    }
+    /* The moon sits right at the crop's edge, and the top of the art is
+       under the text here: step it in and down, beside the lookout. */
+    .moon-spot {
+      transform: translate(1272px, 222px);
+    }
+  }
+
+  .stop-far-top {
+    stop-color: var(--ha-far-top);
+  }
+  .stop-far-bottom {
+    stop-color: var(--ha-far-bottom);
+  }
+  .stop-mid-top {
+    stop-color: var(--ha-mid-top);
+  }
+  .stop-mid-bottom {
+    stop-color: var(--ha-mid-bottom);
+  }
+  .stop-near-top {
+    stop-color: var(--ha-near-top);
+  }
+  .stop-near-bottom {
+    stop-color: var(--ha-near-bottom);
+  }
+
+  .stop-glow,
+  .stop-glow-mid,
+  .stop-glow-edge {
+    stop-color: var(--ha-glow);
+    stop-opacity: 0.3;
+  }
+  .stop-glow-mid {
+    stop-opacity: 0.1;
+  }
+  .stop-glow-edge {
+    stop-opacity: 0;
+  }
+  .sun {
+    fill: var(--ha-sun);
+    opacity: 0.75;
+  }
+
+  /* Warm-white and backlit, so the fog glows rather than smothers. */
+  .stop-fog,
+  .stop-fog-mid,
+  .stop-fog-edge {
+    stop-color: var(--ha-fog);
+    stop-opacity: 0.11;
+  }
+  .stop-fog-mid {
+    stop-opacity: 0.05;
+  }
+  .stop-fog-edge {
+    stop-opacity: 0;
+  }
+
+  .tower-legs,
+  .tower-red,
+  .tower-platform,
+  .tower-bars,
+  .tower-masts {
+    fill: none;
+    stroke: var(--ha-tower);
+    stroke-width: 2.2;
+    stroke-linecap: butt;
+    stroke-linejoin: round;
+  }
+  .tower-legs,
+  .tower-platform,
+  .tower-masts {
+    stroke: var(--ha-tower-white);
+  }
+  .tower-bars {
+    stroke-width: 3;
+  }
+  .tower-platform {
+    stroke-width: 2.4;
+  }
+  .tower-masts {
+    stroke-width: 1.4;
+  }
+  .tower-masts-red {
+    stroke: var(--ha-tower);
+    stroke-dasharray: 5 5;
+  }
+  .beacon {
+    fill: var(--accent);
+    opacity: 0.6;
+  }
+
+  /* Parts: one shared flat recipe. */
+  .part-body {
+    fill: var(--ha-part);
+  }
+  .part-shade,
+  .can-minus {
+    fill: var(--ha-part-shade);
+    stroke: var(--ha-part-shade);
+  }
+  .can-minus {
+    stroke-width: 2;
+  }
+  .part-light {
+    fill: var(--ha-part-light);
+  }
+  .part-lead {
+    fill: none;
+    stroke: var(--ha-lead);
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+  .res-bands {
+    stroke: var(--accent);
+    stroke-width: 3;
+    opacity: 0.5;
+  }
+  /* Ceramic discs: the same dulled amber family as the LED lens. */
+  .disc-body {
+    fill: color-mix(in srgb, var(--accent) 22%, var(--ha-part));
+  }
+  /* Unlit: amber gone dull, the way an LED looks with no current. */
+  .led-lens {
+    --led-off: color-mix(in srgb, var(--accent) 28%, var(--ha-part));
+    --led-on: color-mix(in srgb, var(--accent) 70%, #fff4d6);
+    fill: var(--led-off);
+  }
+
+  .tufts path {
+    fill: none;
+    stroke: var(--ha-tuft);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+  }
+
+  .goat {
+    fill: var(--ha-goat);
+  }
+  .goat :global(.eye) {
+    fill: #151c19;
+  }
+  .goat :global(.legs),
+  .goat :global(.far-legs) {
+    fill: none;
+    stroke: var(--ha-goat);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .goat :global(.far-legs) {
+    stroke: var(--ha-goat-far);
+  }
+  /* The nanny is brown; her kid and the lookout are cream. */
+  .goat-graze {
+    fill: var(--ha-goat-brown);
+  }
+  .goat-graze :global(.legs) {
+    stroke: var(--ha-goat-brown);
+  }
+  .goat-graze :global(.far-legs) {
+    stroke: var(--ha-goat-brown-far);
+  }
+
+  /* --- Hover scenes. Feedback lands at the app's ~70ms; anything that
+     plays out (a hop, a sunrise) starts on that beat and runs its course. --- */
+  .spot {
+    pointer-events: auto;
+  }
+  .hit {
+    fill: none;
+    pointer-events: all;
+  }
+
+  /* Light: the LED powers on. A clean ramp, never a flicker (that reads as
+     a failing part): the lens brightens from the first frame, and the halo
+     swells into a bloom that slightly overshoots and settles, ~380ms end to
+     end. Switching off is a plain fade. */
+  .stop-halo {
+    stop-color: var(--accent);
+    stop-opacity: 0.55;
+  }
+  .stop-halo-edge {
+    stop-color: var(--accent);
+    stop-opacity: 0;
+  }
+  .led-halo {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    transition: opacity 400ms ease-out;
+  }
+  .led-lens {
+    transition: fill 400ms ease-out;
+  }
+  .spot-led:is(.is-on, .can-hover :hover) .led-halo {
+    opacity: 1;
+    animation: ha-led-halo 380ms cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+  .spot-led:is(.is-on, .can-hover :hover) .led-lens {
+    fill: var(--led-on);
+    transition: fill 180ms ease-out;
+  }
+  @keyframes ha-led-halo {
+    0% {
+      opacity: 0.3;
+      transform: scale(0.5);
+    }
+    60% {
+      opacity: 1;
+      transform: scale(1.12);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* The LED catches the nearby goats' eye: a beat after it lights, the
+     nanny lifts her head and the kid tips its chin up toward it. (Both face
+     it already; the lookout faces away and doesn't notice.) */
+  .hero-art:has(.spot-led:is(.is-on, .can-hover :hover)) .goat-graze :global(.head) {
+    animation: ha-hide 0s linear var(--notice) forwards;
+  }
+  .hero-art:has(.spot-led:is(.is-on, .can-hover :hover)) .goat-graze :global(.head-alert) {
+    animation: ha-show 0s linear var(--notice) forwards;
+  }
+  .goat-kid :global(.head) {
+    transform-origin: 8px -22px;
+    transition: transform 300ms ease-out;
+  }
+  .hero-art:has(.spot-led:is(.is-on, .can-hover :hover)) .goat-kid :global(.head) {
+    transform: rotate(-14deg);
+    transition-delay: var(--notice);
+  }
+
+  /* Greet: the kid turns round to face its mother and steps in, she lifts
+     her head and dips it to touch noses, and both wag. The goats are drawn
+     over this scene's hit area, so they are what you hover. The turn is a
+     flip of the kid's stance in its own (already mirrored) frame. */
+  .goat-kid :global(.stance) {
+    transform-origin: 0 0;
+    /* Spelled out in the same form as the turned pose so the turn tweens
+       scaleX straight through (a flat cartoon turn). From 'none', the browser
+       would blend the mirror as a matrix and spin the kid round. */
+    transform: translateX(0) scaleX(1);
+  }
+  .hero-art:has(.spot-goats:is(.is-on, .can-hover :hover)) .goat-kid :global(.stance) {
+    /* The idle hop animates this transform; it has to stand down. */
+    animation: none;
+    transform: translateX(-5px) scaleX(-1);
+    transition: transform 280ms ease-in-out;
+  }
+
+  .hero-art:has(.spot-goats:is(.is-on, .can-hover :hover)) .goat-graze :global(.head) {
+    animation: ha-hide 0s linear 200ms forwards;
+  }
+  .hero-art:has(.spot-goats:is(.is-on, .can-hover :hover)) .goat-graze :global(.head-alert) {
+    animation: ha-show 0s linear 200ms forwards;
+    transform: rotate(38deg);
+    transition: transform 300ms ease-out 200ms;
+  }
+  .goat :global(.tail) {
+    transform-box: fill-box;
+    transform-origin: 90% 100%;
+  }
+  .hero-art:has(.spot-goats:is(.is-on, .can-hover :hover)) .goat-kid :global(.tail),
+  .hero-art:has(.spot-goats:is(.is-on, .can-hover :hover)) .goat-graze :global(.tail) {
+    animation: ha-wag 220ms ease-in-out infinite alternate 250ms;
+  }
+
+  /* Joy: the lookout wags its tail, quick and happy, chin up. The tail's
+     pivot is set with its idle flick below. */
+  .hero-art:has(.spot-lookout:is(.is-on, .can-hover :hover)) .goat-lookout :global(.tail) {
+    animation: ha-wag 240ms ease-in-out infinite alternate;
+  }
+  @keyframes ha-wag {
+    from {
+      transform: rotate(-30deg);
+    }
+    to {
+      transform: rotate(12deg);
+    }
+  }
+  .goat-lookout :global(.head) {
+    transition: transform 250ms ease-out;
+  }
+  .hero-art:has(.spot-lookout:is(.is-on, .can-hover :hover)) .goat-lookout :global(.head) {
+    animation: none;
+    transform: rotate(-10deg);
+  }
+
+  /* The kid's startle jump (see Sound). */
+  @keyframes ha-hop {
+    0% {
+      transform: translateY(0);
+    }
+    10% {
+      transform: translateY(2px);
+    }
+    45% {
+      transform: translateY(-18px);
+    }
+    80% {
+      transform: translateY(0);
+    }
+    90% {
+      transform: translateY(1px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  /* Waves, shared by sound and radio: rings pulse outward in turn. */
+  .wave {
+    fill: none;
+    stroke: var(--ha-warm);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+  }
+  /* The speaker's waves leave the cone sideways, toward the goats. */
+  .sound .wave {
+    transform-origin: 100% 50%;
+  }
+  .radio .wave {
+    stroke: var(--accent);
+    transform-origin: 50% 50%;
+  }
+  .spot-buzzer:is(.is-on, .can-hover :hover) .wave,
+  .spot-tower:is(.is-on, .can-hover :hover) .wave {
+    animation: ha-wave 1.1s ease-out infinite;
+  }
+  .spot-buzzer:is(.is-on, .can-hover :hover) .w2,
+  .spot-tower:is(.is-on, .can-hover :hover) .w2 {
+    animation-delay: 0.18s;
+  }
+  .spot-buzzer:is(.is-on, .can-hover :hover) .w3,
+  .spot-tower:is(.is-on, .can-hover :hover) .w3 {
+    animation-delay: 0.36s;
+  }
+  @keyframes ha-wave {
+    0% {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+    25% {
+      opacity: 0.9;
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.15);
+    }
+  }
+
+  /* Sound: the goats react once the first wave is visible, not the instant
+     the speaker is hovered — sound has to reach them. The nanny's head comes
+     up (the grazer carries an alert head, hidden until then) and the kid
+     startles. The swap runs as zero-length animations so it can be delayed;
+     `display` can't be. */
+  .goat :global(.head-alert) {
+    visibility: hidden;
+  }
+  .hero-art:has(.spot-buzzer:is(.is-on, .can-hover :hover)) .goat-graze :global(.head) {
+    animation: ha-hide 0s linear var(--hear) forwards;
+  }
+  .hero-art:has(.spot-buzzer:is(.is-on, .can-hover :hover)) .goat-graze :global(.head-alert) {
+    animation: ha-show 0s linear var(--hear) forwards;
+  }
+  .hero-art:has(.spot-buzzer:is(.is-on, .can-hover :hover)) .goat-kid :global(.stance) {
+    animation: ha-hop 500ms cubic-bezier(0.3, 0.7, 0.4, 1) var(--hear);
+  }
+  @keyframes ha-hide {
+    to {
+      visibility: hidden;
+    }
+  }
+  @keyframes ha-show {
+    to {
+      visibility: visible;
+    }
+  }
+
+  /* Radio: the mast lights flare while it broadcasts. */
+  .beacon {
+    transition: opacity 70ms ease-out;
+  }
+  .spot-tower:is(.is-on, .can-hover :hover) .beacon {
+    opacity: 1;
+  }
+
+  /* Night: the trimmer turns down, the sun sinks behind the ridge, the glow
+     goes out, a cool dark settles over everything, and the stars, the moon
+     and the tower's lights come out. The sun's setting and the stars'
+     arrival are one motion: the sky turns (see SKY_TURN). Undoing it runs the same way back. */
+  .pot-slot {
+    transform-origin: 0 -21px;
+    transition: transform 700ms ease-in-out;
+  }
+  .spot-pot:is(.is-on, .can-hover :hover) .pot-slot {
+    transform: rotate(-150deg);
+  }
+  .sky-turn {
+    transform-box: view-box;
+    transform-origin: var(--sky-pivot);
+    transition: transform 1600ms ease-in-out;
+  }
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .sky-turn {
+    transform: rotate(var(--sky-turn));
+  }
+  .glow {
+    transition: opacity 1200ms ease-in-out;
+  }
+  .night {
+    fill: #07121a;
+    opacity: 0;
+    transition: opacity 1200ms ease-in-out;
+  }
+  .stars circle {
+    fill: #f4f1e6;
+  }
+  .stars,
+  .moon {
+    opacity: 0;
+    transition: opacity 600ms ease-out;
+  }
+  .moon {
+    fill: #f1ead3;
+    transform: translate(-46px, 34px) rotate(-18deg);
+    transition:
+      opacity 600ms ease-out,
+      transform 1400ms cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+  .glint {
+    fill: #f4f1e6;
+    opacity: 0.7;
+  }
+  .star {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+  }
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .star {
+    animation: ha-twinkle var(--tw) ease-in-out infinite var(--td);
+  }
+  @keyframes ha-twinkle {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    45% {
+      opacity: 0.25;
+      transform: scale(0.6);
+    }
+    60% {
+      opacity: 0.9;
+      transform: scale(1.15);
+    }
+  }
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .glow {
+    opacity: 0;
+  }
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .night {
+    opacity: 0.55;
+  }
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .stars {
+    opacity: 0.85;
+    transition-delay: 700ms;
+  }
+  /* The moon rises into place along its own short arc as it fades in. */
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .moon {
+    opacity: 0.9;
+    transform: none;
+    transition-delay: 400ms;
+  }
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .beacon {
+    opacity: 1;
+  }
+
+  /* Sleep: once the sun is down, every goat lies down — legs folding under
+     as the body lowers, head tucked, eyes shut — and z's drift up. They get up
+     again as soon as the sun does. */
+  .goat :global(.stance) {
+    transition: transform 600ms ease-in-out;
+  }
+  /* As the body lowers, the standing legs draw up from the hip and the
+     folded legs take their place as it lands. Eyes swap to a closed curve. */
+  .goat :global(.legs),
+  .goat :global(.far-legs) {
+    transform-box: fill-box;
+    transform-origin: 50% 0;
+    transition: transform 600ms ease-in-out;
+  }
+  .goat :global(.eye-shut) {
+    fill: none;
+    stroke: #151c19;
+    stroke-width: 0.8;
+    stroke-linecap: round;
+    opacity: 0;
+  }
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .goat :global(.stance) {
+    animation: none;
+    transform: translateY(11px);
+    transition-delay: calc(var(--dusk) + var(--nap));
+  }
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .goat :global(.legs),
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .goat :global(.far-legs) {
+    transform: scaleY(0);
+    transition-delay: calc(var(--dusk) + var(--nap));
+  }
+  /* The resting pose: front leg bent forward under the chest, hind leg
+     tucked under the hip, drawn in as the body lands. */
+  .goat :global(.legs-folded) {
+    fill: none;
+    stroke: var(--ha-goat);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0;
+    transition: opacity 150ms ease-out;
+  }
+  .goat-graze :global(.legs-folded) {
+    stroke: var(--ha-goat-brown);
+  }
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .goat :global(.legs-folded) {
+    opacity: 1;
+    transition-delay: calc(var(--dusk) + var(--nap) + 420ms);
+  }
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .goat :global(.eye) {
+    animation: ha-hide 0s linear calc(var(--dusk) + var(--nap) + 400ms) forwards;
+  }
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .goat :global(.eye-shut) {
+    animation: ha-show-op 0s linear calc(var(--dusk) + var(--nap) + 400ms) forwards;
+  }
+  @keyframes ha-show-op {
+    to {
+      opacity: 1;
+    }
+  }
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .goat :global(.head),
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .goat :global(.tail) {
+    animation: none;
+  }
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .goat-kid :global(.head),
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .goat-lookout :global(.head) {
+    transform: rotate(30deg);
+    transition: transform 600ms ease-in-out calc(var(--dusk) + var(--nap));
+  }
+  /* The nanny sleeps with her head up and tucked like the others: a grazing
+     neck laid on the ground reads as collapsed, not asleep. */
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .goat-graze :global(.head) {
+    animation: ha-hide 0s linear calc(var(--dusk) + var(--nap)) forwards;
+  }
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .goat-graze :global(.head-alert) {
+    animation: ha-show 0s linear calc(var(--dusk) + var(--nap)) forwards;
+    transform: rotate(30deg);
+  }
+  .goat-graze :global(.head-alert) {
+    transform-origin: 8px -22px;
+  }
+  .z {
+    fill: none;
+    stroke: #f4f1e6;
+    stroke-width: 0.9;
+    stroke-linejoin: round;
+    opacity: 0;
+  }
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .z {
+    animation: ha-z 4.8s ease-in-out infinite;
+  }
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .z1 {
+    animation-delay: calc(var(--dusk) + var(--nap) + 900ms);
+  }
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .z2 {
+    animation-delay: calc(var(--dusk) + var(--nap) + 2500ms);
+  }
+  .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .z3 {
+    animation-delay: calc(var(--dusk) + var(--nap) + 4100ms);
+  }
+  @keyframes ha-z {
+    0%,
+    100% {
+      opacity: 0;
+    }
+    35%,
+    55% {
+      opacity: 0.4;
+    }
+  }
+
+  /* --- Motion. Every loop runs at its own period so nothing syncs into a
+     chorus line, and each one is slow enough to be ambient. --- */
+
+  /* The grazer nibbles: a small dip of the whole neck from the withers. */
+  .goat-graze :global(.head) {
+    transform-origin: 8px -22px;
+    animation: ha-nibble 6.5s ease-in-out infinite -2.5s;
+  }
+  @keyframes ha-nibble {
+    0%,
+    60%,
+    100% {
+      transform: rotate(0deg);
+    }
+    68%,
+    76% {
+      transform: rotate(7deg);
+    }
+    72% {
+      transform: rotate(4deg);
+    }
+  }
+
+  /* The kid pronks now and then, the way young goats do for no reason. */
+  .goat-kid :global(.stance) {
+    animation: ha-pronk 9s ease-out infinite 2s;
+  }
+  @keyframes ha-pronk {
+    0%,
+    86%,
+    100% {
+      transform: translateY(0);
+    }
+    90% {
+      transform: translateY(-9px);
+    }
+    94% {
+      transform: translateY(0);
+    }
+  }
+
+  /* The lookout turns to take in the view: a slow lift of the chin. */
+  .goat-lookout :global(.head) {
+    transform-origin: 8px -22px;
+    animation: ha-look 13s ease-in-out infinite;
+  }
+  @keyframes ha-look {
+    0%,
+    40%,
+    100% {
+      transform: rotate(0deg);
+    }
+    48%,
+    70% {
+      transform: rotate(-8deg);
+    }
+  }
+
+  .goat-lookout :global(.tail) {
+    transform-box: fill-box;
+    transform-origin: 90% 100%;
+    animation: ha-flick 6s ease-in-out infinite;
+  }
+  @keyframes ha-flick {
+    0%,
+    90%,
+    100% {
+      transform: rotate(0deg);
+    }
+    93%,
+    97% {
+      transform: rotate(-24deg);
+    }
+    95% {
+      transform: rotate(8deg);
+    }
+  }
+
+  /* Fog crosses the whole viewBox and wraps; every bank has its own period
+     so the sky never repeats in step. */
+  .fog-mid {
+    opacity: 0.75;
+  }
+  .drift {
+    animation: ha-pass var(--dur) linear infinite var(--delay);
+  }
+  @keyframes ha-pass {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(2440px);
+    }
+  }
+
+  /* global.css already brakes all animation under reduced motion, but the
+     motif states its own contract so it stays correct when lifted into the
+     Electron app. The still frame is a composed one: the grazer mid-graze,
+     fog banks spread across the ridges. */
+  @media (prefers-reduced-motion: reduce) {
+    .goat :global(.head),
+    .goat :global(.tail),
+    .goat :global(.stance),
+    .drift {
+      animation: none;
+    }
+    .drift {
+      transform: translateX(var(--rest));
+    }
+    /* Hover scenes keep their idea without the motion: waves show still,
+       the LED still lights, the lookout still lifts its chin; the wag and the kid's
+       jump are dropped. */
+    .spot-buzzer:is(.is-on, .can-hover :hover) .wave,
+    .spot-tower:is(.is-on, .can-hover :hover) .wave {
+      animation: none;
+      opacity: 0.7;
+    }
+    .hero-art:has(.spot-buzzer:is(.is-on, .can-hover :hover)) .goat-kid :global(.stance),
+    .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .star {
+      animation: none;
+    }
+    .moon {
+      transform: none;
+    }
+    .hero-art:has(.spot-goats:is(.is-on, .can-hover :hover)) .goat-kid :global(.stance),
+    .hero-art:has(.spot-goats:is(.is-on, .can-hover :hover)) .goat :global(.tail) {
+      animation: none;
+    }
+    .hero-art:has(.spot-pot:is(.is-on, .can-hover :hover)) .z {
+      animation: none;
+      opacity: 0.35;
+    }
+  }
+</style>

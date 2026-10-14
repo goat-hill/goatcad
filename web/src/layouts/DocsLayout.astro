@@ -1,0 +1,385 @@
+---
+import type { MarkdownHeading } from 'astro'
+import type { CollectionEntry } from 'astro:content'
+import Base from './Base.astro'
+import ThemeToggle from '../components/ThemeToggle.astro'
+import InstallMatrix from '../components/InstallMatrix.astro'
+
+/*
+ * The docs shell: nav rail + article, wrapped around Base so the head/nav/footer
+ * stay identical to the rest of the site. This is the whole "docs theme" — no
+ * framework, same tokens as the landing page. Markdown-rendered prose is styled
+ * through :global() below (scoped styles can't reach slotted <Content/> output).
+ *
+ * Two deliberate differences from the landing page (see WEB.md "Docs"):
+ *   - Legibility over atmosphere. Body prose is --text, not --text-muted; muted
+ *     is for chrome only. Docs are read line by line, not scanned.
+ *   - Light/dark. colorScheme="auto" follows the OS, with ThemeToggle as the
+ *     override. The landing page stays pinned dark.
+ *
+ * There is no on-this-page TOC column — it duplicated navigation and cost the
+ * prose a third of the width. The rail carries the current page's h2s instead.
+ */
+interface Props {
+  entry: CollectionEntry<'docs'>
+  nav: CollectionEntry<'docs'>[]
+  headings: MarkdownHeading[]
+}
+
+const { entry, nav, headings } = Astro.props
+
+const hrefFor = (id: string) => (id === 'index' ? '/docs' : `/docs/${id}`)
+const currentHref = hrefFor(entry.id)
+
+// Second level of the rail: the current page's h2s, so a section is one click
+// away without a separate on-this-page column. h2 only — h3 would turn a nav
+// rail into an outline, and Astro slugs every heading for the anchors.
+const sections = headings.filter((h) => h.depth === 2)
+---
+
+<Base title={entry.data.title} description={entry.data.description} colorScheme="auto">
+  <div class="docs page">
+    <aside class="sidebar" aria-label="Documentation">
+      <p class="sidebar-label">Documentation</p>
+      <ul>
+        {nav.map((item) => {
+          const href = hrefFor(item.id)
+          const isCurrent = href === currentHref
+          return (
+            <li>
+              <a
+                href={href}
+                aria-current={isCurrent ? 'page' : undefined}
+                class:list={[{ current: isCurrent }]}
+              >
+                {item.data.title}
+              </a>
+              {isCurrent && sections.length > 0 && (
+                <ul class="sections">
+                  {sections.map((h) => (
+                    <li>
+                      <a href={`#${h.slug}`}>{h.text}</a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          )
+        })}
+      </ul>
+      <div class="sidebar-foot">
+        <ThemeToggle />
+      </div>
+    </aside>
+
+    <article class="content">
+      <header class="doc-header">
+        <h1>{entry.data.title}</h1>
+      </header>
+      {entry.data.installMatrix && <InstallMatrix />}
+      <slot />
+    </article>
+  </div>
+</Base>
+
+<style>
+  .docs {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-block: clamp(1.75rem, 4vw, 3rem);
+    align-items: start;
+
+    /* Docs run one notch smaller than the marketing type so more of a page is
+       visible at once, with the line-height raised to pay the legibility back. */
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    --measure: 80ch;
+  }
+
+  /* Sidebar becomes a sticky left rail on desktop. Below that it stacks above
+     the article — a handful of links stacked is fine and needs no JS
+     disclosure. */
+  @media (min-width: 900px) {
+    .docs {
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: clamp(2.5rem, 5vw, 4rem);
+    }
+  }
+
+  /* --- Sidebar --- */
+  .sidebar-label {
+    color: var(--brand-ink);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .sidebar ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .sidebar a {
+    display: block;
+    padding: 0.4rem 0.7rem;
+    border-radius: var(--radius);
+    color: var(--text);
+    border-left: 2px solid transparent;
+    transition:
+      color var(--transition),
+      background var(--transition);
+  }
+
+  .sidebar a:hover {
+    color: var(--text-bright);
+    background: var(--bg-raised);
+    text-decoration: none;
+  }
+
+  .sidebar a.current {
+    color: var(--text-bright);
+    background: var(--bg-panel);
+    border-left-color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Second level: indented under the current page, quieter than the page links
+     so the rail still reads as a list of pages first. */
+  .sections {
+    margin: 0.15rem 0 0.5rem;
+    padding-left: 0.85rem;
+    border-left: 1px solid var(--border);
+    gap: 0;
+  }
+
+  .sections a {
+    padding: 0.2rem 0.6rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    border-left: 0;
+  }
+
+  .sections a:hover {
+    color: var(--text-bright);
+    background: none;
+  }
+
+  .sidebar-foot {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  @media (min-width: 900px) {
+    .sidebar {
+      position: sticky;
+      top: 80px;
+      align-self: start;
+    }
+  }
+
+  /* --- Article header --- */
+  .content {
+    min-width: 0;
+  }
+
+  .doc-header {
+    margin-bottom: 1.75rem;
+  }
+
+  /* The frontmatter description is the page's meta/social summary, not a lede:
+     repeating it under the title just makes the reader scroll past a sentence
+     they were about to read in the first paragraph anyway. */
+  .doc-header h1 {
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+  }
+
+  /* --- Markdown prose (:global — the slotted <Content/> is outside scope) --- */
+  /* Each section opens on a hairline rule with a short accent tick riding on
+     it — the one recurring spot of copper in the prose, and what gives a long
+     page its rhythm without tinting the text itself. */
+  .content :global(h2) {
+    position: relative;
+    font-size: 1.35rem;
+    margin-top: 2.5rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border);
+    max-width: var(--measure);
+  }
+
+  .content :global(h2)::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 2.25rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+
+  .content :global(h3) {
+    font-size: 1.05rem;
+    margin-top: 1.75rem;
+    max-width: var(--measure);
+  }
+
+  /* Headings get an id from Astro; offset the scroll target so a jump lands
+     below the sticky nav instead of under it. */
+  .content :global(:is(h2, h3)) {
+    scroll-margin-top: 80px;
+  }
+
+  /* Prose is --text, deliberately. --text-muted is reserved for chrome (labels,
+     captions, the sidebar's resting state) — it does not pass as body copy at
+     this size. */
+  .content :global(p),
+  .content :global(ul),
+  .content :global(ol) {
+    margin-top: 0.9rem;
+    color: var(--text);
+    max-width: var(--measure);
+  }
+
+  .content :global(:is(ul, ol)) {
+    padding-left: 1.4rem;
+  }
+
+  .content :global(li) {
+    margin-top: 0.3rem;
+  }
+
+  .content :global(li)::marker {
+    color: var(--text-muted);
+  }
+
+  .content :global(strong) {
+    color: var(--text-bright);
+    font-weight: 600;
+  }
+
+  /* Inline code carries the brand green rather than plain bright text: it is
+     the most frequent non-prose element on these pages, so it is where a little
+     color does the most work. --brand-ink, never --accent-ink — code is not
+     clickable and must not read as a link. */
+  .content :global(code) {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 5px;
+    padding: 0.1rem 0.35rem;
+    color: var(--brand-ink);
+  }
+
+  /* Fenced code blocks. Long lines scroll rather than break the page, and
+     commands sit at full width rather than the text measure — they are the
+     point of the install page. */
+  .content :global(pre) {
+    margin-top: 1rem;
+    padding: 0.9rem 1.1rem;
+    border: 1px solid var(--code-border);
+    border-radius: var(--radius);
+    overflow-x: auto;
+    max-width: 100%;
+    line-height: 1.65;
+  }
+
+  .content :global(pre code) {
+    background: none;
+    border: 0;
+    padding: 0;
+    /* Not the inline-code green: inside a block, color comes from the
+       highlighter's tokens (or the block's own foreground for plain text). */
+    color: inherit;
+    /* Not the 0.9em the global inline-code rule applies: compounded with the
+       docs' smaller base that lands near 12px, which is unreadable for a file
+       tree full of box-drawing characters. */
+    font-size: 0.9rem;
+  }
+
+  /* Shiki emits both palettes as custom properties (astro.config.mjs sets
+     defaultColor: false), so the theme picks one per mode: light is the base,
+     and the two dark cases below are the same ones tokens.css resolves —
+     explicit dark, and OS-dark on a page that follows the OS.
+
+     Only the token *colors* come from Shiki. The block's surface is --code-bg,
+     so it stays inside our palette instead of importing another product's gray
+     (and, in light mode, a block that was whiter than the page it sat on). */
+  .content :global(pre),
+  .content :global(pre span) {
+    color: var(--shiki-light);
+    background-color: transparent;
+  }
+
+  .content :global(pre) {
+    background-color: var(--code-bg);
+  }
+
+  :global(:root[data-theme='dark']) .content :global(pre),
+  :global(:root[data-theme='dark']) .content :global(pre span) {
+    color: var(--shiki-dark);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root[data-color-scheme='auto']:not([data-theme='light'])) .content :global(pre),
+    :global(:root[data-color-scheme='auto']:not([data-theme='light'])) .content :global(pre span) {
+      color: var(--shiki-dark);
+    }
+  }
+
+  /* No resting underline — the accent color carries the affordance, and a page
+     of underlined inline links reads as noise. The underline arrives on hover
+     from global.css. */
+  .content :global(a:hover) {
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+  }
+
+  .content :global(blockquote) {
+    margin-top: 1rem;
+    padding: 0.6rem 1rem;
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    background: var(--bg-raised);
+    color: var(--text);
+    max-width: var(--measure);
+  }
+
+  .content :global(hr) {
+    margin-block: 2.25rem;
+    border: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .content :global(table) {
+    margin-top: 1rem;
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.9rem;
+    display: block;
+    overflow-x: auto;
+  }
+
+  .content :global(:is(th, td)) {
+    border: 1px solid var(--border);
+    padding: 0.45rem 0.7rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .content :global(th) {
+    background: var(--bg-panel);
+    color: var(--text-bright);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .content :global(td) {
+    color: var(--text);
+  }
+</style>

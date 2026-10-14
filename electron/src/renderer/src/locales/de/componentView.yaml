@@ -1,0 +1,42 @@
+kind:
+  symbol: Symbol
+  footprint: Footprint
+  model: 3D-Modell
+scope:
+  system: System
+  global: Global
+  project: Projekt
+noneAssociated: Nichts zugeordnet
+open: Öffnen
+openTitle: In einem eigenen Editor-Tab öffnen
+loading: Wird geladen…
+indexLoading: Bibliotheksindex wird geladen…
+notFound: Dieses Bibliothekselement konnte nicht aufgelöst werden.
+panes:
+  symbol: Symbol
+  footprint: Footprint
+  model3d: 3D-Modell
+fields:
+  reference: Referenz
+  value: Wert
+  units: Einheiten
+  pins: Pins
+  description: Beschreibung
+  library: Bibliothek
+  category: Kategorie
+  pads: Pads
+  model: 3D-Modell
+noPreview: Keine Vorschau verfügbar
+footprintAssigned: Zugewiesener Footprint
+footprintNone: Kein Footprint zugewiesen.
+footprintCandidates: Mögliche Footprints (aus den Filtern)
+footprintNoCandidates: Keine Footprint-Filter gesetzt — jeder Footprint passt.
+model3dVia: Über den zugewiesenen Footprint aufgelöst.
+model3dPath: Modellpfad
+model3dNone: Kein Footprint zugewiesen, daher auch kein 3D-Modell.
+model3dPending: Die Vorschau des 3D-Modells ist noch nicht angebunden.
+reverseHeading: Verwendet von
+reverseNote: Welche Bauteile diesen Footprint verwenden, ist eine Rückwärtssuche — sie wird bei Bedarf berechnet und hier nicht angezeigt.
+usedByNone: Nichts in den indizierten Bibliotheken verwendet dies.
+choice: '{name} — {library}'
+more: '+{n} weitere'

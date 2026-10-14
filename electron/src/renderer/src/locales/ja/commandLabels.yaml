@@ -1,0 +1,56 @@
+move: '{count} 個のアイテムを移動'
+delete: '{count} 個のアイテムを削除'
+rotate: '{count} 個のアイテムを回転'
+mirror: '{count} 個のアイテムを反転'
+paste: '{count} 個のアイテムを貼り付け'
+duplicate: '{count} 個のアイテムを複製'
+cut: '{count} 個のアイテムを切り取り'
+pasteLeavingOut: '{count} 個のアイテムを貼り付け ({dropped} 個を除外)'
+repeat: '{count} 個のアイテムを繰り返し'
+addSymbol: シンボルを追加
+addWire: ワイヤーを追加
+addLabel: ラベルを追加
+addJunction: ジャンクションを追加
+addNoConnect: 未接続フラグを追加
+addText: テキストを追加
+addSheet: シートを追加
+addBus: バスを追加
+addBusEntry: バスエントリーを追加
+addDirectiveLabel: 指示ラベルを追加
+addLine: ラインを描画
+addRectangle: 矩形を描画
+addCircle: 円を描画
+addArc: 円弧を描画
+addBezier: ベジェ曲線を描画
+addRuleArea: ルール領域を描画
+addTable: テーブルを描画
+addImage: 画像を追加
+addTextBox: テキストボックスを追加
+changeUnit: ユニットを変更
+swapUnits: ユニットを交換
+changeBodyStyle: ボディスタイルを変更
+incrementAnnotations: '{count} 個のアノテーションを増分'
+resizeSheet: シートのサイズを変更
+resizeGraphic: 図形のサイズを変更
+dragWireEnd: ワイヤー端をドラッグ
+dragBusEnd: バス端をドラッグ
+setPaper: ページサイズを設定
+addSheetPin: シートピンを追加
+cleanup: ワイヤーを整理
+annotate: '{count} 個のシンボルをアノテーション'
+generateSymbol: シンボルを生成
+copySymbol: シンボルをコピー
+deleteSymbol: シンボルを削除
+boardSync: 回路図から基板を同期
+bindPart: パーツをバインド
+agentBatch: '{count} 件のエージェント編集'
+editComponents: '{count} 個のコンポーネントを編集'
+editFootprintItem: フットプリントのアイテムを編集
+addFootprintItem: フットプリントのアイテムを追加
+editSymbolItem: シンボルのアイテムを編集
+addSymbolItem: シンボルのアイテムを追加
+updateSymbols: '{count} 個のシンボルをライブラリから更新'
+changeSymbols: '{count} 個のシンボルを変更'
+replaceText: '{count} 件のテキストを置換'
+align: '{count} 個のアイテムを整列'
+distribute: '{count} 個のアイテムを均等配置'

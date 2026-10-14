@@ -1,0 +1,45 @@
+kind:
+  symbol: Symbol
+  footprint: Footprint
+  model: 3D model
+scope:
+  system: System
+  global: Global
+  project: Project
+noneAssociated: None associated
+# Per-pane button that opens the shown item in its own full editor tab.
+open: Open
+openTitle: Open in a full editor tab
+loading: Loading…
+indexLoading: Loading library index…
+notFound: Could not resolve this library item.
+panes:
+  symbol: Symbol
+  footprint: Footprint
+  model3d: 3D model
+fields:
+  reference: Reference
+  value: Value
+  units: Units
+  pins: Pins
+  description: Description
+  library: Library
+  category: Category
+  pads: Pads
+  model: 3D model
+noPreview: No preview available
+footprintAssigned: Assigned footprint
+footprintNone: No footprint assigned.
+footprintCandidates: Candidate footprints (from filters)
+footprintNoCandidates: No footprint filters set — any footprint applies.
+model3dVia: Resolved through the assigned footprint.
+model3dPath: Model path
+model3dNone: No footprint assigned, so no 3D model.
+model3dPending: 3D model preview is not wired up yet.
+reverseHeading: Used by
+reverseNote: Which parts use this footprint is a reverse lookup — computed on demand, not shown here.
+usedByNone: Nothing in the indexed libraries uses this.
+# A dropdown choice in a pane's head: the part, then its library.
+choice: '{name} — {library}'
+# After a pane's one named record, when it shows several together (a footprint's 3D models).
+more: '+{n} more'

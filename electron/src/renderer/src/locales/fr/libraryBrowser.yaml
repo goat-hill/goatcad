@@ -1,0 +1,41 @@
+searchPlaceholder: Filtrer…
+nav:
+  symbols: Symboles
+  footprints: Empreintes
+  models3d: Modèles 3D
+  models3dNote: Les modèles 3D se parcourent via leur empreinte.
+  system: 'Système ({n})'
+  systemPlain: Système
+  addLibrary: Ajouter une librairie
+  addSymbol: Ajouter une librairie de symboles…
+  addFootprint: Ajouter une librairie d’empreintes…
+  models3dManaged: Les chemins de recherche des modèles 3D sont gérés par des variables d’environnement dans les Paramètres.
+  remove: Retirer
+  hasSymbol: A un symbole associé
+  hasFootprint: A une empreinte associée
+  has3dModel: A un modèle 3D associé
+download: Télécharger les librairies KiCad officielles
+downloading: Téléchargement…
+rebuildIndex: Reconstruire l’index des librairies
+indexing: 'Indexation… {done}/{total}'
+indexingWait: Construction de l’index des librairies…
+resultsCapped: 'Affichage des {n} premiers résultats par type — affinez votre recherche.'
+noResults: Aucun résultat.
+typeShort:
+  symbol: SYM
+  footprint: EMP
+  model: 3D
+add:
+  newSymbolLibrary: Nouvelle librairie de symboles
+  newFootprintLibrary: Nouvelle librairie d’empreintes
+  addSymbolLibrary: Ajouter une librairie de symboles
+  addFootprintLibrary: Ajouter une librairie d’empreintes
+  symbolExt: .kicad_sym
+  footprintExt: .pretty/
+  toProject: au projet…
+  toAllProjects: à tous les projets…
+  needsProject: Aucun projet actif
+  symbolFileTitle: Sélectionner un fichier de librairie de symboles (.kicad_sym)
+  footprintFolderTitle: Sélectionner un dossier de librairie d’empreintes (nom se terminant par .pretty)
+scanningEmptySymbols: 'Aucun fichier .kicad_sym trouvé dans ce dossier.'
+scanningEmptyFootprints: Aucune empreinte trouvée dans ce dossier.

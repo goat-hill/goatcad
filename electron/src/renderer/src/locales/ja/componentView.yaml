@@ -1,0 +1,42 @@
+kind:
+  symbol: シンボル
+  footprint: フットプリント
+  model: 3D モデル
+scope:
+  system: システム
+  global: グローバル
+  project: プロジェクト
+noneAssociated: 関連付けなし
+open: 開く
+openTitle: 専用のエディタータブで開く
+loading: 読み込み中…
+indexLoading: ライブラリのインデックスを読み込み中…
+notFound: このライブラリ項目を解決できませんでした。
+panes:
+  symbol: シンボル
+  footprint: フットプリント
+  model3d: 3D モデル
+fields:
+  reference: リファレンス
+  value: 値
+  units: ユニット
+  pins: ピン
+  description: 説明
+  library: ライブラリ
+  category: カテゴリー
+  pads: パッド
+  model: 3D モデル
+noPreview: プレビューはありません
+footprintAssigned: 割り当て済みフットプリント
+footprintNone: フットプリントが割り当てられていません。
+footprintCandidates: 候補フットプリント (フィルターより)
+footprintNoCandidates: フットプリントフィルターが未設定のため、どのフットプリントも使用できます。
+model3dVia: 割り当てられたフットプリント経由で解決されます。
+model3dPath: モデルのパス
+model3dNone: フットプリントが割り当てられていないため、3D モデルはありません。
+model3dPending: 3D モデルのプレビューはまだ接続されていません。
+reverseHeading: 使用元
+reverseNote: このフットプリントを使用するパーツは逆引きで、必要なときに計算されるため、ここには表示されません。
+usedByNone: インデックス済みライブラリ内でこれを使用しているものはありません。
+choice: '{name} — {library}'
+more: '+{n} 件'

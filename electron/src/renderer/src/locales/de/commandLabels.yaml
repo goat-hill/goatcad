@@ -1,0 +1,56 @@
+move: Element verschieben | {count} Elemente verschieben
+delete: Element löschen | {count} Elemente löschen
+rotate: Element drehen | {count} Elemente drehen
+mirror: Element spiegeln | {count} Elemente spiegeln
+paste: Element einfügen | {count} Elemente einfügen
+duplicate: Element duplizieren | {count} Elemente duplizieren
+cut: Element ausschneiden | {count} Elemente ausschneiden
+pasteLeavingOut: Element einfügen ({dropped} ausgelassen) | {count} Elemente einfügen ({dropped} ausgelassen)
+repeat: Element wiederholen | {count} Elemente wiederholen
+addSymbol: Symbol hinzufügen
+addWire: Verbindung hinzufügen
+addLabel: Bezeichner hinzufügen
+addJunction: Knoten hinzufügen
+addNoConnect: Nichtanschluss-Markierung hinzufügen
+addText: Text hinzufügen
+addSheet: Blatt hinzufügen
+addBus: Bus hinzufügen
+addBusEntry: Buseingang hinzufügen
+addDirectiveLabel: Direktiven-Bezeichner hinzufügen
+addLine: Linie zeichnen
+addRectangle: Rechteck zeichnen
+addCircle: Kreis zeichnen
+addArc: Bogen zeichnen
+addBezier: Bezierkurve zeichnen
+addRuleArea: Regelfläche zeichnen
+addTable: Tabelle zeichnen
+addImage: Bild hinzufügen
+addTextBox: Textfeld hinzufügen
+changeUnit: Einheit ändern
+swapUnits: Einheiten tauschen
+changeBodyStyle: Körperstil ändern
+incrementAnnotations: Annotation erhöhen | {count} Annotationen erhöhen
+resizeSheet: Blattgröße ändern
+resizeGraphic: Grafikgröße ändern
+dragWireEnd: Verbindungsende ziehen
+dragBusEnd: Busende ziehen
+setPaper: Seitengröße festlegen
+addSheetPin: Blattanschluss hinzufügen
+cleanup: Verbindungen aufräumen
+annotate: Symbol annotieren | {count} Symbole annotieren
+generateSymbol: Symbol erzeugen
+copySymbol: Symbol kopieren
+deleteSymbol: Symbol löschen
+boardSync: Platine mit Schaltplan abgleichen
+bindPart: Bauteil zuordnen
+agentBatch: Agent-Bearbeitung | {count} Agent-Bearbeitungen
+editComponents: Bauteil bearbeiten | {count} Bauteile bearbeiten
+editFootprintItem: Footprint-Element bearbeiten
+addFootprintItem: Footprint-Element hinzufügen
+editSymbolItem: Symbolelement bearbeiten
+addSymbolItem: Symbolelement hinzufügen
+updateSymbols: Symbol aus Bibliothek aktualisieren | {count} Symbole aus Bibliothek aktualisieren
+changeSymbols: Symbol ändern | {count} Symbole ändern
+replaceText: Text ersetzen | {count} Texte ersetzen
+align: Element ausrichten | {count} Elemente ausrichten
+distribute: Element verteilen | {count} Elemente verteilen

@@ -1,0 +1,375 @@
+# Board Setup view (P0.4).
+#
+# Four sections that mean different things: the stackup is what the board IS,
+# constraints are what it MUST SATISFY, net classes are what each net IS, and
+# design rules are which DRC checks report, and how loudly.
+#
+# Voice: the audience are engineers. Do NOT explain electronics — nobody needs
+# "clearance is the gap between copper". Explain the PRODUCT: what this control
+# feeds, what it costs, which file it lands in. Most settings therefore carry no
+# subtitle at all; a section description does the work instead. Add a per-setting
+# blurb only when the answer is a decision the product makes for you.
+title: Board setup
+sections:
+  stackup: Stackup
+  constraints: Constraints
+  tuningPatterns: Length-tuning patterns
+  teardrops: Teardrops
+  tuningProfiles: Tuning profiles
+  netClasses: Net classes
+  customRules: Custom rules
+  rules: Design rules
+  exclusions: Exclusions
+# Groups within Constraints — KiCad's own groupings, since the page is a
+# reimplementation of its Constraints tab and engineers already know the shape.
+groups:
+  copper: Thickness
+  holes: Holes
+  microvias: Microvias
+  silk: Silkscreen
+  arcs: Arc approximation
+  zones: Zone fill
+  lengthTuning: Length tuning
+  # Length-tuning patterns' three tuners (KiCad's Default Properties for each).
+  tuneSingle: Single track
+  tunePair: Differential pair
+  tuneSkew: Differential pair skew
+  # Teardrops' three blocks (KiCad's Default Properties for Round / Rectangular Shapes and Track-to-Track).
+  teardropRound: Round shapes
+  teardropRect: Rectangular shapes
+  teardropTrack: Track to track
+# The header row that governs a section: a label, the picker, and its actions.
+actions:
+  save: Save
+  cancel: Cancel
+  remove: Remove
+  # Why Remove is grayed: the shipped presets are read-only.
+  removeOnlyYours: Only presets you saved can be removed
+profile:
+  # Names what the picker sets, not who publishes it: a profile is a named set
+  # of constraints, and the parallel with "Stackup Configuration" is the point.
+  name: Constraint configuration
+  # Shown when the board's values match no built-in profile.
+  custom: Custom
+  # Suffix on a profile the user has edited away from its shipped values.
+  edited: edited
+  saveAs: Save as…
+stackup:
+  preset:
+    label: Stackup configuration
+  copperLayers:
+    label: Copper layers
+  copperFinish:
+    label: Surface finish
+# Column headings for the layer table. Terse — they head a table, not a form.
+columns:
+  layer: Layer
+  type: Type
+  material: Material
+  thickness: Thickness
+  weight: Weight
+  # Dk and Df are the industry abbreviations, and their case is meaningful — do
+  # not upper-case them. Both get an info tooltip because neither is guessable.
+  epsilonR: Dk
+  epsilonRHint: Dielectric constant (relative permittivity). Higher slows signals down; it sets trace impedance.
+  lossTangent: Df
+  lossTangentHint: Dissipation factor. How much signal the laminate absorbs — only matters at high frequency.
+  color: Color
+  # A mask or silk layer the file gives no color: KiCad's "not specified",
+  # which fabs and the 3D view take as the default finish named here.
+  colorUnsetMask: Not specified (green)
+  colorUnsetSilk: Not specified (white)
+table:
+  addDielectric: Add dielectric
+  removeLayer: Remove layer
+  # The board thickness is the sum of the layers, not a field you type into.
+  copper: Thickness
+  dielectric: Dielectric
+  total: Total
+# KiCad's Constraints page in full, in its order. Labels follow KiCad's wording
+# where KiCad's is already the industry term — a constraint the user has met in
+# another tool should not need re-learning under a different name here.
+constraints:
+  minClearance:
+    label: Minimum clearance
+  minTrackWidth:
+    label: Minimum track width
+  minConnectionWidth:
+    label: Minimum connection width
+  minViaAnnularWidth:
+    label: Minimum annular ring
+  minViaDiameter:
+    label: Minimum via diameter
+  minCopperHoleClearance:
+    label: Copper to hole clearance
+  minCopperEdgeClearance:
+    label: Board edge clearance
+  minThroughHoleDiameter:
+    label: Minimum drill size
+  minHoleToHole:
+    label: Hole to hole clearance
+  minMicroviaDiameter:
+    label: Minimum microvia diameter
+  minMicroviaDrill:
+    label: Minimum microvia drill
+  minSilkClearance:
+    label: Minimum item clearance
+  minTextHeight:
+    label: Minimum text height
+  minTextThickness:
+    label: Minimum text thickness
+  maxError:
+    label: Maximum allowed deviation
+  zonesAllowExternalFillets:
+    label: Allow fillets outside zone outline
+  minResolvedSpokes:
+    label: Minimum thermal relief spokes
+  useHeightForLengthCalcs:
+    label: Include stackup height in track length
+# Each tuner's meander defaults, KiCad's Length-tuning Patterns page; the letters are its
+# legend's, drawn under each group.
+tuningPatterns:
+  minAmplitude:
+    label: Minimum amplitude (A)
+  maxAmplitude:
+    label: Maximum amplitude (A)
+  spacing:
+    label: Spacing (s)
+  cornerRadiusPercent:
+    label: Corner radius (r), %
+  singleSided:
+    label: Single-sided
+# Each shape's teardrop defaults, KiCad's Teardrops page; Edit teardrops' "add" takes them.
+# Lengths and widths are of the pad or via size, as KiCad's L and W.
+teardrops:
+  enabled: Teardrops where a track meets a wider one
+  bestLength: Best length (L)
+  maxLength: Maximum length (L)
+  bestWidth: Best width (W)
+  maxWidth: Maximum width (W)
+  trackWidthLimit: Track width limit (w/d)
+  curved: Curved edges
+  twoSegments: Span two track segments
+  preferZone: Prefer zone connection
+# The net class table. Headings are terse because they head columns; the names
+# follow KiCad's, since these are the same fields under the same names there.
+netClassColumns:
+  name: Class
+  clearance: Clearance
+  trackWidth: Track width
+  viaDiameter: Via size
+  viaDrill: Via hole
+  microviaDiameter: µVia size
+  microviaDrill: µVia hole
+  diffPairWidth: DP width
+  diffPairGap: DP gap
+  # KiCad's PCB Color: the class's tag dot, and KiCad's net color mode.
+  pcbColor: PCB color
+  tuningProfile: Tuning profile
+  # Schematic Setup's columns: how the class's wires and buses draw (KiCad's).
+  wireWidth: Wire width
+  busWidth: Bus width
+  schematicColor: Color
+  lineStyle: Line style
+netClasses:
+  title: Net classes
+  fromInterface: Set up standard interface…
+  interfaceSupports: USB 2.0, MIPI CSI-2, 50 Ω RF feed
+  interfaceAdds: Sets a net class's pair sizes, a tuning profile solved for the stackup, and custom rules
+  # An empty color cell: the class has none, and its copper keeps its layer's (KiCad's transparent).
+  # Short, since an empty width or style cell shows the inherited value itself.
+  layerColor: Layer
+  # An empty schematic color: wires keep the theme's (an empty width or style shows the value it inherits).
+  themeColor: Theme
+  # KiCad's one-time copy of each class's schematic color into its PCB color.
+  importColors: Import colors from schematic
+  add: Add class
+  remove: Remove class
+  # Seeded from Default, so a new class starts manufacturable rather than blank.
+  newName: New class
+patterns:
+  pair: Differential pair (by KiCad's P/N or +/- naming)
+  title: Assignments
+  add: Add assignment
+  remove: Remove assignment
+  matching: Matching nets
+  # The pattern syntax, named by example beside a sample of each kind.
+  syntax:
+    any: any run of characters
+    one: any one character
+    regex: regular expression, whole name
+  # Tooltips on a row's net count.
+  invalid: Not a valid expression — matches nothing
+  overlap: '{count} also in {classes}'
+patternColumns:
+  pattern: Net pattern
+  netClass: Class
+  nets: Nets
+# The route tool's sizes beyond the classes' own (KiCad's pre-defined sizes).
+extraSizes:
+  title: Custom sizes
+  width: Track width
+  diameter: Via diameter
+  drill: Via drill
+  addTrack: Add track width
+  addVia: Add via
+  remove: Remove size
+currentWidth:
+  title: Width from current
+  current: Current
+  rise: Temperature rise
+  layer: Layer
+  copper: Thickness
+  width: Min width
+  source: Per IPC-2221
+  outOfRange: Outside IPC-2221's fitted range
+section:
+  core: Core
+  prepreg: Prepreg
+  silkTop: F.Silkscreen
+  maskTop: F.Mask
+  silkBottom: B.Silkscreen
+  maskBottom: B.Mask
+  total: Finished thickness
+# Design rules live in the project file, so a board opened without one has
+# nowhere to save them.
+noProject: This board has no project file, so constraints, net classes and rule severities cannot be saved. The stackup is stored in the board itself and saves normally.
+# KiCad 10's Tuning Profiles: per signal layer, the reference planes, width,
+# pair gap and unit delay a class's nets take.
+tuningProfiles:
+  add: Add tuning profile
+  remove: Remove profile
+  newName: Profile
+  empty: No tuning profiles. A net class takes one in its Tuning profile column.
+  name: Name
+  type: Type
+  single: Single
+  differential: Differential
+  target: Target
+  timeDomain: Time domain
+  viaDelay: Via delay
+  none: None
+  usedBy: Used by
+  addLayer: Add layer
+  removeLayer: Remove layer
+  solve: Solve
+  solveAll: Solve all layers
+  solveHint: Width (and delay) for the target over the stackup, as KiCad's calculator solves it
+  readout: Z
+  columns:
+    layer: Layer
+    topReference: Top reference
+    bottomReference: Bottom reference
+    width: Width
+    gap: Gap
+    delay: Delay
+  # Why a Solve or the impedance readout has no answer: KiCad's own reasons.
+  errors:
+    target-not-positive: Set a target impedance first
+    signal-layer-missing: Signal layer not found in the stackup
+    zero-signal-thickness: Signal layer thickness must be greater than 0
+    reference-missing: Reference layer not found in the stackup
+    reference-same-as-signal: Reference layer must differ from the signal layer
+    top-reference-missing: Top reference layer not found in the stackup
+    top-reference-not-above: Top reference must be above the signal layer
+    bottom-reference-missing: Bottom reference layer not found in the stackup
+    bottom-reference-not-below: Bottom reference must be below the signal layer
+    zero-dielectric: Dielectric height must be greater than 0
+    gap-required: Set the pair gap first; the width is solved for it
+    width-required: Set the width first
+    width-and-gap-required: Set the width and gap first
+    gap-on-single: A single-ended profile has no gap
+    width-failed: Could not compute track width
+    gap-failed: Could not compute differential pair gap
+    no-width: Could not compute track width
+    no-gap: Could not compute differential pair gap
+    no-delay: Could not compute track propagation delay
+# A row an interface preset's draft would write, before Apply.
+pending:
+  added: Added on Apply
+  edited: Changed on Apply
+# The project's .kicad_dru, read only.
+customRules:
+  add: Add rule
+  edit: Edit rule
+  remove: Remove rule
+  save: Save
+  addSave: Add
+  oneRule: Write one rule, (rule "name" …), and nothing else.
+  empty: No custom rules. KiCad's Custom Rules, or setting up a standard interface, write them to .kicad_dru.
+  columns:
+    rule: Rule
+    appliesTo: Applies to
+    constraint: Constraint
+    limit: Limit
+# Set up a net class for an interface: a draft on Net classes, its rows shown
+# in each table until Apply writes them.
+interfacePreset:
+  title: Set up standard interface
+  apply: Apply
+  discard: Discard
+  interface: Interface
+  mode: Mode
+  target: Target
+  stackup: Stackup
+  reference: ref
+  customRules: Custom rules
+  classUpdates: '{netClass} updates'
+  profileUpdates: '{profile} tuning profile'
+  classUnchanged: The class already has these sizes.
+  constraints: Constraints
+  stackupSummary: '{count} copper layers, {thickness} mm'
+  fabLimitsValues: 'track ≥ {track}, clearance ≥ {clearance}'
+  notSet: not set
+  defaultClearance: Default class clearance
+  frequency: Design frequency
+  differential: differential
+  uncontrolled: "the standard's, not held: the class keeps the board's sizes"
+  netClass: Net class
+  nets: Nets
+  assignNets: '{netClass} has no nets yet. It is set up all the same; nets assigned in Assignments take it, and their pairs are checked then.'
+  noClasses: Add a net class above and assign its nets, then set it up here.
+  matched: '{count} net, {pairs} pairs: | {count} nets, {pairs} pairs:'
+  pairGap: Pair gap
+  groundGap: Ground gap
+  linked: Linked for the target impedance; set either and the other is solved
+  derivedGap: Use derived gap
+  layers: Layers
+  # Why the gap is what it is, beside its row.
+  gapSource:
+    given: ''
+    fromWidth: Solved for the width
+    classClearance: ''
+    fabClearance: The fab's minimum clearance (Constraints)
+    widened: Widened until the width is one the fab builds
+  columns:
+    gap: Gap
+    width: Width
+  writeFailed: '{file} could not be written.'
+  modes:
+    usb2:
+      high: High Speed, 480 Mb/s
+      full: Full Speed, 12 Mb/s
+      full-uncontrolled: Full Speed, 12 Mb/s, impedance not held
+    rf-50:
+      sub1g: Sub-GHz, 868/915 MHz
+      2g4: 2.4 GHz
+      5g: 5 GHz
+    ethernet-mdi:
+      1g: 1000BASE-T
+      100m: 10/100BASE-T
+    rgmii:
+      1g: 1 Gb/s
+      100m: 10/100 Mb/s
+    csi2:
+      1g0: 1.0 Gb/s per lane
+      1g5: 1.5 Gb/s per lane
+      2g5: 2.5 Gb/s per lane
+  errors:
+    unknown-preset: No such interface.
+    unknown-mode: No such mode.
+    no-nets: 'Name a net class other than Default, and patterns that each match a net.'
+    unpaired: 'KiCad pairs nets by a P/N or +/- suffix; these have no partner among the matches:'
+    bad-layer: 'The line cannot run on these layers:'
+    solve-failed: The stackup does not solve for this target.
+    below-fab: "Under the fab's minimum clearance or track width (Constraints)."

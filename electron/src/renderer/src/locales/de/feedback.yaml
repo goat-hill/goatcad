@@ -1,0 +1,25 @@
+title: App-Feedback geben
+kind:
+  bug: Fehlerbericht
+  idea: Idee
+summary: Zusammenfassung
+summaryPlaceholder: Eine Zeile, wie eine Überschrift
+details: Details
+detailsBugPlaceholder: Was haben Sie getan, was haben Sie erwartet, und was ist stattdessen passiert?
+detailsIdeaPlaceholder: Was soll GoatCAD tun, und wobei würde es helfen?
+truncated: Zu lang, um vollständig gesendet zu werden. Das Ende wird abgeschnitten; fügen Sie den Rest in das Issue auf GitHub ein.
+screenshot: Screenshot
+copyScreenshot: Screenshot kopieren
+screenshotHint: Wird nicht automatisch angehängt. Kopieren Sie ihn und fügen Sie ihn in das Issue auf GitHub ein.
+screenshotCopied: Kopiert. Fügen Sie ihn in das Issue auf GitHub ein.
+screenshotCopyFailed: Der Screenshot konnte nicht kopiert werden.
+noScreenshot: Dieses Fenster konnte nicht aufgenommen werden.
+includeSystemInfo: Systeminformationen einschließen
+showSystemInfo: Anzeigen
+hideSystemInfo: Ausblenden
+note: Öffnet ein neues Issue auf GitHub, das Sie vor dem Absenden prüfen können. Sie benötigen ein GitHub-Konto.
+openFailed: Ihr Browser konnte nicht geöffnet werden. Kopieren Sie den Link und öffnen Sie ihn dort.
+copyLink: Link kopieren
+linkCopied: Kopiert
+cancel: Abbrechen
+continue: Weiter auf GitHub

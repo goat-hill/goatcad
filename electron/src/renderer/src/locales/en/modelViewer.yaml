@@ -1,0 +1,16 @@
+# 3D model viewer — the editor tab shown for .step / .stp / .wrl files.
+# All strings are short; toolbar titles are hover tooltips on icon-only chips.
+
+# Shown while the geometry kernel tessellates the model (can take seconds).
+loading: Preparing 3D model…
+loadFailed: Could not load this 3D model
+# Camera tooltips. Zoom to fit is shared (shared.insertSearch.ops.fitView).
+isoViewTitle: Isometric view
+frontViewTitle: Front view
+topViewTitle: Top view
+rightViewTitle: Right view
+# The toggle for the dimension/scale graphic around the model; its lit state
+# says whether it shows.
+gaugeTitle: Scale gauge
+# Overall bounding size readout; x/y/z are millimeter numbers.
+dims: '{x} × {y} × {z} mm'

@@ -1,0 +1,178 @@
+pill:
+  clean: チェック
+  title: デザインルールチェック
+  errors: '{count} 件のエラー'
+  warnings: '{count} 件の警告'
+drawer:
+  title: 問題
+  performance: パフォーマンス
+  settings: 設定
+  close: 問題の一覧を閉じる
+  rerun: すべてのチェックを再実行
+  clean: チェックで問題は見つかりませんでした。
+  checking: 基板をチェック中…
+  pending: チェックはまだ実行されていません。再実行すると問題が一覧表示されます。
+  needs: '{actual}、必要値 {limit}'
+  allows: '{actual}、許容値 {limit}'
+  byRule: '{text} ({rule})'
+  markers: キャンバス上のマーカー
+  markersAll: すべて
+  markersErrors: エラーのみ
+  markersOff: オフ
+  count: '{count} 件'
+  excluded: KiCad で除外
+  excludedHint: プロジェクトの KiCad 除外設定に該当する指摘です。件数には含まれず、エージェントにも表示されません。すべての除外は基板の設定と回路図の設定に一覧表示されます。
+  severity:
+    error: エラー
+    warning: 警告
+performance:
+  empty: この基板ではまだ何も実行されていません。
+  total: 合計
+  ms: '{ms} ms'
+  seconds: '{s} 秒'
+  more: 'ほか {count} ステップ'
+  fewer: ステップを折りたたむ
+  tasks:
+    refill: ゾーンの塗りつぶし
+    check: デザインチェック
+    ratsnest: ラッツネスト
+  scope:
+    all: すべてのゾーン
+    whole: 基板全体
+    since: 編集箇所の周辺
+  autoZoneFill: ゾーンの自動塗りつぶし
+  autoDrc: 自動 DRC
+  mode:
+    greedy: 局所
+    full: 完全
+    'off': オフ
+rules:
+  unconnectedPin: 未接続のピン
+  unconnectedWireEnd: ワイヤー端が何もない場所で終わっている
+  offGrid: 接続グリッドから外れている
+  pinConflict: 同じネットにすべきでないピン
+  inputUndriven: 駆動元のない入力
+  wireDangling: どこにも接続されていないワイヤー
+  labelDangling: 何も接続していないラベル
+  labelSinglePin: ピンが 1 つだけのネット上のラベル
+  noConnectConnected: 配線済みピン上の未接続フラグ
+  noConnectDangling: 何も示していない未接続フラグ
+  multipleNetNames: 1 本のワイヤーに 2 つの名前
+  labelMultipleWires: 複数のワイヤーをつなぐラベル
+  netNotBusMember: バスのメンバーではないネット
+  busToBusConflict: 共通メンバーのないバスとポート
+  busToNetConflict: 1 本のワイヤー上のネットとバス
+  unconnectedSheetPort: 何にも接続されていないシートピンまたは階層ラベル
+  unannotated: アノテーションされていない部品
+  duplicateReference: 同じリファレンスを持つ 2 つの部品
+  extraUnits: 部品に存在しないユニット
+  unitValueMismatch: 値が異なるユニット
+  missingUnit: 配置されていないユニット
+  missingPowerPin: 電源ピンを持つ未配置ユニット
+  missingInputPin: 入力ピンを持つ未配置ユニット
+  missingBidiPin: 双方向ピンを持つ未配置ユニット
+  differentUnitFootprint: フットプリントが異なるユニット
+  differentUnitNet: 2 つのネット上の共有ピン
+  duplicateSheetName: 同じ名前の 2 つのシート
+  similarLabels: 大文字・小文字だけが異なるラベル
+  similarPower: 大文字・小文字だけが異なる電源名
+  similarLabelAndPower: 大文字・小文字だけが異なるラベルと電源名
+  sameLocalGlobalLabel: ローカルとグローバルの両方で使われている名前
+  groundPinNotGround: グランドに接続されていないグランドピン
+  stackedPinName: 不正なスタックピン番号
+  fieldNameWhitespace: 余分なスペースを含むフィールド名
+  undefinedNetclass: 未定義のネットクラス
+  unresolvedVariable: どこにも定義されていないテキスト変数
+  singleGlobalLabel: 1 回しか使われていないグローバルラベル
+  fourWayJunction: 1 点に 4 つのアイテム
+  symbolLibraryIssue: シンボルライブラリにアクセスできない
+  footprintLinkIssue: フットプリントにアクセスできない
+  footprintFilter: フィルター外のフットプリント
+  powerInputUndriven: 駆動元のない電源レール
+  sheetPinUnmatched: 階層ラベルのないシートピン
+  hierarchicalLabelUnmatched: シートピンのない階層ラベル
+  symbolLibraryMismatch: ライブラリより古いシンボル
+  padsOverlap: パッドの重なり
+  netTieShort: ネットタイ以外で導体がパッドをつないでいる
+  netTieGroups: ネットタイグループが存在しないパッドを指定している
+  silkClippedByMask: ハンダマスクで切り抜かれたシルクスクリーン
+  padstack: 疑わしいパッド
+  padstackInvalid: 無効なパッド
+  throughHolePadWithoutHole: 穴のないスルーホールパッド
+  malformedCourtyard: 閉じていないコートヤード
+  holesCoLocated: 同じ位置のドリル穴
+  holeToHole: 接触しているドリル穴
+  silkWidth: シルクスクリーンの幅 (KLC)
+  referenceText: リファレンステキストのスタイル (KLC)
+  valueText: 値テキストのスタイル (KLC)
+  missingCourtyard: コートヤードなし (KLC)
+  courtyardEnclosure: コートヤードが部品を囲んでいない (KLC)
+  footprintTypeMismatch: 実装タイプがパッドと一致しない (KLC)
+  duplicatePin: 同じ番号を持つ 2 つのピン
+  powerSymbol: ネットを指定していない電源シンボル
+  powerSymbolHiddenPin: 電源シンボルのピンが非表示
+  hiddenPowerPin: 非表示の電源入力ピン
+  offGridPin: グリッドから外れたピン
+  referencePrefix: 番号付けできないリファレンス接頭辞
+  zeroSizeGraphic: サイズのない形状
+  customRules: カスタムルールが適用されていない
+  copperClearance: 導体が近すぎる
+  copperShort: 2 つのネットの導体が接触している
+  tracksCrossing: 配線の交差
+  trackOnPostMachinedLayer: バックドリルまたは後加工レイヤー上の配線
+  holeClearance: 穴が導体に近すぎる
+  holesTooClose: ドリル穴が近すぎる
+  copperEdgeClearance: 導体が基板端に近すぎる
+  unconnectedItems: 未配線の接続
+  trackWidth: 配線が細すぎる
+  viaDiameter: ビアが小さすぎる
+  annularWidth: 穴の周囲の導体が少なすぎる
+  drillOutOfRange: 穴が小さすぎてドリル加工できない
+  microviaDrillOutOfRange: マイクロビアの穴が小さすぎてドリル加工できない
+  courtyardsOverlap: コートヤードの重なり
+  pthInsideCourtyard: 他のコートヤード内のメッキ穴
+  npthInsideCourtyard: 他のコートヤード内のメッキなし穴
+  invalidOutline: 基板外形が閉じていない
+  itemsNotAllowed: 禁止領域内のアイテム
+  zonesIntersect: 同じ優先度で重なる同一ネットのゾーン
+  isolatedCopper: 接続のないゾーンの島
+  starvedThermal: サーマルスポークが少なすぎる
+  trackDangling: どこにも接続されていない配線端
+  viaDangling: どこにも接続されていないビア
+  connectionWidth: 導体の接続が細すぎる
+  copperSliver: 導体スライバー
+  textHeight: テキストが小さすぎる
+  textThickness: テキストの線が細すぎる
+  mirroredTextOnFront: 表面レイヤー上の反転テキスト
+  nonmirroredTextOnBack: 裏面レイヤー上の非反転テキスト
+  textOnEdgeCuts: 基板外形レイヤー上のテキスト
+  drcError: テキスト内のデザインルールエラーマーカー
+  drcWarning: テキスト内のデザインルール警告マーカー
+  trackSegmentLength: 配線セグメントの長さが範囲外
+  trackAngle: 許可されていない配線角度
+  trackNotCenteredOnVia: 配線がビアの中心にない
+  partTypeMismatch: フットプリントのタイプがパッドと一致しない
+  footprint: 不正なフットプリント
+  noCourtyard: フットプリントにコートヤードがない
+  itemOnDisabledLayer: 基板にないレイヤー上のアイテム
+  assertionFailure: カスタムルールのアサーション失敗
+  missingTuningProfile: ネットクラスが存在しない調整プロファイルを指定している
+  silkOverlap: シルクスクリーン同士の重なり
+  silkOverCopper: マスク開口で切り抜かれたシルクスクリーン
+  silkEdgeClearance: 基板端で切り抜かれたシルクスクリーン
+  solderMaskBridge: ネット間のハンダマスクが細すぎる
+  lengthOutOfRange: ネット長が範囲外
+  skewOutOfRange: ネット長のスキューが範囲外
+  tooManyVias: ビア数が範囲外
+  diffPairGap: 差動ペアのギャップが範囲外
+  diffPairUncoupledLength: 差動ペアの非結合部が長すぎる
+  creepage: 基板表面上の沿面距離が近すぎる
+  libraryFootprintIssue: ライブラリにフットプリントが見つからない
+  libraryFootprintMismatch: フットプリントがライブラリのものと異なる
+  duplicateFootprints: 同じリファレンスを持つ 2 つのフットプリント
+  missingFootprint: 基板にない部品
+  extraFootprint: 回路図にないフットプリント
+  footprintSymbolMismatch: フットプリントがシンボルと異なる
+  footprintSymbolFieldMismatch: フットプリントのフィールドがシンボルと異なる
+  footprintFiltersMismatch: シンボルのフィルター外のフットプリント
+  netConflict: パッドのネットが回路図と異なる

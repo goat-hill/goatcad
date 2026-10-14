@@ -1,0 +1,178 @@
+pill:
+  clean: Comprob.
+  title: Comprobaciones de reglas de diseño
+  errors: '{count} error | {count} errores | {count} errores'
+  warnings: '{count} aviso | {count} avisos | {count} avisos'
+drawer:
+  title: Problemas
+  performance: Rendimiento
+  settings: Configuración
+  close: Cerrar la lista de problemas
+  rerun: Volver a ejecutar todas las comprobaciones
+  clean: Las comprobaciones no encontraron ningún problema.
+  checking: Comprobando la placa…
+  pending: Las comprobaciones aún no se han ejecutado. Vuelva a ejecutarlas para listar los problemas.
+  needs: '{actual}, requiere {limit}'
+  allows: '{actual}, permite {limit}'
+  byRule: '{text} ({rule})'
+  markers: Marcadores en el lienzo
+  markersAll: Todos
+  markersErrors: Solo errores
+  markersOff: Desactivados
+  count: '{count} hallazgo | {count} hallazgos | {count} hallazgos'
+  excluded: Excluidos en KiCad
+  excludedHint: Hallazgos que nombran las exclusiones de KiCad del proyecto. No se cuentan y los agentes no los ven. Configuración de la placa y Configuración del esquema listan todas las exclusiones.
+  severity:
+    error: Error
+    warning: Aviso
+performance:
+  empty: Aún no se ha ejecutado nada en esta placa.
+  total: Total
+  ms: '{ms} ms'
+  seconds: '{s} s'
+  more: '{count} paso más | {count} pasos más | {count} pasos más'
+  fewer: Menos pasos
+  tasks:
+    refill: Relleno de zonas
+    check: Comprobaciones de diseño
+    ratsnest: Líneas aéreas
+  scope:
+    all: todas las zonas
+    whole: toda la placa
+    since: alrededor de la edición
+  autoZoneFill: Relleno automático de zonas
+  autoDrc: DRC automático
+  mode:
+    greedy: Voraz
+    full: Completo
+    'off': Desactivado
+rules:
+  unconnectedPin: Pin sin conectar
+  unconnectedWireEnd: Cable que termina en el vacío
+  offGrid: Fuera de la rejilla de conexión
+  pinConflict: Pines que no deberían compartir red
+  inputUndriven: Entrada sin nada que la excite
+  wireDangling: Cable sin conectar a nada
+  labelDangling: Etiqueta que no conecta nada
+  labelSinglePin: Etiqueta en una red con un solo pin
+  noConnectConnected: Marca de no conectado en un pin cableado
+  noConnectDangling: Marca de no conectado que no marca nada
+  multipleNetNames: Dos nombres en un mismo cable
+  labelMultipleWires: Etiqueta que une varios cables
+  netNotBusMember: Red que no es miembro de su bus
+  busToBusConflict: Bus y puerto sin ningún miembro en común
+  busToNetConflict: Red y bus en un mismo cable
+  unconnectedSheetPort: Pin de hoja o etiqueta jerárquica sin conectar a nada
+  unannotated: Componente sin anotar
+  duplicateReference: Dos componentes con una misma referencia
+  extraUnits: Unidad que el componente no tiene
+  unitValueMismatch: Unidades con valores distintos
+  missingUnit: Unidad no colocada
+  missingPowerPin: Unidad no colocada con pines de alimentación
+  missingInputPin: Unidad no colocada con pines de entrada
+  missingBidiPin: Unidad no colocada con pines bidireccionales
+  differentUnitFootprint: Unidades con huellas distintas
+  differentUnitNet: Pin compartido en dos redes
+  duplicateSheetName: Dos hojas con un mismo nombre
+  similarLabels: Etiquetas que solo difieren en mayúsculas
+  similarPower: Nombres de alimentación que solo difieren en mayúsculas
+  similarLabelAndPower: Etiqueta y nombre de alimentación que solo difieren en mayúsculas
+  sameLocalGlobalLabel: Nombre usado como local y global
+  groundPinNotGround: Pin de tierra fuera de tierra
+  stackedPinName: Número de pin apilado mal formado
+  fieldNameWhitespace: Nombre de campo con espacios sobrantes
+  undefinedNetclass: Clase de red no definida
+  unresolvedVariable: Variable de texto que nada define
+  singleGlobalLabel: Etiqueta global usada una sola vez
+  fourWayJunction: Cuatro elementos en un mismo punto
+  symbolLibraryIssue: Biblioteca de símbolos no accesible
+  footprintLinkIssue: Huella no accesible
+  footprintFilter: Huella fuera de sus filtros
+  powerInputUndriven: Raíl de alimentación sin nada que lo excite
+  sheetPinUnmatched: Pin de hoja sin etiqueta jerárquica
+  hierarchicalLabelUnmatched: Etiqueta jerárquica sin pin de hoja
+  symbolLibraryMismatch: Símbolo desactualizado respecto a su biblioteca
+  padsOverlap: Pads solapados
+  netTieShort: El cobre une pads fuera de un puente de red
+  netTieGroups: Un grupo de puente de red nombra un pad inexistente
+  silkClippedByMask: Serigrafía recortada por la máscara de soldadura
+  padstack: Pad dudoso
+  padstackInvalid: Pad no válido
+  throughHolePadWithoutHole: Pad pasante sin agujero
+  malformedCourtyard: Patio no cerrado
+  holesCoLocated: Agujeros taladrados en un mismo punto
+  holeToHole: Agujeros taladrados que se tocan
+  silkWidth: Ancho de serigrafía (KLC)
+  referenceText: Estilo del texto de referencia (KLC)
+  valueText: Estilo del texto de valor (KLC)
+  missingCourtyard: Sin patio (KLC)
+  courtyardEnclosure: El patio no rodea el componente (KLC)
+  footprintTypeMismatch: El tipo de emplazamiento no coincide con los pads (KLC)
+  duplicatePin: Dos pines comparten número
+  powerSymbol: El símbolo de alimentación no nombra ninguna red
+  powerSymbolHiddenPin: Pin oculto en símbolo de alimentación
+  hiddenPowerPin: Pin de entrada de alimentación oculto
+  offGridPin: Pin fuera de la rejilla
+  referencePrefix: El prefijo de referencia no se puede numerar
+  zeroSizeGraphic: Forma sin tamaño
+  customRules: Reglas personalizadas no aplicadas
+  copperClearance: Cobre demasiado cerca
+  copperShort: Se tocan cobres de dos redes
+  tracksCrossing: Pistas que se cruzan
+  trackOnPostMachinedLayer: Pista en una capa con backdrill o postmecanizado
+  holeClearance: Agujero demasiado cerca del cobre
+  holesTooClose: Agujeros taladrados demasiado cerca
+  copperEdgeClearance: Cobre demasiado cerca del borde de la placa
+  unconnectedItems: Conexión sin enrutar
+  trackWidth: Pista demasiado estrecha
+  viaDiameter: Vía demasiado pequeña
+  annularWidth: Muy poco cobre alrededor de un agujero
+  drillOutOfRange: Agujero demasiado pequeño para taladrar
+  microviaDrillOutOfRange: Agujero de microvía demasiado pequeño para taladrar
+  courtyardsOverlap: Solapamiento de patios
+  pthInsideCourtyard: Agujero metalizado dentro de otro patio
+  npthInsideCourtyard: Agujero no metalizado dentro de otro patio
+  invalidOutline: Contorno de la placa no cerrado
+  itemsNotAllowed: Elemento dentro de un área restringida
+  zonesIntersect: Zonas de una misma red solapadas con la misma prioridad
+  isolatedCopper: Isla de zona sin conexión
+  starvedThermal: Muy pocos radios de alivio térmico
+  trackDangling: Extremo de pista sin conectar a nada
+  viaDangling: Vía sin conectar a nada
+  connectionWidth: Conexión de cobre demasiado estrecha
+  copperSliver: Astilla de cobre
+  textHeight: Texto demasiado pequeño
+  textThickness: Trazo de texto demasiado fino
+  mirroredTextOnFront: Texto reflejado en una capa frontal
+  nonmirroredTextOnBack: Texto sin reflejar en una capa trasera
+  textOnEdgeCuts: Texto en la capa del borde de la placa
+  drcError: Marcador de error de reglas de diseño en el texto
+  drcWarning: Marcador de aviso de reglas de diseño en el texto
+  trackSegmentLength: Longitud de segmento de pista fuera de rango
+  trackAngle: Ángulo de pista no permitido
+  trackNotCenteredOnVia: Pista no centrada en su vía
+  partTypeMismatch: El tipo de huella no coincide con sus pads
+  footprint: Huella mal formada
+  noCourtyard: La huella no tiene patio
+  itemOnDisabledLayer: Elemento en una capa que la placa no tiene
+  assertionFailure: Falla una aserción de regla personalizada
+  missingTuningProfile: La clase de red nombra un perfil de afinado inexistente
+  silkOverlap: Serigrafía solapada con serigrafía
+  silkOverCopper: Serigrafía recortada por una apertura de máscara
+  silkEdgeClearance: Serigrafía recortada por el borde de la placa
+  solderMaskBridge: Máscara de soldadura demasiado estrecha entre redes
+  lengthOutOfRange: Longitud de red fuera de rango
+  skewOutOfRange: Desviación de longitud de red fuera de rango
+  tooManyVias: Número de vías fuera de rango
+  diffPairGap: Separación del par diferencial fuera de rango
+  diffPairUncoupledLength: Tramo desacoplado del par diferencial demasiado largo
+  creepage: Cobre demasiado cerca sobre la superficie de la placa
+  libraryFootprintIssue: Huella no encontrada en su biblioteca
+  libraryFootprintMismatch: La huella difiere de su copia de la biblioteca
+  duplicateFootprints: Dos huellas comparten referencia
+  missingFootprint: Componente ausente de la placa
+  extraFootprint: Huella que no está en el esquema
+  footprintSymbolMismatch: La huella difiere de su símbolo
+  footprintSymbolFieldMismatch: Un campo de la huella difiere de su símbolo
+  footprintFiltersMismatch: Huella fuera de los filtros de su símbolo
+  netConflict: La red del pad difiere de la del esquema

@@ -1,0 +1,317 @@
+title: 基板の設定
+sections:
+  stackup: 積層構造
+  constraints: 制約
+  tuningPatterns: 配線長の調整パターン
+  teardrops: ティアドロップ
+  tuningProfiles: 調整プロファイル
+  netClasses: ネットクラス
+  customRules: カスタム ルール
+  rules: デザインルール
+  exclusions: 除外
+groups:
+  copper: 厚さ
+  holes: 穴
+  microvias: マイクロビア
+  silk: シルクスクリーン
+  arcs: 円弧近似
+  zones: ゾーンの塗りつぶし
+  lengthTuning: 配線長の調整
+  tuneSingle: 単一配線
+  tunePair: 差動ペア
+  tuneSkew: 差動ペアの遅延差（スキュー）
+  teardropRound: 円形
+  teardropRect: 矩形
+  teardropTrack: 配線間
+actions:
+  save: 保存
+  manage: 管理
+profile:
+  name: 制約の構成
+  custom: カスタム
+  edited: 編集済み
+  saveAs: 名前を付けて保存…
+stackup:
+  preset:
+    label: 積層構造の構成
+  copperLayers:
+    label: 導体レイヤー
+  copperFinish:
+    label: 表面処理
+columns:
+  layer: レイヤー
+  type: タイプ
+  material: 材料
+  thickness: 厚さ
+  weight: 銅箔重量
+  epsilonR: Dk
+  epsilonRHint: 誘電率（比誘電率）。高いほど信号が遅くなり、配線のインピーダンスを決めます。
+  lossTangent: Df
+  lossTangentHint: 誘電正接。積層材が吸収する信号の量で、高周波でのみ影響します。
+  color: 色
+  colorUnsetMask: 指定なし（緑）
+  colorUnsetSilk: 指定なし（白）
+table:
+  addDielectric: 誘電体を追加
+  removeLayer: レイヤーを削除
+  copper: 厚さ
+  dielectric: 誘電体
+  total: 合計
+constraints:
+  minClearance:
+    label: 最小クリアランス
+  minTrackWidth:
+    label: 最小配線幅
+  minConnectionWidth:
+    label: 最小接続幅
+  minViaAnnularWidth:
+    label: 最小アニュラー幅
+  minViaDiameter:
+    label: 最小ビア直径
+  minCopperHoleClearance:
+    label: 導体から穴のクリアランス
+  minCopperEdgeClearance:
+    label: 基板端クリアランス
+  minThroughHoleDiameter:
+    label: 最小ドリル径
+  minHoleToHole:
+    label: 穴から穴へのクリアランス
+  minMicroviaDiameter:
+    label: 最小マイクロビア直径
+  minMicroviaDrill:
+    label: 最小マイクロビア穴径
+  minSilkClearance:
+    label: アイテムの最小クリアランス
+  minTextHeight:
+    label: 最小テキスト高
+  minTextThickness:
+    label: 最小テキストの太さ
+  maxError:
+    label: 最大許容偏差
+  zonesAllowExternalFillets:
+    label: ゾーン外形の外側のフィレットを許可
+  minResolvedSpokes:
+    label: 最小サーマルリリーフ スポーク数
+  useHeightForLengthCalcs:
+    label: 積層構造の高さを配線長に含める
+tuningPatterns:
+  minAmplitude:
+    label: 最小振幅 (A)
+  maxAmplitude:
+    label: 最大振幅 (A)
+  spacing:
+    label: 間隔 (s)
+  cornerRadiusPercent:
+    label: コーナー半径 (r)、%
+  singleSided:
+    label: 片側のみ
+teardrops:
+  enabled: 配線がより太い配線につながる箇所にティアドロップを付ける
+  bestLength: 最適な長さ (L)
+  maxLength: 最大長 (L)
+  bestWidth: 最適な幅 (W)
+  maxWidth: 最大幅 (W)
+  trackWidthLimit: 配線幅の上限 (w/d)
+  curved: 曲線のエッジ
+  twoSegments: 2 つの配線セグメントにまたがる
+  preferZone: ゾーン接続を優先
+netClassColumns:
+  name: クラス
+  clearance: クリアランス
+  trackWidth: 配線幅
+  viaDiameter: ビア サイズ
+  viaDrill: ビア穴
+  microviaDiameter: µビア サイズ
+  microviaDrill: µビア穴
+  diffPairWidth: DP 幅
+  diffPairGap: DP ギャップ
+  pcbColor: PCBの色
+  tuningProfile: 調整プロファイル
+  wireWidth: ワイヤー幅
+  busWidth: バス線幅
+  schematicColor: 色
+  lineStyle: 線のスタイル
+netClasses:
+  title: ネットクラス
+  fromInterface: 標準インターフェースを設定…
+  interfaceSupports: USB 2.0、MIPI CSI-2、50 Ω RF 給電線
+  interfaceAdds: ネットクラスのペアのサイズ、積層構造に合わせて求めた調整プロファイル、カスタム ルールを設定します
+  layerColor: レイヤー
+  themeColor: テーマ
+  importColors: 回路図から色をインポート
+  add: クラスを追加
+  remove: クラスを削除
+  newName: 新しいクラス
+patterns:
+  pair: 差動ペア（KiCad の P/N または +/- の命名による）
+  title: 割り当て
+  add: 割り当てを追加
+  remove: 割り当てを削除
+  matching: 一致するネット
+  syntax:
+    any: 任意の文字列
+    one: 任意の 1 文字
+    regex: 正規表現、名前全体
+  invalid: 有効な式ではありません。何にも一致しません
+  overlap: '{count} 個が {classes} にも該当'
+patternColumns:
+  pattern: ネットパターン
+  netClass: クラス
+  nets: ネット
+extraSizes:
+  title: カスタムサイズ
+  width: 配線幅
+  diameter: ビア直径
+  drill: ビアドリル
+  addTrack: 配線幅を追加
+  addVia: ビアを追加
+  remove: サイズを削除
+currentWidth:
+  title: 電流から求める幅
+  current: 電流
+  rise: 温度上昇
+  layer: レイヤー
+  copper: 厚さ
+  width: 最小幅
+  source: IPC-2221 による
+  outOfRange: IPC-2221 の近似式の適用範囲外
+section:
+  core: コア
+  prepreg: プリプレグ
+  silkTop: F.Silkscreen
+  maskTop: F.Mask
+  silkBottom: B.Silkscreen
+  maskBottom: B.Mask
+  total: 仕上がり厚さ
+noProject: この基板にはプロジェクトファイルがないため、制約、ネットクラス、ルールの深刻度を保存できません。積層構造は基板ファイル自体に格納されるため、通常どおり保存されます。
+tuningProfiles:
+  add: 調整プロファイルを追加
+  remove: プロファイルを削除
+  newName: プロファイル
+  empty: 調整プロファイルがありません。ネットクラスの「調整プロファイル」列で指定します。
+  name: 名前
+  type: タイプ
+  single: 単線
+  differential: 差動
+  target: 目標
+  timeDomain: 時間領域
+  viaDelay: ビア遅延
+  none: なし
+  usedBy: 使用先
+  addLayer: レイヤーを追加
+  removeLayer: レイヤーを削除
+  solve: 計算
+  solveAll: 全レイヤーを計算
+  solveHint: 積層構造で目標を満たす幅（と遅延）を、KiCad の計算機と同じ方法で求めます
+  readout: Z
+  columns:
+    layer: レイヤー
+    topReference: 表側リファレンス面
+    bottomReference: 裏側リファレンス面
+    width: 幅
+    gap: ギャップ
+    delay: 遅延
+  errors:
+    target-not-positive: 先に目標インピーダンスを設定してください
+    signal-layer-missing: 信号レイヤーが積層構造にありません
+    zero-signal-thickness: 信号レイヤーの厚さは 0 より大きくなければなりません
+    reference-missing: リファレンス レイヤーが積層構造にありません
+    reference-same-as-signal: リファレンス レイヤーは信号レイヤーと異なる必要があります
+    top-reference-missing: 表側リファレンス レイヤーが積層構造にありません
+    top-reference-not-above: 表側リファレンスは信号レイヤーより上にある必要があります
+    bottom-reference-missing: 裏側リファレンス レイヤーが積層構造にありません
+    bottom-reference-not-below: 裏側リファレンスは信号レイヤーより下にある必要があります
+    zero-dielectric: 誘電体の高さは 0 より大きくなければなりません
+    gap-required: 先にペアのギャップを設定してください。幅はそのギャップに対して求めます
+    width-required: 先に幅を設定してください
+    width-and-gap-required: 先に幅とギャップを設定してください
+    gap-on-single: シングルエンドのプロファイルにはギャップがありません
+    width-failed: 配線幅を計算できませんでした
+    gap-failed: 差動ペアのギャップを計算できませんでした
+    no-width: 配線幅を計算できませんでした
+    no-gap: 差動ペアのギャップを計算できませんでした
+    no-delay: 配線伝播遅延を計算できませんでした
+pending:
+  added: 適用時に追加
+  edited: 適用時に変更
+customRules:
+  add: ルールを追加
+  edit: ルールを編集
+  remove: ルールを削除
+  save: 保存
+  addSave: 追加
+  oneRule: ルールを 1 つ (rule "name" …) だけ記述してください。
+  empty: カスタム ルールがありません。KiCad のカスタム ルール、または標準インターフェースの設定で .kicad_dru に書き込まれます。
+  columns:
+    rule: ルール
+    appliesTo: 適用対象
+    constraint: 制約
+    limit: 制限値
+interfacePreset:
+  title: 標準インターフェースを設定
+  apply: 適用
+  discard: 破棄
+  interface: インターフェース
+  mode: モード
+  target: 目標
+  stackup: 積層構造
+  reference: ref
+  customRules: カスタム ルール
+  classUpdates: '{netClass} の更新'
+  profileUpdates: '{profile} 調整プロファイル'
+  classUnchanged: このクラスはすでにこれらのサイズです。
+  constraints: 制約
+  stackupSummary: '導体 {count} 層、{thickness} mm'
+  fabLimitsValues: '配線 ≥ {track}、クリアランス ≥ {clearance}'
+  notSet: 未設定
+  defaultClearance: Default クラスのクリアランス
+  frequency: 設計周波数
+  differential: 差動
+  uncontrolled: 規格の値、維持しない：クラスは基板のサイズのまま
+  netClass: ネットクラス
+  nets: ネット
+  assignNets: '{netClass} にはまだネットがありません。それでも設定は行われます。「割り当て」で割り当てたネットにこのクラスが適用され、その時点でペアがチェックされます。'
+  noClasses: 上でネットクラスを追加してネットを割り当ててから、ここで設定してください。
+  matched: '{count} ネット、{pairs} ペア：'
+  pairGap: ペアのギャップ
+  groundGap: グランドとのギャップ
+  linked: 目標インピーダンスで連動。どちらかを設定するともう一方が求まります
+  derivedGap: 求めたギャップを使用
+  layers: レイヤー
+  gapSource:
+    given: ''
+    fromWidth: 幅に対して計算
+    classClearance: ''
+    fabClearance: 製造業者の最小クリアランス（制約）
+    widened: 製造可能な幅になるまで拡大
+  columns:
+    gap: ギャップ
+    width: 幅
+  writeFailed: '{file} を書き込めませんでした。'
+  modes:
+    usb2:
+      high: High Speed、480 Mb/s
+      full: Full Speed、12 Mb/s
+      full-uncontrolled: Full Speed、12 Mb/s、インピーダンス非制御
+    rf-50:
+      sub1g: サブ GHz、868/915 MHz
+      2g4: 2.4 GHz
+      5g: 5 GHz
+    ethernet-mdi:
+      1g: 1000BASE-T
+      100m: 10/100BASE-T
+    rgmii:
+      1g: 1 Gb/s
+      100m: 10/100 Mb/s
+    csi2:
+      1g0: 1 レーンあたり 1.0 Gb/s
+      1g5: 1 レーンあたり 1.5 Gb/s
+      2g5: 1 レーンあたり 2.5 Gb/s
+  errors:
+    unknown-preset: そのようなインターフェースはありません。
+    unknown-mode: そのようなモードはありません。
+    no-nets: Default 以外のネットクラス名と、それぞれがネットに一致するパターンを指定してください。
+    unpaired: KiCad は P/N または +/- の接尾辞でネットをペアにします。以下のネットには一致するものの中に相手がいません：
+    bad-layer: 以下のレイヤーではこの線路を配線できません：
+    solve-failed: この目標に対して積層構造から解が得られません。
+    below-fab: 製造業者の最小クリアランスまたは最小配線幅（制約）を下回っています。

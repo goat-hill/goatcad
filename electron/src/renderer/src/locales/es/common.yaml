@@ -1,0 +1,11 @@
+save: Guardar
+cancel: Cancelar
+close: Cerrar
+delete: Eliminar
+undo: Deshacer ({shortcut})
+redo: Rehacer ({shortcut})
+undoWithLabel: Deshacer {label} ({shortcut})
+redoWithLabel: Rehacer {label} ({shortcut})
+undoLabel: Deshacer
+redoLabel: Rehacer
+selectAllLabel: Seleccionar todo

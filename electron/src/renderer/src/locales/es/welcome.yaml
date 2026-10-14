@@ -1,0 +1,35 @@
+tabTitle: Bienvenida
+hero:
+  tagline: El banco de trabajo moderno y nativo de IA para el diseño de placas de circuito.
+start:
+  title: Comenzar
+  openProject: Abrir proyecto…
+  openProjectDesc: Abrir un proyecto .kicad_pro existente
+  openFolder: Abrir carpeta…
+  newProject: Nuevo proyecto…
+  newProjectDesc: Comenzar un nuevo esquema y una nueva placa
+  openFile: Abrir archivo…
+  openSample: Abrir proyecto de ejemplo…
+  openSampleDesc: Descargar un diseño de ejemplo desde GitHub
+explore:
+  title: Explorar
+recent:
+  title: Recientes
+  filesTitle: Archivos
+  clear: Borrar
+  remove: Quitar de recientes
+samples:
+  title: Abrir proyecto de ejemplo
+  loading: Cargando ejemplos…
+  empty: No hay proyectos de ejemplo disponibles en este momento.
+  size: '{size} MB'
+  cancel: Cancelar
+  retry: Reintentar
+  open: Abrir
+  downloading: Descargando…
+  errors:
+    offline: No se pudo conectar con GitHub. Compruebe su conexión e inténtelo de nuevo.
+    rateLimited: GitHub está limitando las solicitudes desde esta red. Inténtelo de nuevo en unos minutos.
+    unavailable: No se pudieron cargar los proyectos de ejemplo. Inténtelo de nuevo más tarde.
+footer:
+  showOnStartup: Mostrar la página de bienvenida al iniciar

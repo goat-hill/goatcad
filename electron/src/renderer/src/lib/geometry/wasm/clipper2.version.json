@@ -1,0 +1,6 @@
+{
+  "clipper2": "2.0.1",
+  "tarballSha256": "2a3693aceab4aed3e39b743e038d87701acc53cf05ed7b2013aab3e0aec5287e",
+  "toolchain": "emscripten/emsdk:6.0.9 (emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.9 (4e4223852a0835923411059a3929907d7df1232e))",
+  "builtBy": "electron/wasm/clipper2/build.sh"
+}

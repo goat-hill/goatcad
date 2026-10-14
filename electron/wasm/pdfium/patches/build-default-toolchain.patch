@@ -1,0 +1,19 @@
+diff --git a/config/BUILDCONFIG.gn b/config/BUILDCONFIG.gn
+index 538bb3d..376a0d9 100644
+--- a/config/BUILDCONFIG.gn
++++ b/config/BUILDCONFIG.gn
+@@ -296,11 +296,9 @@ if (target_os == "android") {
+ } else if (target_os == "zos") {
+   _default_toolchain = "//build/toolchain/zos:$target_cpu"
+ } else if (target_os == "emscripten") {
+-  # Because it's too hard to remove all targets from //BUILD.gn that do not work
+-  # with it.
+-  assert(
+-      false,
+-      "emscripten is not a supported target_os. It is available only as secondary toolchain.")
++  # Chromium keeps wasm a secondary toolchain because its root BUILD.gn has
++  # targets that cannot build for it; pdfium's can, so make it the default.
++  _default_toolchain = "//build/toolchain/wasm:$target_cpu"
+ } else {
+   assert(false, "Unsupported target_os: $target_os")
+ }

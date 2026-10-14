@@ -1,0 +1,15 @@
+#!/bin/bash
+# Record a demo video of the marketing site (web/): build, serve dist/ through
+# Astro's preview server, drive system Chrome with Playwright while a --script
+# steers the page, encode the frames to mp4/gif with ffmpeg. See
+# scripts/record.mjs for options (--out, --size, --path, --url, --dpr, --script,
+# --fps, --format, --wait, --visible, --no-build).
+#
+# Headless by default — no xvfb needed (unlike the Electron harness); --visible
+# opens a real Chrome window to watch the driver. Requires ffmpeg on PATH.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+exec node scripts/record.mjs "$@"

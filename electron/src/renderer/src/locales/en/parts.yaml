@@ -1,0 +1,230 @@
+# Distributor part search (docs/parts-sourcing-workstream.md).
+# Company names (DigiKey, Mouser) are proper nouns and never translated — they
+# come from the provider registry in main, not from here.
+title: Part search
+# Placeholder in the query box. "MPN" is the industry abbreviation for
+# manufacturer part number and is left as-is in most languages; expand it if
+# yours does not use it. Quoted because a space-preceded `#` starts a YAML
+# comment and would silently truncate the string at "part".
+searchPlaceholder: 'Search distributors by part # or keyword'
+search: Search
+
+# Search scope, chosen with a segmented control left of the query box. Company
+# names come from the provider registry, so only Universal is named here.
+modes:
+  # Searches every connected distributor at once and groups the answers by
+  # physical part. Shown only when more than one distributor is connected.
+  universal: All
+
+# Category browsing. Only DigiKey's API exposes a category tree; a distributor
+# without one goes straight to the search prompt.
+browse:
+  # Breadcrumb root — clears the path back to the top-level categories.
+  all: All categories
+  # Button on the breadcrumb: searches the open category rather than opening it.
+  # {count} is a product count, preformatted with thousands separators.
+  searchCategory: Search this category ({count} parts)
+  # Returns to the tree from a category's results, keeping the path you browsed.
+  backToCategories: Back to categories
+  empty: This distributor does not publish a category list.
+searching: Searching…
+# Stops waiting on a slow request. The request itself ends on its own deadline.
+cancel: Cancel
+cancelled: Search cancelled.
+retry: Try again
+# Shown when the query box is empty and nothing has been searched yet.
+emptyPrompt: Search for a manufacturer part number to see who stocks it, at what
+  price, and with which datasheet.
+noResults: No parts matched that search.
+# Result paging. Distributor modes only — Universal merges two catalogs, so
+# neither API can be asked for "page 2" of the merged set.
+paging:
+  # {from}, {to} and {total} are preformatted with thousands separators.
+  showing: Showing {from}–{to} of {total}
+  none: No results
+  previous: Previous
+  next: Next
+  perPage: Per page
+
+# One row per physical part, so this counts parts rather than listings.
+groupCount: '{count} part | {count} parts'
+# Target quantity. A display option over results already fetched — it picks which
+# price break each row shows and never reaches an API, which is why it sits with
+# the results rather than beside the search box.
+quantity: Price at qty
+# One distributor failed while others succeeded. Named rather than swallowed —
+# "no results" and "your key expired" must not look the same. {name} is a
+# company name, {reason} one of the errors below.
+providerFailed: '{name} could not be searched. {reason}'
+# A failure that never reached a distributor — a bug in the app rather than an
+# API error, so the raw message is shown; there is nothing to translate it into.
+searchFailed: 'The search could not run: {error}'
+# Required by both API agreements: the surface showing distributor data must
+# clearly attribute it. {names} is a comma-separated list of company names.
+attribution: 'Pricing, stock and product data from {names}.'
+
+# The panel's state when no API key has been entered for any distributor. This
+# is a setup card, not an error: nothing is broken, the feature just needs a key.
+setup:
+  title: Connect a distributor
+  body: Search DigiKey or Mouser for real manufacturer parts — prices, stock,
+    datasheets and CAD model links. It needs a free API key from the distributor,
+    which takes a few minutes to get.
+  # Leads straight to Settings ▸ Distributor APIs, not to Settings in general.
+  action: Set up a distributor
+
+# Per-distributor onboarding, keyed by provider id and shown until a key is
+# stored. Separate per provider because the flows genuinely differ in shape and
+# length: DigiKey wants an app subscribed to a product, Mouser emails you a key.
+# Deliberately describing the *shape* of each flow rather than quoting button
+# labels, which the vendors change without notice.
+providers:
+  digikey:
+    # Verified against the live portal's app form, 2026-08-14. Steps 2 and 3 are
+    # the two that actually stop people: the product list defaults to none, and
+    # the callback field asks for something GoatCAD never uses.
+    steps:
+      - Sign in on DigiKey's developer portal and add a Production app — not a
+        Sandbox one, which uses a different server.
+      - Tick Product Information V4 in the product list. GoatCAD uses only that.
+      - Leave OAuth Callback empty. It applies only to three-legged OAuth, which
+        GoatCAD does not use.
+      - Copy the app's Client ID and Client Secret into the boxes below.
+  mouser:
+    steps:
+      - Sign in on Mouser's API hub.
+      - Request a key for the Search API. Mouser sends it to you by email.
+      - Paste the key into the box below.
+
+# The filter rail. Every control here narrows results already fetched — it runs
+# on our own data, so it is instant and costs no API request.
+filters:
+  title: Filters
+  # Commits the pending changes and runs a new search. Explicit, not automatic:
+  # each filter change is an API request, and a ~1000/day budget should not be
+  # spent one checkbox at a time.
+  apply: Apply filters
+  # Shown while the draft differs from what the results were fetched with.
+  pending: Not applied yet
+  availability: Availability
+  inStock: In stock
+  rohs: RoHS compliant
+  hasDatasheet: Has datasheet
+  has3dModel: Has 3D model
+  manufacturer: Manufacturer
+  packaging: Packaging
+  # Product lifecycle as the distributor reports it (Active, Obsolete, …).
+  status: Status
+  # A manufacturer's product family, e.g. "GRM" or "X7R" — DigiKey's Series.
+  series: Series
+  # Heading over the removable chips of everything currently narrowing the
+  # search. These are the reliable way to undo a filter: the checkbox that set
+  # it may not exist in the next result set's facets.
+  # Keyword chips render the search text itself, with no prefix — the text is
+  # the thing being removed, and a label repeats what the box it came from says.
+  searchWithin: Search within results…
+  removeFilter: Remove this filter
+  clearAll: Clear all
+  # Appears inside a filter group with enough options that scrolling stops being
+  # a way to find one. Narrows the options offered, not the search itself.
+  findOption: Find…
+  noOptions: No matching options
+  # Shown in modes whose API has no facets. Universal cannot merge two catalogs'
+  # filters, and Mouser's API publishes none at all.
+  scopeNote: This distributor supports only these filters. Search DigiKey directly
+    for category and specification filtering.
+
+# Column headings for the results table. Parametric columns are not listed here:
+# their headings are the distributor's own parameter names, shown verbatim
+# because a mapped spec is a wrong spec.
+columns:
+  # The part number, manufacturer and description share one column — they answer
+  # "which part is this" together, and a parametric table runs out of width
+  # before it runs out of anything else. The heading is the part number, which is
+  # what the column sorts by. Quoted: an unquoted `#` after a space starts a YAML
+  # comment and would truncate this to "Manufacturer part".
+  part: 'Manufacturer part #'
+  mpn: 'Manufacturer part #'
+  manufacturer: Manufacturer
+  status: Status
+  # Which distributor the stock and price on this line come from. In Universal a
+  # row can carry a line per distributor; they are never merged.
+  seller: Distributor
+  stock: Stock
+  price: Price
+  # Not a column today, but the API sorts by it, so the label exists for the
+  # heading that would offer it.
+  packaging: Packaging
+  # Tooltip on a sortable heading. Only some columns sort: the distributor sorts
+  # the whole result set, and it will not order by a specification, so those
+  # headings are plain text rather than a control that could only fake it.
+  sortBy: Sort by {name}
+  # Opens the row's full specifications and links.
+  expand: Show details
+
+# Per-result fields.
+part:
+  manufacturer: Manufacturer
+  # A distributor's own ordering code, as opposed to the manufacturer's MPN.
+  # Quoted for the same reason as searchPlaceholder: an unquoted trailing `#`
+  # is a YAML comment, leaving the value as a bare "Distributor".
+  distributorPart: 'Distributor #'
+  # {count} is preformatted with thousands separators.
+  inStock: '{count} in stock'
+  stockUnknown: Stock unknown
+  outOfStock: Out of stock
+  # Unit price at the lowest quantity break, e.g. "$3.34 @ 1". The `@` is the
+  # standard notation on a distributor price break, so it is kept — but it is
+  # also vue-i18n's linked-message sigil, so a bare one fails to compile and has
+  # to be escaped as {'@'}. Same applies in every translation of this string.
+  priceAt: "{price} {'@'} {quantity}"
+  noPrice: No price
+  moq: 'Min {quantity}'
+  datasheet: Datasheet
+  # Opens the distributor's own product page. {name} is a company name from the
+  # provider registry, never translated.
+  product: View on {name}
+  # The CAD hand-off. Deliberately "open", never "download": neither DigiKey nor
+  # Mouser serves the model file itself, only a link to a page that hosts it.
+  cadOpen: Open CAD model page
+  cadCheck: Check for CAD model
+  cadNone: No CAD model listed
+  # Specs are shown per distributor and never merged: the two catalogs name the
+  # same field differently, and a mapped spec is a wrong spec. {name} is a company.
+  parametersFrom: Specifications from {name}
+
+lifecycle:
+  active: Active
+  # "Not recommended for new designs" — the industry phrase. Keep it short; this
+  # renders as a small badge.
+  nrnd: Not for new designs
+  obsolete: Obsolete
+  unknown: Unknown
+
+# Credential field labels, keyed by the provider registry's `labelKey`.
+fields:
+  apiKey: API key
+  clientId: Client ID
+  clientSecret: Client secret
+
+# Errors. Main names a kind and the renderer translates it, because every one of
+# these has a different fix and "search failed" would hide which.
+errors:
+  no-credentials: No API key is set for this distributor.
+  invalid-credentials: This distributor rejected the API key. Check it and try again.
+  # 403 rather than 401 — the key is real but the account lacks access to the
+  # product being called. A different fix from a wrong key, so a different message.
+  forbidden: This API key is not authorized for part search. Check the subscription
+    on the distributor's developer portal.
+  # {detail} is a number of seconds.
+  rate-limited: Too many requests just now. Try again in {detail} seconds.
+  quota-exhausted: Today's request limit for this distributor is used up. It resets
+    at midnight UTC.
+  network: Could not reach the distributor. Check your connection.
+  # Distinct from `network`: the connection worked, the distributor just never
+  # answered. Every request carries a deadline so this ends rather than hanging.
+  timeout: The distributor did not respond in time. It may be busy — try again.
+  provider-error: The distributor returned an error.
+  bad-response: The distributor's response could not be read.
+  storage-unavailable: The key was not saved, because this computer's secure
+    storage is unavailable.

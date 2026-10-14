@@ -1,0 +1,42 @@
+kind:
+  symbol: Símbolo
+  footprint: Huella
+  model: Modelo 3D
+scope:
+  system: Sistema
+  global: Global
+  project: Proyecto
+noneAssociated: Ninguno asociado
+open: Abrir
+openTitle: Abrir en una pestaña de editor completa
+loading: Cargando…
+indexLoading: Cargando el índice de bibliotecas…
+notFound: No se pudo resolver este elemento de biblioteca.
+panes:
+  symbol: Símbolo
+  footprint: Huella
+  model3d: Modelo 3D
+fields:
+  reference: Referencia
+  value: Valor
+  units: Unidades
+  pins: Pines
+  description: Descripción
+  library: Biblioteca
+  category: Categoría
+  pads: Pads
+  model: Modelo 3D
+noPreview: Vista previa no disponible
+footprintAssigned: Huella asignada
+footprintNone: No hay ninguna huella asignada.
+footprintCandidates: Huellas candidatas (según los filtros)
+footprintNoCandidates: No hay filtros de huellas; cualquier huella es válida.
+model3dVia: Resuelto a través de la huella asignada.
+model3dPath: Ruta del modelo
+model3dNone: No hay ninguna huella asignada, por lo que no hay modelo 3D.
+model3dPending: La vista previa del modelo 3D aún no está conectada.
+reverseHeading: Usado por
+reverseNote: Qué componentes usan esta huella es una búsqueda inversa; se calcula bajo demanda y no se muestra aquí.
+usedByNone: Nada en las bibliotecas indexadas usa esto.
+choice: '{name} — {library}'
+more: '+{n} más'

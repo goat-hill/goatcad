@@ -1,0 +1,29 @@
+# Share app feedback: a draft that opens as a prefilled GitHub issue in the
+# user's browser, where they review and post it. "Issue" is GitHub's word.
+title: Share app feedback
+kind:
+  bug: Bug report
+  idea: Idea
+summary: Summary
+summaryPlaceholder: One line, like a headline
+details: Details
+detailsBugPlaceholder: What did you do, what did you expect, and what happened instead?
+detailsIdeaPlaceholder: What would you like GoatCAD to do, and what would it help with?
+# A link has a length limit, so a very long description is cut to fit.
+truncated: Too long to send in full. The end will be cut; paste the rest into the issue on GitHub.
+screenshot: Screenshot
+copyScreenshot: Copy screenshot
+# A link cannot carry an image, so the user pastes it into the issue.
+screenshotHint: Not attached automatically. Copy it, then paste it into the issue on GitHub.
+screenshotCopied: Copied. Paste it into the issue on GitHub.
+screenshotCopyFailed: Could not copy the screenshot.
+noScreenshot: This window could not be captured.
+includeSystemInfo: Include system info
+showSystemInfo: Show
+hideSystemInfo: Hide
+note: Opens a new issue on GitHub, where you can review it before posting. You need a GitHub account.
+openFailed: Could not open your browser. Copy the link and open it there.
+copyLink: Copy link
+linkCopied: Copied
+cancel: Cancel
+continue: Continue on GitHub

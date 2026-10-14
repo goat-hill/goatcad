@@ -1,0 +1,123 @@
+title: Sorties de fabrication
+board: Circuit imprimé
+exportProfile: Profil d’exportation
+outputs:
+  gerber: Gerbers
+  drill: Perçage
+  bom: Liste du matériel
+  cpl: Placement
+detail:
+  configure: Configurer
+  preview: Aperçu
+gerber:
+  category:
+    copper: Cuivre
+    technical: Techniques
+    board: Circuit imprimé
+  format: Format
+  coordinateFormat: Format des coordonnées
+  units: Unités
+  naming: Nommage des fichiers
+  namingValue:
+    kicad: KiCad (.gbr)
+    protel: Extensions Protel
+  layerCountNote: 'Les couches sont lues depuis le circuit imprimé ; l’aperçu restitue exactement les Gerbers.'
+  previewLoading: Chargement du circuit imprimé…
+  previewEmpty: Sélectionnez au moins une couche à prévisualiser.
+drill:
+  format: Format
+  formatValue: Excellon
+  units: Unités
+  zeros: Zéros
+  zerosValue:
+    none: Garder
+    leading: Suppr. zéros de tête
+    trailing: Suppr. zéros de fin
+  options: Options
+  merge: Fusionner PTH + NPTH
+  map: Plan de perçage (Gerber)
+  stats: '{holes} trous · {tools} outils'
+bom:
+  options: Options
+  group: Regrouper les pièces identiques
+  includeDnp: Inclure les pièces DNP
+  partNumber: Référence fabricant
+  format: Format
+  formatValue: CSV
+  col:
+    comment: Commentaire
+    designator: Référence
+    footprint: Empreinte
+  export: Exporter la liste du matériel
+  loading: Chargement des composants…
+  empty: Aucune pièce dans la liste du matériel — le circuit imprimé n’a pas d’empreintes, ou elles sont toutes exclues.
+  stats: '{total} composants · {unique} uniques'
+  dnpLabel: 'DNP (ne pas monter) :'
+cpl:
+  units: Unités
+  side: Face d’assemblage
+  sideValue:
+    both: Dessus + dessous
+    top: Dessus uniquement
+  group: Regrouper les pièces identiques
+  rotationNote: Centroïdes KiCad standard ; les tables de rotation par fabricant sont prévues pour M2+.
+  export: Exporter le fichier de placement
+  stats: '{total} placements · {top} dessus · {bottom} dessous'
+  empty: Aucun placement — le circuit imprimé n’a pas d’empreintes, ou elles sont toutes exclues.
+  listTitle: Composants
+  top: Dessus
+  bottom: Dessous
+  origin: Origine du placement
+  originOff: 'Origine du placement · {distance} mm'
+outputFolder: Dossier de sortie
+zip: Zip
+export: Exporter le paquet
+exporting: Exportation…
+preflight:
+  title: Vérifications préalables
+  group:
+    blocking: Bloque l’exportation
+    review: À vérifier
+    passed: Réussi
+  check:
+    outline: Contour du circuit imprimé
+    drcErrors: Erreurs de règles de conception
+    drcWarnings: Avertissements de règles de conception
+    unfilledZones: Remplissage des zones
+    drillSize: Diamètres de perçage
+    holeSpacing: Espacement des trous
+    partNumbers: Références fabricant
+    values: Valeurs des pièces
+  outline:
+    found: Le contour Edge.Cuts n’est pas une forme fermée unique ; aucun fabricant ne peut découper le circuit imprimé.
+    passed: Le contour est une forme fermée unique.
+  drc:
+    errors: '{count} erreur | {count} erreurs | {count} erreurs'
+    warnings: '{count} avertissement | {count} avertissements | {count} avertissements'
+    noErrors: Aucune erreur de règles de conception.
+    noWarnings: Aucun avertissement de règles de conception.
+  zones:
+    found: '{count} zone n’a jamais été remplie : {names} | {count} zones n’ont jamais été remplies : {names} | {count} zones n’ont jamais été remplies : {names}'
+    passed: Toutes les zones sont remplies.
+  drill:
+    found: '{count} trou est sous le minimum de {limit} mm de ce fabricant ; le plus petit fait {actual} mm. | {count} trous sont sous le minimum de {limit} mm de ce fabricant ; le plus petit fait {actual} mm. | {count} trous sont sous le minimum de {limit} mm de ce fabricant ; le plus petit fait {actual} mm.'
+    passed: 'Tous les trous font au moins {limit} mm.'
+  spacing:
+    found: 'Deux trous sont espacés de {actual} mm ; le minimum de ce fabricant est de {limit} mm.'
+    passed: 'Les trous sont espacés d’au moins {limit} mm.'
+  partNumbers:
+    found: '{count} pièce n’a pas de référence {field} : {refs} | {count} pièces n’ont pas de référence {field} : {refs} | {count} pièces n’ont pas de référence {field} : {refs}'
+    passed: 'Chaque pièce a une référence {field}.'
+  values:
+    found: '{count} pièce n’a pas de valeur : {refs} | {count} pièces n’ont pas de valeur : {refs} | {count} pièces n’ont pas de valeur : {refs}'
+    passed: Chaque pièce a une valeur.
+  more: '{list} et {more} de plus'
+  showOnBoard: Afficher sur le circuit imprimé
+  unsaved:
+    title: Modifications non enregistrées
+    detail: Le circuit imprimé comporte des modifications non enregistrées. Le paquet est écrit à partir du fichier enregistré ; enregistrez pour les inclure.
+  status:
+    checking: Vérification du circuit imprimé…
+    blocked: Exportation bloquée
+    review: '{count} à vérifier | {count} à vérifier | {count} à vérifier'
+    ready: Prêt à exporter

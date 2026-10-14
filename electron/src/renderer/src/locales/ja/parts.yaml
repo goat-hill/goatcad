@@ -1,0 +1,108 @@
+title: パーツ検索
+searchPlaceholder: 型番またはキーワードで販売代理店を検索
+search: 検索
+modes:
+  universal: すべて
+browse:
+  all: すべてのカテゴリー
+  searchCategory: このカテゴリーを検索 ({count} 部品)
+  backToCategories: カテゴリーに戻る
+  empty: この販売代理店はカテゴリー一覧を公開していません。
+searching: 検索中…
+cancel: キャンセル
+cancelled: 検索をキャンセルしました。
+retry: 再試行
+emptyPrompt: メーカー型番を検索すると、どこに在庫があるか、価格、データシートを確認できます。
+noResults: その検索に一致する部品はありません。
+paging:
+  showing: '{total} 件中 {from}–{to} 件を表示'
+  none: 結果なし
+  previous: 前へ
+  next: 次へ
+  perPage: 1 ページあたり
+groupCount: '{count} 部品'
+quantity: 数量別の価格
+providerFailed: '{name} を検索できませんでした。{reason}'
+searchFailed: '検索を実行できませんでした：{error}'
+attribution: '価格、在庫、製品データの提供元：{names}。'
+setup:
+  title: 販売代理店に接続
+  body: DigiKey または Mouser で実在のメーカー部品を検索できます — 価格、在庫、データシート、CAD モデルへのリンク。販売代理店の無料 API キーが必要で、取得には数分かかります。
+  action: 販売代理店を設定
+providers:
+  digikey:
+    steps:
+      - DigiKey の開発者ポータルにサインインし、Production アプリを追加します — Sandbox アプリは別のサーバーを使うため不可です。
+      - 製品リストで Product Information V4 にチェックを入れます。GoatCAD が使うのはそれだけです。
+      - OAuth Callback は空欄のままにします。これは 3-legged OAuth にのみ使われ、GoatCAD では使用しません。
+      - アプリの Client ID と Client Secret を下の欄にコピーします。
+  mouser:
+    steps:
+      - Mouser の API ハブにサインインします。
+      - Search API のキーをリクエストします。Mouser からメールでキーが送られます。
+      - 下の欄にキーを貼り付けます。
+filters:
+  title: フィルター
+  apply: フィルターを適用
+  pending: 未適用
+  availability: 在庫状況
+  inStock: 在庫あり
+  rohs: RoHS 準拠
+  hasDatasheet: データシートあり
+  has3dModel: 3D モデルあり
+  manufacturer: メーカー
+  packaging: 梱包形態
+  status: ステータス
+  series: シリーズ
+  searchWithin: 結果内を検索…
+  removeFilter: このフィルターを削除
+  clearAll: すべてクリア
+  findOption: 検索…
+  noOptions: 一致するオプションはありません
+  scopeNote: この販売代理店はこれらのフィルターのみ対応しています。カテゴリーや仕様で絞り込むには DigiKey を直接検索してください。
+columns:
+  part: メーカー型番
+  mpn: メーカー型番
+  manufacturer: メーカー
+  status: ステータス
+  seller: 販売代理店
+  stock: 在庫
+  price: 価格
+  packaging: 梱包形態
+  sortBy: '{name} で並べ替え'
+  expand: 詳細を表示
+part:
+  manufacturer: メーカー
+  distributorPart: 販売代理店の品番
+  inStock: '在庫 {count}'
+  stockUnknown: 在庫不明
+  outOfStock: 在庫切れ
+  priceAt: "{price} {'@'} {quantity}"
+  noPrice: 価格なし
+  moq: '最小 {quantity}'
+  datasheet: データシート
+  product: '{name} で表示'
+  cadOpen: CAD モデルのページを開く
+  cadCheck: CAD モデルを確認
+  cadNone: CAD モデルの掲載なし
+  parametersFrom: '{name} の仕様'
+lifecycle:
+  active: 量産中
+  nrnd: 新規設計非推奨
+  obsolete: 生産終了
+  unknown: 不明
+fields:
+  apiKey: API キー
+  clientId: Client ID
+  clientSecret: Client Secret
+errors:
+  no-credentials: この販売代理店の API キーが設定されていません。
+  invalid-credentials: この販売代理店が API キーを拒否しました。キーを確認して再試行してください。
+  forbidden: この API キーはパーツ検索の権限がありません。販売代理店の開発者ポータルでサブスクリプションを確認してください。
+  rate-limited: 現在リクエストが多すぎます。{detail} 秒後に再試行してください。
+  quota-exhausted: この販売代理店の本日のリクエスト上限に達しました。UTC の午前 0 時にリセットされます。
+  network: 販売代理店に接続できませんでした。接続を確認してください。
+  timeout: 販売代理店が時間内に応答しませんでした。混雑している可能性があります — 再試行してください。
+  provider-error: 販売代理店がエラーを返しました。
+  bad-response: 販売代理店の応答を読み取れませんでした。
+  storage-unavailable: このコンピューターのセキュアストレージが利用できないため、キーは保存されませんでした。

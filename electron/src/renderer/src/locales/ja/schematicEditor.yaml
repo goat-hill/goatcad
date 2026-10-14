@@ -1,0 +1,268 @@
+errors:
+  empty: この回路図は空です。
+  parseTitle: KiCad の回路図として開けません
+actions:
+  initializeBlank: KiCad の回路図を初期化
+titleBlock:
+  title: タイトル
+  date: 発行日
+  rev: リビジョン
+  company: 会社名
+  comment1: コメント1
+  comment2: コメント2
+  comment3: コメント3
+  comment4: コメント4
+  comment5: コメント5
+  comment6: コメント6
+  comment7: コメント7
+  comment8: コメント8
+  comment9: コメント9
+directiveShapes:
+  round: ラウンド
+  dot: 点
+  diamond: ひし形
+  rectangle: 矩形
+edit:
+  cut: 切り取り
+  copy: コピー
+  paste: 貼り付け
+  duplicate: 複製
+  repeat: 最後のアイテムを繰り返し
+  delete: 削除
+commands:
+  editField: '{field} を編集'
+  editFieldMultiple: '{field} を編集（{count} 個の部品）'
+  editFlag: '{token} を編集'
+  editFlagMultiple: '{token} を編集（{count} 個の部品）'
+  editSymbol: シンボルを編集
+  editLabel: ラベルを編集
+  editWire: ワイヤーを編集
+  editJunction: ジャンクションを編集
+  editText: テキストを編集
+  editTextBox: テキスト ボックスを編集
+  editGraphic: 図形を編集
+  editSheet: シートを編集
+  editSheetPin: シートピンを編集
+  editDirectiveLabel: 指示ラベルを編集
+  editBus: バスを編集
+  editBusEntry: バス エントリーを編集
+  editImage: 画像を編集
+  editTable: テーブルを編集
+itemTypes:
+  symbol: '{count} 個のシンボル'
+  wire: '{count} 本のワイヤー'
+  label: '{count} 個のラベル'
+  junction: '{count} 個のジャンクション'
+  noConnect: '{count} 個の未接続フラグ'
+  sheet: '{count} 枚のシート'
+labelKinds:
+  label: ローカル ラベル
+  globalLabel: グローバル ラベル
+  hierarchicalLabel: 階層ラベル
+  directiveLabel: 指示ラベル
+toolbar:
+  undoTitle: 元に戻す (Ctrl/Cmd+Z)
+  redoTitle: やり直し (Ctrl/Cmd+Y)
+  grid: グリッド
+  showGrid: グリッドを表示
+tools:
+  select: 選択
+  annotateTitle: 回路図をアノテーション…
+annotate:
+  title: 回路図をアノテーション
+  scope: 範囲
+  scopeDesign: 回路図全体
+  scopeSheet: 現在のシートのみ
+  scopeSelection: '選択範囲（{count} 個のシンボル）'
+  recurse: サブシートも含める
+  order: 順番
+  orderXY: シンボルを X 位置でソート
+  orderYX: シンボルを Y 位置でソート
+  options: オプション
+  optionsKeep: 既存のアノテーションをキープ
+  optionsReset: 既存のアノテーションをリセット
+  numbering: ナンバリング
+  numberingAfter: 以降の最初の空き番号から使用：
+  numberingSheet100: シート番号 × 100 以降の最初の空き番号
+  numberingSheet1000: シート番号 × 1000 以降の最初の空き番号
+  preview: '{count} 個のシンボルのうち {changed} 個の番号が変更されます'
+  cancel: キャンセル
+  confirm: アノテーション
+incrementAnnotations:
+  title: アノテーションの増分
+  action: アノテーションの増分…
+  first: 開始リファレンス指定子：
+  increment: 増分：
+  currentSheet: 現在のシートのみ
+  allSheets: すべてのシート
+  preview: '{count} 個のリファレンス指定子が変更されます'
+  cancel: キャンセル
+  confirm: インクリメント
+footprintChooser:
+  parts: '{n} 個の部品'
+insertOverlay:
+  ops:
+    symbol: シンボル
+    power: 電源シンボル
+    wire: ワイヤー
+    label: ラベル
+    globalLabel: グローバル ラベル
+    hierarchicalLabel: 階層ラベル
+    noConnect: 未接続フラグ
+    junction: ジャンクション
+    text: テキスト
+    sheet: シート
+    sheetPin: シートピン
+    directiveLabel: 指示ラベル
+    bus: バス
+    busEntry: バス エントリー
+    line: 線
+    rectangle: 矩形
+    circle: 円
+    arc: 円弧
+    bezier: ベジェ曲線
+    table: テーブル
+    image: 画像…
+    ruleArea: ルール領域
+    textBox: テキスト ボックス
+image:
+  pickTitle: 画像を配置
+  filter: 画像
+  unreadable: このファイルは画像として読み込めませんでした。
+units:
+  menu: ユニット
+  unitLabel: 'ユニット {unit}'
+  alreadyPlaced: 'ユニット {unit} はすでに配置済みです（シート {sheet} 上）'
+  swap: '{target} と {current} を交換'
+  duplicate: '{unit} を複製'
+  rootSheet: ルート
+  cycleBodyStyle: ボディ スタイルを切り替える
+  openInLibraryEditor: シンボルエディターで開く
+  showDatasheet: データシートを表示
+labelPopover:
+  netPlaceholder: ネット名
+  textPlaceholder: テキスト
+  netClassPlaceholder: ネットクラス
+  pinPlaceholder: ピン名
+  kinds:
+    label: ローカル
+    globalLabel: グローバル
+    hierarchicalLabel: 階層
+    directiveLabel: 指示
+sheetPopover:
+  nameLabel: シート名
+  namePlaceholder: シート名
+  fileLabel: ファイル名
+  invalidName: そのファイル名は使用済みか無効です。
+componentsPanel:
+  title: コンポーネント
+  design: 設計
+  count: '{count} 個のコンポーネント'
+  showInSchematic: 回路図で表示
+  loading: 設計を読み込み中…
+  unreadable: この設計の最上位の回路図を読み込めませんでした。
+modes:
+  schematic: 回路図
+properties:
+  selectionTitle: 選択
+  snapToGrid: グリッドに吸着
+  items: アイテム
+  multiSelectHint: ドラッグで選択中のすべてを移動、Delete で削除します。
+  reference: リファレンス
+  value: 値
+  libraryId: ライブラリ ID
+  unit: ユニット
+  position: 位置
+  rotation: 回転
+  footprint: フットプリント
+  unassigned: 未割り当て
+  symbolHint: ドラッグで移動。Shift+クリックまたは選択枠のドラッグで複数のアイテムを選択します。
+  type: 種類
+  wireTypeValue: ワイヤー
+  net: ネット
+  length: 長さ
+  points: ポイント
+  width: 幅
+  defaultWidth: デフォルト
+  file: ファイル
+  pageNumber: ページ番号
+  pageDuplicate: このページ番号は別のシートですでに使用されています。
+  pageEmpty: このシートにはページ番号がありません。
+  sheetName: シート名
+  paperSize: 用紙サイズ
+  paperUser: カスタム
+  paperWidth: 用紙の幅
+  paperHeight: 用紙の高さ
+  orientation: 向き
+  landscape: 横向き
+  portrait: 縦向き
+  text: テキスト
+  junctionTypeValue: ジャンクション
+  noConnectTypeValue: 未接続フラグ
+  defaultHint: アイテムを選択すると詳細を表示します。中ボタンまたは Ctrl/Cmd+ドラッグでパン、ホイールでズームします。
+viewRail:
+  netHighlight: ネットをハイライト
+  showHiddenPins: 非表示ピンを表示
+  showHiddenFields: 非表示フィールドを表示
+symbolUpdate:
+  updateAction: ライブラリからシンボルを更新…
+  changeAction: シンボルを変更…
+  quickFix: ライブラリから更新
+  options:
+    resetFieldText: フィールドのテキスト
+    resetEmptyFields: ライブラリで空のフィールド
+    removeExtraFields: ライブラリのシンボルにないフィールドを削除
+    resetFieldVisibility: フィールドの表示/非表示
+    resetFieldEffects: フィールドのサイズとスタイル
+    resetFieldPositions: フィールドの位置
+    resetPinTextVisibility: ピン名と番号の表示/非表示
+    resetAlternatePins: 代替ピンの機能
+    resetAttributes: シンボルの属性
+    resetCustomPower: カスタム電源シンボルの値
+  tooFewUnits: '{count} 個のシンボルをスキップします：新しいシンボルのユニットが足りません。'
+align:
+  menu: 整列
+  distributeMenu: 均等配置
+  left: 左寄せ
+  centerX: 水平中央寄せ
+  right: 右寄せ
+  top: 上寄せ
+  centerY: 垂直中央寄せ
+  bottom: 下寄せ
+  distributeHorizontal: 水平方向に均等配置
+  distributeVertical: 垂直方向に均等配置
+find:
+  title: 検索と置換…
+  toggleReplace: 置換の切り替え
+  scope: 検索範囲
+  scopeSheet: このシート
+  scopeDesign: すべてのシート
+  replacePlaceholder: 置換
+  replace: 置換
+  replaceAll: すべて置換
+  replaceReferences: リファレンス
+  duplicates: 'これにより、複数の部品のリファレンスが {references} になります。'
+  replaceAnyway: それでも置換
+  cancel: キャンセル
+hierarchy:
+  enterSheet: シートに入る
+  leaveSheet: シートから抜ける
+hints:
+  elbow: / で折れ方向を切り替え
+  busEntry: R で回転 · Shift+Z で反対の斜めを配置
+  bezier: 始点、終点、各制御点の順にクリック
+  ruleArea: 最初の角を再度クリック、ダブルクリック、または Enter で閉じる
+  table: 角をクリックし、もう一度クリックして行と列を設定
+  sheetPin: シートの辺をクリック
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+drag:
+  follow: ワイヤーが追従 · Shift を押すと単独で移動
+  alone: ワイヤーは固定
+  title: ドラッグ
+  nets: ネット
+  netsChange: ネットリストが変わります
+  merges: '{a} と {b} を結合'
+  splits: '{net} を分断'
+  connects: '{member} を {net} に接続'

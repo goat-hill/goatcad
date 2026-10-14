@@ -1,0 +1,21 @@
+#!/bin/bash
+# Time the app's launch: build to a cache folder, start it a few times with a
+# fresh profile, and print when each `launch:*` milestone landed. A manual
+# check, not a CI gate. See scripts/launch-timing.mjs for options (--runs,
+# --open, --no-build, --visible).
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+want_visible=false
+for a in "$@"; do [ "$a" = "--visible" ] && want_visible=true; done
+
+if [ "$want_visible" = true ]; then
+  exec node scripts/launch-timing.mjs "$@"
+elif command -v xvfb-run >/dev/null 2>&1; then
+  exec xvfb-run -a node scripts/launch-timing.mjs "$@"
+else
+  echo "launch-timing: xvfb-run not found — running on the real \$DISPLAY." >&2
+  exec node scripts/launch-timing.mjs "$@"
+fi

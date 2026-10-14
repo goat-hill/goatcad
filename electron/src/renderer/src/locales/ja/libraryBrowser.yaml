@@ -1,0 +1,41 @@
+searchPlaceholder: 絞り込み…
+nav:
+  symbols: シンボル
+  footprints: フットプリント
+  models3d: 3D モデル
+  models3dNote: 3D モデルはフットプリントから参照します。
+  system: 'システム ({n})'
+  systemPlain: システム
+  addLibrary: ライブラリを追加
+  addSymbol: シンボルライブラリを追加…
+  addFootprint: フットプリントライブラリを追加…
+  models3dManaged: 3D モデルの検索パスは設定の環境変数で管理します。
+  remove: 削除
+  hasSymbol: 関連付けられたシンボルあり
+  hasFootprint: 関連付けられたフットプリントあり
+  has3dModel: 関連付けられた 3D モデルあり
+download: 公式 KiCad ライブラリをダウンロード
+downloading: ダウンロード中…
+rebuildIndex: ライブラリのインデックスを再構築
+indexing: 'インデックス作成中… {done}/{total}'
+indexingWait: ライブラリのインデックスを構築中…
+resultsCapped: '種類ごとに最初の {n} 件を表示しています — 検索条件を絞り込んでください。'
+noResults: 一致なし。
+typeShort:
+  symbol: SYM
+  footprint: FP
+  model: 3D
+add:
+  newSymbolLibrary: 新規シンボルライブラリ
+  newFootprintLibrary: 新規フットプリントライブラリ
+  addSymbolLibrary: シンボルライブラリを追加
+  addFootprintLibrary: フットプリントライブラリを追加
+  symbolExt: .kicad_sym
+  footprintExt: .pretty/
+  toProject: プロジェクトへ…
+  toAllProjects: すべてのプロジェクトへ…
+  needsProject: アクティブなプロジェクトがありません
+  symbolFileTitle: シンボルライブラリファイル (.kicad_sym) を選択
+  footprintFolderTitle: フットプリントライブラリフォルダー (名前が .pretty で終わるもの) を選択
+scanningEmptySymbols: 'そのフォルダーに .kicad_sym ファイルは見つかりませんでした。'
+scanningEmptyFootprints: そのフォルダーにフットプリントは見つかりませんでした。

@@ -1,0 +1,268 @@
+errors:
+  empty: Este esquema está vacío.
+  parseTitle: No se puede abrir como esquema de KiCad
+actions:
+  initializeBlank: Inicializar esquema de KiCad
+titleBlock:
+  title: Título
+  date: Fecha de emisión
+  rev: Revisión
+  company: Compañía
+  comment1: Comentario 1
+  comment2: Comentario 2
+  comment3: Comentario 3
+  comment4: Comentario 4
+  comment5: Comentario 5
+  comment6: Comentario 6
+  comment7: Comentario 7
+  comment8: Comentario 8
+  comment9: Comentario 9
+directiveShapes:
+  round: Redondo
+  dot: Punto
+  diamond: Diamante
+  rectangle: Rectángulo
+edit:
+  cut: Cortar
+  copy: Copiar
+  paste: Pegar
+  duplicate: Duplicar
+  repeat: Repetir último elemento
+  delete: Eliminar
+commands:
+  editField: Editar {field}
+  editFieldMultiple: Editar {field} ({count} componentes)
+  editFlag: Editar {token}
+  editFlagMultiple: Editar {token} ({count} componentes)
+  editSymbol: Editar símbolo
+  editLabel: Editar etiqueta
+  editWire: Editar cable
+  editJunction: Editar unión
+  editText: Editar texto
+  editTextBox: Editar cuadro de texto
+  editGraphic: Editar gráfico
+  editSheet: Editar hoja
+  editSheetPin: Editar pin de hoja
+  editDirectiveLabel: Editar etiqueta de directiva
+  editBus: Editar bus
+  editBusEntry: Editar entrada de bus
+  editImage: Editar imagen
+  editTable: Editar tabla
+itemTypes:
+  symbol: '{count} símbolo | {count} símbolos | {count} símbolos'
+  wire: '{count} cable | {count} cables | {count} cables'
+  label: '{count} etiqueta | {count} etiquetas | {count} etiquetas'
+  junction: '{count} unión | {count} uniones | {count} uniones'
+  noConnect: '{count} marca de no conectado | {count} marcas de no conectado | {count} marcas de no conectado'
+  sheet: '{count} hoja | {count} hojas | {count} hojas'
+labelKinds:
+  label: Etiqueta local
+  globalLabel: Etiqueta global
+  hierarchicalLabel: Etiqueta jerárquica
+  directiveLabel: Etiqueta de directiva
+toolbar:
+  undoTitle: Deshacer (Ctrl/Cmd+Z)
+  redoTitle: Rehacer (Ctrl/Cmd+Y)
+  grid: Rejilla
+  showGrid: Mostrar rejilla
+tools:
+  select: Seleccionar
+  annotateTitle: Anotar esquema…
+annotate:
+  title: Anotar esquema
+  scope: Ámbito
+  scopeDesign: Esquema completo
+  scopeSheet: Solo hoja actual
+  scopeSelection: 'Selección ({count} símbolo) | Selección ({count} símbolos) | Selección ({count} símbolos)'
+  recurse: Recorrer subhojas
+  order: Orden
+  orderXY: Ordenar símbolos por posición X
+  orderYX: Ordenar símbolos por posición Y
+  options: Opciones
+  optionsKeep: Mantener la anotación actual
+  optionsReset: Reiniciar la anotación actual
+  numbering: Numeración
+  numberingAfter: 'Utilizar primer número libre tras:'
+  numberingSheet100: Primero libre tras número de hoja × 100
+  numberingSheet1000: Primero libre tras número de hoja × 1000
+  preview: '{changed} de {count} símbolo se renumerará | {changed} de {count} símbolos se renumerarán | {changed} de {count} símbolos se renumerarán'
+  cancel: Cancelar
+  confirm: Anotar
+incrementAnnotations:
+  title: Incrementar anotaciones
+  action: Incrementar anotaciones…
+  first: 'Designador inicial:'
+  increment: 'Incrementar en:'
+  currentSheet: Solo hoja actual
+  allSheets: Todas las hojas
+  preview: 'Cambiará un designador | Cambiarán {count} designadores | Cambiarán {count} designadores'
+  cancel: Cancelar
+  confirm: Incrementar
+footprintChooser:
+  parts: '{n} componentes'
+insertOverlay:
+  ops:
+    symbol: Símbolo
+    power: Símbolo de alimentación
+    wire: Cable
+    label: Etiqueta
+    globalLabel: Etiqueta global
+    hierarchicalLabel: Etiqueta jerárquica
+    noConnect: Marca de no conectado
+    junction: Unión
+    text: Texto
+    sheet: Hoja
+    sheetPin: Pin de hoja
+    directiveLabel: Etiqueta de directiva
+    bus: Bus
+    busEntry: Entrada de bus
+    line: Línea
+    rectangle: Rectángulo
+    circle: Círculo
+    arc: Arco
+    bezier: Bezier
+    table: Tabla
+    image: Imagen…
+    ruleArea: Área de reglas
+    textBox: Cuadro de texto
+image:
+  pickTitle: Colocar imagen
+  filter: Imágenes
+  unreadable: No se pudo leer ese archivo como imagen.
+units:
+  menu: Unidad
+  unitLabel: 'Unidad {unit}'
+  alreadyPlaced: 'La unidad {unit} ya está colocada (en la hoja {sheet})'
+  swap: 'Intercambiar {target} y {current}'
+  duplicate: 'Duplicar {unit}'
+  rootSheet: Raíz
+  cycleBodyStyle: Alternar estilo de cuerpo
+  openInLibraryEditor: Abrir en el editor de símbolos
+  showDatasheet: Mostrar hoja de datos
+labelPopover:
+  netPlaceholder: Nombre de red
+  textPlaceholder: Texto
+  netClassPlaceholder: Clase de red
+  pinPlaceholder: Nombre de pin
+  kinds:
+    label: Local
+    globalLabel: Global
+    hierarchicalLabel: Jerárq.
+    directiveLabel: Directiva
+sheetPopover:
+  nameLabel: Nombre de hoja
+  namePlaceholder: Nombre de hoja
+  fileLabel: Nombre de archivo
+  invalidName: Ese nombre de archivo ya está en uso o no es válido.
+componentsPanel:
+  title: Componentes
+  design: Diseño
+  count: '{count} componente | {count} componentes | {count} componentes'
+  showInSchematic: Mostrar en el esquema
+  loading: Leyendo el diseño…
+  unreadable: No se pudo leer el esquema de nivel superior de este diseño.
+modes:
+  schematic: Esquema
+properties:
+  selectionTitle: Selección
+  snapToGrid: Ajustar a la rejilla
+  items: Elementos
+  multiSelectHint: Arrastrar para mover toda la selección; Supr la elimina.
+  reference: Referencia
+  value: Valor
+  libraryId: ID de biblioteca
+  unit: Unidad
+  position: Posición
+  rotation: Rotación
+  footprint: Huella
+  unassigned: Sin asignar
+  symbolHint: Arrastrar para mover. Mayús+clic o arrastrar un recuadro de selección para seleccionar varios elementos.
+  type: Tipo
+  wireTypeValue: Cable
+  net: Red
+  length: Longitud
+  points: Puntos
+  width: Anchura
+  defaultWidth: predeterminada
+  file: Archivo
+  pageNumber: Número de página
+  pageDuplicate: Otra hoja ya usa este número de página.
+  pageEmpty: Esta hoja no tiene número de página.
+  sheetName: Nombre de hoja
+  paperSize: Tamaño de papel
+  paperUser: Personalizado
+  paperWidth: Ancho del papel
+  paperHeight: Alto del papel
+  orientation: Orientación
+  landscape: Horizontal
+  portrait: Vertical
+  text: Texto
+  junctionTypeValue: Unión
+  noConnectTypeValue: Marca de no conectado
+  defaultHint: Seleccionar un elemento para inspeccionarlo. Desplazar con el botón central o Ctrl/Cmd+arrastrar; zoom con la rueda.
+viewRail:
+  netHighlight: Resaltar redes
+  showHiddenPins: Mostrar pines ocultos
+  showHiddenFields: Mostrar campos ocultos
+symbolUpdate:
+  updateAction: Actualizar símbolos desde la biblioteca…
+  changeAction: Cambiar símbolo…
+  quickFix: Actualizar desde la biblioteca
+  options:
+    resetFieldText: Texto de los campos
+    resetEmptyFields: Campos que la biblioteca deja vacíos
+    removeExtraFields: Eliminar campos que no tiene el símbolo de la biblioteca
+    resetFieldVisibility: Visibilidad de los campos
+    resetFieldEffects: Tamaños y estilos de los campos
+    resetFieldPositions: Posiciones de los campos
+    resetPinTextVisibility: Visibilidad de nombres y números de pin
+    resetAlternatePins: Funciones alternativas de pin
+    resetAttributes: Atributos del símbolo
+    resetCustomPower: Valores de símbolos de alimentación personalizados
+  tooFewUnits: '1 símbolo se omite: el símbolo nuevo tiene muy pocas unidades. | {count} símbolos se omiten: el símbolo nuevo tiene muy pocas unidades. | {count} símbolos se omiten: el símbolo nuevo tiene muy pocas unidades.'
+align:
+  menu: Alinear
+  distributeMenu: Distribuir
+  left: Alinear a la izquierda
+  centerX: Alinear al centro horizontal
+  right: Alinear a la derecha
+  top: Alinear arriba
+  centerY: Alinear al centro vertical
+  bottom: Alinear abajo
+  distributeHorizontal: Distribuir horizontalmente
+  distributeVertical: Distribuir verticalmente
+find:
+  title: Buscar y reemplazar…
+  toggleReplace: Alternar reemplazo
+  scope: Buscar en
+  scopeSheet: Esta hoja
+  scopeDesign: Todas las hojas
+  replacePlaceholder: Reemplazar
+  replace: Reemplazar
+  replaceAll: Reemplazar todo
+  replaceReferences: Referencias
+  duplicates: 'Esto da a más de un componente la referencia {references}.'
+  replaceAnyway: Reemplazar de todos modos
+  cancel: Cancelar
+hierarchy:
+  enterSheet: Entrar en la hoja
+  leaveSheet: Salir de la hoja
+hints:
+  elbow: / gira el codo
+  busEntry: R la gira · Mayús+Z coloca la otra diagonal
+  bezier: Clic en el inicio, el final y luego cada punto de control
+  ruleArea: Clic de nuevo en la primera esquina, doble clic o Intro para cerrar
+  table: Clic en una esquina y clic de nuevo para fijar sus filas y columnas
+  sheetPin: Clic en un borde de la hoja
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+drag:
+  follow: Los cables siguen · mantener Mayús para mover solo
+  alone: Los cables se quedan fijos
+  title: Arrastre
+  nets: Redes
+  netsChange: Cambia la lista de redes
+  merges: Une {a} y {b}
+  splits: Divide {net}
+  connects: Conecta {member} a {net}

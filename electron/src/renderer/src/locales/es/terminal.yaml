@@ -1,0 +1,23 @@
+title: Terminal
+tabTooltip: '{process} — {cwd}'
+status:
+  running: Ejecutando {process}
+  working: '{process} está trabajando'
+  waiting: '{process} está esperando una instrucción'
+  attention: '{process} requiere su atención'
+  idle: Ningún proceso en ejecución
+  exited: 'El shell terminó (código {code})'
+exitNotice: '[el proceso terminó con el código {code}]'
+missingCli: '{cli} no fue encontrado por su shell. Instálelo (consulte {docs}) y después cierre esta pestaña y vuelva a abrirla. Hasta entonces, esta pestaña es un shell simple.'
+menu:
+  copy: Copiar
+  paste: Pegar
+  selectAll: Seleccionar todo
+  clear: Borrar
+close:
+  message: '¿Cerrar el terminal que ejecuta {process}?'
+  messageMany: '¿Cerrar {count} terminales en ejecución?'
+  detail: Se detendrá el proceso.
+  detailMany: Se detendrán estos procesos.
+  confirm: Cerrar terminal
+  confirmMany: Cerrar terminales

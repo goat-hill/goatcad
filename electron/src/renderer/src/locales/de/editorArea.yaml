@@ -1,0 +1,41 @@
+closeTab: Tab schließen
+symbolTabTitle: '{file} › {symbol}'
+designCopyTooltip: '{part}, wie in {file} gespeichert — die Bibliothek bleibt unverändert'
+childTab:
+  boardSetup: Platineneinstellungen
+  schematicSetup: Schaltplaneinstellungen
+  components: Bauteile
+  manufacture: Fertigungsdaten
+split:
+  sendTab: Tab in anderen Bereich verschieben ({shortcut})
+  resize: Bereichsgröße ändern
+empty:
+  openFolder: Ordner öffnen
+  openProject: Projekt öffnen
+  newSchematic: Neuer Schaltplan
+  newWindow: Neues Fenster
+loadingFileContents: Dateiinhalt wird geladen...
+writeContentPlaceholder: Inhalt hier eingeben...
+find:
+  placeholder: Suchen
+  matchCase: Groß-/Kleinschreibung beachten
+  matchWholeWord: Nur ganzes Wort
+  useRegex: Regulären Ausdruck verwenden
+  previousMatch: Vorheriger Treffer
+  nextMatch: Nächster Treffer
+  close: Schließen
+  noResults: Keine Treffer
+  results: '{current} von {total}'
+formatNotice:
+  older: 'KiCad-{release}-Format ({kind})'
+  olderBody: 'Diese Datei ({kind}) wird beim Speichern ins KiCad-10-Format migriert.'
+  newer: 'Schreibgeschützt: KiCad-{release}-Format ({kind})'
+  newerUnknown: 'Schreibgeschützt: neueres KiCad-Format ({kind})'
+  newerBody: 'GoatCAD speichert KiCad-10-Dateien, daher wird diese Datei ({kind}) schreibgeschützt geöffnet.'
+  unsupported: 'Schreibgeschützt: Format vor KiCad 6 ({kind})'
+  unsupportedBody: 'Zuerst in KiCad speichern, um es hier zu bearbeiten.'
+  kinds:
+    schematic: Schaltplan
+    board: Platine
+    symbolLibrary: Symbolbibliothek
+    footprint: Footprint

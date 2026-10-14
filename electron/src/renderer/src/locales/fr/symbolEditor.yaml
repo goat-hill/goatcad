@@ -1,0 +1,179 @@
+errors:
+  empty: Cette librairie de symboles est vide.
+  parseTitle: Impossible d'ouvrir ce fichier comme librairie de symboles KiCad
+groups:
+  fields: Champs
+  pinDisplay: Affichage des pins
+  attributes: Attributs
+  units: Unités
+  alternate: 'Fonction {n}'
+pinTypes:
+  input: Entrée
+  output: Sortie
+  bidirectional: Bidirectionnel
+  tri_state: 3 états
+  passive: Passive
+  free: Libre
+  unspecified: Non spécifié
+  power_in: Entrée alim.
+  power_out: Sortie alim.
+  open_collector: Collecteur ouvert
+  open_emitter: Émetteur ouvert
+  no_connect: Non connecté
+pinStyles:
+  line: Ligne
+  inverted: Inversé
+  clock: Horloge
+  inverted_clock: Horloge inversée
+  input_low: Entrée active bas
+  clock_low: Horloge active bas
+  output_low: Sortie active bas
+  edge_clock_high: Horloge (front)
+  non_logic: Non logique
+powerKinds:
+  none: Aucun
+  global: Global
+  local: Local
+fillTypes:
+  none: Aucun
+  outline: Contour
+  background: Arrière-plan
+  color: Couleur
+  hatch: Hachure
+  reverse_hatch: Hachure inversée
+  cross_hatch: Hachure croisée
+edit:
+  cut: Couper
+  copy: Copier
+  paste: Coller
+  duplicate: Dupliquer
+  delete: Supprimer
+  rotate: Rotation anti-horaire
+  rotateClockwise: Rotation horaire
+  mirrorHorizontal: Miroir horizontal
+  mirrorVertical: Miroir vertical
+  repeat: Répéter le dernier élément
+units:
+  label: Unité
+  title: Unité de ce symbole multi-unités à modifier
+  option: Unité {letter}
+  namedOption: '{letter} — {name}'
+  add: Ajouter une unité
+  remove: Retirer l'unité
+  addTitle: Ajouter une unité à ce symbole
+  removeTitle: Retirer l'unité en cours de modification, avec tout ce qui y est dessiné
+bodyStyles:
+  label: Style
+  title: Style de corps de ce symbole à afficher
+  standard: Standard
+  alternate: Alternatif (De Morgan)
+  option: Style {number}
+  viewOnly: Affichage seul
+  viewOnlyTitle: La modification des styles de corps alternatifs n'est pas encore prise en charge
+tools:
+  pin: Pin
+  rectangle: Rectangle
+  line: Ligne
+  polygon: Polygone
+  circle: Cercle
+  arc: Arc
+  bezier: Courbe
+  text: Texte
+  anchor: Déplacer l'ancre du symbole
+  textBox: Boîte de texte
+  repeat: Répéter le dernier élément
+export:
+  png: Exporter en PNG…
+  failed: Impossible d'exporter l'image
+actions:
+  editFields: Modifier
+  editFieldsTitle: Ajouter, retirer et réordonner les champs
+  focusField: Sélectionner sur le canevas
+fieldsDialog:
+  title: Champs
+  name: Nom
+  value: Valeur
+  show: Visible
+  add: Ajouter un champ
+  done: Terminé
+  remove: Retirer ce champ
+  rename: Renommer ce champ
+  moveUp: Monter
+  moveDown: Descendre
+  mandatory: KiCad exige ce champ
+  defaultName: Champ
+pinTable:
+  title: Pins
+  number: '#'
+  name: Nom
+  type: Type
+  unit: U
+  duplicateHint: Ce numéro de pin est utilisé plus d'une fois
+  empty: Ce symbole n'a pas encore de pins.
+  add: Ajouter une pin
+  remove: Retirer les pins
+  removeHint: Sélectionnez les pins à retirer
+  removeN: Retirer la pin | Retirer {count} de pins | Retirer {count} pins
+  import: Importer…
+  export: Exporter…
+  importTitle: Importer une table de pins
+  importButton: Importer
+  exportTitle: Exporter la table de pins
+  csvFilter: Valeurs séparées par des virgules
+  importPrompt: 'Importer {count} pin ? | Importer {count} de pins ? | Importer {count} pins ?'
+  importSkipped: '{count} ligne ignorée | {count} de lignes ignorées | {count} lignes ignorées'
+  importReplace: Remplacer toutes les pins
+  importAppend: Ajouter aux pins existantes
+  importCancel: Annuler
+  importEmpty: Aucune pin n'a pu être lue dans ce fichier.
+  importFailed: Impossible de lire ce fichier.
+  exportFailed: Impossible d'écrire ce fichier.
+alternates:
+  add: Ajouter une fonction de pin
+  remove: Retirer cette fonction de pin
+  defaultName: Nouvelle fonction
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+viewRail:
+  showHiddenPins: Afficher les pins cachées
+  showHiddenFields: Afficher les champs cachés
+commands:
+  editField: 'Modifier {field}'
+  editFieldStyle: Modifier le champ
+  addField: Ajouter un champ
+  removeField: Retirer le champ
+  renameField: Renommer le champ
+  reorderFields: Réordonner les champs
+  editPin: Modifier la pin
+  editGraphic: Modifier le graphique
+  editUnitScope: Changer la portée d'unité
+  addPin: Ajouter une pin
+  removePins: Retirer la pin | Retirer {count} de pins | Retirer {count} pins
+  importPins: Importer des pins
+  addRectangle: Ajouter un rectangle
+  addLine: Ajouter une ligne
+  addPolygon: Ajouter un polygone
+  moveAnchor: Déplacer l'ancre du symbole
+  addCircle: Ajouter un cercle
+  addArc: Ajouter un arc
+  addBezier: Ajouter une courbe
+  addText: Ajouter un texte
+  addTextBox: Ajouter une boîte de texte
+  addAlternate: Ajouter une fonction de pin
+  removeAlternate: Retirer la fonction de pin
+  editAlternate: Modifier la fonction de pin
+  deleteItems: Supprimer l'élément | Supprimer {count} d'éléments | Supprimer {count} éléments
+  rotate: Rotation
+  duplicateItems: Dupliquer l'élément | Dupliquer {count} d'éléments | Dupliquer {count} éléments
+  pasteItems: Coller l'élément | Coller {count} d'éléments | Coller {count} éléments
+  cutItems: Couper l'élément | Couper {count} d'éléments | Couper {count} éléments
+  repeatItems: Répéter l'élément | Répéter {count} d'éléments | Répéter {count} éléments
+  mirrorHorizontal: Miroir horizontal
+  mirrorVertical: Miroir vertical
+  resizeGraphic: Redimensionner le graphique
+  addUnit: Ajouter une unité
+  removeUnit: Retirer l'unité
+  newSymbol: Nouveau symbole
+  deleteSymbol: Supprimer le symbole
+  renameSymbol: Renommer le symbole

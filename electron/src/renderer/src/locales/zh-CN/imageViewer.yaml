@@ -1,0 +1,4 @@
+loading: 正在加载图像…
+loadFailed: 无法加载此图像
+actualSizeTitle: 实际大小（100%）
+dims: '{w} × {h} px · {zoom}%'

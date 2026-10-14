@@ -1,0 +1,2243 @@
+@import './base.css';
+@import './propertyPanel.css';
+@import './canvasToolbar.css';
+
+/* Full viewport layout */
+#app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--vscode-bg-editor);
+}
+
+.window-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Custom Titlebar */
+.titlebar {
+  height: 35px;
+  background-color: var(--vscode-bg-title);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--vscode-border);
+  -webkit-app-region: drag;
+  padding: 0 10px;
+  /* Its menus open inside this stacking context, so it sits above the panels'
+     resize handles (z-index 100): level with them, a handle later in the page
+     drew over an open menu and took its hover. Dialogs (999) stay above it. */
+  z-index: 200;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* A drag region swallows its clicks before the page sees them, so with a menu
+   open the bar stops being one: a click on it then dismisses the menu, as a
+   native menu's does, and dragging comes back once it closes. */
+.titlebar.menu-open {
+  -webkit-app-region: no-drag;
+}
+
+/* The bar backs off when the window is not the active one — the platform
+   convention, and the only such cue a frameless window has to give (focus state
+   comes from main, see lib/windowFocus.ts). The background flattens toward the
+   window body and everything in the bar fades together, which is what makes the
+   wordmark, menus, title and window controls recede as one surface. */
+/* Windows / Linux: the title centered over the WINDOW, not over the gap
+   between the menus and the window controls. Equal side columns center it;
+   when the menus or controls need more than their half, their column grows to
+   fit and the title slides over and truncates rather than running under them. */
+.titlebar:not(.mac) {
+  display: grid;
+  grid-template-columns: minmax(max-content, 1fr) minmax(0, auto) minmax(max-content, 1fr);
+  column-gap: 12px;
+}
+
+.titlebar:not(.mac) .titlebar-controls {
+  justify-self: end;
+}
+
+.titlebar.inactive {
+  background-color: var(--vscode-bg-title-inactive);
+}
+
+.titlebar.inactive > * {
+  opacity: 0.55;
+}
+
+/* macOS: the bar carries only the document title — no wordmark, no window
+   controls (TitleBar.vue). It is centered over the whole window rather than over
+   what's left of it, and held clear of the native traffic lights, which sit at
+   the far left (positioned in main/index.ts) and end around 64px. */
+.titlebar.mac {
+  padding-left: 88px;
+}
+
+.titlebar.mac .titlebar-title {
+  position: absolute;
+  left: 88px;
+  right: 88px;
+}
+
+.titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Type treatment (two-tone name + mark) lives in shared/BrandWordmark.vue;
+   this rule only positions it in the title bar. */
+.titlebar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.titlebar-menu {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.menu-item {
+  position: relative;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--vscode-text);
+  font-size: var(--text-body);
+  transition: background-color 0.07s;
+  /* Only what takes a click opts out of the drag: the wordmark, the gaps
+     between menus and the empty run up to the title all move the window. */
+  -webkit-app-region: no-drag;
+}
+
+.menu-item:hover,
+.menu-item.open {
+  background-color: var(--vscode-bg-hover);
+}
+
+.titlebar-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-body);
+  color: var(--vscode-text-muted);
+  text-align: center;
+  flex-grow: 1;
+  pointer-events: none;
+}
+
+.titlebar-controls {
+  display: flex;
+  align-items: center;
+  -webkit-app-region: no-drag;
+  height: 100%;
+}
+
+.control-btn {
+  width: 45px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.07s;
+  border: none;
+  background: transparent;
+}
+
+.control-btn:hover {
+  background-color: var(--vscode-bg-hover);
+}
+
+.control-btn.close:hover {
+  background-color: #e81123;
+  color: white;
+}
+
+.control-btn svg {
+  width: 12px;
+  height: 12px;
+  fill: var(--vscode-text);
+}
+
+.control-btn.close:hover svg {
+  fill: white;
+}
+
+/* Workspace layout */
+.workspace-container {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Activity Bar */
+.activity-bar {
+  width: 48px;
+  background-color: var(--vscode-bg-activity);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* Divider is painted, not laid out: a real border-right would (with the
+     global border-box) shrink the content box to an odd 47px, so the 24px
+     icons would straddle a half-pixel — visibly off-center on retina. */
+  box-shadow: inset -1px 0 0 var(--vscode-border);
+  flex-shrink: 0;
+}
+
+.activity-bar-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
+  gap: 15px;
+}
+
+.activity-btn {
+  /* Fill the rail's content box rather than hardcoding 48px: the rail is 48px
+     wide with border-box + a 1px right border, so its content is 47px and a
+     48px button would center a half-pixel to the left (visible on retina). */
+  width: 100%;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  border: none;
+  background: transparent;
+  color: var(--vscode-text-muted);
+  transition: color 0.07s;
+}
+
+.activity-btn:hover {
+  color: var(--vscode-text-light);
+}
+
+.activity-btn.active {
+  color: var(--vscode-text-light);
+}
+
+.activity-btn.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--vscode-accent);
+}
+
+.activity-btn svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+/* Change-count pill riding on the git activity button (position: relative). */
+.activity-badge {
+  position: absolute;
+  right: 4px;
+  bottom: 2px;
+  min-width: 14px;
+  padding: 0 3px;
+  border-radius: 7px;
+  background-color: var(--vscode-accent);
+  color: var(--vscode-on-accent);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  line-height: 14px;
+  text-align: center;
+}
+
+.sidebar-drawer {
+  flex: 1;
+  background-color: var(--vscode-bg-sidebar);
+  border-right: 1px solid var(--vscode-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--vscode-border);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: var(--vscode-text-muted);
+}
+
+.sidebar-header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.sidebar-action-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--vscode-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  padding: 2px;
+}
+
+.sidebar-action-btn:hover,
+.sidebar-action-btn.open {
+  color: var(--vscode-text-light);
+  background-color: var(--vscode-bg-hover);
+}
+
+.sidebar-action-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 5px 0;
+}
+
+/* File Tree Node styles */
+.tree-node {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  /* Depth comes from the row (`--depth`), the steps from its pane
+     (.sidebar-section-content). */
+  padding-left: calc(var(--tree-inset) + var(--depth, 0) * var(--tree-step));
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--vscode-text);
+  gap: 6px;
+  border-left: 2px solid transparent;
+}
+
+.tree-node:hover {
+  background-color: var(--vscode-bg-hover);
+}
+
+.tree-node.active {
+  background-color: var(--vscode-bg-hover);
+  color: var(--vscode-text-light);
+  border-left-color: var(--vscode-accent);
+}
+
+/* The File Explorer keeps its selection visible after focus moves elsewhere
+   (opening a file hands the pane to the editor), but mutes it so only one
+   surface reads as active at a time. */
+.tree-node.active.inactive {
+  color: var(--vscode-text);
+  border-left-color: transparent;
+  background-color: color-mix(in srgb, var(--vscode-bg-hover) 55%, transparent);
+}
+
+/* Files with no editor/viewer route (they open the file-info tab). */
+.tree-node.unsupported {
+  opacity: 0.45;
+}
+
+.tree-node-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.tree-node-icon svg {
+  /* 16px exactly: FileIcon draws on a 16-unit grid (DESIGN.md §Icons). */
+  width: 16px;
+  height: 16px;
+}
+
+.tree-node-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  /* Like .tree-node-icon: fixed, and the same 16px, so a file's glyph fills
+     exactly the column a sibling folder's caret does. Without this the caret
+     squeezes as the pane narrows and every row below it slides left, so the
+     tree's left edge moves while you drag. */
+  flex-shrink: 0;
+  color: var(--vscode-text-muted);
+  transition: transform 0.15s;
+}
+
+.tree-node-arrow.expanded {
+  transform: rotate(90deg);
+}
+
+.tree-node-arrow svg {
+  /* The one caret size (DESIGN.md §Icons): the chevron glyph only inks the
+     middle third of its box, so anything under 16px reads as a speck. */
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.tree-node-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Inline rename editor: sits in the label's place so the row does not reflow. */
+.tree-node-rename {
+  flex: 1;
+  min-width: 0;
+  padding: 1px 4px;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--vscode-text-light);
+  background-color: var(--vscode-bg-editor);
+  border: 1px solid var(--vscode-accent);
+  border-radius: 2px;
+  outline: none;
+}
+
+.tree-node-rename.invalid {
+  border-color: var(--vscode-error);
+}
+
+/* Git status letter at the row's right edge (files only; folders tint the
+   label instead). Color comes from the shared .git-* classes. */
+.tree-node-git-badge {
+  margin-left: auto;
+  padding-right: 8px;
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* New File Inline Prompt */
+.new-file-prompt {
+  padding: 4px 8px 4px var(--tree-inset);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.new-file-input {
+  background-color: var(--vscode-input-bg);
+  border: 1px solid var(--vscode-input-border);
+  color: var(--vscode-text-light);
+  padding: 2px 4px;
+  font-size: 12px;
+  width: 100%;
+  outline: none;
+  border-radius: 2px;
+}
+
+.new-file-input:focus {
+  border-color: var(--vscode-input-focus);
+}
+
+/* Editor Area Layout: the groups (one, or two split) beside the right rail. The
+   rail is an empty box the editor that owns the context teleports its panels
+   into, so it takes no room when that editor has none. */
+.editor-area {
+  flex: 1;
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+  background-color: var(--vscode-bg-editor);
+  position: relative;
+}
+
+.editor-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.editor-groups {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.editor-groups.column {
+  flex-direction: column;
+}
+
+.editor-group {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.editor-group-resizer {
+  flex: 0 0 1px;
+  background-color: var(--vscode-border);
+  position: relative;
+  z-index: 5;
+  cursor: col-resize;
+}
+
+.editor-groups.column > .editor-group-resizer {
+  cursor: row-resize;
+}
+
+/* A 1px line is no target; the grip is the 7px around it. */
+.editor-group-resizer::before {
+  content: '';
+  position: absolute;
+  inset: 0 -3px;
+}
+
+.editor-groups.column > .editor-group-resizer::before {
+  inset: -3px 0;
+}
+
+/* The line between two groups is one hairline, shared: it takes the focus
+   ring's color when either side holds the keyboard, rather than the ring
+   doubling it from inside. */
+.editor-group.focused + .editor-group-resizer,
+.editor-group-resizer:has(+ .editor-group.focused) {
+  background-color: color-mix(in srgb, var(--vscode-accent) 55%, transparent);
+}
+
+.editor-groups > .editor-group-resizer:hover,
+.editor-groups.resizing > .editor-group-resizer {
+  background-color: var(--vscode-accent);
+}
+
+/* A drag crossing a canvas or an iframe would lose its mousemove to it. */
+.editor-groups.resizing > .editor-group {
+  pointer-events: none;
+}
+
+/* Which group holds the keyboard: a hairline ring drawn inward, so nothing
+   reflows as focus moves and no opacity layer sits over a WebGL canvas. A lone
+   group has nothing to disambiguate and gets neither cue. */
+.editor-group.split.focused::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  border: 1px solid color-mix(in srgb, var(--vscode-accent) 55%, transparent);
+}
+
+/* The side facing the other group is the resizer's line, colored above. */
+.editor-groups.row > .editor-group-resizer + .editor-group::after {
+  border-left-width: 0;
+}
+
+.editor-groups.row > .editor-group:has(+ .editor-group-resizer)::after {
+  border-right-width: 0;
+}
+
+.editor-groups.column > .editor-group-resizer + .editor-group::after {
+  border-top-width: 0;
+}
+
+.editor-groups.column > .editor-group:has(+ .editor-group-resizer)::after {
+  border-bottom-width: 0;
+}
+
+.editor-group.split:not(.focused) .tab-item.active {
+  color: var(--vscode-text);
+  box-shadow: inset 0 -2px 0 var(--vscode-border);
+}
+
+.context-rail {
+  flex-shrink: 0;
+  display: flex;
+  min-height: 0;
+}
+
+/* Held at the bar's width while the view in front has no panels for it yet:
+   drawn as the bar still, its ground and its left rule, so the page beside it
+   has an edge. A panel in it draws its own. */
+.context-rail:empty {
+  background-color: var(--vscode-bg-sidebar);
+  border-left: 1px solid var(--vscode-border);
+}
+
+/* Hosts a WebGL visual editor (schematic/PCB/footprint). The background
+   matches the engine's clear color so the gap while an editor mounts (or a
+   file first loads) reads as the same shade as the canvas, not a flash. */
+.viewport-editor-host {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: var(--vscode-bg-viewport);
+}
+
+/* Immediate feedback while a viewport tab's file is still being read — the
+   heavy editors only mount once content arrives, and a large board takes long
+   enough that an empty panel reads as a hang. */
+.viewport-loading {
+  position: absolute;
+  inset: 0;
+  /* The editor mounts as a later sibling and its own viewport host is
+     positioned and opaque, so without this the overlay is buried the moment
+     content arrives — the bar would vanish while the load still had a second
+     of scene building to go. */
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: var(--vscode-text-muted);
+  font-size: 12px;
+}
+
+.viewport-loading-spinner {
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid var(--vscode-accent-border);
+  border-top-color: var(--vscode-accent);
+  border-radius: 50%;
+}
+
+/* The board tab's merged read+parse progress (see EditorArea.pcbLoadPercent). */
+.viewport-loading-pill {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  padding: 14px 22px;
+  background: var(--vscode-overlay-strong);
+  border: 1px solid var(--vscode-border);
+  border-radius: 8px;
+  color: var(--vscode-text);
+  font-size: 12px;
+}
+
+.viewport-loading-bar {
+  width: 220px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--vscode-border);
+  overflow: hidden;
+}
+
+.viewport-loading-fill {
+  height: 100%;
+  background: var(--vscode-accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .viewport-loading-fill {
+    transition: width 120ms linear;
+  }
+
+  .viewport-loading-spinner {
+    animation: spin 0.9s linear infinite;
+  }
+}
+
+.tabs-bar {
+  height: 35px;
+  background-color: var(--vscode-tab-inactive);
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--vscode-border);
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Tabs scroll inside this strip; the actions area to its right stays fixed.
+   The scrollbar shows only while the strip is scrolling (EditorGroup.vue sets
+   `.scrolling`), since it lies over the active tab's underline; at rest, an
+   edge with tabs past it fades out instead. Tabs are pinned to the top at a
+   fixed height so the scrollbar appearing cannot shift their labels up. */
+.tabs-scroller {
+  --fade-start: 0px;
+  --fade-end: 0px;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  height: 100%;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 var(--fade-start),
+    #000 calc(100% - var(--fade-end)),
+    transparent
+  );
+}
+
+.tabs-scroller.clipped-start {
+  --fade-start: var(--tab-fade);
+}
+
+.tabs-scroller.clipped-end {
+  --fade-end: var(--tab-fade);
+}
+
+.tabs-scroller::-webkit-scrollbar {
+  height: 0;
+}
+
+.tabs-scroller.scrolling::-webkit-scrollbar {
+  height: 3px;
+}
+
+/* Always-visible editor actions at the right end of the tab bar (VS Code's
+   split-editor spot) */
+.tabs-actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 100%;
+  padding: 0 6px;
+}
+
+.tab-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: var(--vscode-text-muted);
+  cursor: pointer;
+}
+
+.tab-action-btn:hover {
+  background-color: var(--vscode-overlay-control);
+  color: var(--vscode-text-light);
+}
+
+.tab-action-btn.active {
+  background-color: var(--vscode-bg-active);
+  color: var(--vscode-accent);
+}
+
+.tab-action-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.tab-item {
+  /* Fixed to the bar height (not 100% of the scroller's content box) so the
+     scrollbar appearing cannot re-center the label — see .tabs-scroller. */
+  height: 35px;
+  flex-shrink: 0;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid var(--vscode-border);
+  background-color: var(--vscode-tab-inactive);
+  color: var(--vscode-text-muted);
+  cursor: pointer;
+  position: relative;
+  font-size: 12px;
+  gap: 8px;
+  user-select: none;
+}
+
+/* The tabs connected to the active one, its parent and the child tabs nested
+   under it (lib/tabs.ts `tabParent`), share its underline in gray. */
+.tab-item.family:not(.active) {
+  box-shadow: inset 0 -2px 0 var(--vscode-text-muted);
+}
+
+/* VS Code preview tab: opened with a single click, not yet pinned */
+.tab-item.preview .tab-title {
+  font-style: italic;
+}
+
+.tab-item:hover {
+  background-color: var(--vscode-overlay-control);
+  color: var(--vscode-text);
+}
+
+.tab-item.active {
+  background-color: var(--vscode-tab-active);
+  color: var(--vscode-text-light);
+  /* An inset line, not a border, so marking a tab never moves its content. */
+  box-shadow: inset 0 -2px 0 var(--vscode-tab-active-border);
+}
+
+/* Component view tabs: a distinct violet accent + tint so they read as a
+   "Component" surface, not a file. */
+.tab-item.component-tab {
+  background-color: color-mix(in srgb, var(--vscode-component) 8%, transparent);
+}
+
+.tab-item.component-tab .tab-icon {
+  color: var(--vscode-component);
+}
+
+.tab-item.component-tab .tab-title {
+  color: var(--vscode-component-text);
+}
+
+.tab-item.component-tab.active {
+  background-color: color-mix(in srgb, var(--vscode-component) 16%, transparent);
+  box-shadow: inset 0 -2px 0 var(--vscode-component);
+}
+
+.tab-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+
+.tab-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* A terminal tab's process state. Idle needs no mark at all — a prompt is the
+   resting state and a dot for it would be noise on every terminal tab — so only
+   running and exited draw. */
+.terminal-state {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 50%;
+}
+
+.terminal-state.idle {
+  /* At rest: a shell at its prompt, or an agent waiting for one. Dim but
+     present, so the slot reads as an indicator and not as stray padding. */
+  background-color: var(--vscode-text-muted);
+  opacity: 0.45;
+}
+.terminal-state.running {
+  background-color: var(--vscode-success);
+  animation: terminal-pulse 1.8s ease-in-out infinite;
+}
+
+.terminal-state.attention {
+  /* An agent waiting on a person: the one state worth a color of its own,
+     and it holds still — a pulse says "going", and this is the opposite. */
+  background-color: var(--vscode-term-yellow);
+}
+.terminal-state.exited {
+  /* Hollow: the shell is gone, and an outline reads as "was" next to the filled
+     dot of one that still is. */
+  box-shadow: inset 0 0 0 1px var(--vscode-text-muted);
+}
+
+@keyframes terminal-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .terminal-state.running {
+    animation: none;
+  }
+}
+
+/* The editor chain's placeholder while a terminal tab is active; the pane
+   itself is the absolutely-positioned layer over .editor-panel. */
+.terminal-slot {
+  flex: 1;
+  background-color: var(--vscode-source-bg);
+}
+
+/* Always visible, not revealed on hover: closing is the commonest thing done to
+   a tab, and hiding its control means every close is a hover-then-aim. The
+   dirty case is the exception, and it is handled below — an edited tab shows
+   its dot until the pointer is on the control itself. */
+.tab-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* DESIGN.md's 24px minimum target, reached by padding around an 8px glyph
+     rather than by growing the glyph — the X should not gain weight just
+     because its hit area did. */
+  width: 24px;
+  height: 24px;
+  /* Pull back most of the padding so a 24px target does not widen every tab. */
+  margin: 0 -5px;
+  border-radius: 3px;
+  color: var(--vscode-text-muted);
+  transition:
+    color 0.1s,
+    background-color 0.1s;
+}
+
+.tab-close:hover {
+  background-color: var(--vscode-overlay-control-hover);
+  color: var(--vscode-text-light) !important;
+}
+
+.tab-close svg {
+  width: 8px;
+  height: 8px;
+  fill: currentColor;
+}
+
+/* Empty editor — the brand and the ways into a design. Deliberately plain:
+   someone lands here mid-work, so there is nothing to click and nothing moving.
+   The shortcuts are reminders. */
+.editor-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--vscode-text-muted);
+  background-color: var(--vscode-bg-editor);
+}
+
+.editor-empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  text-align: center;
+}
+
+/* Type treatment lives in shared/BrandWordmark.vue; the watermark effect is
+   just the reduced opacity. */
+.editor-empty-logo {
+  font-size: calc(var(--text-display) * 1.6);
+  opacity: 0.5;
+}
+
+.editor-empty-tagline {
+  font-size: var(--text-body);
+  color: var(--vscode-text-muted);
+  margin-bottom: 16px;
+}
+
+.shortcut-grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  gap: 8px 24px;
+  margin: 0;
+}
+
+.shortcut-grid dd {
+  margin: 0;
+  display: flex;
+}
+
+.shortcut-desc {
+  font-size: var(--text-body);
+  color: var(--vscode-text-muted);
+  text-align: right;
+}
+
+/* Editor Panel Content */
+.editor-panel {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  /* Positioning context for the terminal layer, which sits over the editor
+     chain rather than in it: terminal panes stay mounted across tab switches
+     (ARCHITECTURE.md §3.12). */
+  position: relative;
+}
+
+/* Explorer state when the window has no project folder */
+.sidebar-empty-state {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-empty-state p {
+  color: var(--vscode-text-muted);
+  font-size: var(--text-body-sm);
+  line-height: 1.5;
+}
+
+.sidebar-open-folder-btn {
+  background-color: var(--vscode-accent);
+  color: var(--vscode-on-accent);
+  border: none;
+  border-radius: 3px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sidebar-open-folder-btn:hover {
+  filter: brightness(1.1);
+}
+
+/* Status Bar */
+/* The viewport's floating corner pills — the coordinate readout and the Grid /
+   Filter controls. One home, because two components render them side by side
+   and a copied metric is how their heights drift apart.
+
+   Metrics are the 3D views' `.dims-pill` to the pixel. `line-height` is
+   explicit for the same reason: the readout is mono and the controls are the UI
+   font, and left to their own metrics the two line boxes differ by a pixel or
+   two — enough to see when they sit in a row. */
+.viewport-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border: 1px solid var(--vscode-border, #24302b);
+  border-radius: 6px;
+  background: var(--vscode-overlay);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--vscode-text-muted, #748780);
+  font-size: var(--text-body-sm);
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+/* A corner control whose label changes as you work (the active layer, the
+   check counts) or sits among ones that do: one floor for them all, so an
+   ordinary change does not shove its neighbors along the row. Content centers
+   in the spare width. */
+.viewport-pill.steady-width {
+  min-width: 112px;
+  justify-content: center;
+}
+
+/* The numeric half of a readout. Mono so digits are one width, `pre` so the
+   right-aligning spaces `coordinateField` pads with survive. The LABEL beside
+   it stays in the UI font — it is a word, not data. */
+.viewport-pill-value {
+  font-family: var(--font-mono, monospace);
+  white-space: pre;
+}
+
+/* Editable Text Editor styling */
+.text-editor-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--vscode-bg-editor);
+}
+
+.editor-btn {
+  background-color: var(--vscode-accent);
+  color: var(--vscode-text-light);
+  border: none;
+  padding: 4px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  transition: background-color 0.07s;
+}
+
+.editor-btn:hover {
+  background-color: var(--vscode-accent-hover);
+}
+
+.text-editor-body {
+  flex: 1;
+  position: relative;
+  display: flex;
+}
+
+/* The plain-text editor now lives in components/TextEditor.vue (scoped styles);
+   .text-editor-container / .text-editor-body above still wrap it in EditorArea. */
+
+.layer-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.layer-color-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+/* Drag overlay hover states */
+.tabs-bar.drag-over {
+  background-color: color-mix(in srgb, var(--vscode-text) 6%, transparent) !important;
+  outline: 2px dashed var(--vscode-text-muted);
+}
+.sidebar-drawer.drag-over {
+  background-color: var(--vscode-drop-target-subtle) !important;
+}
+
+/* Standard animation utility */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Sidebar Accordion (VSCode Accordion Style) */
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--vscode-border);
+  overflow: hidden;
+  transition: flex 0.15s ease-out;
+}
+
+.sidebar-section:not(.collapsed) {
+  flex: 1;
+}
+
+.sidebar-section.collapsed {
+  flex: 0 0 26px;
+}
+
+/* Which design is active, at the top of the PROJECT pane. "Will my edits
+   propagate?" must be answerable at a glance (docs/workspace-model.md §3).
+   A tree row's type and glyph column, with room above to part it from the
+   header: its mark sits over the group carets below. */
+.project-id {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 10px 4px var(--tree-inset);
+  border: none;
+  background: none;
+  color: var(--vscode-text-light);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+}
+
+/* A switcher, not a label — so it takes a control's outline and hit area. The
+   static single-project row stays plain text: nothing there to click. */
+button.project-id {
+  /* The outline sits 8px in, at the header's caret; margin, border and
+     padding sum to --tree-inset, so the mark keeps its column. */
+  width: calc(100% - 18px);
+  margin: 6px 10px 2px 8px;
+  padding: 6px 9px 6px calc(var(--tree-inset) - 9px);
+  border: 1px solid var(--vscode-border);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button.project-id:hover,
+button.project-id.open {
+  border-color: var(--vscode-accent);
+  color: var(--vscode-accent);
+}
+
+button.project-id:hover .project-caret,
+button.project-id.open .project-caret {
+  opacity: 1;
+}
+
+.project-mark {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--vscode-accent);
+}
+
+.project-id.none .project-mark {
+  color: var(--vscode-warning, #d0a215);
+}
+
+.project-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-caret {
+  flex: none;
+  width: 11px;
+  height: 11px;
+  margin-left: auto;
+  opacity: 0.7;
+}
+
+/* The only exit from a folder with no project in it, so it is sized as the
+   pane's primary action rather than a footnote. */
+.project-create {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: calc(100% - 20px);
+  margin: 6px 10px 0;
+  padding: 9px 10px;
+  border: 1px solid var(--vscode-accent);
+  border-radius: 4px;
+  background: none;
+  color: var(--vscode-accent);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.project-create:hover {
+  background: var(--vscode-accent);
+  color: var(--vscode-on-accent);
+}
+
+.project-create-icon {
+  width: 15px;
+  height: 15px;
+}
+
+/* Why a project is worth having, under whichever affordance is showing. */
+.project-why {
+  margin: 8px 10px 6px;
+  color: var(--vscode-text-muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* Member group headings — collapsible, subordinate to the PROJECT section
+   title above, and sized so the rows beneath keep File Explorer metrics. */
+.project-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  /* A group is a level of the tree, like a directory: its caret at the
+     pane's inset, its rows one step in. */
+  padding: 6px 10px 2px var(--tree-inset);
+  border: none;
+  background: none;
+  color: var(--vscode-text-muted);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+}
+
+.project-group:hover {
+  color: var(--vscode-text);
+}
+
+.project-group.open .disclosure {
+  transform: rotate(90deg);
+}
+
+/* Per-group create: the `+` sits at the group header's right edge and stays out
+   of the way until the row is hovered or the button itself is focused. */
+.project-group-row {
+  display: flex;
+  align-items: center;
+}
+
+.project-group-row > .project-group {
+  flex: 1;
+}
+
+.project-group-add {
+  opacity: 0;
+  margin-right: 6px;
+}
+
+.project-group-row:hover .project-group-add,
+.project-group-add:focus-visible {
+  opacity: 1;
+}
+
+/* Inline New-Library prompt: indented under its group, with the fixed extension
+   shown after the name field so it reads as `[ MyParts ] .kicad_sym`. */
+.project-new-library {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px 4px calc(var(--tree-inset) + var(--tree-step));
+}
+
+.project-new-library .new-file-input {
+  flex: 1;
+}
+
+.new-library-ext {
+  color: var(--vscode-text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+/* Library rows reuse .tree-node for height, hover, and font; these only add
+   what a button element loses and what the count badge needs. */
+.lib-node {
+  width: 100%;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* A flex item will not shrink below its text unless told, so a long name
+   would push the git letter out of the row instead of ellipsizing. */
+.tree-node > .tree-node-label {
+  min-width: 0;
+}
+
+/* Project pane libraries: a group's rows sit one step in, and a library's
+   leaves one step past that, the leaf's glyph in the caret's column. */
+.lib-node {
+  --depth: 1;
+}
+
+.lib-leaf {
+  --depth: 2;
+}
+
+/* Matches the right-bar CollapsiblePanel header (shared/CollapsiblePanel.vue) so
+   the left and right bars read as the same panel system. */
+.sidebar-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 26px;
+  /* 8px left: the pane's content starts one --tree-step in from this caret. */
+  padding: 0 10px 0 8px;
+  background-color: var(--vscode-bg-editor);
+  cursor: pointer;
+  user-select: none;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--vscode-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.sidebar-section-header:hover {
+  color: var(--vscode-text);
+}
+
+.sidebar-section-header .chevron {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  margin-right: 6px;
+  transition: transform 0.12s ease;
+  transform: rotate(-90deg);
+}
+
+.sidebar-section-header .chevron.expanded {
+  transform: rotate(0deg);
+}
+
+.sidebar-section-header .section-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Vertical scroll only. A long filename or a deep indent must clip (the row
+   labels already ellipsize) rather than push the pane sideways — a horizontal
+   scrollbar in a tree makes every row's start position unstable. */
+.sidebar-section-content {
+  /* Tree indentation. The inset puts a pane's top-level rows one step in from
+     its header's caret, so everything under a header reads as inside it. */
+  --tree-step: 10px;
+  --tree-inset: calc(8px + var(--tree-step));
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The File Explorer pane is focusable so arrow keys and Enter reach the tree.
+   Its selection highlight already shows where focus is, so the browser's own
+   focus ring would only double up on it. */
+.sidebar-section-content:focus,
+.sidebar-section-content:focus-visible {
+  outline: none;
+}
+
+/* Git status colors (pane rows, tree labels/badges). VSCode mapping onto the
+   theme tokens: gold = modified/renamed, green = added/untracked, red =
+   deleted/conflict. */
+.git-modified {
+  color: var(--vscode-accent);
+}
+
+.git-added {
+  color: var(--vscode-success);
+}
+
+.git-deleted,
+.git-conflict {
+  color: var(--vscode-error);
+}
+
+/* Branch picker popover, anchored above the explorer's Git status footer */
+.branch-picker-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+}
+
+.branch-picker {
+  position: fixed;
+  /* Past the 48px activity bar, clear of the footer's row. */
+  left: 56px;
+  bottom: 36px;
+  z-index: 91;
+  width: 280px;
+  background-color: var(--vscode-bg-sidebar);
+  border: 1px solid var(--vscode-border);
+  border-radius: 4px;
+  box-shadow: 0 4px 16px var(--vscode-shadow-float);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.branch-picker-input {
+  margin: 8px;
+}
+
+.branch-picker-error {
+  padding: 0 12px 8px;
+  color: var(--vscode-error);
+  font-size: var(--text-body-sm);
+  word-break: break-word;
+}
+
+.branch-picker-list {
+  max-height: 280px;
+  overflow-y: auto;
+  padding-bottom: 4px;
+}
+
+/* 28px rows: the roomy target size, since this is a popover (DESIGN.md §Minimum target size). */
+.branch-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--text-body-sm);
+  color: var(--vscode-text);
+  text-align: left;
+}
+
+.branch-picker-row.highlighted {
+  background-color: var(--vscode-bg-hover);
+}
+
+.branch-picker-row.current {
+  color: var(--vscode-text-light);
+}
+
+.branch-picker-row.create {
+  color: var(--vscode-accent);
+}
+
+.branch-picker-row svg {
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.branch-picker-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.branch-picker-check {
+  margin-left: auto;
+  color: var(--vscode-accent);
+}
+
+.branch-picker-empty {
+  padding: 12px;
+  text-align: center;
+  color: var(--vscode-text-muted);
+  font-size: var(--text-body-sm);
+}
+
+/* Components Library Tree styles */
+.library-tree-root {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 0;
+}
+
+.lib-tree-node {
+  display: flex;
+  flex-direction: column;
+}
+
+.lib-node-header {
+  display: flex;
+  align-items: center;
+  padding: 5px 8px;
+  cursor: pointer;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--vscode-text-light);
+  user-select: none;
+}
+
+.lib-node-header:hover {
+  background-color: var(--vscode-bg-hover);
+}
+
+.lib-node-header .chevron {
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+  margin-right: 4px;
+  transition: transform 0.1s ease;
+  transform: rotate(-90deg);
+}
+
+.lib-node-header .chevron.expanded {
+  transform: rotate(0deg);
+}
+
+.lib-node-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.matched-highlight {
+  color: var(--vscode-accent, #cca250) !important;
+}
+
+/* Status badge — a state, not an action: a rounded pill of one or two words
+   reporting where something stands (connected / checking / failed). Sized at
+   the caption floor because it is a label on top of something else, and paired
+   with a tinted background so the state reads without depending on hue alone. */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: var(--text-caption);
+  line-height: 1.45;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.status-badge.is-neutral {
+  background: var(--vscode-overlay-control);
+  color: var(--vscode-text-muted);
+}
+.status-badge.is-ok {
+  background: var(--vscode-success-subtle);
+  color: var(--vscode-success);
+}
+.status-badge.is-error {
+  background: var(--vscode-error-subtle);
+  color: var(--vscode-error);
+}
+/* Pending and unproven share the accent: both mean "not an answer yet", and
+   painting either green or red would state an outcome we do not have. */
+.status-badge.is-pending {
+  background: var(--vscode-accent-subtle-strong);
+  color: var(--vscode-accent);
+}
+
+.lib-type-badge {
+  font-size: var(--text-caption);
+  padding: 1px 4px;
+  border-radius: 3px;
+  background-color: var(--vscode-accent-subtle-strong);
+  color: var(--vscode-accent);
+  font-weight: bold;
+  margin-left: 6px;
+  text-transform: uppercase;
+}
+
+.lib-node-children {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.lib-cat-node {
+  display: flex;
+  flex-direction: column;
+}
+
+.lib-node-header.category-header {
+  padding-left: 20px;
+  font-weight: normal;
+  color: var(--vscode-text-muted);
+}
+
+.lib-node-children.leaf-items {
+  padding-left: 32px;
+}
+
+/* Spinner and Badges */
+.item-spinner {
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid var(--vscode-accent-border);
+  border-top-color: var(--vscode-accent);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.tag-3d {
+  font-size: 7.5px;
+  font-weight: bold;
+  padding: 1px 3px;
+  border-radius: 2px;
+  background-color: var(--vscode-accent-subtle-strong);
+  border: 1px solid var(--vscode-accent-border);
+  color: var(--vscode-accent);
+  margin-left: 6px;
+  line-height: 1;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Drag Resizers */
+.sidebar-container {
+  position: relative;
+}
+
+.sidebar-resizer-v {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 100;
+  transition: background-color 0.07s;
+}
+
+.sidebar-resizer-v:hover,
+.sidebar-resizer-v:active {
+  background-color: var(--vscode-accent, #cca250);
+}
+
+.sidebar-resizer-h {
+  height: 4px;
+  width: 100%;
+  /* Collapse the flow footprint so it doesn't add a gap between sections; the
+     4px grab area overlaps the section border instead (matches the overlay
+     resizers and the right-bar ResizeHandle). */
+  margin: -2px 0;
+  cursor: row-resize;
+  background-color: transparent;
+  z-index: 100;
+  transition: background-color 0.07s;
+  flex-shrink: 0;
+}
+
+.sidebar-resizer-h:hover,
+.sidebar-resizer-h:active {
+  background-color: var(--vscode-accent, #cca250);
+}
+
+.property-panel {
+  position: relative;
+}
+
+.properties-resizer-v {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 100;
+  transition: background-color 0.07s;
+}
+
+.properties-resizer-v:hover,
+.properties-resizer-v:active {
+  background-color: var(--vscode-accent, #cca250);
+}
+
+/* Tab indicator style. Size and paint live in the `.tab-close` rule above; this
+   block owns only the dot-vs-X swap. */
+.tab-close {
+  position: relative;
+}
+.tab-close .close-icon {
+  width: 8px;
+  height: 8px;
+  display: block;
+}
+.tab-close .dirty-indicator {
+  display: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--vscode-accent, #cca250);
+}
+.tab-close.modified .dirty-indicator {
+  display: block;
+}
+.tab-close.modified .close-icon {
+  display: none;
+}
+/* The circle only yields to the X when the pointer is on the close control
+   itself (VS Code behavior) — hovering elsewhere on the tab keeps the dot. */
+.tab-close.modified:hover .dirty-indicator {
+  display: none;
+}
+.tab-close.modified:hover .close-icon {
+  display: block;
+}
+
+/* ===========================================================================
+   Design framework — shared element styles (DESIGN.md).
+   A standard element is composed from these classes, not hand-styled at the
+   call site: a button takes an emphasis class + a size class; a form control
+   takes one size class. Built from the --text-* / --vscode-* tokens.
+   =========================================================================== */
+
+/* Buttons — base shared by every emphasis. */
+.btn-cta,
+.btn-outline,
+.btn-subtle,
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-family: var(--font-family);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    color 70ms ease,
+    background 70ms ease,
+    border-color 70ms ease;
+}
+.btn-cta:disabled,
+.btn-outline:disabled,
+.btn-subtle:disabled,
+.btn-danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Buttons — emphasis (paint). CTA is the one primary action per surface. */
+.btn-cta {
+  background: var(--vscode-accent);
+  color: var(--vscode-bg-editor); /* dark text on copper */
+}
+.btn-cta:hover:not(:disabled) {
+  background: var(--vscode-accent-hover);
+}
+.btn-outline {
+  background: none;
+  border-color: var(--vscode-border);
+  color: var(--vscode-text-light);
+}
+.btn-outline:hover:not(:disabled) {
+  border-color: var(--vscode-accent);
+  color: var(--vscode-accent);
+}
+.btn-subtle {
+  background: none;
+  color: var(--vscode-text-muted);
+}
+.btn-subtle:hover:not(:disabled) {
+  color: var(--vscode-text);
+}
+/* Destructive. Outline-weight at rest on purpose: a permanently red-filled
+   button reads as an alarm on a surface where nothing is wrong yet. The fill
+   arrives on hover, when the pointer is actually over the thing that deletes. */
+.btn-danger {
+  background: none;
+  border-color: var(--vscode-border);
+  color: var(--vscode-error);
+}
+.btn-danger:hover:not(:disabled) {
+  border-color: var(--vscode-error);
+  background: var(--vscode-error-subtle);
+}
+
+/* Buttons — size (padding + type-scale step). */
+.btn-sm {
+  padding: 4px 8px;
+  font-size: var(--text-body-sm);
+}
+.btn-md {
+  padding: 8px 12px;
+  font-size: var(--text-body);
+}
+.btn-lg {
+  padding: 10px 16px;
+  font-size: var(--text-heading);
+}
+/* A registry glyph beside a button's label, sized to its text step. */
+.btn-sm > svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.btn-md > svg,
+.btn-lg > svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Buttons — icon-only. A square target instead of a size class, since a glyph
+   gives a control no width. 24px is the floor for anything clickable
+   (DESIGN.md "Minimum target size"). */
+.btn-icon-sm,
+.btn-icon-md {
+  padding: 0;
+  line-height: 1;
+}
+.btn-icon-sm {
+  width: 24px;
+  height: 24px;
+  font-size: var(--text-body-sm);
+}
+.btn-icon-md {
+  width: 28px;
+  height: 28px;
+  font-size: var(--text-body);
+}
+/* A registry glyph in an icon button or cell (`<Icon>`), sized by the button. */
+.btn-icon-sm > svg,
+.btn-cell > svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.btn-icon-md > svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Disclosure caret — `<Icon name="chevron-right" class="disclosure" :class="{ open }" />`.
+   Points right when closed and turns down when open, the file tree's caret. */
+.disclosure {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--vscode-text-muted);
+}
+.disclosure.open {
+  transform: rotate(90deg);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .disclosure {
+    transition: transform 0.12s ease;
+  }
+}
+
+/* Breadcrumb separator — `<Icon name="chevron-right" class="breadcrumb-sep" />`. */
+.breadcrumb-sep {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  vertical-align: -2px;
+  color: var(--vscode-text-muted);
+}
+
+/* Sort direction beside a table header's label —
+   `<Icon :name="asc ? 'arrow-up' : 'arrow-down'" class="sort-indicator" />`. */
+.sort-indicator {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  vertical-align: -1px;
+  color: var(--vscode-accent);
+}
+
+/* Panel action — `btn-outline btn-md btn-panel`. One action a row at the
+   panel's width, icon then label read left to right. Regular weight, and the
+   icon in the label's color: a stack of these is a list of what you can do
+   here, not a call to action, so nothing in it reaches for the copper. */
+.btn-panel {
+  justify-content: flex-start;
+  width: 100%;
+  font-weight: 400;
+}
+.btn-panel > svg {
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+}
+
+/* Buttons — cell. A row action shaped as a table CELL rather than a pill:
+   square corners, flush against the control it follows. Reaches the 24px floor
+   by filling the row height, so it stays snug in a narrow panel. Pair with an
+   emphasis class. */
+.btn-cell {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: 0;
+  border-color: var(--vscode-border);
+  background: var(--vscode-input-bg);
+  font-size: var(--text-body-sm);
+  line-height: 1;
+}
+
+/* Form controls (select / text input) — one self-contained size class each
+   (no bare `.field`; that name is a form-row label elsewhere). */
+.field-sm,
+.field-md {
+  background: var(--vscode-input-bg);
+  color: var(--vscode-text);
+  border: 1px solid var(--vscode-input-border);
+  border-radius: 4px;
+  font-family: var(--font-family);
+}
+.field-sm:focus,
+.field-md:focus {
+  outline: none;
+  border-color: var(--vscode-input-focus);
+}
+.field-md {
+  padding: 6px 8px;
+  font-size: var(--text-body);
+}
+.field-sm {
+  padding: 4px 6px;
+  font-size: var(--text-body-sm);
+}
+
+/* ---------------------------------------------------------------------------
+   Sheets (DESIGN.md §Sheets): a data table edited in place, ruled like a
+   spreadsheet. The gridlines are every cell's border; an editor inside a cell
+   has no box of its own and fills it; the cell being edited takes an accent
+   ring inside its gridline. A cell that cannot be edited reads as dimmed text,
+   and one that does not apply to its row is a dash (`.sheet-na`).
+   --------------------------------------------------------------------------- */
+.sheet {
+  border-collapse: collapse;
+  font-size: var(--text-body-sm);
+}
+
+.sheet th,
+.sheet td {
+  height: 28px;
+  padding: 0;
+  /* The field border color, a step brighter than the panels' rules: the grid
+     is what a sheet is, so it reads, and every line of it is the same. */
+  border: 1px solid var(--vscode-input-border);
+  vertical-align: middle;
+}
+
+.sheet thead th {
+  padding: 0 8px;
+  background-color: var(--vscode-bg-sidebar);
+  color: var(--vscode-text-muted);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* A row a change would add or edit, before it is applied (an interface setup's
+   draft): the success and warning tints Update PCB marks its changes with. */
+.sheet tr.pending-added > td,
+.sheet tr.pending-added > th {
+  background-color: var(--vscode-success-subtle);
+}
+
+.sheet tr.pending-edited > td,
+.sheet tr.pending-edited > th {
+  background-color: var(--vscode-warning-subtle);
+}
+
+/* A row's own name, or a cell of plain text: inset as an editor's text is. */
+.sheet tbody th,
+.sheet .sheet-text {
+  padding: 0 8px;
+  font-weight: normal;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.sheet td .dense-input,
+.sheet td .dense-select,
+.sheet td .swatch-trigger {
+  width: 100%;
+  height: 28px;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  padding: 0 8px;
+}
+
+.sheet td .input-with-unit {
+  height: 28px;
+}
+
+/* Above the focused input, which rises over its neighbors' gridlines (below). */
+.sheet td .input-with-unit .unit-label {
+  z-index: 3;
+}
+
+/* A color cell is the cell too: its clear button fills the height, ruled off
+   by one grid line rather than boxed (the Properties panel's is a 24px square). */
+.sheet td .color-cell {
+  height: 28px;
+}
+
+.sheet td .color-clear {
+  height: 28px;
+  border: none;
+  border-left: 1px solid var(--vscode-input-border);
+  background: transparent;
+}
+
+.sheet td:hover .color-cell:not(.disabled) {
+  background-color: var(--vscode-overlay-control-hover);
+}
+
+.sheet td .color-clear:hover {
+  background-color: var(--vscode-overlay-control-hover);
+}
+
+.sheet td:hover .dense-input:not(:disabled),
+.sheet td:hover .dense-select:not(:disabled),
+.sheet td:hover .swatch-trigger:not(:disabled) {
+  background-color: var(--vscode-overlay-control-hover);
+}
+
+.sheet td .dense-input:focus,
+.sheet td .dense-select:focus,
+.sheet td .swatch-trigger:focus {
+  position: relative;
+  z-index: 2;
+  outline: 1px solid var(--vscode-accent);
+  outline-offset: 0;
+  background-color: var(--vscode-input-bg);
+}
+
+.sheet td .dense-input:disabled,
+.sheet td .dense-select:disabled,
+.sheet td .swatch-trigger:disabled {
+  color: var(--vscode-text-muted);
+  cursor: default;
+  opacity: 1;
+}
+
+/* A value that is wrong where it stands (a duplicate pin number, a pattern
+   naming no class): its gridline, in the error color. */
+.sheet td .dense-input.bad,
+.sheet td .dense-select.bad {
+  position: relative;
+  z-index: 1;
+  outline: 1px solid var(--vscode-error);
+  outline-offset: 0;
+}
+
+/* A cell that does not apply to its row: recessed to the deepest ground, over
+   any row tint, with a dash so the shade is not the only sign. */
+.sheet td.sheet-na {
+  padding: 0 8px;
+  background-color: var(--vscode-bg-viewport);
+  color: var(--vscode-text-muted);
+}
+
+/* Numbers line up on the right, as a spreadsheet's do. */
+.sheet td.num .dense-input {
+  text-align: right;
+}
+
+.sheet .sheet-check {
+  text-align: center;
+}
+
+/* Row actions sit beside the grid, not in it. */
+.sheet .sheet-actions {
+  border: none;
+  background: none;
+  padding: 0 0 0 4px;
+  white-space: nowrap;
+}
+
+/* Segmented control — a few fixed, mutually exclusive options laid out rather
+   than hidden in a select: `<div class="segmented"><button class="segmented-btn
+   active">…</button>…</div>`. Sized like `.btn-sm`, 24px tall at the least. */
+.segmented {
+  display: inline-flex;
+  flex: none;
+  border: 1px solid var(--vscode-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.segmented-btn {
+  min-height: 24px;
+  padding: 3px 8px;
+  border: none;
+  background: none;
+  color: var(--vscode-text-muted);
+  font-family: var(--font-family);
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    color 70ms ease,
+    background 70ms ease;
+}
+.segmented-btn + .segmented-btn {
+  border-left: 1px solid var(--vscode-border);
+}
+.segmented-btn:hover:not(:disabled) {
+  color: var(--vscode-text);
+}
+.segmented-btn.active {
+  background: var(--vscode-bg-active);
+  color: var(--vscode-text-light);
+}
+.segmented-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* The ground under a picture with no background of its own: a checkerboard
+   (the 3D pane set to Transparent, the export preview). */
+.transparent-ground {
+  background-image: repeating-conic-gradient(
+    var(--vscode-bg-3d-near) 0% 25%,
+    var(--vscode-bg-3d-far) 0% 50%
+  );
+  background-size: 24px 24px;
+}
+
+/* Hotkey keycap — `<kbd class="kbd"><span>{{ hotkeyLabel(id) }}</span></kbd>`.
+   One cap for every surface that names a shortcut (DESIGN.md §Hotkeys).
+   17px, not 18: an 11px caption's letters are 7px tall at 1x, which center
+   exactly only in an odd (15px) interior. */
+.kbd {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  box-sizing: border-box;
+  height: 17px;
+  padding: 0 6px;
+  border: 1px solid var(--vscode-border);
+  border-radius: 3px;
+  /* A step off the field and dropdown grounds, so the cap stands up on either. */
+  background: var(--vscode-input-bg);
+  color: var(--vscode-text);
+  font: var(--text-caption) var(--font-mono);
+  white-space: nowrap;
+}
+/* Centering a line box centers the font's ascent-to-descent span, which sits
+   the letters high; trimming the label to cap height and baseline centers the
+   letters themselves. It must be an inline child — on the flex container it
+   never reaches the anonymous item holding the text. */
+.kbd > span {
+  text-box: trim-both cap alphabetic;
+}
+
+/* Selection nav — the left panel of a full-pane view (Settings / Board Setup /
+   Manufacture): a vertical list of items; clicking one shows its detail on the
+   right. `.nav-list` is the container, `.nav-item` each row (+ `.active`). */
+.nav-list {
+  flex: 0 0 auto;
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 16px 8px;
+  border-right: 1px solid var(--vscode-border);
+}
+.nav-item {
+  padding: 8px 10px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vscode-text-muted);
+  font-family: var(--font-family);
+  font-size: var(--text-body);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    color 70ms ease,
+    background 70ms ease;
+}
+.nav-item:hover:not(:disabled) {
+  background: var(--vscode-bg-hover);
+  color: var(--vscode-text-light);
+}
+.nav-item.active {
+  background: var(--vscode-bg-active);
+  box-shadow: inset 2px 0 0 var(--vscode-accent);
+  color: var(--vscode-text-light);
+  font-weight: 500;
+}
+.nav-item:disabled {
+  opacity: 0.4;
+  cursor: default;
+}

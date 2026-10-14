@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./bin/pre-cm-checks)",
+      "Bash(./bin/pre-merge-checks)",
+      "Bash(./bin/test)",
+      "Bash(./bin/test-i18n)",
+      "Bash(./bin/typecheck)",
+      "Bash(./bin/lint)",
+      "Bash(./bin/format)",
+      "Bash(./bin/build)",
+      "Bash(./bin/check)",
+      "WebFetch(domain:www.kicad.org)",
+      "WebFetch(domain:dev-docs.kicad.org)"
+    ],
+    "deny": [
+      "Bash(npx)",
+      "Bash(npx *)",
+      "Bash(bunx)",
+      "Bash(bunx *)",
+      "Bash(npm install)",
+      "Bash(npm install *)",
+      "Bash(npm ci)",
+      "Bash(npm ci *)"
+    ],
+    "ask": [
+      "Bash(git push)",
+      "Bash(git push *)"
+    ]
+  }
+}

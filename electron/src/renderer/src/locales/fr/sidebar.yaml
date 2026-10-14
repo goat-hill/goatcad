@@ -1,0 +1,65 @@
+activityBar:
+  explorer: Explorateur
+  git: Git
+  partManager: Librairies
+  partSearch: Recherche de pièces
+  feedback: Envoyer un avis sur l’application
+  settings: Paramètres
+project:
+  title: PROJET
+  none: Aucun projet
+  isolated: Les modifications sont isolées — les renommages ne mettront pas à jour les autres fichiers, et seules les librairies globales sont chargées.
+  selectPrompt: Sélectionner un projet
+  switch: Changer de projet actif
+  createProject: Créer un projet…
+  why: Les classes d’équipotentielles, les règles de conception, les librairies du projet et la hiérarchie des feuilles résident toutes dans un fichier de projet.
+  schematics: Schématiques
+  boards: PCB
+  symbolLibraries: Librairies de symboles
+  footprintLibraries: Librairies d’empreintes
+  newSchematicTitle: Nouvelle schématique
+  newBoardTitle: Nouveau PCB
+  symbolLibraryActions: Créer ou ajouter une librairie de symboles
+  footprintLibraryActions: Créer ou ajouter une librairie d’empreintes
+  newLibraryPlaceholder: Nom de la librairie
+  newLibraryError: Saisissez un nom valide et unique
+fileExplorer:
+  title: EXPLORATEUR DE FICHIERS
+  newFile: Nouveau fichier
+  refreshExplorer: Actualiser l’explorateur
+  newFilePlaceholder: fichier.kicad_sch
+  emptyState: Vous n’avez pas encore ouvert de dossier.
+  openFolder: Ouvrir un dossier
+  emptyWorkspace: Espace de travail vide.
+fileMenu:
+  open: Ouvrir
+  new: Nouveau
+  newSchematic: Schématique
+  newBoard: PCB
+  newSymbolLibrary: Librairie de symboles
+  newFootprintLibrary: Librairie d’empreintes
+  newSymbol: Nouveau symbole
+  newFootprint: Nouvelle empreinte
+  reveal: Afficher dans le dossier
+  copyPath: Copier le chemin
+  rename: Renommer
+  delete: Supprimer
+  needsFile: Sélectionnez d’abord un fichier ou un dossier.
+  needsSymbolLibrary: Ouvrez ou sélectionnez d’abord une librairie de symboles.
+  needsFootprintLibrary: Ouvrez ou sélectionnez d’abord une librairie d’empreintes.
+schematics:
+  title: SCHÉMATIQUES
+  sheetTitle: '{namePath}  ·  {fileName}'
+partManager:
+  title: Librairies
+  sharedLibraries: LIBRAIRIES PARTAGÉES
+  browse: Parcourir les librairies
+  filterPlaceholder: Filtrer les composants…
+  noLibrariesConfigured: Aucune librairie pour l’instant. Si KiCad est installé, elles sont détectées automatiquement — sinon, téléchargez-les ou ajoutez-les.
+  configureLibraries: Gérer les librairies
+  noCustomFootprints: Aucun fichier d’empreinte personnalisé trouvé.
+  rootCategory: (Racine)
+  tooManyResults: Trop de résultats, certains sont masqués
+  includes3dModel: Inclut un modèle 3D
+gitStatus:
+  branchTitle: Branche Git — cliquez pour changer

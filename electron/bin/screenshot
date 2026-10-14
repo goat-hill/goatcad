@@ -1,0 +1,25 @@
+#!/bin/bash
+# Screenshot the real app: build, launch via Playwright's Electron driver,
+# capture a PNG. See scripts/screenshot.mjs for options (--out, --size,
+# --script, --wait, --no-build) and .claude/skills/screenshot-app/SKILL.md
+# for usage.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+# Display mode: headless by default (xvfb, invisible), or --visible to show the
+# app on the real desktop for debugging. screenshot.mjs reads --visible too, to
+# skip the X11/Wayland pinning when visible.
+want_visible=false
+for a in "$@"; do [ "$a" = "--visible" ] && want_visible=true; done
+
+if [ "$want_visible" = true ]; then
+  exec node scripts/screenshot.mjs "$@"
+elif command -v xvfb-run >/dev/null 2>&1; then
+  # Throwaway virtual display so no window flashes on a real desktop.
+  exec xvfb-run -a node scripts/screenshot.mjs "$@"
+else
+  echo "screenshot: xvfb-run not found — running on the real \$DISPLAY. Install xvfb for headless, or pass --visible to opt in." >&2
+  exec node scripts/screenshot.mjs "$@"
+fi

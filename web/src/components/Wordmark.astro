@@ -1,0 +1,68 @@
+---
+import { WORDMARK_PARTS } from '../brand'
+import BrandMark from './art/BrandMark.astro'
+
+interface Props {
+  /** Renders as an <h1> in the hero, a <span> in nav/footer. */
+  as?: 'h1' | 'span'
+  size?: 'hero' | 'nav'
+}
+
+/*
+ * The wordmark: type plus the square mark (art/BrandMark.astro, docs/BRAND.md
+ * §3), which rides along wherever the name is written, as the app icon does.
+ * Changing either touches this file and the mark's seam only — nothing else
+ * renders the product name directly.
+ *
+ * Note: comments belong in this frontmatter block, not the template. HTML
+ * comments in an .astro template are shipped verbatim to the browser, which
+ * would publish our internal doc references to every visitor.
+ */
+const { as: Tag = 'span', size = 'nav' } = Astro.props
+const [first, second] = WORDMARK_PARTS
+---
+
+<Tag class:list={['wordmark', size]}>
+  <span class="mark">
+    <BrandMark />
+  </span>
+  <span class="name">
+    <span class="goat">{first}</span>
+    <span class="cad">{second}</span>
+  </span>
+</Tag>
+
+<style>
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    font-weight: 650;
+    letter-spacing: -0.025em;
+    color: var(--text-bright);
+    white-space: nowrap;
+  }
+
+  /* Slightly larger than the cap height so the mark reads as a peer of the
+     name, not a bullet point in front of it. */
+  .mark {
+    font-size: 1.15em;
+    display: inline-flex;
+  }
+
+  .wordmark.nav {
+    font-size: 1.25rem;
+  }
+
+  .wordmark.hero {
+    font-size: var(--step-hero);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+  }
+
+  /* The accent lands on "CAD" only — the half of the name that carries the
+     engineering claim. "Goat" stays in plain text so the joke doesn't shout. */
+  .cad {
+    color: var(--accent-ink);
+  }
+</style>

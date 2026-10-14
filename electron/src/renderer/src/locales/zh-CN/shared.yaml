@@ -1,0 +1,488 @@
+insertSearch:
+  noMatches: 无匹配项
+  placeholder: 工具…
+  label: 搜索工具
+  sections:
+    edit: 编辑
+    view: 视图
+  groups:
+    select: 选择
+    place: 放置
+    connect: 连接
+    routeOptions: 布线选项
+    draw: 绘制
+    zones: 填充区
+    units: 单位
+    utilities: 实用工具
+    navigate: 导航
+    display: 显示
+    layers: 层
+  ops:
+    undo: 撤销
+    redo: 重做
+    rotateCCW: 逆时针旋转
+    rotateCW: 顺时针旋转
+    mirrorHorizontal: 水平镜像
+    mirrorVertical: 垂直镜像
+    fitView: 自适应缩放
+    zoomIn: 放大
+    zoomOut: 缩小
+    centerOnCursor: 以光标为中心
+    zoomToSelection: 缩放至选区
+    find: 查找…
+    sketchPads: 焊盘草图模式
+    inactiveLayers: 非活动层：{mode}
+
+properties:
+  selection: 选择
+  browseFootprint: 选择封装…
+  openFootprint: 在封装编辑器中打开
+  openDatasheet: 打开数据手册
+  posX: 位置 X
+  posY: 位置 Y
+  x: X
+  y: Y
+  startX: 起点 X
+  startY: 起点 Y
+  endX: 终点 X
+  endY: 终点 Y
+  midX: 中点 X
+  midY: 中点 Y
+  centerX: 中心 X
+  centerY: 中心 Y
+  radius: 半径
+  angle: 角度
+  length: 长度
+  width: 宽度
+  height: 高度
+  marginLeft: 左边距
+  marginTop: 上边距
+  marginRight: 右边距
+  marginBottom: 下边距
+  showPinNames: 显示名称
+  showPinNumbers: 显示编号
+  pinNameOffset: 名称偏移
+  show: 显示
+  showName: 显示名称
+  doNotAutoplace: 不自动放置
+  strokeWidth: 线宽
+  strokeColor: 线条颜色
+  fill: 填充
+  fillColor: 填充颜色
+  textColor: 颜色
+  size: 尺寸
+  text: 文本
+  name: 名称
+  derivedFrom: 派生自
+  number: 编号
+  reference: 位号
+  value: 数值
+  footprint: 封装
+  datasheet: 数据手册
+  description: 描述
+  keywords: 关键字
+  electricalType: 类型
+  graphicStyle: 样式
+  hidden: 隐藏
+  inBom: 计入 BOM
+  onBoard: 放在板上
+  excludeFromSim: 不参与仿真
+  inPosFiles: 计入坐标文件
+  duplicatePinNumbersAreJumpers: 跳线引脚
+  power: 电源
+  fpFilters: 封装筛选
+  unitName: 单元名称
+  unitsInterchangeable: 单元可互换
+  net: 网络
+  trackLength: 走线
+  arcLength: 圆弧
+  routedLength: 已布线
+  padToDie: 焊盘到 Die
+  fullLength: 总长
+  layer: 层
+  type: 类型
+  shape: 形状
+  drill: 钻孔
+  roundRatio: 圆角比例
+  strokeType: 线型
+  side: 面
+  locked: 锁定
+  hatchStyle: 影线
+  hatchPitch: 影线间距
+  minThickness: 最小宽度
+  fillMode: 填充
+  hatchThickness: 栅格宽度
+  hatchGap: 栅格间隙
+  hatchOrientation: 栅格角度
+  priority: 优先级
+  padConnection: 焊盘连接
+  padClearance: 焊盘间距
+  maskMargin: 阻焊扩展
+  pasteMargin: 锡膏间隙
+  pasteRatio: 锡膏比例
+  bridgedMask: 允许阻焊桥接
+  thermalGap: 散热间隙
+  thermalBridge: 散热引线
+  teardropsEnabled: 泪滴
+  teardropBestLength: 最佳长度
+  teardropMaxLength: 最大长度
+  teardropBestWidth: 最佳宽度
+  teardropMaxWidth: 最大宽度
+  teardropCurved: 弯曲边缘
+  teardropTwoSegments: 跨两段
+  teardropMaxTrackWidth: 走线宽度限制
+  teardropPreferZone: 优先填充区连接
+  removeIslands: 死铜
+  keepout: Keepout
+  blockTracks: 禁止走线
+  blockVias: 禁止过孔
+  blockPads: 禁止焊盘
+  blockPour: 禁止覆铜
+  blockFootprints: 禁止封装
+  points: 顶点
+  columns: 列
+  rows: 行
+  noEditable: 没有可编辑的属性
+  knockout: 反显
+  keepUpright: 保持正向
+  holeShape: 孔形状
+  holeSizeY: 孔 Y
+  cornerRadius: 圆角半径
+  border: 边框
+  externalBorder: 外边框
+  headerBorder: 表头边框
+  rowSeparators: 行分隔线
+  colSeparators: 列分隔线
+  separatorWidth: 分隔线宽度
+  borderWidth: 边框宽度
+  pinLength: 引脚长度
+  scale: 缩放
+  private: 私有
+  minIslandArea: 最小死铜面积
+  layerTop: 顶层
+  layerBottom: 底层
+  pinType: 引脚类型
+  bold: 粗体
+  italic: 斜体
+  hAlign: 水平对齐
+  vAlign: 垂直对齐
+  thickness: 厚度
+  thicknessAuto: 自动线宽
+  nameSize: 名称尺寸
+  numberSize: 编号尺寸
+  commonToAllUnits: 所有单元
+  paper: 图纸
+  pads: 焊盘
+  rotation: 旋转
+  mirror: 镜像
+  diameter: 直径
+  kind: 种类
+  libId: 库标识
+  symbolUnit: 单元
+  bodyStyle: 图形样式
+  bodyStyleStandard: 标准
+  bodyStyleAlternate: 备选
+propertyChanges:
+  added: 新增
+  removed: 已移除
+propertySections:
+  text: 文本属性
+  shape: 形状
+  fill: 填充
+  border: 边框
+  margins: 边距
+  pad: 焊盘
+  hole: 孔
+  via: 过孔
+  fields: 字段
+  attributes: 特性
+  overrides: 覆盖
+  keepout: Keepout
+  islands: 死铜
+  thermal: 缓释热焊盘
+  teardrops: 泪滴
+  pinDisplay: 引脚显示
+  units: 单元和图形样式
+  length: 长度
+propertiesPanel:
+  title: 属性
+  manufacture: 制造输出
+  components: 元件
+  schematicSetup: 原理图配置
+  updateFromSchematic: 从原理图更新
+  syncAdded: '{count} 个封装待添加'
+  syncRemoved: '{count} 个封装不在原理图中'
+  syncEdited: '{count} 个封装待更新'
+  syncNoSchematic: 项目中没有可供更新的原理图。
+  syncUnannotated: 未批注
+  boardSetup: 电路板配置
+  colorInherited: 默认
+  colorReset: 恢复默认颜色
+preview3dToggle:
+  board: 3D 电路板视图
+  footprint: 3D 模型预览
+nonActiveDisplay:
+  modes:
+    show: 正常
+    dim: 暗显
+    hide: 隐藏
+layersPanel:
+  title: 层
+  buttonTitle: 层
+  presetLabel: 预设
+  selectPreset: 选择…
+  savePresetTitle: 将这些层保存为命名预设
+  deletePresetTitle: 删除此预设
+  deletePresetDisabledTitle: 选择一个已保存的预设以删除
+  activeLayerTitle: 活动层
+  toggleVisibilityTitle: 切换层可见性
+gridSettingsPanel:
+  title: 栅格
+  buttonTitle: 栅格
+  unit: 单位
+  spacing: 间距
+  showGrid: 显示栅格
+  snap: 捕获
+viewportStatus:
+  axisX: X
+  axisY: Y
+  gridMm: '{value} mm'
+  gridMil: '{value} mil'
+  gridIn: '{value} in'
+  unitMm: mm
+  unitMil: mil
+  unitIn: in
+viewportPopover:
+  pin: 固定到侧边栏
+  unpin: 取消固定，回到视口角落
+selectionFilterPanel:
+  title: 选择筛选器
+  allItems: 所有项目
+  locked: 锁定
+  button: 筛选
+  buttonTitle: 选择筛选器
+  kinds:
+    footprint: 封装
+    track: 走线
+    via: 过孔
+    zone: 填充区
+    pad: 焊盘
+    graphic: 图形
+    text: 文本
+    point: 点
+    symbol: 符号
+    wire: 连线
+    label: 标签
+    junction: 结点
+    no_connect: 无连接标志
+    sheet: 图纸
+    sheet_pin: 图纸引脚
+    image: 图像
+    rule_area: 规则域
+    field: 字段文本
+    pin: 引脚
+layerPresets:
+  all: 所有层
+  frontAssembly: 顶层装配视图
+  front: 顶层
+  backAssembly: 底层装配视图
+  back: 底层
+  copper: 所有铜层
+  innerCopper: 内部铜层
+  none: 无层
+componentsTable:
+  filterPlaceholder: 筛选元件…
+  groupSymbols: 符号分组
+  columns: 列
+  columnsFieldHeader: 字段
+  columnsShowHeader: 显示
+  columnsGroupHeader: 分组
+  recordCount: '{count} 个元件'
+  rowForeignTitle: 位于其他图纸——点击打开
+  collapseGroup: 折叠分组
+  expandGroup: 展开分组
+  mixedValue: （混合）
+  noComponentsFiltered: 没有与筛选条件匹配的元件。
+  noComponentsAtAll: 此原理图中没有元件。
+  fields:
+    reference: 位号
+    sheet: 图纸
+    value: 数值
+    dnp: DNP
+    excludeFromBom: 从物料清单中移除
+    excludeFromBoard: 不在电路板中
+    footprint: 封装
+    datasheet: 数据手册
+layerNames:
+  fCu: 顶层铜
+  bCu: 底层铜
+  fSilkS: 顶层丝印
+  bSilkS: 底层丝印
+  fMask: 顶层阻焊
+  bMask: 底层阻焊
+  fPaste: 顶层锡膏
+  bPaste: 底层锡膏
+  fFab: 顶层制造
+  bFab: 底层制造
+  fCrtYd: 顶层元件外框
+  bCrtYd: 底层元件外框
+  edgeCuts: 电路板外框
+netHighlight:
+  status: 网络
+  clear: 清除
+  highlight: 高亮网络
+  clearMenu: 清除网络高亮
+selectOther:
+  title: 选择
+  all: 全选
+  menu: 选择其他…
+primitives:
+  board: 电路板
+  footprint: 封装
+  pad: 焊盘
+  track: 走线
+  trackArc: 圆弧走线
+  tuningPattern: 调整规则
+  via: 过孔
+  zone: 填充区
+  ruleArea: 规则域
+  line: 线
+  arc: 圆弧
+  circle: 圆
+  rectangle: 矩形
+  polygon: 多边形
+  curve: 曲线
+  text: 文本
+  textBox: 文本框
+  table: 表格
+  point: 点
+  symbol: 符号
+  pin: 引脚
+  field: 字段
+  wire: 连线
+  bus: 总线
+  busEntry: 总线入口
+  junction: 结点
+  noConnect: 无连接标志
+  label: 标签
+  directiveLabel: 指令标签
+  sheet: 图纸
+  sheetPin: 图纸引脚
+  graphic: 图形
+  image: 图像
+libraryChooser:
+  title:
+    placeSymbol: 放置符号
+    placePower: 放置电源符号
+  search:
+    symbol: 搜索符号…
+    power: 搜索电源符号…
+    footprint: 搜索封装…
+  searchTitle: 搜索（{keys}）
+  scopes:
+    design: 本设计中
+    project: 项目
+    global: 我的
+    system: 标准
+  sections:
+    design: 本设计中
+    recent: 最近
+    fits: 适配符号
+  columns:
+    name: 名称
+    description: 描述
+  fits: 适配
+  moreResults: 还有 {n} 项——继续输入以缩小范围
+  noMatches: 无匹配项
+  indexing: 正在索引库…
+  noModel: 无 3D 模型
+  loading: 正在加载…
+  noFootprint: 未分配封装
+  noFootprintOption: 无
+  footprintMissing: 没有库包含此封装
+  unreadable: 无法读取此文件。
+  details:
+    name: 名称
+    description: 描述
+    keywords: 关键字
+    source: 来源
+    pinMap: 引脚
+    datasheet: 数据手册
+  pinMap:
+    allMatch: 每个引脚都有焊盘（{n}）
+    pinsWithoutPad: 无焊盘的引脚：{list}
+    padsWithoutPin: 无引脚的焊盘：{list}
+  openDatasheet: 打开
+  cancel: 取消
+  place: 放置
+  assign: 分配
+  assignMany: 分配给 {n} 个元件
+  change: 更换
+librarySync:
+  checking: 正在检查库…
+  matches: '{count} 个与库一致'
+  differs: 与库不同步
+  differsSome: '{total} 个中有 {count} 个与库不同步'
+  missing: 不在任何库中
+  missingSome: '{total} 个中有 {count} 个不在任何库中'
+libraryLink:
+  title: 库
+  update: 从库更新…
+  updateHint: 从库副本重建，保留位置、位号和网络
+  changeSymbol: 更换符号…
+  changeFootprint: 更换封装…
+  changeHintSymbol: 换成另一个库符号
+  changeHintFootprint: 换成另一个库封装
+  editSymbol: 编辑符号…
+  editFootprint: 编辑封装…
+  editHintSymbol: 编辑此图纸中的符号副本，不改动库
+  editHintFootprint: 编辑此电路板中的封装副本，不改动库
+  editLibrarySymbol: 编辑库符号…
+  editLibraryFootprint: 编辑库封装…
+  editLibraryHintSymbol: 在符号编辑器中打开库符号
+  editLibraryHintFootprint: 在封装编辑器中打开库封装
+partUpdate:
+  updateTitleSymbol: 从库更新符号
+  updateTitleFootprint: 从库更新封装
+  changeTitleSymbol: 更换符号
+  changeTitleFootprint: 更换封装
+  fromPartSymbol: 库符号
+  fromPartFootprint: 库封装
+  newPartSymbol: 新符号
+  newPartFootprint: 新封装
+  newPartPlaceholderSymbol: 库:符号
+  newPartPlaceholderFootprint: 库:封装
+  eachOwn: 各自从其库项
+  updateHintSymbol: 每个符号都从其自身的库符号重建。在此指定一个库符号，可将它们全部从该符号重建。
+  updateHintFootprint: 每个封装都从其自身的库封装重建。在此指定一个库封装，可将它们全部从该封装重建。
+  updateToHintSymbol: 范围内的每个符号都将从此库符号重建。
+  updateToHintFootprint: 范围内的每个封装都将从此库封装重建。
+  browse: 浏览…
+  scopeSymbol: 符号
+  scopeFootprint: 封装
+  scopeSelectionSymbol: 选中的符号（{count}）
+  scopeSelectionFootprint: 选中的封装（{count}）
+  scopeReference: 匹配位号
+  scopeValue: 匹配数值
+  scopeLibId: 匹配库标识
+  scopeAllSymbol: 原理图中的所有符号
+  scopeAllFootprint: 电路板上的所有封装
+  wildcards: '* 匹配任意长度的字符，? 匹配任意单个字符'
+  reset: 从库中获取
+  fields: 字段
+  all: 全部
+  none: 无
+  outcomeSymbol: 待重建的符号
+  outcomeFootprint: 待重建的封装
+  loading: 正在读取库…
+  notFound: 没有库包含 {libId}
+  matches: 与库一致
+  differs: 与库不同步
+  nothingSymbol: 此范围内没有符号。
+  nothingFootprint: 此范围内没有封装。
+  cancel: 取消
+  confirmUpdate: 更新
+  confirmChange: 更换
+agentViewport:
+  close: 关闭智能体视口
+  reveal: 显示智能体视口：{label}

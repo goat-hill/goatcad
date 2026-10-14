@@ -1,0 +1,91 @@
+errors:
+  createFile: 创建文件时出错：{error}
+  deleteFile: 删除文件时出错：{error}
+  renameFile: 重命名文件时出错：{error}
+  library: 更新库时出错：{error}
+  openRecent: 无法加载所选目录。它可能已被移动或删除。
+  saveFile: 保存文件时出错：{error}
+confirm:
+  deleteFile: 将“{name}”移到废纸篓？
+  renameForward: "将“{from}”重命名为“{to}”？\n\n其他 {count} 个文件将随之更新：\n{files}"
+  renameForwardFile: '• {name}（{count} 处图纸引用）'
+  deleteFileReferenced: "将“{name}”移到废纸篓？\n\n有 {count} 个文件引用了它，其图纸链接将会失效：\n{files}"
+  deleteImpactFile: '• {name}（{count} 处图纸引用）'
+unsaved:
+  message: 是否保存对 {name} 所做的更改？
+  messageMany: 是否保存对以下 {count} 个文件的更改？
+  detail: 如果不保存，你的更改将会丢失。
+  dontSave: 不保存
+  saveAll: 全部保存
+branchPicker:
+  placeholder: 切换分支或输入新名称…
+  create: 创建分支“{name}”
+  loading: 正在加载分支…
+  noBranches: 未找到分支。
+quickOpen:
+  placeholder: 转到文件…
+  noResults: 未找到匹配的文件
+shortcuts:
+  title: 键盘快捷键
+  openFolder: 打开文件夹
+  openProject: 打开项目
+  goToFile: 转到文件
+  newSchematic: 新建原理图
+  newWindow: 新建窗口
+  closeTab: 关闭标签页
+  nextTab: 下一个标签页
+  previousTab: 上一个标签页
+  splitTab: 将标签页移到另一窗格
+  splitDirection: 切换左右/上下窗格
+  focusOtherGroup: 聚焦另一窗格
+  updatePcb: 从原理图更新 PCB
+  save: 保存
+  showExplorer: 显示资源管理器
+  showLibraries: 显示库
+  openPartSearch: 打开元件搜索
+  newTerminal: 新建终端
+  openAgent: 打开智能体
+  openSettings: 打开设置
+  gitFocusCommit: 编写提交信息
+  gitCommit: 提交（在消息框中）
+  gitStageAll: 暂存所有更改
+  gitPush: 推送
+  gitPull: 拉取
+  toggleDevTools: 切换开发者工具
+updatePcb:
+  title: 从原理图更新
+  board: 电路板
+  loading: 正在比较原理图和电路板…
+  upToDate: 电路板已与原理图一致。
+  options: 选项
+  replace: 用符号指定的封装替换现有封装
+  prune: 删除没有符号的封装
+  fields: 从符号更新封装字段
+  columns:
+    reference: 位号
+    value: 数值
+    footprint: 封装
+    change: 更改
+  change:
+    added: 已添加
+    deleted: 已删除
+    kept: 不在原理图中，已保留
+    reference: 位号
+    value: 数值
+    footprint: 封装
+    nets: 焊盘网络
+    fields: 字段
+    attributes: 特性
+  skip:
+    noFootprint: 未分配封装
+    footprintNotFound: '{libId} 不在任何库中'
+    noUuid: 符号没有 UUID
+  confirm: 更新 PCB
+  errors:
+    noBoard: 项目中没有电路板（.kicad_pcb）。
+    noSchematic: 项目中没有可供更新的根原理图。
+    notAnnotated: 请先批注原理图。未批注：{references}
+netlist:
+  errors:
+    noSchematic: 项目中没有可导出的根原理图。
+    write: 无法写入网表：{error}

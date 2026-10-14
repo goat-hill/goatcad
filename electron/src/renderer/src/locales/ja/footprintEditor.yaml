@@ -1,0 +1,130 @@
+commands:
+  editFootprintProperties: フットプリントのプロパティを編集
+  editPad: パッド {number} を編集
+  editLine: 線を編集
+  editPolygon: ポリゴンを編集
+  editRuleArea: ルール領域を編集
+  editShape: 図形を編集
+  addPad: パッドを追加
+  addLine: 線を追加
+  addArc: 円弧を追加
+  addRectangle: 矩形を追加
+  addCircle: 円を追加
+  addPolygon: ポリゴンを追加
+  addText: テキストを追加
+  addBezier: 曲線を追加
+  addTextBox: テキスト ボックスを追加
+  addPoint: ポイントを追加
+  rotate: 回転
+  mirror: 反転
+  flip: 配置面を変更
+  moveAnchor: フットプリントのアンカーを移動
+  editModel: 3D モデルを編集
+  addModel: 3D モデルをリンク
+  removeModel: 3D モデルを削除
+edit:
+  cut: 切り取り
+  copy: コピー
+  paste: 貼り付け
+  duplicate: 複製
+  delete: 削除
+  rotate: 左回転
+  rotateClockwise: 右回転
+  flip: 配置面を変更
+tools:
+  flip: 配置面を変更
+  anchor: フットプリントのアンカーを配置
+  gridOrigin: グリッド原点を設定
+  resetGridOrigin: グリッド原点をリセット
+properties:
+  fromBoard: 基板の設定から
+zoneConnect:
+  inherit: ゾーンの設定から
+  solid: ベタ
+  thermal: サーマルリリーフ
+  none: なし
+  thermalTht: サーマルリリーフ（THT のみ）
+readonlyBanner:
+  title: 読み取り専用の公式ライブラリ部品
+  body: この部品は直接編集できません。下をクリックしてプロジェクトのワークスペースにコピーしてください。
+  exportComponentTitle: 部品をエクスポート
+  exportPart: 部品をエクスポート
+saveModal:
+  title: フットプリントの保存オプション
+  subtitle: このフットプリントは読み取り専用ライブラリのものです。編集するにはプロジェクトにコピーを保存してください。
+  saveLocalTitle: プロジェクトのローカル フットプリントとして保存
+  saveLocalDesc: ワークスペースのディレクトリに再利用可能な `.kicad_mod` フットプリント ファイルを作成します。
+  saveLocalPlaceholder: filename.kicad_mod
+propertiesPanel:
+  footprintProperties: フットプリントのプロパティ
+  descr: 説明
+  model3d: 3D モデル
+  modelPath: パス
+  modelOffset: オフセット (mm)
+  modelScale: 拡大／縮小率
+  modelRotate: 回転 (°)
+  addModel: 3D モデルをリンク…
+  removeModel: 3D モデルを削除
+  browse: 参照…
+  padInspector: パッド [{number}] インスペクター
+  number: 番号
+  type: タイプ
+  padTypes:
+    smd: SMD
+    throughHole: スルーホール
+    npThroughHole: メッキなしスルーホール
+  shape: 形状
+  shapeTypes:
+    rect: 四角
+    circle: 円
+    oval: 長円
+    roundrect: 角丸長方形
+  drillSize: ドリルサイズ
+  roundRatio: 角の半径比
+  graphicInspector: 図形アイテム インスペクター
+  startX: 始点 X
+  startY: 始点 Y
+  endX: 終点 X
+  endY: 終点 Y
+  polygonInspector: ポリゴン インスペクター
+  points: ポイント
+  fill: 塗りつぶし
+  fillTypes:
+    none: なし（外形のみ）
+    solid: ベタ塗り
+    hatch: ハッチ
+    reverseHatch: 逆ハッチ
+    crossHatch: クロスハッチ
+  ruleAreaInspector: ルール領域 インスペクター
+  minThickness: 最小厚さ
+  hatchStyle: ハッチ スタイル
+  hatchStyleTypes:
+    none: なし（外形のみ）
+    edge: エッジ（境界ハッチ）
+    full: フル（塗りつぶしハッチ）
+  hatchPitch: ハッチ ピッチ
+  selectHint: 2D レイアウトでパッドまたは図形の線を選択すると、このサイドバーで詳細を確認・編集できます。
+viewRail:
+  sketchGraphics: 図形をスケッチ表示
+  sketchText: テキストをスケッチ表示
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+  pad: パッド
+  line: 線
+  arc: 円弧
+  rectangle: 矩形
+  circle: 円
+  polygon: ポリゴン
+  text: テキスト
+  bezier: 曲線
+  textBox: テキスト ボックス
+  point: ポイント
+  lineModeTitle: ライン モード — 45° / 90° / 自由 ({hotkey})
+  lineMode: 'ライン モード：{mode}'
+  lineFree: 自由
+viewport3d:
+  title: 3D プレビュー
+  noFootprintMsg: フットプリントを開くと 3D で表示されます。
+  noModelMsg: このフットプリントには 3D モデルがリンクされていません。
+  notFoundMsg: リンクされた 3D モデルが見つかりませんでした。

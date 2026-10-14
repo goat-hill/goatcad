@@ -1,0 +1,578 @@
+commands:
+  editBoard: Editar placa
+  editStackup: Editar apilado
+  applyProfile: Aplicar perfil de fabricación
+  applyStackup: Aplicar apilado
+  addDielectric: Añadir capa dieléctrica
+  removeLayer: Eliminar capa
+  editItem: Editar elemento
+  routeTrack: Enrutar pista
+  dragTrack: Arrastrar pista
+  dragVia: Arrastrar vía
+  dragArc: Arrastrar arco
+  routePair: Enrutar par diferencial
+  tune: Ajustar longitud
+  retune: Reajustar
+  updateTuningPatterns: Actualizar todos los patrones de afinado
+  removeTuningPattern: Eliminar patrón de afinado | Eliminar {count} patrones de afinado | Eliminar {count} patrones de afinado
+  editTeardrops: Editar lágrimas
+  rebuildTeardrops: Reconstruir lágrimas
+  dragFootprint: Arrastrar huella | Arrastrar {count} huellas | Arrastrar {count} huellas
+  addVia: Añadir vía
+  placeFootprint: Colocar {reference}
+  changeTrackWidth: Cambiar anchura de pista
+  changeViaSize: Cambiar tamaño de vía
+  addLine: Añadir línea | Añadir {count} líneas | Añadir {count} líneas
+  addArc: Añadir arco
+  addRectangle: Añadir rectángulo
+  addCircle: Añadir círculo
+  addPolygon: Añadir polígono
+  addText: Añadir texto
+  addBezier: Añadir curva
+  addTextBox: Añadir cuadro de texto
+  addPoint: Añadir punto
+  addZone: Añadir zona
+  editZone: Editar zona
+  editShape: Editar forma
+  refillZones: Rellenar zonas de nuevo
+  rotateFootprints: Girar huella | Girar {count} huellas | Girar {count} huellas
+  rotateItems: Girar elemento | Girar {count} elementos | Girar {count} elementos
+  moveFootprint: Mover {reference}
+  rotateFootprint: Girar {reference}
+  flipFootprints: Cambiar de lado la huella | Cambiar de lado {count} huellas | Cambiar de lado {count} huellas
+  flipItems: Cambiar de lado el elemento | Cambiar de lado {count} elementos | Cambiar de lado {count} elementos
+  updateFootprints: Actualizar huella desde la biblioteca | Actualizar {count} huellas desde la biblioteca | Actualizar {count} huellas desde la biblioteca
+  changeFootprints: Cambiar huella | Cambiar {count} huellas | Cambiar {count} huellas
+  fanout: Fanout de {reference}
+  cleanup: Limpiar pistas y vías
+  footprintFallback: Huella
+  editTrack: Editar pista
+  editVia: Editar vía
+  lock: Bloquear elemento | Bloquear {count} elementos | Bloquear {count} elementos
+  unlock: Desbloquear elemento | Desbloquear {count} elementos | Desbloquear {count} elementos
+  mirror: Reflejar elemento | Reflejar {count} elementos | Reflejar {count} elementos
+  placeGridOrigin: Colocar origen de rejilla
+  resetGridOrigin: Restablecer origen de rejilla
+  placeDrillOrigin: Colocar origen de taladrado
+  resetDrillOrigin: Restablecer origen de taladrado
+  breakTrack: Dividir pista
+  moveTracksToLayer: Mover pista a {layer} | Mover {count} pistas a {layer} | Mover {count} pistas a {layer}
+edit:
+  cut: Cortar
+  copy: Copiar
+  paste: Pegar
+  duplicate: Duplicar
+  delete: Eliminar
+  rotate: Girar en sentido antihorario
+  rotateClockwise: Girar en sentido horario
+  flip: Cambiar de lado
+  fanout: Fanout…
+  breakTrack: Dividir pista
+  trackLayerNext: Mover a la capa siguiente
+  trackLayerPrev: Mover a la capa anterior
+tools:
+  flip: Cambiar de lado
+  fanout: Fanout…
+fanout:
+  title: Fanout
+  style: Estilo
+  direction: Dirección
+  surfaceRows: Filas en superficie
+  surfaceRowsHint: Filas exteriores de una matriz que se dejan para enrutar en superficie, sin vía
+  styles:
+    auto: Automático
+    dogbone: Dogbone
+    under-pads: Bajo los pads
+    inline: Filas alineadas
+    staggered: Filas escalonadas
+  directions:
+    out: Hacia fuera
+    in: Hacia dentro
+    ne: Noreste
+    se: Sureste
+    sw: Suroeste
+    nw: Noroeste
+  willPlace: Se colocará 1 vía | Se colocarán {count} vías | Se colocarán {count} vías
+  placed: 1 vía colocada | {count} vías colocadas | {count} vías colocadas
+  skipped: '{count} omitidos: {reason}'
+  surface: 1 queda para la superficie | {count} quedan para la superficie | {count} quedan para la superficie
+  refused: 1 pad no admite vía | {count} pads no admiten vía | {count} pads no admiten vía
+  skip:
+    no-net: sin red
+    no-connect: sin conectar
+    through-hole: pasante
+    joined: ya unido a su red
+    via: ya tiene una vía
+  apply: Aplicar fanout
+selection:
+  toggleLock: Bloquear / desbloquear
+  selectConnection: Seleccionar conexión
+  selectNet: Seleccionar red
+  deleteFullTrack: Eliminar pista completa
+origins:
+  placeGrid: Origen de rejilla
+  resetGrid: Restablecer origen de rejilla
+  placeDrill: Origen del archivo de taladrado/colocación
+  resetDrill: Restablecer origen del archivo de taladrado/colocación
+loadingBoard: 'Cargando placa… {percent}%'
+viewRail:
+  zoneOutlines: Solo contornos de zonas
+  sketchTracks: Pistas en boceto
+  sketchVias: Vías en boceto
+  hideRatsnest: Ocultar líneas aéreas
+  boardArea: Sombreado del área de la placa
+  flip: Voltear placa
+  fpReferences: Referencias de huellas
+  fpValues: Valores de huellas
+  fpText: Texto de huellas
+  assembly: Superposición de montaje
+parseError:
+  title: No se pudo analizar el archivo de placa
+collision:
+  title: Enrutador
+  buttonTitle: Modo del enrutador
+  explain:
+    highlight: Deja todo en su sitio y marca las violaciones de holgura, pero no las coloca salvo que se permitan las violaciones de DRC.
+  settingsTitle: Ajustes
+  settings:
+    allowViolations:
+      name: Permitir violaciones de DRC
+      note: Coloca la pista incluso a través de las violaciones de holgura que marca Resaltar.
+    freeAngle:
+      name: Modo de ángulo libre
+      note: Las pistas van rectas hasta el cursor con cualquier ángulo.
+    shoveVias:
+      name: Empujar vías
+    jumpOverObstacles:
+      name: Saltar sobre los obstáculos
+      note: Las pistas empujadas que encuentran un pad lo rodean por detrás en lugar de frenar el enrutado.
+    removeLoops:
+      name: Eliminar pistas redundantes
+      note: Una pista nueva que une lo que ya une una antigua la sustituye.
+    smartPads:
+      name: Optimizar conexiones de pads
+      note: Las pistas salen y entran en los pads por su salida más limpia, nunca con un ángulo extraño.
+    smoothDragged:
+      name: Suavizar segmentos arrastrados
+      note: Un segmento arrastrado se alinea con sus vecinos, y una esquina con el punto donde se encuentran.
+    optimizeDragged:
+      name: Optimizar toda la pista arrastrada
+      note: Se ordena toda la pista arrastrada, no solo la parte que movió el arrastre.
+    autoPosture:
+      name: Usar el recorrido del ratón para fijar la postura
+      note: Que una pista empiece en diagonal o recta depende de cómo sale el ratón del clic.
+    startDiagonal:
+      name: Empezar en diagonal
+      note: Sin el recorrido del ratón, las pistas empiezan con la diagonal; / la invierte.
+    fixAllSegments:
+      name: Fijar todos los segmentos al hacer clic
+      note: Un clic tiende toda la pista hasta el cursor. Desactivado, el último segmento queda libre.
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+  select: Seleccionar
+  route: Enrutar
+  via: Vía
+  layerPair:
+    title: Par de capas
+    top: Capa superior
+    bottom: Capa inferior
+    save: Guardar como preajuste
+    remove: Eliminar preajuste
+    presets: Preajustes (Mayús+V recorre los marcados)
+    pickLayer: Colocar vía hasta la capa
+  hintKeys:
+    routeVia: Vía
+    trackWidthNext: Anchura
+    trackWidthPrev: Más estrecha
+    viaSizeNext: Tamaño de vía
+    routePosture: Postura
+    dropVia: Soltar vía
+    tuneSpacing: Espaciado
+    tuneAmplitude: Amplitud
+    tuneTighter: Más junto
+    tuneTaller: Más alto
+    pairVia: Par de vías
+    pairSize: Tamaño del par
+    routeKeys: Todas las teclas
+  keysCard:
+    title: Teclas de enrutado
+    titlePair: Teclas de par diferencial
+    titleTune: Teclas de ajuste de longitud
+    pairVia: Par de vías, hacia donde va el par
+    pairSize: Tamaño de par siguiente / anterior
+    via: Vía pasante, hacia donde va la ruta
+    posture: Invertir postura
+    corner: Modo de esquina
+    width: Más ancha / más estrecha
+    viaSize: Vía mayor / menor
+    customSize: Tamaño de pista y vía personalizado
+    finish: Terminar hasta el pad
+    end: Terminar la ruta aquí
+    unroute: Retroceder un clic
+    mode: Modo del enrutador
+    layer: Capa siguiente / anterior
+    blindVia: Vía ciega o enterrada entre el par de capas
+    microVia: Microvía
+    tuneSpacing: Subir / bajar espaciado del meandro
+    tuneAmplitude: Subir / bajar amplitud del meandro
+    viaPickLayer: Vía hasta una capa elegida de una lista (pasante, ciega)
+    layerPair: Siguiente preajuste de par de capas
+    cancel: Terminar la ruta, conservando lo marcado con clic
+    toggle: Mostrar u ocultar esta tarjeta
+    sections:
+      route: Ruta
+      sizes: Anchura y tamaño
+      vias: Vías
+      layers: Capas
+  trackWidthOp: 'Anchura de pista: {size} mm'
+  viaSizeOp: 'Tamaño de vía: {size} mm'
+  sizes:
+    trackWidth: Anchura de pista
+    trackWidthBetween: 'Anchura de pista · regla {min}–{max} mm'
+    trackWidthAtLeast: 'Anchura de pista · regla ≥ {min} mm'
+    viaSize: Tamaño de vía (diámetro / taladro)
+    viaSizeAtLeast: 'Tamaño de vía (diámetro / taladro) · regla ≥ {min} mm'
+    pairSize: Anchura / espacio del par
+    custom: Tamaño personalizado…
+    customTitle: Tamaño personalizado
+    customViaDiameter: Diámetro de vía
+    customViaDrill: Taladro de vía
+    customApply: Aplicar
+    netClass: 'Clase de red · {size} mm'
+    netClassIdle: Clase de red
+    useConnected: Usar la anchura de la pista inicial
+    size: '{size} mm'
+    below: por debajo de la regla
+    above: por encima de la regla
+    edit: Editar tamaños…
+  routeMode: 'Modo de colisión: {mode}'
+  routeModes:
+    shove: Empujar
+    walkaround: Rodear
+    highlight: Resaltar
+  cornerMode: 'Modo de esquina: {mode}'
+  cornerFree: libre
+  cornerRounded: 'redondeada {angle}°'
+  lineModeTitle: Modo de línea — 45° / 90° / libre ({hotkey})
+  posture: Invertir postura de esquina
+  facts:
+    route: Ruta
+    netClass: Clase de red
+    width: Anchura
+    via: Vía
+    viaDiameter: Tamaño de vía
+    viaDrill: Orificio de vía
+    widthOutside: 'Fuera de {min}–{max} mm según'
+    continued: continuada
+    custom: personalizada
+    picked: elegida
+    profile: 'perfil {name}'
+    pairRoute: Ruta de par
+    nets: Redes
+    gap: Espacio
+    viaGap: Espaciado de vía
+    clearance: Holgura
+    clearanceTo: Frente a
+    length: Longitud
+    lengthRule: Regla de longitud
+    lengthOver: 'Supera el máximo de la regla, {max} mm'
+    lengthBetween: '{min}–{max}'
+    lengthAtMost: '≤ {max}'
+    lengthAtLeast: '≥ {min}'
+  line: Línea
+  arc: Arco
+  rectangle: Rectángulo
+  circle: Círculo
+  polygon: Polígono
+  text: Texto
+  bezier: Curva
+  textBox: Cuadro de texto
+  point: Punto
+  polygonContinueHint: Clic en el primer punto para cerrar
+  arcHint: Clic en el inicio, el final y luego la curvatura
+  bezierHint: Clic en el inicio, el final y luego cada punto de control
+  zone: Zona
+  zoneContinueHint: Clic en el primer punto para cerrar
+  placeFootprint: Colocar huella
+  refillTitle: Rellenar zonas ({hotkey})
+  refill: Rellenar zonas
+  rerunChecks: Volver a ejecutar todas las comprobaciones de diseño
+  fillProgress: 'Rellenando zonas… {settled} de {total}'
+  renderBuilding: Construyendo superposición de montaje…
+viewport3d:
+  bottomViewTitle: Vista inferior
+  building: 'Construyendo placa… {percent}%'
+  loadingModels: 'Cargando modelos… {settled} de {total}'
+  missingModelsDetail: 'No se pudo resolver:'
+  options:
+    layersGroup: Capas
+    boardBody: Cuerpo de la placa
+    copper: Cobre
+    solderMask: Máscara de soldadura
+    solderPaste: Pasta de soldadura
+    silkscreen: Serigrafía
+    holes: Orificios metalizados
+    drawings: Comentarios y dibujos
+    axes: Ejes
+    gauge: Regla de escala
+    models: Modelos de componentes
+    modelsThroughHole: Pasante
+    modelsSmd: SMD
+    modelsUnspecified: Sin especificar
+    modelsDnp: DNP
+    modelsNotInPosFiles: No en archivos de posición
+    reset: Restablecer valores predeterminados
+  presentation:
+    title: Presentación
+    projection: Proyección
+    projections:
+      perspective: Perspectiva
+      orthographic: Ortográfica
+    lighting: Iluminación
+    lightings:
+      studio: Estudio
+      soft: Suave
+      flat: Plana
+      dramatic: Dramática
+    lightLevel: Nivel de luz
+    background: Fondo
+    backgrounds:
+      theme: Tema
+      transparent: Transparente
+      white: Blanco
+      black: Negro
+  exportImage:
+    section: Exportar
+    button: Exportar imagen…
+    menu: Imagen 3D…
+    needs3d: Cambiar primero la placa a su vista 3D
+    title: Exportar imagen
+    size: Tamaño
+    sizeView: 'Vista actual ({width} × {height})'
+    sizePreset: '{width} × {height}'
+    sizeCustom: Personalizado
+    width: Anchura
+    height: Altura
+    lockAspect: Mantener proporciones
+    preview: Vista previa
+    copy: Copiar imagen
+    copied: Copiada al portapapeles
+    copyFailed: No se pudo copiar la imagen
+    save: Guardar imagen…
+    failed: No se pudo exportar la imagen
+footprintUpdate:
+  updateAction: Actualizar huellas desde la biblioteca…
+  changeAction: Cambiar huella…
+  options:
+    removeExtraTexts: Eliminar los textos que no tiene la huella de la biblioteca
+    resetTextLayers: Capas y visibilidad de los textos
+    resetTextEffects: Tamaños y estilos de los textos
+    resetTextPositions: Posiciones de los textos
+    resetTextContent: Texto de los campos
+    resetFabricationAttributes: Atributos de fabricación
+    resetClearanceOverrides: Holguras forzadas
+    reset3DModels: Modelos 3D
+  owned: 'El esquema sigue indicando {footprint}'
+  droppedPads: 'Pads perdidos: {pads}'
+  addedPads: 'Pads nuevos, sin red: {pads}'
+properties:
+  belowRule: 'Por debajo del mínimo de {size} mm según'
+  aboveRule: 'Por encima del máximo de {size} mm según'
+routeRun:
+  selected: Enrutar lo seleccionado
+  selectedFromEnd: Enrutar lo seleccionado desde el otro extremo
+  finishSelected: Intentar terminar lo seleccionado (autoenrutado)
+  fromOtherEnd: Enrutar desde el otro extremo
+  skip: Saltar al siguiente elemento seleccionado
+routerMenu:
+  cancel: Cancelar
+  finish: Terminar
+  undoSegment: Deshacer el último segmento
+  attemptFinish: Intentar terminar
+  viaThrough: Colocar vía pasante
+  viaBlind: Colocar vía ciega/enterrada
+  viaMicro: Colocar microvía
+  viaPickThrough: Seleccionar capa y colocar vía pasante…
+  viaPickBlind: Seleccionar capa y colocar vía ciega/enterrada…
+  posture: Cambiar postura de pista
+  corner: Modo de esquina de pista
+  cornerAngle: '{angle}°'
+  cornerArc: 'Arco {angle}°'
+  sizes: Tamaños de pista y vía
+  mode: Modo del enrutador
+pair:
+  route: Enrutar par diferencial
+  dimensions: Par diferencial
+  dimensionsOp: Dimensiones del par diferencial…
+  width: Anchura de pista
+  gap: Espacio
+  viaGap: Espaciado de vía
+  coach: Clic en un pad, vía o pista de un par
+tune:
+  length: Longitud
+  skew: Desfase
+  min: Mín.
+  max: Máx.
+  meter:
+    pairLength: Longitud del par
+    delay: Retardo
+    pairDelay: Retardo del par
+  target: Objetivo
+  noTarget: mientras se mantenga
+  status: Estado
+  statuses:
+    tuned: ajustada
+    too_short: demasiado corta
+    too_long: demasiado larga
+  settings: Ajuste de longitud
+  settingsPair: Ajuste de longitud de par diferencial
+  settingsSkew: Ajuste de desfase
+  settingsOp: Configuración del ajuste de longitud…
+  tools:
+    single: Ajustar longitud de pista
+    pair: Ajustar longitud de par
+    skew: Ajustar desfase de par
+  coach:
+    start: Clic en una pista donde empiezan los meandros
+    startPair: Clic en una pista de un par donde empiezan los meandros
+    lay: Avanzar por la pista y hacer clic para trazar los meandros
+    noTrack: No hay ninguna pista aquí
+    noMate: Ninguna pista compañera discurre junto a esta
+    cannot: Los meandros no pueden empezar aquí
+    inPattern: Las pistas de un patrón de afinado no se pueden volver a ajustar
+    selectFirst: Primero, clic en una pista para ajustarla
+  targetField: Objetivo (0 para ninguno)
+  overrideRules: Ignorar reglas personalizadas
+  minAmplitude: Amplitud mín.
+  maxAmplitude: Amplitud máx.
+  spacing: Espaciado
+  cornerRadius: Radio de esquina
+  singleSided: Un solo lado
+  mode: Modo de ajuste
+  modes:
+    single: Pista única
+    diff_pair: Par diferencial
+    diff_pair_skew: Desfase
+  initialSide: Primer bucle
+  sides:
+    left: Izquierda
+    right: Derecha
+    default: Predeterminado
+  rounded: Redondeado
+limits:
+  title: Límites
+  hint: Lo que exigen las reglas a la selección, y qué fijó cada valor
+  constraint:
+    clearance: Holgura
+    physical_clearance: Holgura física
+    hole_clearance: Holgura de orificio
+    physical_hole_clearance: Holgura física de orificio
+    hole_to_hole: Orificio a orificio
+    zone_connection: Conexión de zona
+    track_width: Anchura de pista
+    via_diameter: Diámetro de vía
+    annular_width: Ancho de anillo anular
+    hole_size: Tamaño de orificio
+  sameNet: 0, una red
+  unset: Sin límite
+  min: 'mín. {value}'
+  opt: 'ópt. {value}'
+  max: 'máx. {value}'
+  connection:
+    solid: Sólida
+    thermal: 'Térmica, espacio {gap}, radio {spoke}'
+    none: Sin conectar
+  steps: Cómo se decidió
+  none: Estos elementos no comparten ninguna capa de cobre ni ningún orificio.
+  noneOne: No se aplica ningún límite de tamaño a este elemento.
+  outcome:
+    net-tie: Puente de red, 0
+    override: El valor propio del elemento
+    board-minimum: Elevado al mínimo de la placa
+    applied: Se aplica
+    condition-false: La condición no se cumple
+    layer-mismatch: No está en esta capa
+    not-copper: No es cobre
+    no-hole: Sin orificio
+    disallow-mismatch: Prohíbe otros tipos
+    local-clearance: La holgura propia de la zona
+    fallback: Por defecto
+teardrops:
+  action: Editar lágrimas…
+  selectionAction: Editar lágrimas de la selección…
+  title: Editar lágrimas
+  actionGroup: Acción
+  actions:
+    add: Añadir con valores predeterminados
+    set: Establecer valores
+    remove: Eliminar
+    removeAll: Eliminar todas
+  targets: Destinos
+  target:
+    vias: Vías
+    pthPads: Pads pasantes
+    smdPads: Pads SMD
+    trackToTrack: De pista a pista
+  filter: Filtro
+  selectionOnly: 'Solo el elemento seleccionado | Solo los elementos seleccionados ({count}) | Solo los elementos seleccionados ({count})'
+  roundOnly: Solo pads redondos
+  existingOnly: Solo lágrimas existentes
+  net: Red
+  allNets: Todas las redes
+  netClass: Clase
+  allClasses: Todas las clases
+  layer: Capa
+  allLayers: Todas las capas
+  values: Valores
+  keep: Mantener
+  'yes': Sí
+  'no': 'No'
+  defaultsHint: Los valores predeterminados de cada forma están en Configuración de la placa ▸ Lágrimas.
+  confirm:
+    add: 'Añadir lágrimas a {count} pad o vía | Añadir lágrimas a {count} pads y vías | Añadir lágrimas a {count} pads y vías'
+    set: 'Establecer lágrimas en {count} pad o vía | Establecer lágrimas en {count} pads y vías | Establecer lágrimas en {count} pads y vías'
+    remove: 'Eliminar lágrimas de {count} pad o vía | Eliminar lágrimas de {count} pads y vías | Eliminar lágrimas de {count} pads y vías'
+    removeAll: Eliminar todas las lágrimas
+cleanup:
+  action: Limpiar pistas y vías…
+  selectionAction: Limpiar selección…
+  title: Limpiar pistas y vías
+  actions: Acciones
+  refill: Rellenar zonas antes y después
+  options:
+    shorts: Eliminar pistas que conectan redes distintas
+    redundantVias: Eliminar vías redundantes
+    danglingVias: Eliminar vías conectadas en una sola capa
+    mergeTracks: Fusionar pistas colineales
+    danglingTracks: Eliminar pistas sin conectar en un extremo
+    tracksInPads: Eliminar pistas totalmente dentro de pads
+  filter: Filtrar elementos
+  selectionOnly: 'Solo elementos seleccionados | Solo elementos seleccionados ({count}) | Solo elementos seleccionados ({count})'
+  net: Red
+  allNets: Todas las redes
+  layer: Capa
+  allLayers: Todas las capas de cobre
+  loading: Buscando cambios…
+  clean: No hay nada que limpiar.
+  columns:
+    change: Cambio
+    net: Red
+    layer: Capa
+    at: Posición (mm)
+  change:
+    shortingTrack: Eliminar pista que cortocircuita dos redes
+    shortingVia: Eliminar vía que cortocircuita dos redes
+    redundantVia: Eliminar vía redundante
+    duplicateTrack: Eliminar pista duplicada
+    zeroLengthTrack: Eliminar pista de longitud cero
+    trackInPad: Eliminar pista dentro de pad
+    danglingTrack: Eliminar pista no conectada en ambos extremos
+    danglingVia: Eliminar vía conectada en menos de dos capas
+    mergeTracks: Fusionar pistas colineales
+  confirm: 'Aplicar {count} cambio | Aplicar {count} cambios | Aplicar {count} cambios'
+  fix: Eliminar
+  fixAll: Eliminar todo
+setSizes:
+  action: Fijar tamaños según las reglas
+  undo: Fijar tamaños según las reglas

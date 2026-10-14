@@ -1,0 +1,317 @@
+title: 电路板配置
+sections:
+  stackup: 叠层
+  constraints: 约束
+  tuningPatterns: 长度调整规则
+  teardrops: 泪滴
+  tuningProfiles: 调整配置
+  netClasses: 网络类
+  customRules: 自定义规则
+  rules: 设计规则
+  exclusions: 排除项
+groups:
+  copper: 厚度
+  holes: 孔
+  microvias: 微孔
+  silk: 丝印
+  arcs: 圆弧近似
+  zones: 填充区填充
+  lengthTuning: 长度调整
+  tuneSingle: 单端走线
+  tunePair: 差分对
+  tuneSkew: 差分对偏差
+  teardropRound: 圆形
+  teardropRect: 矩形
+  teardropTrack: 走线到走线
+actions:
+  save: 保存
+  manage: 管理
+profile:
+  name: 约束配置
+  custom: 自定义
+  edited: 已修改
+  saveAs: 另存为…
+stackup:
+  preset:
+    label: 叠层配置
+  copperLayers:
+    label: 铜层
+  copperFinish:
+    label: 表面处理
+columns:
+  layer: 层
+  type: 类型
+  material: 材料
+  thickness: 厚度
+  weight: 铜重
+  epsilonR: Dk
+  epsilonRHint: 介电常数 (相对介电常数)。数值越高信号越慢；它决定走线阻抗。
+  lossTangent: Df
+  lossTangentHint: 损耗因子。层压板吸收了多少信号——仅在高频下才重要。
+  color: 颜色
+  colorUnsetMask: 未指定 (绿色)
+  colorUnsetSilk: 未指定 (白色)
+table:
+  addDielectric: 添加介质层
+  removeLayer: 移除层
+  copper: 厚度
+  dielectric: 介质
+  total: 总计
+constraints:
+  minClearance:
+    label: 最小间距
+  minTrackWidth:
+    label: 最小走线宽度
+  minConnectionWidth:
+    label: 最小连接宽度
+  minViaAnnularWidth:
+    label: 最小孔环宽度
+  minViaDiameter:
+    label: 最小过孔外径
+  minCopperHoleClearance:
+    label: 铜到孔的间距
+  minCopperEdgeClearance:
+    label: 铜箔到板边间距
+  minThroughHoleDiameter:
+    label: 最小钻孔尺寸
+  minHoleToHole:
+    label: 孔到孔的间距
+  minMicroviaDiameter:
+    label: 最小微孔直径
+  minMicroviaDrill:
+    label: 最小微孔孔径
+  minSilkClearance:
+    label: 最小项目间距
+  minTextHeight:
+    label: 最小文本高度
+  minTextThickness:
+    label: 最小文本线宽
+  maxError:
+    label: 最大允许偏差
+  zonesAllowExternalFillets:
+    label: 允许在填充区轮廓外倒圆角
+  minResolvedSpokes:
+    label: 最小散热引线数量
+  useHeightForLengthCalcs:
+    label: 计算走线长度时考虑叠层高度
+tuningPatterns:
+  minAmplitude:
+    label: 最小幅度 (A)
+  maxAmplitude:
+    label: 最大幅度 (A)
+  spacing:
+    label: 间距 (s)
+  cornerRadiusPercent:
+    label: 圆角半径 (r)，%
+  singleSided:
+    label: 单侧
+teardrops:
+  enabled: 在走线连接更宽走线处添加泪滴
+  bestLength: 最佳长度 (L)
+  maxLength: 最大长度 (L)
+  bestWidth: 最佳宽度 (W)
+  maxWidth: 最大宽度 (W)
+  trackWidthLimit: 走线宽度限制 (w/d)
+  curved: 弯曲边缘
+  twoSegments: 跨越两段走线
+  preferZone: 优先考虑填充区连接
+netClassColumns:
+  name: 类
+  clearance: 间距
+  trackWidth: 走线宽度
+  viaDiameter: 过孔外径
+  viaDrill: 过孔内孔
+  microviaDiameter: 微孔外径
+  microviaDrill: 微孔内径
+  diffPairWidth: 差分对宽度
+  diffPairGap: 差分对间隙
+  pcbColor: PCB 颜色
+  tuningProfile: 调整配置
+  wireWidth: 连线线宽
+  busWidth: 总线线宽
+  schematicColor: 颜色
+  lineStyle: 线型
+netClasses:
+  title: 网络类
+  fromInterface: 设置标准接口…
+  interfaceSupports: USB 2.0、MIPI CSI-2、50 Ω 射频馈线
+  interfaceAdds: 设置网络类的差分对尺寸、针对叠层求解的调整配置以及自定义规则
+  layerColor: 层
+  themeColor: 主题
+  importColors: 从原理图中导入颜色
+  add: 添加类
+  remove: 移除类
+  newName: 新类
+patterns:
+  pair: 差分对 (按 KiCad 的 P/N 或 +/- 命名)
+  title: 分配
+  add: 添加分配
+  remove: 移除分配
+  matching: 匹配的网络
+  syntax:
+    any: 任意字符序列
+    one: 任意单个字符
+    regex: 正则表达式，匹配完整名称
+  invalid: 不是有效的表达式——不匹配任何内容
+  overlap: '其中 {count} 个也属于 {classes}'
+patternColumns:
+  pattern: 网络匹配规则
+  netClass: 类
+  nets: 网络
+extraSizes:
+  title: 自定义尺寸
+  width: 走线宽度
+  diameter: 过孔外径
+  drill: 过孔钻孔
+  addTrack: 添加走线宽度
+  addVia: 添加过孔
+  remove: 移除尺寸
+currentWidth:
+  title: 按电流计算宽度
+  current: 电流
+  rise: 温升
+  layer: 层
+  copper: 厚度
+  width: 最小宽度
+  source: 依据 IPC-2221
+  outOfRange: 超出 IPC-2221 的拟合范围
+section:
+  core: Core
+  prepreg: PrePreg
+  silkTop: F.Silkscreen
+  maskTop: F.Mask
+  silkBottom: B.Silkscreen
+  maskBottom: B.Mask
+  total: 成品厚度
+noProject: 此电路板没有项目文件，因此无法保存约束、网络类和规则严重级别。叠层存储在电路板文件中，可正常保存。
+tuningProfiles:
+  add: 添加调整配置
+  remove: 移除配置
+  newName: 配置
+  empty: 没有调整配置。网络类在其“调整配置”列中选用一个。
+  name: 名称
+  type: 类型
+  single: 单端
+  differential: 差分
+  target: 目标
+  timeDomain: 时域
+  viaDelay: 过孔时延
+  none: 无
+  usedBy: 使用者
+  addLayer: 添加层
+  removeLayer: 移除层
+  solve: 求解
+  solveAll: 求解所有层
+  solveHint: 按 KiCad 计算器的方法，针对叠层求解目标对应的宽度 (及时延)
+  readout: Z
+  columns:
+    layer: 层
+    topReference: 顶层参考
+    bottomReference: 底层参考
+    width: 宽度
+    gap: 间隙
+    delay: 时延
+  errors:
+    target-not-positive: 请先设置目标阻抗
+    signal-layer-missing: 在叠层中找不到信号层
+    zero-signal-thickness: 信号层厚度必须大于 0
+    reference-missing: 在叠层中找不到参考层
+    reference-same-as-signal: 参考层必须不同于信号层
+    top-reference-missing: 在叠层中找不到顶层参考层
+    top-reference-not-above: 顶层参考层必须位于信号层之上
+    bottom-reference-missing: 在叠层中找不到底层参考层
+    bottom-reference-not-below: 底层参考层必须位于信号层之下
+    zero-dielectric: 介质高度必须大于 0
+    gap-required: 请先设置差分对间隙；宽度将据此求解
+    width-required: 请先设置宽度
+    width-and-gap-required: 请先设置宽度和间隙
+    gap-on-single: 单端配置没有间隙
+    width-failed: 无法计算走线宽度
+    gap-failed: 无法计算差分对间隙
+    no-width: 无法计算走线宽度
+    no-gap: 无法计算差分对间隙
+    no-delay: 无法计算走线传播时延
+pending:
+  added: 应用时添加
+  edited: 应用时更改
+customRules:
+  add: 添加规则
+  edit: 编辑规则
+  remove: 移除规则
+  save: 保存
+  addSave: 添加
+  oneRule: 只写一条规则，(rule "name" …)，不要写其他内容。
+  empty: 没有自定义规则。KiCad 的自定义规则或设置标准接口会将规则写入 .kicad_dru。
+  columns:
+    rule: 规则
+    appliesTo: 适用于
+    constraint: 约束
+    limit: 限值
+interfacePreset:
+  title: 设置标准接口
+  apply: 应用
+  discard: 放弃
+  interface: 接口
+  mode: 模式
+  target: 目标
+  stackup: 叠层
+  reference: 参考
+  customRules: 自定义规则
+  classUpdates: '{netClass} 的更新'
+  profileUpdates: '{profile} 调整配置'
+  classUnchanged: 该类已经是这些尺寸。
+  constraints: 约束
+  stackupSummary: '{count} 层铜，{thickness} mm'
+  fabLimitsValues: '走线 ≥ {track}，间距 ≥ {clearance}'
+  notSet: 未设置
+  defaultClearance: 默认类间距
+  frequency: 设计频率
+  differential: 差分
+  uncontrolled: 标准值，不受控：该类保留电路板的尺寸
+  netClass: 网络类
+  nets: 网络
+  assignNets: '{netClass} 还没有网络。它仍会被设置；在“分配”中指定的网络将使用它，届时会检查其差分对。'
+  noClasses: 请先在上方添加一个网络类并分配其网络，然后在此设置。
+  matched: '{count} 个网络，{pairs} 对：'
+  pairGap: 差分对间隙
+  groundGap: 地间隙
+  linked: 为目标阻抗而联动；设置其中一个，另一个将自动求解
+  derivedGap: 使用推导出的间隙
+  layers: 层
+  gapSource:
+    given: ''
+    fromWidth: 根据宽度求解
+    classClearance: ''
+    fabClearance: 制造商的最小间距 (约束)
+    widened: 已加宽至制造商可加工的宽度
+  columns:
+    gap: 间隙
+    width: 宽度
+  writeFailed: '无法写入 {file}。'
+  modes:
+    usb2:
+      high: 高速，480 Mb/s
+      full: 全速，12 Mb/s
+      full-uncontrolled: 全速，12 Mb/s，不控制阻抗
+    rf-50:
+      sub1g: Sub-GHz，868/915 MHz
+      2g4: 2.4 GHz
+      5g: 5 GHz
+    ethernet-mdi:
+      1g: 1000BASE-T
+      100m: 10/100BASE-T
+    rgmii:
+      1g: 1 Gb/s
+      100m: 10/100 Mb/s
+    csi2:
+      1g0: 每通道 1.0 Gb/s
+      1g5: 每通道 1.5 Gb/s
+      2g5: 每通道 2.5 Gb/s
+  errors:
+    unknown-preset: 没有此接口。
+    unknown-mode: 没有此模式。
+    no-nets: '请指定 Default 以外的网络类，以及每条都能匹配到网络的匹配规则。'
+    unpaired: 'KiCad 按 P/N 或 +/- 后缀配对网络；以下网络在匹配结果中没有配对：'
+    bad-layer: '该线路无法在以下层上布线：'
+    solve-failed: 叠层无法针对此目标求解。
+    below-fab: 低于制造商的最小间距或走线宽度 (约束)。

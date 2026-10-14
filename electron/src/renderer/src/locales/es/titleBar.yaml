@@ -1,0 +1,52 @@
+menu:
+  file: Archivo
+  edit: Editar
+  new: Nuevo
+  needsProject: Abra primero una carpeta de proyecto
+  newProject: Nuevo proyecto…
+  newWindow: Nueva ventana
+  openProject: Abrir proyecto…
+  openFolder: Abrir carpeta…
+  openFile: Abrir archivo…
+  openRecent: Abrir reciente
+  recentProjects: Proyectos
+  recentFiles: Archivos y carpetas
+  noRecent: No hay proyectos recientes
+  clearRecent: Borrar abiertos recientemente
+  save: Guardar
+  saveAs: Guardar como…
+  saveAll: Guardar todo
+  schematicSetup: Configuración del esquema
+  components: Componentes
+  boardSetup: Configuración de la placa
+  manufacture: Salidas de fabricación
+  export: Exportar
+  exportNetlist: Lista de redes…
+  exit: Salir
+  view: Ver
+  splitTab: Mover la pestaña al otro panel
+  splitDirection: Alternar lado a lado / apilado
+  focusOtherGroup: Enfocar el otro panel
+  toggleDevTools: Alternar herramientas de desarrollo
+  go: Ir
+  goBack: Atrás
+  goForward: Adelante
+  goLeaveSheet: Salir de la hoja
+  goPreviousSheet: Hoja anterior
+  goNextSheet: Siguiente hoja
+  updatePcb: Actualizar placa desde esquema…
+  needsSchematic: Abra primero un proyecto con un esquema
+  help: Ayuda
+  welcome: Bienvenida
+  keyboardShortcutsReference: Referencia de atajos de teclado
+  shareFeedback: Enviar comentarios sobre la aplicación…
+  aboutGoatCAD: Acerca de GoatCAD
+windowTitle:
+  workspace: '{tabPrefix}{project}'
+  tabOnly: '{tab}'
+  default: GoatCAD
+  withApp: '{title} — GoatCAD'
+controls:
+  minimize: Minimizar
+  maximize: Maximizar
+  close: Cerrar

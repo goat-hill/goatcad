@@ -1,0 +1,87 @@
+activityBar:
+  explorer: Explorer
+  git: Git
+  partManager: Libraries
+  # A separate panel from Libraries on purpose: Libraries is local inventory
+  # ("what do I have?"), this searches a distributor's remote catalog
+  # ("what can I get?").
+  partSearch: Part search
+  feedback: Share app feedback
+  settings: Settings
+# The window's active project (docs/projects.md). "Isolated" is the
+# word for the no-project state: edits are safe, they just don't propagate.
+project:
+  title: PROJECT
+  none: No project
+  isolated: Edits are isolated — renames won't update other files, and only global libraries load.
+  selectPrompt: Select a project
+  switch: Switch the active project
+  createProject: Create project…
+  # Sits under whichever no-project affordance is showing — the switcher or the
+  # Create button. Says what a project buys, not what its absence costs; the
+  # fuller isolated-edits warning is the identity row's tooltip.
+  why: Net classes, design rules, project libraries, and the sheet hierarchy all live in a project file.
+  # Member groups. Sentence case: these sit *inside* the PROJECT section, so
+  # uppercasing them again would compete with the section title.
+  schematics: Schematics
+  boards: PCBs
+  symbolLibraries: Symbol libraries
+  footprintLibraries: Footprint libraries
+  # Per-group `+` (create). File groups create straight away; library groups
+  # open a New/Add menu, so their tooltip names both actions.
+  newSchematicTitle: New schematic
+  newBoardTitle: New PCB
+  symbolLibraryActions: New or add symbol library
+  footprintLibraryActions: New or add footprint library
+  newLibraryPlaceholder: Library name
+  newLibraryError: Enter a valid, unique name
+fileExplorer:
+  title: FILE EXPLORER
+  newFile: New file
+  refreshExplorer: Refresh explorer
+  newFilePlaceholder: filename.kicad_sch
+  emptyState: You have not yet opened a folder.
+  openFolder: Open folder
+  emptyWorkspace: Empty workspace.
+# The create/file commands (lib/commands.ts), rendered by every menu surface:
+# the explorer right-click, File ▸ New, and the Project view's group headers.
+fileMenu:
+  open: Open
+  new: New
+  newSchematic: Schematic
+  newBoard: PCB
+  newSymbolLibrary: Symbol library
+  newFootprintLibrary: Footprint library
+  # Container creates — a new entry *inside* an existing library, so each needs a
+  # target library rather than a target folder.
+  newSymbol: New symbol
+  newFootprint: New footprint
+  reveal: Reveal in folder
+  copyPath: Copy path
+  rename: Rename
+  delete: Delete
+  # Why a command is grayed: it names the missing target, per menu item.
+  needsFile: Select a file or folder first.
+  needsSymbolLibrary: Open or select a symbol library first.
+  needsFootprintLibrary: Open or select a footprint library first.
+schematics:
+  title: SCHEMATICS
+  sheetTitle: '{namePath}  ·  {fileName}'
+partManager:
+  title: Libraries
+  # Uppercase like the other accordion section titles (see FILE EXPLORER):
+  # these render in small collapsible section headers, not the pane header.
+  sharedLibraries: SHARED LIBRARIES
+  # Header action-button tooltip (opens the Library viewer).
+  browse: Browse libraries
+  filterPlaceholder: Filter components…
+  noLibrariesConfigured: No libraries yet. If KiCad is installed they're detected automatically — otherwise download or add them.
+  configureLibraries: Manage libraries
+  noCustomFootprints: No custom footprint files found.
+  rootCategory: (Root)
+  tooManyResults: Too many results, some hidden
+  includes3dModel: Includes 3D model
+# The explorer's footer: the repo's branch, ahead / behind, and a push or pull
+# in progress. branchTitle: the branch's tooltip.
+gitStatus:
+  branchTitle: Git branch — click to switch

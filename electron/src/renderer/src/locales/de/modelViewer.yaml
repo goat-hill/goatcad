@@ -1,0 +1,8 @@
+loading: 3D-Modell wird vorbereitet…
+loadFailed: Dieses 3D-Modell konnte nicht geladen werden
+isoViewTitle: Isometrische Ansicht
+frontViewTitle: Vorderansicht
+topViewTitle: Draufsicht
+rightViewTitle: Ansicht von rechts
+gaugeTitle: Maßstab anzeigen
+dims: '{x} × {y} × {z} mm'

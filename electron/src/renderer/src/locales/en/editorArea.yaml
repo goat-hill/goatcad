@@ -1,0 +1,55 @@
+closeTab: Close tab
+# A tab that is part of a file names both, the file first: a `.kicad_sym`
+# tab and the symbol it edits, and a child tab (Board setup, a design's copy
+# of a part) away from its file's tab. {symbol} is the part's or page's name.
+# The separator is a locale string rather than a baked-in glyph so a locale
+# can substitute its own.
+symbolTabTitle: '{file} › {symbol}'
+# A design's own copy of a part, edited in its own tab; saving saves {file}.
+designCopyTooltip: '{part}, as {file} holds it — the library is not changed'
+# Titles of the tabs that belong to a design file's tab (lib/tabs.ts
+# `tabParent`). Beside that tab one names only itself; in the other pane it
+# reads as `symbolTabTitle`.
+childTab:
+  boardSetup: Board setup
+  schematicSetup: Schematic setup
+  components: Components
+  manufacture: Fabrication outputs
+split:
+  # Tooltip on the tab bar's split button. The window shows at most two editor
+  # panes; this moves the tab in front into the other one, opening it if needed.
+  sendTab: Move tab to other pane ({shortcut})
+  # Accessible name of the draggable divider between the two panes.
+  resize: Resize panes
+empty:
+  openFolder: Open folder
+  openProject: Open project
+  newSchematic: New schematic
+  newWindow: New window
+loadingFileContents: Loading file contents…
+writeContentPlaceholder: Write content here…
+find:
+  # VS Code-style find widget in the plain-text editor (Ctrl/Cmd+F).
+  placeholder: Find
+  matchCase: Match case
+  matchWholeWord: Match whole word
+  useRegex: Use regular expression
+  previousMatch: Previous match
+  nextMatch: Next match
+  close: Close
+  noResults: No results
+  # e.g. "3 of 9"
+  results: '{current} of {total}'
+formatNotice:
+  older: 'KiCad {release} {kind} format'
+  olderBody: 'This {kind} will be migrated to KiCad 10 format upon save.'
+  newer: 'Read-only: KiCad {release} {kind} format'
+  newerUnknown: 'Read-only: newer KiCad {kind} format'
+  newerBody: 'GoatCAD saves KiCad 10 files, so this {kind} opens read-only.'
+  unsupported: 'Read-only: pre-KiCad 6 {kind} format'
+  unsupportedBody: 'Save it in KiCad first to edit it here.'
+  kinds:
+    schematic: schematic
+    board: board
+    symbolLibrary: symbol library
+    footprint: footprint

@@ -1,0 +1,19 @@
+title: プロジェクトを作成
+inFolder: 場所
+name: プロジェクト名
+foundTitle: このフォルダーで見つかったファイル
+rootSheetLabel: ルートシートとして使用
+boardsIncluded: '含まれるもの：{names}'
+blankSheet: 代わりに新しい空の回路図を作成
+emptyNote: 空の回路図と基板が作成されます。
+create: プロジェクトを作成
+cancel: キャンセル
+existsTitle: このフォルダーには既にプロジェクトがあります
+existsBody: '{name} は既にここにあります。新しく作成せずにこれを開きますか？'
+open: プロジェクトを開く
+errors:
+  empty: プロジェクト名を入力してください。
+  separator: プロジェクト名にスラッシュは使用できません。
+  reserved: その名前はオペレーティングシステムで予約されています。
+  dots: プロジェクト名の先頭または末尾にドットは使用できません。
+  exists: その名前のファイルは既にここにあります。

@@ -1,0 +1,157 @@
+# Board Setup's Design Rules and Schematic Setup's Electrical Rules
+# (shared/RuleSeverityTable.vue): every rule KiCad's DRC and ERC name, with
+# this project's severity for it and whether GoatCAD checks it yet.
+# A rule's severity, a three-way segmented control; Ignore turns the rule off.
+severity:
+  error: Error
+  warning: Warning
+  ignore: Ignore
+# The chip beside a rule GoatCAD checks, once the checks have run.
+# passing: nothing reported now.
+status:
+  passing: Passing
+  findings: '{count} finding | {count} findings'
+# Tooltip on the warning glyph beside a rule not checked yet. Its severity is
+# still saved to the project.
+notSupported: Not yet supported
+# Shown beside a rule whose severity differs from its default; {severity} is one of severity.*.
+defaultSeverity: 'Default: {severity}'
+# Button beside defaultSeverity: sets the rule back to its default severity.
+restore: Restore
+# KiCad's own group headings, in its Violation Severity pages.
+drcGroups:
+  electrical: Electrical
+  dfm: Design for Manufacturing
+  schematicParity: Schematic Parity
+  signalIntegrity: Signal Integrity
+  readability: Readability
+  misc: Miscellaneous
+ercGroups:
+  connections: Connections
+  conflicts: Conflicts
+  misc: Miscellaneous
+# Rule titles, KiCad's own wording (pcbnew/drc/drc_item.cpp); the keys are
+# KiCad's violation keys and are never translated.
+drc:
+  shorting_items: 'Items shorting two nets'
+  tracks_crossing: 'Tracks crossing'
+  clearance: 'Clearance violation'
+  creepage: 'Creepage violation'
+  via_dangling: 'Via is not connected or connected on only one layer'
+  track_dangling: 'Track has unconnected end'
+  starved_thermal: 'Thermal relief connection to zone incomplete'
+  copper_edge_clearance: 'Board edge clearance violation'
+  hole_clearance: 'Hole clearance violation'
+  hole_to_hole: 'Drilled hole too close to other hole'
+  holes_co_located: 'Drilled holes co-located'
+  track_width: 'Track width'
+  track_angle: 'Track angle'
+  track_segment_length: 'Track segment length'
+  annular_width: 'Annular width'
+  drill_out_of_range: 'Hole size out of range'
+  microvia_drill_out_of_range: 'Micro via hole size out of range'
+  via_diameter: 'Via diameter'
+  courtyards_overlap: 'Courtyards overlap'
+  missing_courtyard: 'Footprint has no courtyard defined'
+  malformed_courtyard: 'Footprint has malformed courtyard'
+  invalid_outline: 'Board has malformed outline'
+  copper_sliver: 'Copper sliver'
+  solder_mask_bridge: 'Solder mask aperture bridges items with different nets'
+  connection_width: 'Copper connection too narrow'
+  track_on_post_machined_layer: 'Track connected to post-machined or backdrilled layer'
+  track_not_centered_on_via: 'Track endpoint not centered on via'
+  tuning_profile_track_geometries: 'Tuning profile track geometries'
+  duplicate_footprints: 'Duplicate footprints'
+  missing_footprint: 'Missing footprint'
+  extra_footprint: 'Extra footprint'
+  footprint_symbol_mismatch: "Footprint attributes don't match symbol"
+  footprint_symbol_field_mismatch: 'Footprint field does not match symbol field'
+  footprint_filters_mismatch: "Footprint doesn't match symbol's footprint filters"
+  net_conflict: "Pad net doesn't match schematic"
+  unconnected_items: 'Missing connection between items'
+  length_out_of_range: 'Track length out of range'
+  skew_out_of_range: 'Skew between tracks out of range'
+  too_many_vias: 'Too many or too few vias on a connection'
+  diff_pair_gap_out_of_range: 'Differential pair gap out of range'
+  diff_pair_uncoupled_length_too_long: 'Differential uncoupled length too long'
+  silk_overlap: 'Silkscreen clearance'
+  silk_over_copper: 'Silkscreen clipped by solder mask'
+  silk_edge_clearance: 'Silkscreen clipped by board edge'
+  text_height: 'Text height out of range'
+  text_thickness: 'Text thickness out of range'
+  mirrored_text_on_front_layer: 'Mirrored text on front layer'
+  nonmirrored_text_on_back_layer: 'Non-Mirrored text on back layer'
+  items_not_allowed: 'Items not allowed'
+  text_on_edge_cuts: 'Text or graphic on Edge.Cuts layer'
+  zones_intersect: 'Copper zones intersect'
+  isolated_copper: 'Isolated copper fill'
+  footprint: 'Footprint is not valid'
+  padstack: 'Padstack is questionable'
+  pth_inside_courtyard: 'PTH inside courtyard'
+  npth_inside_courtyard: 'NPTH inside courtyard'
+  item_on_disabled_layer: 'Item on a disabled copper layer'
+  unresolved_variable: 'Unresolved text variable'
+  assertion_failure: 'Assertion failure'
+  footprint_type_mismatch: "Footprint component type doesn't match footprint pads"
+  lib_footprint_issues: 'Footprint not found in libraries'
+  lib_footprint_mismatch: "Footprint doesn't match copy in library"
+  through_hole_pad_without_hole: 'Through hole pad has no hole'
+  missing_tuning_profile: 'Missing tuning profile'
+# Rule titles, KiCad's own wording (eeschema/erc/erc_item.cpp).
+erc:
+  pin_not_connected: 'Pin not connected'
+  pin_not_driven: 'Input pin not driven by any Output pins'
+  power_pin_not_driven: 'Input Power pin not driven by any Output Power pins'
+  no_connect_connected: 'A pin with a "no connection" flag is connected'
+  no_connect_dangling: 'Unconnected "no connection" flag'
+  label_dangling: 'Label not connected'
+  isolated_pin_label: 'Label connected to only one pin'
+  single_global_label: 'Global label only appears once in the schematic'
+  same_local_global_label: 'Local and global labels have same name'
+  wire_dangling: 'Wires not connected to anything'
+  endpoint_off_grid: 'Symbol pin or wire end off connection grid'
+  four_way_junction: 'Four connection points are joined together'
+  label_multiple_wires: 'Label connects more than one wire'
+  unconnected_wire_endpoint: 'Unconnected wire endpoint'
+  duplicate_reference: 'Duplicate reference designators'
+  pin_to_pin: 'Conflict problem between pins'
+  unit_value_mismatch: 'Units of same symbol have different values'
+  different_unit_footprint: 'Different footprint assigned in another unit of the symbol'
+  different_unit_net: 'Different net assigned to a shared pin in another unit of the symbol'
+  duplicate_sheet_names: 'Duplicate sheet names within a given sheet'
+  hier_label_mismatch: 'Mismatch between hierarchical labels and sheet pins'
+  multiple_net_names: 'More than one name given to this bus or net'
+  bus_to_bus_conflict: 'Buses are graphically connected but share no bus members'
+  bus_to_net_conflict: 'Invalid connection between bus and net items'
+  net_not_bus_member: 'Net is graphically connected to a bus but not a bus member'
+  ground_pin_not_ground: 'Ground pin not connected to ground net'
+  stacked_pin_name: 'Pin name resembles stacked pin'
+  field_name_whitespace: 'Field name has leading or trailing whitespace'
+  unannotated: 'Symbol is not annotated'
+  unresolved_variable: 'Unresolved text variable'
+  undefined_netclass: 'Undefined netclass'
+  simulation_model_issue: 'SPICE model issue'
+  similar_labels: 'Labels are similar (lower/upper case difference only)'
+  similar_power: 'Power pins are similar (lower/upper case difference only)'
+  similar_label_and_power: 'Power pin and label are similar (lower/upper case difference only)'
+  lib_symbol_issues: 'Library symbol issue'
+  lib_symbol_mismatch: "Symbol doesn't match copy in library"
+  footprint_link_issues: 'Footprint link issue'
+  footprint_filter: "Assigned footprint doesn't match footprint filters"
+  extra_units: 'Symbol has more units than are defined'
+  missing_unit: 'Symbol has units that are not placed'
+  missing_input_pin: 'Symbol has input pins that are not placed'
+  missing_bidi_pin: 'Symbol has bidirectional pins that are not placed'
+  missing_power_pin: 'Symbol has power input pins that are not placed'
+# The Exclusions section of Board Setup and Schematic Setup
+# (shared/ExclusionList.vue): the findings a KiCad user excluded, read from the
+# project file.
+exclusions:
+  note: These are the findings excluded in KiCad's checks, read from the project file. GoatCAD matches each one by its rule and the items it names, not by where KiCad drew its marker, so an exclusion still holds here after its items move — in KiCad the finding would come back. Exclusions are added and removed in KiCad.
+  none: The project has no exclusions.
+  # {count} findings it excludes here now.
+  matched: 'Excludes {count} finding | Excludes {count} findings'
+  unmatched: Matches no finding
+  unmatchedHint: Nothing GoatCAD finds now is this finding — it was fixed, its items are gone, or GoatCAD names its items differently from KiCad.
+  noItems: Cannot match
+  noItemsHint: This exclusion names only a position, not the items it is about, so GoatCAD cannot tell which finding it means.

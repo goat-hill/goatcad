@@ -1,0 +1,204 @@
+# The health pill in every editor's bottom-right corner and the findings drawer
+# behind it (shared/HealthPill.vue, shared/FindingsDrawer.vue).
+pill:
+  # The pill with nothing wrong, before the first check, and of an editor whose
+  # checker is not built yet; the glyph beside it tells these apart.
+  # Short: it sits beside the coordinate readout.
+  clean: Checks
+  # Hover text on the viewport pill, in every state: its name alone (DESIGN.md §Viewport status strips).
+  title: Design Rule Checks
+  errors: '{count} error | {count} errors'
+  warnings: '{count} warning | {count} warnings'
+drawer:
+  # Uppercase eyebrow over the list; with Performance beside it, the first of two panel tabs.
+  title: Problems
+  # The second panel tab: how long the last checks and refills took.
+  performance: Performance
+  # The header's gear: how the zone fill and the checks run on their own.
+  settings: Settings
+  close: Close the problems list
+  # Runs every check over the whole board again, not only round the last edits.
+  rerun: Re-run all checks
+  clean: The checks found no problems.
+  # The list before the first check has finished: nothing is known yet. The
+  # first while it runs; the second where nothing runs it (auto DRC off).
+  checking: Checking the board…
+  pending: The checks have not run yet. Re-run them to list the problems.
+  # The gear's row, in every editor: an arrow at each finding on the canvas.
+  # A row's numbers: what was measured and the limit it breaks, then the rule that set it.
+  needs: '{actual}, needs {limit}'
+  allows: '{actual}, allows {limit}'
+  byRule: '{text} ({rule})'
+  # The gear's row: mark every finding on the canvas, errors alone, or none.
+  markers: Canvas markers
+  markersAll: All
+  markersErrors: Errors only
+  markersOff: 'Off'
+  # A finding's rule group, when a rule has more than one finding.
+  count: '{count} finding | {count} findings'
+  # The last group: findings a KiCad exclusion in the project names. They are
+  # listed but not counted; the hint is the group header's tooltip.
+  excluded: Excluded in KiCad
+  excludedHint: Findings the project's KiCad exclusions name. They are not counted, and agents do not see them. Board setup and Schematic setup list every exclusion.
+  severity:
+    error: Error
+    warning: Warning
+# The Performance tab (the last run of each background task) and the gear's settings (how they run on their own).
+performance:
+  empty: Nothing has run on this board yet.
+  # Above the tasks: their last runs' times added up.
+  total: Total
+  ms: '{ms} ms'
+  seconds: '{s} s'
+  # Folds a task's quicker steps into one line, and unfolds them.
+  more: '{count} more step | {count} more steps'
+  fewer: Fewer steps
+  tasks:
+    refill: Zone fill
+    check: Design checks
+    ratsnest: Ratsnest
+  # What a run covered.
+  scope:
+    all: every zone
+    whole: whole board
+    since: round the edit
+  # The two settings, per board: how the zone fill and the checks run after an edit.
+  autoZoneFill: Auto zone fill
+  autoDrc: Auto DRC
+  mode:
+    greedy: Greedy
+    full: Full
+    'off': 'Off'
+# A rule's name for a person, one per check the engines run.
+rules:
+  unconnectedPin: Unconnected pin
+  unconnectedWireEnd: Wire ends in open space
+  offGrid: Off the connection grid
+  pinConflict: Pins that should not share a net
+  inputUndriven: Input with nothing driving it
+  wireDangling: Wire connected to nothing
+  labelDangling: Label that connects nothing
+  labelSinglePin: Label on a net with one pin
+  noConnectConnected: No-connect flag on a wired pin
+  noConnectDangling: No-connect flag marking nothing
+  multipleNetNames: Two names on one wire
+  labelMultipleWires: Label joining several wires
+  netNotBusMember: Net not a member of its bus
+  busToBusConflict: Bus and port with no member in common
+  busToNetConflict: Net and bus on one wire
+  unconnectedSheetPort: Sheet pin or hierarchical label connected to nothing
+  unannotated: Part not annotated
+  duplicateReference: Two parts with one reference
+  extraUnits: Unit the part does not have
+  unitValueMismatch: Units with different values
+  missingUnit: Unit not placed
+  missingPowerPin: Unplaced unit with power pins
+  missingInputPin: Unplaced unit with input pins
+  missingBidiPin: Unplaced unit with bidirectional pins
+  differentUnitFootprint: Units with different footprints
+  differentUnitNet: Shared pin on two nets
+  duplicateSheetName: Two sheets with one name
+  similarLabels: Labels differing only in case
+  similarPower: Power names differing only in case
+  similarLabelAndPower: Label and power name differing only in case
+  sameLocalGlobalLabel: Name used as local and global
+  groundPinNotGround: Ground pin off ground
+  stackedPinName: Malformed stacked pin number
+  fieldNameWhitespace: Field name with stray spaces
+  undefinedNetclass: Undefined net class
+  unresolvedVariable: Text variable nothing defines
+  singleGlobalLabel: Global label used once
+  fourWayJunction: Four items at one point
+  symbolLibraryIssue: Symbol library not reachable
+  footprintLinkIssue: Footprint not reachable
+  footprintFilter: Footprint outside its filters
+  powerInputUndriven: Power rail with nothing driving it
+  sheetPinUnmatched: Sheet pin with no hierarchical label
+  hierarchicalLabelUnmatched: Hierarchical label with no sheet pin
+  symbolLibraryMismatch: Symbol behind its library
+  padsOverlap: Pads overlap
+  netTieShort: Copper joins pads outside a net tie
+  netTieGroups: Net-tie group names a missing pad
+  silkClippedByMask: Silkscreen clipped by solder mask
+  padstack: Questionable pad
+  padstackInvalid: Invalid pad
+  throughHolePadWithoutHole: Through-hole pad with no hole
+  malformedCourtyard: Courtyard not closed
+  holesCoLocated: Drilled holes at one point
+  holeToHole: Drilled holes touch
+  # The style rules of KiCad's library conventions (KLC), opt-in.
+  silkWidth: Silkscreen width (KLC)
+  referenceText: Reference text style (KLC)
+  valueText: Value text style (KLC)
+  missingCourtyard: No courtyard (KLC)
+  courtyardEnclosure: Courtyard does not surround the part (KLC)
+  footprintTypeMismatch: Placement type does not match the pads (KLC)
+  duplicatePin: Two pins share a number
+  powerSymbol: Power symbol does not name a net
+  powerSymbolHiddenPin: Power symbol pin hidden
+  hiddenPowerPin: Hidden power input pin
+  offGridPin: Pin off the grid
+  referencePrefix: Reference prefix cannot be numbered
+  zeroSizeGraphic: Shape with no size
+  # The board's design rule checks (DRC).
+  customRules: Custom rules not applied
+  copperClearance: Copper too close
+  copperShort: Copper of two nets touches
+  tracksCrossing: Tracks cross
+  trackOnPostMachinedLayer: Track on a backdrilled or post-machined layer
+  holeClearance: Hole too close to copper
+  holesTooClose: Drilled holes too close
+  copperEdgeClearance: Copper too close to the board edge
+  unconnectedItems: Unrouted connection
+  trackWidth: Track too narrow
+  viaDiameter: Via too small
+  annularWidth: Too little copper around a hole
+  drillOutOfRange: Hole too small to drill
+  microviaDrillOutOfRange: Microvia hole too small to drill
+  courtyardsOverlap: Courtyards overlap
+  pthInsideCourtyard: Plated hole inside another courtyard
+  npthInsideCourtyard: Unplated hole inside another courtyard
+  invalidOutline: Board outline not closed
+  itemsNotAllowed: Item inside a keepout area
+  zonesIntersect: Zones of one net overlap at one priority
+  isolatedCopper: Zone island with no connection
+  starvedThermal: Too few thermal spokes
+  trackDangling: Track end connects to nothing
+  viaDangling: Via connects to nothing
+  connectionWidth: Copper connection too narrow
+  copperSliver: Copper sliver
+  textHeight: Text too small
+  textThickness: Text stroke too thin
+  mirroredTextOnFront: Mirrored text on a front layer
+  nonmirroredTextOnBack: Unmirrored text on a back layer
+  textOnEdgeCuts: Text on the board edge layer
+  drcError: Design-rule error marker in text
+  drcWarning: Design-rule warning marker in text
+  trackSegmentLength: Track segment length out of range
+  trackAngle: Track angle not allowed
+  trackNotCenteredOnVia: Track not centered on its via
+  partTypeMismatch: Footprint type does not match its pads
+  footprint: Malformed footprint
+  noCourtyard: Footprint has no courtyard
+  itemOnDisabledLayer: Item on a layer the board does not have
+  assertionFailure: Custom rule assertion fails
+  missingTuningProfile: Net class names a missing tuning profile
+  silkOverlap: Silkscreen overlaps silkscreen
+  silkOverCopper: Silkscreen clipped by a mask opening
+  silkEdgeClearance: Silkscreen clipped by the board edge
+  solderMaskBridge: Solder mask too narrow between nets
+  lengthOutOfRange: Net length out of range
+  skewOutOfRange: Net length skew out of range
+  tooManyVias: Via count out of range
+  diffPairGap: Differential pair gap out of range
+  diffPairUncoupledLength: Differential pair uncoupled too long
+  creepage: Copper too close over the board surface
+  libraryFootprintIssue: Footprint not found in its library
+  libraryFootprintMismatch: Footprint differs from its library copy
+  duplicateFootprints: Two footprints share a reference
+  missingFootprint: Part missing from the board
+  extraFootprint: Footprint not in the schematic
+  footprintSymbolMismatch: Footprint differs from its symbol
+  footprintSymbolFieldMismatch: Footprint field differs from its symbol
+  footprintFiltersMismatch: Footprint outside its symbol's filters
+  netConflict: Pad net differs from the schematic

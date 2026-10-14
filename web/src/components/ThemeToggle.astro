@@ -1,0 +1,89 @@
+---
+/*
+ * Three-state theme control for pages that opt into light/dark
+ * (Base.astro's colorScheme="auto"): Auto → Light → Dark → Auto.
+ *
+ * "Auto" is the default and stores nothing — the OS preference is handled by
+ * CSS alone, so clearing the key genuinely returns the page to no-JS behavior.
+ * Light/Dark write `data-theme` on <html> and remember it in localStorage under
+ * the same key Base.astro's pre-paint script reads.
+ *
+ * Rendered with no label until the script runs (hidden), because the honest
+ * label depends on stored state the server cannot know. That keeps it out of
+ * the way rather than flashing the wrong state.
+ */
+---
+
+<button class="theme-toggle" type="button" data-theme-toggle hidden aria-live="polite"></button>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-raised);
+    color: var(--text-muted);
+    font: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition:
+      color var(--transition),
+      border-color var(--transition);
+  }
+
+  .theme-toggle:hover {
+    color: var(--text-bright);
+    border-color: var(--border-strong);
+  }
+
+  .theme-toggle[hidden] {
+    display: none;
+  }
+</style>
+
+<script>
+  type Mode = 'auto' | 'light' | 'dark'
+
+  // Must match the key Base.astro's pre-paint script reads.
+  const KEY = 'goatcad-theme'
+  const ORDER: Mode[] = ['auto', 'light', 'dark']
+  const LABEL: Record<Mode, string> = {
+    auto: 'Theme: auto',
+    light: 'Theme: light',
+    dark: 'Theme: dark'
+  }
+
+  const btn = document.querySelector<HTMLElement>('[data-theme-toggle]')
+
+  if (btn) {
+    const read = (): Mode => {
+      try {
+        const v = localStorage.getItem(KEY)
+        return v === 'light' || v === 'dark' ? v : 'auto'
+      } catch {
+        return 'auto'
+      }
+    }
+
+    const apply = (mode: Mode) => {
+      if (mode === 'auto') delete document.documentElement.dataset.theme
+      else document.documentElement.dataset.theme = mode
+      btn.textContent = LABEL[mode]
+      try {
+        if (mode === 'auto') localStorage.removeItem(KEY)
+        else localStorage.setItem(KEY, mode)
+      } catch {
+        // Storage blocked: the choice lasts for this page only.
+      }
+    }
+
+    apply(read())
+    btn.hidden = false
+    btn.addEventListener('click', () => {
+      apply(ORDER[(ORDER.indexOf(read()) + 1) % ORDER.length])
+    })
+  }
+</script>

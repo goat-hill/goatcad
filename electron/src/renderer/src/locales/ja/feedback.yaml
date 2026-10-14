@@ -1,0 +1,25 @@
+title: アプリのフィードバックを送る
+kind:
+  bug: バグ報告
+  idea: アイデア
+summary: 概要
+summaryPlaceholder: 見出しのように 1 行で
+details: 詳細
+detailsBugPlaceholder: 何をして、何を期待し、代わりに何が起きましたか？
+detailsIdeaPlaceholder: GoatCAD に何をしてほしいですか？それは何に役立ちますか？
+truncated: 長すぎるため全文を送信できません。末尾が切り捨てられるので、残りは GitHub の Issue に貼り付けてください。
+screenshot: スクリーンショット
+copyScreenshot: スクリーンショットをコピー
+screenshotHint: 自動では添付されません。コピーしてから GitHub の Issue に貼り付けてください。
+screenshotCopied: コピーしました。GitHub の Issue に貼り付けてください。
+screenshotCopyFailed: スクリーンショットをコピーできませんでした。
+noScreenshot: このウィンドウをキャプチャできませんでした。
+includeSystemInfo: システム情報を含める
+showSystemInfo: 表示
+hideSystemInfo: 非表示
+note: GitHub で新しい Issue を開き、投稿前に内容を確認できます。GitHub アカウントが必要です。
+openFailed: ブラウザーを開けませんでした。リンクをコピーしてブラウザーで開いてください。
+copyLink: リンクをコピー
+linkCopied: コピーしました
+cancel: キャンセル
+continue: GitHub で続ける

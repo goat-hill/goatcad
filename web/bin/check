@@ -1,0 +1,8 @@
+#!/bin/bash
+# Typecheck the GoatCAD site (astro check). The web/ equivalent of ./bin/typecheck.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+npm run check

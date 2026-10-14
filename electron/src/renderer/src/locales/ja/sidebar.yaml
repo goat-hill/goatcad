@@ -1,0 +1,65 @@
+activityBar:
+  explorer: エクスプローラー
+  git: Git
+  partManager: ライブラリ
+  partSearch: パーツ検索
+  feedback: アプリのフィードバックを送る
+  settings: 設定
+project:
+  title: プロジェクト
+  none: プロジェクトなし
+  isolated: 編集は分離されています — 名前を変更しても他のファイルは更新されず、グローバルライブラリのみが読み込まれます。
+  selectPrompt: プロジェクトを選択
+  switch: アクティブなプロジェクトを切り替え
+  createProject: プロジェクトを作成…
+  why: ネットクラス、デザインルール、プロジェクトライブラリ、シート階層はすべてプロジェクトファイルに保存されます。
+  schematics: 回路図
+  boards: PCB
+  symbolLibraries: シンボルライブラリ
+  footprintLibraries: フットプリントライブラリ
+  newSchematicTitle: 新規回路図
+  newBoardTitle: 新規 PCB
+  symbolLibraryActions: シンボルライブラリを新規作成または追加
+  footprintLibraryActions: フットプリントライブラリを新規作成または追加
+  newLibraryPlaceholder: ライブラリ名
+  newLibraryError: 有効で重複しない名前を入力してください
+fileExplorer:
+  title: ファイル エクスプローラー
+  newFile: 新規ファイル
+  refreshExplorer: エクスプローラーを更新
+  newFilePlaceholder: filename.kicad_sch
+  emptyState: まだフォルダーを開いていません。
+  openFolder: フォルダーを開く
+  emptyWorkspace: ワークスペースは空です。
+fileMenu:
+  open: 開く
+  new: 新規
+  newSchematic: 回路図
+  newBoard: PCB
+  newSymbolLibrary: シンボルライブラリ
+  newFootprintLibrary: フットプリントライブラリ
+  newSymbol: 新規シンボル
+  newFootprint: 新規フットプリント
+  reveal: フォルダーに表示
+  copyPath: パスをコピー
+  rename: 名前を変更
+  delete: 削除
+  needsFile: 先にファイルまたはフォルダーを選択してください。
+  needsSymbolLibrary: 先にシンボルライブラリを開くか選択してください。
+  needsFootprintLibrary: 先にフットプリントライブラリを開くか選択してください。
+schematics:
+  title: 回路図
+  sheetTitle: '{namePath}  ·  {fileName}'
+partManager:
+  title: ライブラリ
+  sharedLibraries: 共有ライブラリ
+  browse: ライブラリを参照
+  filterPlaceholder: コンポーネントを絞り込み…
+  noLibrariesConfigured: ライブラリはまだありません。KiCad がインストールされていれば自動で検出されます。それ以外の場合はダウンロードまたは追加してください。
+  configureLibraries: ライブラリを管理
+  noCustomFootprints: カスタムフットプリントファイルが見つかりません。
+  rootCategory: (ルート)
+  tooManyResults: 結果が多すぎるため、一部を非表示にしています
+  includes3dModel: 3D モデルあり
+gitStatus:
+  branchTitle: Git ブランチ — クリックして切り替え

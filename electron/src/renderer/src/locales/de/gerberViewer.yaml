@@ -1,0 +1,16 @@
+loading: Suche nach Lagendateien…
+layerCount: '{count} Lagendatei wird angezeigt | {count} Lagendateien werden angezeigt'
+errorTitle: Diese Gerber-Datei konnte nicht gelesen werden
+coords: 'X {x} Y {y} mm'
+warningsTitle: 'Warnungen ({count})'
+readOnlyNote: >-
+  Gerber-Dateien sind erzeugte Fertigungsdaten; GoatCAD öffnet sie
+  schreibgeschützt. Zum Ändern erneut aus dem Platineneditor exportieren.
+panel:
+  fileTitle: Datei der aktiven Lage
+properties:
+  file: Datei
+  function: Funktion
+  units: Einheiten
+  apertures: Blenden
+  objects: Objekte

@@ -1,0 +1,245 @@
+/*
+ * Floating canvas-toolbar chrome shared by the footprint, PCB, and schematic
+ * editors: the top-left pill (undo/redo | icon-only tools | insert search).
+ * Lives here rather than in per-component <style scoped> blocks for the same
+ * reason as propertyPanel.css: duplicated scoped copies are how the three
+ * editors drifted into different looks. Components may still override for
+ * layout, since scoped rules outrank these.
+ */
+
+/* Every editor's canvas area (it clips its overlays): a size container, so the
+   tool search's dropdown can cap its width to the canvas (shared/ToolbarSearch.vue). */
+.viewport-host-area {
+  container-type: inline-size;
+}
+
+.canvas-floating-toolbar {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border: 1px solid var(--vscode-border, #24302b);
+  /* Tight to the chips: they fill the bar's height, and the 3px inset makes
+     their 5px radius concentric with the bar's 8px. */
+  padding: 3px;
+  border-radius: 8px;
+  z-index: 10;
+  box-shadow: 0 4px 20px var(--vscode-shadow-float);
+  /* Its natural width even past the canvas edge, never squeezed chips: the fit
+     (lib/canvasToolbar.ts) measures the bar whole, then hides what overflows. */
+  width: max-content;
+}
+
+/* The canvas's top-right slot: find, and the symbol editor's unit and body
+   style pickers. Items line up left of one another, the last at the edge, and
+   the top bar's fit stops short of the slot (lib/canvasToolbar.ts), so the two
+   never overlap. Each item takes its place in the row, not its own corner. */
+.canvas-top-right {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 11;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.canvas-top-right > * {
+  position: relative;
+  top: auto;
+  right: auto;
+  left: auto;
+}
+
+/* A chip past the fold of a fitted bar (v-toolbar-fit, lib/canvasToolbar.ts).
+   The tool search stays and still lists it. */
+.canvas-floating-toolbar > [data-toolbar-hidden] {
+  display: none;
+}
+
+/* The instant tooltip on a toolbar chip (installToolbarTips): its name and
+   hotkey, the moment the pointer lands, in the viewport pills' chrome. */
+.canvas-tool-tip {
+  position: fixed;
+  z-index: 10000;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border: 1px solid var(--vscode-border, #24302b);
+  border-radius: 6px;
+  background: var(--vscode-overlay);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px var(--vscode-shadow-float);
+  color: var(--vscode-text-light, #ffffff);
+  font-size: var(--text-caption);
+  line-height: 16px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.canvas-tool-tip[hidden] {
+  display: none;
+}
+
+/* The bar's frosted fill, on a layer behind its contents rather than on the
+   bar itself: an element with a backdrop-filter is a backdrop root, and an
+   overlay inside it (the tool search's dropdown) would blur only what lies
+   within the bar — over the canvas it would read as bare, see-through glass.
+   z-index -1 stays inside the bar's stacking context (its z-index 10). */
+.canvas-floating-toolbar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--vscode-overlay);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* The chip whose row is active in the tool search, so the search teaches
+   where each control lives on the bar. */
+.canvas-floating-toolbar .search-hint {
+  border-color: var(--vscode-accent, #cca250);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--vscode-accent, #cca250) 35%, transparent);
+  color: var(--vscode-text-light, #ffffff);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .canvas-floating-toolbar .search-hint {
+    animation: search-hint-pulse 1.2s ease-in-out infinite;
+  }
+}
+
+@keyframes search-hint-pulse {
+  50% {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--vscode-accent, #cca250) 15%, transparent);
+  }
+}
+
+/* A vertical rail down the canvas's left edge, under the top toolbar — every
+   zoomable view's view controls: zoom to fit first, then its camera presets
+   and display toggles (KiCad's left-toolbar idiom). */
+.canvas-floating-toolbar.toolbar-left-rail {
+  top: 64px;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* A viewer with no top toolbar (the 3D views, Gerber, images): its rail
+   starts where that bar would have. */
+.canvas-floating-toolbar.toolbar-left-rail.rail-solo {
+  top: 12px;
+}
+
+/* What an overlay dropping from the top toolbar must clear to stay off the
+   rail: its outer width (a 32px chip, the bar's 3px inset and 1px border each
+   side) and an 8px gap. Read by the tool search's dropdown. */
+.viewport-host-area:has(.toolbar-left-rail) {
+  --canvas-rail-clearance: calc(32px + 2 * 3px + 2 * 1px + 8px);
+}
+
+.canvas-floating-toolbar.toolbar-left-rail .toolbar-divider {
+  width: auto;
+  height: 1px;
+  margin: 3px 6px;
+}
+
+.floating-btn {
+  background: transparent;
+  border: none;
+  color: var(--vscode-text-muted, #748780);
+  padding: 5px 10px;
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.floating-btn:hover {
+  background-color: var(--vscode-overlay-control);
+  color: var(--vscode-text-light, #ffffff);
+}
+
+.floating-btn.active {
+  background-color: var(--vscode-bg-active, #32473f);
+  color: var(--vscode-accent, #cca250);
+}
+
+.floating-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+}
+
+.floating-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Icon-only chips (OnShape's toolbar): no resting fill or border, since the
+   bar's own frame already says "controls live here" (DESIGN.md §Buttons,
+   btn-subtle). A chip shows its box only when hovered or selected, and fills
+   the bar's height so the target is as large as the bar allows. Names and
+   hotkeys live in the hover tooltips. */
+.tool-btn,
+.history-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  justify-content: center;
+  font-size: 15px;
+  line-height: 1;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  transition:
+    background-color 70ms ease-out,
+    border-color 70ms ease-out,
+    color 70ms ease-out;
+}
+
+/* The palette glyphs are drawn on a 20-unit grid: at exactly 20px each unit
+   is one pixel, which is what keeps their 1px strokes crisp. */
+.tool-btn svg,
+.history-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.tool-btn:hover,
+.history-btn:hover {
+  background-color: var(--vscode-overlay-control-hover);
+  border-color: var(--vscode-input-border);
+  color: var(--vscode-text-light, #ffffff);
+}
+
+.tool-btn.active {
+  background-color: var(--vscode-bg-active, #32473f);
+  border-color: var(--vscode-accent, #cca250);
+  color: var(--vscode-accent, #cca250);
+}
+
+/* A view toggle is on/off, not a mode, so it lights up instead of taking
+   the selected tool's copper outline: bright glyph on a quiet fill, no
+   border. Copper means "the tool you are in"; lit means "this is showing". */
+.tool-btn.toggle-btn.active {
+  background-color: var(--vscode-bg-active, #32473f);
+  border-color: transparent;
+  color: var(--vscode-text-light, #ffffff);
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background-color: var(--vscode-border, #24302b);
+  margin: 0 4px;
+}

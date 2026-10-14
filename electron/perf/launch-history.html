@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Launch Performance</title>
+    <style>
+      :root {
+        --bg: #f0f8f4;
+        --surface: #ffffff;
+        --border: #d3e2db;
+        --text: #1a221f;
+        --muted: #5b6b64;
+        --faster: #1d7a46;
+        --slower: #b3392f;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #151c19;
+          --surface: #1a221f;
+          --border: #24302b;
+          --text: #dfe8e3;
+          --muted: #8a9a93;
+          --faster: #5cc38a;
+          --slower: #e0776c;
+        }
+      }
+      body {
+        margin: 0;
+        padding: 24px 16px 48px;
+        background: var(--bg);
+        color: var(--text);
+        font:
+          14px/1.5 system-ui,
+          sans-serif;
+      }
+      main {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 22px;
+        margin: 0 0 8px;
+      }
+      h2 {
+        font-size: 16px;
+        margin: 32px 0 4px;
+      }
+      p,
+      .spec {
+        color: var(--muted);
+        max-width: 80ch;
+      }
+      .spec {
+        margin: 0 0 8px;
+      }
+      .scroll {
+        overflow-x: auto;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: var(--surface);
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        font-variant-numeric: tabular-nums;
+      }
+      th,
+      td {
+        padding: 6px 10px;
+        border-bottom: 1px solid var(--border);
+        text-align: right;
+        white-space: nowrap;
+      }
+      th {
+        font-weight: 600;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      th:nth-child(-n + 4),
+      td:nth-child(-n + 4) {
+        text-align: left;
+      }
+      td.label {
+        white-space: normal;
+        min-width: 24ch;
+      }
+      td.key {
+        font-weight: 600;
+      }
+      .delta {
+        font-size: 12px;
+        margin-left: 6px;
+      }
+      .faster {
+        color: var(--faster);
+      }
+      .slower {
+        color: var(--slower);
+      }
+      code {
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Launch performance</h1>
+      <p>
+        Recorded by <code>./bin/launch-timing --record</code>, from <code>electron/</code>. Every
+        row is the same method: a fresh build launched with a fresh profile and no files; one
+        warm-up launch is discarded, then the row holds the median of 10 launches. Times are ms
+        since the main process started (milestones in ARCHITECTURE.md §3.1). Headless runs under
+        xvfb with software GL; desktop runs (<code>--visible</code>) use the real GPU and
+        compositor. Rows compare only within one machine and one display mode, so each pair has its
+        own table, newest first. A <code>*</code> on a commit means the app's sources differed from
+        it; the label says how. Release rows are labeled with the version; a branch's rows carry its
+        name and may be pruned when it lands.
+      </p>
+      <div id="series"></div>
+    </main>
+
+    <!-- The data. bin/launch-timing --record appends to it; hand edits are fine. -->
+    <script type="application/json" id="launch-data">
+      {
+        "machines": [
+          {
+            "id": "m1",
+            "cpu": "AMD Ryzen 7 8845HS w/ Radeon 780M Graphics",
+            "cores": 16,
+            "memoryGb": 27,
+            "os": "linux x64"
+          }
+        ],
+        "runs": [
+          {
+            "date": "2026-10-06",
+            "label": "before: NewStroke font as an object literal (f804c63f with json.namedExports line removed)",
+            "version": "0.1.14",
+            "commit": "f804c63f*",
+            "machine": "m1",
+            "display": "headless",
+            "runs": 10,
+            "milestones": {
+              "process spawn → main start": 21,
+              "main module evaluated": 113,
+              "app ready": 164,
+              "renderer navigation start": 197,
+              "renderer bundle evaluated": 1454,
+              "app mounted": 1481,
+              "window shown": 1494,
+              "session ready": 1497,
+              "first contentful paint": 1604
+            },
+            "firstPaintRange": [1587, 1758],
+            "entryKb": 5289
+          },
+          {
+            "date": "2026-10-06",
+            "label": "before: NewStroke font as an object literal (f804c63f with json.namedExports line removed)",
+            "version": "0.1.14",
+            "commit": "f804c63f*",
+            "machine": "m1",
+            "display": "desktop",
+            "runs": 10,
+            "milestones": {
+              "process spawn → main start": 20,
+              "main module evaluated": 142,
+              "app ready": 222,
+              "renderer navigation start": 250,
+              "renderer bundle evaluated": 1489,
+              "app mounted": 1513,
+              "window shown": 1526,
+              "session ready": 1529,
+              "first contentful paint": 1645
+            },
+            "firstPaintRange": [1637, 1663],
+            "entryKb": 5289
+          },
+          {
+            "date": "2026-10-06",
+            "label": "after: NewStroke font as JSON.parse (Vite json.namedExports off)",
+            "version": "0.1.14",
+            "commit": "f804c63f",
+            "machine": "m1",
+            "display": "headless",
+            "runs": 10,
+            "milestones": {
+              "process spawn → main start": 19,
+              "main module evaluated": 109,
+              "app ready": 158,
+              "renderer navigation start": 189,
+              "renderer bundle evaluated": 387,
+              "app mounted": 412,
+              "window shown": 425,
+              "session ready": 427,
+              "first contentful paint": 534
+            },
+            "firstPaintRange": [528, 608],
+            "entryKb": 5448
+          },
+          {
+            "date": "2026-10-06",
+            "label": "after: NewStroke font as JSON.parse (Vite json.namedExports off)",
+            "version": "0.1.14",
+            "commit": "f804c63f",
+            "machine": "m1",
+            "display": "desktop",
+            "runs": 10,
+            "milestones": {
+              "process spawn → main start": 20,
+              "main module evaluated": 142,
+              "app ready": 223,
+              "renderer navigation start": 251,
+              "renderer bundle evaluated": 446,
+              "app mounted": 471,
+              "window shown": 486,
+              "session ready": 488,
+              "first contentful paint": 605
+            },
+            "firstPaintRange": [590, 620],
+            "entryKb": 5448
+          }
+        ]
+      }
+    </script>
+    <script>
+      const data = JSON.parse(document.getElementById('launch-data').textContent)
+      const COLUMNS = [
+        ['app ready', 'app ready'],
+        ['renderer bundle evaluated', 'bundle evaluated'],
+        ['window shown', 'window shown'],
+        ['session ready', 'session ready'],
+        ['first contentful paint', 'first paint']
+      ]
+      const el = (tag, props = {}, ...children) => {
+        const node = Object.assign(document.createElement(tag), props)
+        node.append(...children)
+        return node
+      }
+      const root = document.getElementById('series')
+      const series = new Map()
+      for (const run of data.runs) {
+        const key = `${run.machine} ${run.display}`
+        if (!series.has(key)) series.set(key, [])
+        series.get(key).push(run)
+      }
+      if (series.size === 0) root.append(el('p', { textContent: 'No runs recorded yet.' }))
+      for (const [key, runs] of series) {
+        const [machineId, display] = key.split(' ')
+        const m = data.machines.find((x) => x.id === machineId)
+        root.append(
+          el('h2', { textContent: `${machineId} · ${display}` }),
+          el('div', {
+            className: 'spec',
+            textContent: m ? `${m.cpu}, ${m.cores} threads, ${m.memoryGb} GB, ${m.os}` : ''
+          })
+        )
+        const head = el(
+          'tr',
+          {},
+          ...[
+            'date',
+            'label',
+            'version',
+            'commit',
+            ...COLUMNS.map((c) => c[1]),
+            'first paint range',
+            'entry chunk'
+          ].map((h) => el('th', { textContent: h }))
+        )
+        const body = runs.map((run, i) => {
+          const prev = runs[i - 1]
+          const cells = COLUMNS.map(([name]) => {
+            const v = run.milestones[name]
+            const td = el('td', { textContent: v ?? '—' })
+            if (name === 'first contentful paint') {
+              td.className = 'key'
+              td.title = Object.entries(run.milestones)
+                .map(([k, ms]) => `${k}: ${ms} ms`)
+                .join('\n')
+              const before = prev?.milestones[name]
+              if (v != null && before != null && before !== 0) {
+                const change = (v - before) / before
+                const sign = v > before ? '+' : '−'
+                td.append(
+                  el('span', {
+                    className: `delta ${change < -0.05 ? 'faster' : change > 0.05 ? 'slower' : ''}`,
+                    textContent: `${sign}${Math.abs(v - before)}`
+                  })
+                )
+              }
+            }
+            return td
+          })
+          return el(
+            'tr',
+            {},
+            el('td', { textContent: run.date }),
+            el('td', { className: 'label', textContent: run.label }),
+            el('td', { textContent: run.version }),
+            el('td', {}, el('code', { textContent: run.commit })),
+            ...cells,
+            el('td', { textContent: run.firstPaintRange.join('–') }),
+            el('td', { textContent: run.entryKb == null ? '—' : `${run.entryKb} KB` })
+          )
+        })
+        root.append(
+          el(
+            'div',
+            { className: 'scroll' },
+            el('table', {}, el('thead', {}, head), el('tbody', {}, ...body.reverse()))
+          )
+        )
+      }
+    </script>
+  </body>
+</html>

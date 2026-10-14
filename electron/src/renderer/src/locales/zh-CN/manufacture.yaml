@@ -1,0 +1,123 @@
+title: 制造输出
+board: 电路板
+exportProfile: 导出配置
+outputs:
+  gerber: Gerber
+  drill: 钻孔
+  bom: BOM
+  cpl: 贴片坐标
+detail:
+  configure: 配置
+  preview: 预览
+gerber:
+  category:
+    copper: 铜层
+    technical: 技术层
+    board: 电路板
+  format: 格式
+  coordinateFormat: 坐标格式
+  units: 单位
+  naming: 文件命名
+  namingValue:
+    kicad: KiCad (.gbr)
+    protel: Protel 扩展名
+  layerCountNote: 层从电路板读取；预览渲染的就是实际的 Gerber 文件。
+  previewLoading: 正在加载电路板…
+  previewEmpty: 请至少选择一层以预览。
+drill:
+  format: 格式
+  formatValue: Excellon
+  units: 单位
+  zeros: 补零
+  zerosValue:
+    none: 保留
+    leading: 省略前导零
+    trailing: 省略后导零
+  options: 选项
+  merge: 合并 PTH 与 NPTH
+  map: 钻孔图（Gerber）
+  stats: '{holes} 个孔 · {tools} 把钻头'
+bom:
+  options: 选项
+  group: 合并相同元件
+  includeDnp: 包含 DNP 元件
+  partNumber: 料号
+  format: 格式
+  formatValue: CSV
+  col:
+    comment: 注释
+    designator: 位号
+    footprint: 封装
+  export: 导出 BOM
+  loading: 正在加载元件…
+  empty: 没有 BOM 元件——电路板上没有封装，或所有封装均已排除。
+  stats: '{total} 个元件 · {unique} 种'
+  dnpLabel: DNP（不装配）：
+cpl:
+  units: 单位
+  side: 装配面
+  sideValue:
+    both: 顶层 + 底层
+    top: 仅顶层
+  group: 合并相同元件
+  rotationNote: 采用标准 KiCad 元件中心；各板厂的旋转映射将在 M2 之后提供。
+  export: 导出贴片坐标
+  stats: '{total} 个贴装位置 · 顶层 {top} · 底层 {bottom}'
+  empty: 没有贴装位置——电路板上没有封装，或所有封装均已排除。
+  listTitle: 元件
+  top: 顶层
+  bottom: 底层
+  origin: 坐标原点
+  originOff: 坐标原点 · {distance} mm
+outputFolder: 输出文件夹
+zip: Zip
+export: 导出生产文件包
+exporting: 正在导出…
+preflight:
+  title: 预检
+  group:
+    blocking: 阻止导出
+    review: 待审查
+    passed: 已通过
+  check:
+    outline: 电路板外框
+    drcErrors: 设计规则错误
+    drcWarnings: 设计规则警告
+    unfilledZones: 填充区填充
+    drillSize: 钻孔尺寸
+    holeSpacing: 孔间距
+    partNumbers: 料号
+    values: 元件数值
+  outline:
+    found: Edge.Cuts 外框不是一个闭合形状，板厂无法切割电路板。
+    passed: 外框是一个闭合形状。
+  drc:
+    errors: '{count} 个错误'
+    warnings: '{count} 个警告'
+    noErrors: 没有设计规则错误。
+    noWarnings: 没有设计规则警告。
+  zones:
+    found: '{count} 个填充区从未填充：{names}'
+    passed: 所有填充区均已填充。
+  drill:
+    found: '{count} 个孔小于此板厂的最小值 {limit} mm；最小的为 {actual} mm。'
+    passed: 所有孔均不小于 {limit} mm。
+  spacing:
+    found: 有两个孔相距 {actual} mm；此板厂的最小值为 {limit} mm。
+    passed: 孔间距均不小于 {limit} mm。
+  partNumbers:
+    found: '{count} 个元件没有 {field} 料号：{refs}'
+    passed: 每个元件都有 {field} 料号。
+  values:
+    found: '{count} 个元件没有数值：{refs}'
+    passed: 每个元件都有数值。
+  more: '{list} 等，另有 {more} 个'
+  showOnBoard: 在电路板上显示
+  unsaved:
+    title: 未保存的更改
+    detail: 电路板有未保存的编辑。生产文件包将根据已保存的文件生成，请先保存以包含这些编辑。
+  status:
+    checking: 正在检查电路板…
+    blocked: 导出被阻止
+    review: '{count} 项待审查'
+    ready: 可以导出

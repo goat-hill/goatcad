@@ -1,0 +1,81 @@
+pane:
+  title: Git
+  refresh: 更新
+  switchBranch: ブランチを切り替え
+  noBranch: ブランチなし
+  pull: プル
+  push: プッシュ
+  publish: ブランチを公開
+  publishShort: 公開
+  noUpstream: プル元のアップストリームがありません
+  pushing: プッシュ中…
+  pulling: プル中…
+  pushed: プッシュ完了
+  pulled: 最新です
+  commitPlaceholder: コミットメッセージ
+  commit: コミット
+  commitAll: すべてコミット
+  commitAllHint: すべての変更をステージしてコミット
+  mergeChanges: マージの変更
+  stagedChanges: ステージ済みの変更
+  changes: 変更
+  noChanges: 変更なし
+  openFile: ファイルを開く
+  addTo: 追加先
+  ignoreTracked: 既に追跡されています。.gitignore のエントリは新しいファイルを Git が検知しないようにするだけです。
+  showSymbols: 変更されたシンボルを表示
+  hideSymbols: 変更されたシンボルを非表示
+  loadingSymbols: シンボルを読み込み中…
+  symbolsUnreadable: このライブラリのシンボルを読み込めませんでした。
+  noSymbolChanges: 変更されたシンボルはありません
+  stage: ステージ
+  unstage: ステージ解除
+  stageAll: すべてステージ
+  unstageAll: すべてステージ解除
+  discard: 変更を破棄
+  discardAll: すべての変更を破棄
+  markResolved: 解決済みにする
+  confirmDiscard: '{name} への変更を破棄しますか？この操作は元に戻せません。'
+  confirmDeleteUntracked: 未追跡のファイル {name} を削除しますか？この操作は元に戻せません。
+  confirmDiscardAll: '{count} 個のファイルへの変更を破棄しますか？未追跡のファイルは削除されます。この操作は元に戻せません。'
+  notARepo: このフォルダーは Git リポジトリではありません。
+  initRepo: リポジトリを初期化
+  initRepoHint: このフォルダーで git init を実行
+  gitNotInstalled: このシステムで Git が見つかりませんでした。
+  statusError: Git のステータスを読み込めませんでした。
+error:
+  noRemote: リモートが設定されていません。git remote add で追加してください。
+  noUpstream: ブランチにアップストリームがありません。プッシュして公開してください。
+  auth: Git がリモートにサインインできませんでした。SSH キーまたは認証情報ヘルパーを設定してから再試行してください。
+  diverged: ブランチとリモートの両方が変更されています。ターミナルでマージまたはリベースしてから再試行してください。
+  rejected: リモートにローカルにないコミットがあります。先にプルしてからプッシュしてください。
+  network: リモートに接続できませんでした。
+  conflictsBeforeCommit: コミットする前にコンフリクトを解決してステージしてください。
+diff:
+  tabWorking: '{name} (作業ツリー)'
+  tabStaged: '{name} (ステージ済み)'
+  sideWorking: 作業ツリー vs. ステージ済み
+  sideStaged: ステージ済み vs. 最新コミット
+  split: 左右に並べて表示
+  unified: インライン
+  visual: ビジュアル
+  text: テキスト
+  openFile: ファイルを開く
+  stage: ステージ
+  unstage: ステージ解除
+  loading: 差分を読み込み中…
+  unreadable: このファイルを描画できませんでした。テキストに切り替えると変更内容を確認できます。
+  unitTitle: 表示するこのシンボルのユニット
+  noDifferences: 差分なし
+  binary: バイナリファイルが変更されました。比較するテキストはありません。
+  truncated: 差分の最初の {count} 行を表示しています。
+  notChanged: このファイルにはもうここでの変更はありません。
+  error: '差分を読み込めませんでした：{error}'
+  added: '+{count}'
+  removed: '−{count}'
+visual:
+  diff: 差分
+  before: 変更前
+  after: 変更後
+  noChanges: 図面に変更はありません。テキストに切り替えると変更内容を確認できます。
+  nothingOnSide: こちら側に変更はありません。

@@ -1,0 +1,6 @@
+dist
+package-lock.json
+# Astro generated types
+.astro
+# wrangler dev local state
+.wrangler

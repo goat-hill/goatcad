@@ -1,0 +1,176 @@
+/*
+ * Design tokens, ported from the Electron app's
+ * src/renderer/src/assets/base.css so the site and the app read as one product.
+ *
+ * Duplicated by necessity: web/ is a self-contained npm project with no shared
+ * package, so there is no import path between the two. Change one side, change
+ * the other.
+ *
+ * See docs/BRAND.md for what is settled vs pending. Short version: the green
+ * is settled, the copper accent is a working default that has not been through
+ * review. Go through these tokens rather than hardcoding, so a re-theme stays
+ * cheap.
+ */
+
+:root {
+  /* --- Settled: the emerald/forest family --- */
+  --bg: #151c19; /* Deep forest-tinted charcoal */
+  --bg-raised: #1a221f;
+  --bg-panel: #202b27;
+  --bg-elevated: #25332e;
+  --border: #24302b;
+  --border-strong: #3b4d46;
+
+  --text: #c5d3cd; /* Soft mint-tinted gray */
+  --text-bright: #ffffff;
+  --text-muted: #748780;
+
+  /* --- Pending: working default, not endorsed (BRAND.md §3) --- */
+  --accent: #cca250;
+  --accent-hover: #dfb35e;
+
+  /* Accent as *ink* — links, the wordmark's "CAD", anything accent-colored
+     that sits on a background rather than filling one. Split from --accent
+     because the copper that reads well on the dark bg is far too pale on the
+     light one; fills (buttons) keep using --accent in both themes, since their
+     label is dark either way. */
+  --accent-ink: var(--accent);
+  --accent-ink-hover: var(--accent-hover);
+
+  /* The brand mark's two hills, solid so the mark reads on any ground. In
+     light themes the far hill is the lighter one, like hills fading into
+     haze. Mirrored in the app's base.css (--vscode-mark-*). */
+  --mark-far: #5a6661;
+  --mark-near: #cca250;
+
+  --success: #89d185;
+
+  /* File-kind hues, from the app's File Explorer (--vscode-file-* in base.css):
+     the schematic side violet, the board side cyan. */
+  --file-schematic: #a193ee;
+  --file-board: #56b6c2;
+
+  /* Green as ink. The forest family is settled but has only ever been used for
+     surfaces; this is the same family pulled up to a legible foreground, for
+     the places that want brand color without being a link (inline code,
+     section markers). Deliberately distinct from --accent-ink so a reader never
+     mistakes code for something clickable. */
+  --brand-ink: #8fc9aa;
+
+  /* Code surfaces. Kept as tokens rather than inherited from Shiki's theme
+     background: Shiki's is a different product's gray and reads as a foreign
+     panel dropped into the page. Ours sinks *below* the page in dark and sits
+     just above it in light, so a block reads as recessed either way. */
+  --code-bg: #101613;
+  --code-border: #263230;
+
+  /* System font stack — matches the app, and costs zero network requests.
+     No webfont: an external font request would be the single slowest thing on
+     an otherwise ~0 KB-JS page. */
+  --font-family:
+    'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell,
+    'Helvetica Neue', sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+
+  /* Fluid type: clamp() scales with the viewport without breakpoints. */
+  --step-hero: clamp(2.5rem, 1.5rem + 4.5vw, 5rem);
+  --step-h2: clamp(1.75rem, 1.3rem + 2vw, 2.75rem);
+  --step-h3: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  --step-body: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --step-lead: clamp(1.125rem, 1rem + 0.6vw, 1.375rem);
+
+  --measure: 68ch;
+  --page-max: 1120px;
+  --radius: 10px;
+
+  /* The app's speed principle applies to the site: interaction feedback lands
+     fast enough to feel instant. */
+  --transition: 70ms ease-out;
+}
+
+/*
+ * --- Light theme -------------------------------------------------------------
+ *
+ * Only surfaces that opt in get a light mode: a page sets
+ * `data-color-scheme="auto"` on <html> (Base.astro's `colorScheme` prop) and
+ * then follows the OS, with an explicit `data-theme` overriding it. Docs opt
+ * in; the landing page is a designed dark surface (the hero art assumes it) and
+ * stays dark. Same token names throughout, so components need no theme code.
+ *
+ * The palette is the dark one inverted around the same forest hue, pushed for
+ * contrast rather than prettiness: body text is ~14:1 on the page background,
+ * muted text ~7:1 — docs are read, not skimmed.
+ */
+:root[data-color-scheme='auto'] {
+  /* Native widgets (scrollbars, form controls, the ::selection default) follow
+     the same preference the palette below does. */
+  color-scheme: light dark;
+}
+
+/* Explicit choice from the theme toggle. Also the palette of record — the
+   OS-driven rule under it repeats these values because CSS cannot share one
+   declaration block across a media-query boundary. Change both together. */
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #f5f9f6;
+  --bg-raised: #ebf1ed;
+  --bg-panel: #e1eae4;
+  --bg-elevated: #d7e2db;
+  --border: #cfdbd4;
+  --border-strong: #9db0a6;
+
+  --text: #14201b;
+  --text-bright: #06100b;
+  --text-muted: #4a5c54;
+
+  --accent-ink: #7a5407;
+  --accent-ink-hover: #5b3e04;
+
+  --mark-far: #a3b3ac;
+  --file-schematic: #6450c8;
+  --file-board: #1f8593;
+  --mark-near: #a8792a;
+
+  --success: #1f7a3a;
+
+  --brand-ink: #1f5d42;
+
+  --code-bg: #e9f0eb;
+  --code-border: #c6d5cc;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  /* Same values as :root[data-theme='light'] above. */
+  :root[data-color-scheme='auto']:not([data-theme='dark']) {
+    --bg: #f5f9f6;
+    --bg-raised: #ebf1ed;
+    --bg-panel: #e1eae4;
+    --bg-elevated: #d7e2db;
+    --border: #cfdbd4;
+    --border-strong: #9db0a6;
+
+    --text: #14201b;
+    --text-bright: #06100b;
+    --text-muted: #4a5c54;
+
+    --accent-ink: #7a5407;
+    --accent-ink-hover: #5b3e04;
+
+    --mark-far: #a3b3ac;
+    --file-schematic: #6450c8;
+    --file-board: #1f8593;
+    --mark-near: #a8792a;
+
+    --success: #1f7a3a;
+
+    --brand-ink: #1f5d42;
+
+    --code-bg: #e9f0eb;
+    --code-border: #c6d5cc;
+  }
+}

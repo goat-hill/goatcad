@@ -1,0 +1,131 @@
+#!/bin/bash
+#
+# Delete GoatCAD's local config and cache so the next launch behaves like a fresh
+# install (no config.json, no recents, no restored session, no library table,
+# no cached footprints, empty localStorage).
+#
+# Usage:
+#   ./bin/reset             # show targets, ask, delete
+#   ./bin/reset --dry-run   # show targets only
+#   ./bin/reset --yes       # no confirmation prompt
+#
+set -euo pipefail
+
+# App identity — keep in sync with APP_NAME in src/main/appConfig.ts.
+# If the app is ever renamed again, add the old name here so the rename doesn't
+# strand state on disk: userData lives under APP_NAME, so a renamed build reads a
+# different directory and leaves the old one behind.
+APP_NAMES=("GoatCAD")
+
+usage() {
+  cat <<'EOF'
+Delete GoatCAD's local config and cache so the next launch behaves like a fresh
+install (no config.json, no recents, no restored session, no library table,
+no cached footprints, empty localStorage).
+
+Usage:
+  ./bin/reset             show targets, ask, delete
+  ./bin/reset --dry-run   show targets only
+  ./bin/reset --yes       skip the confirmation prompt
+EOF
+}
+
+DRY_RUN=0
+ASSUME_YES=0
+for arg in "$@"; do
+  case "$arg" in
+    --dry-run|-n) DRY_RUN=1 ;;
+    --yes|-y) ASSUME_YES=1 ;;
+    --help|-h) usage; exit 0 ;;
+    *)
+      echo "reset: unknown option '$arg' (try --help)" >&2
+      exit 2
+      ;;
+  esac
+done
+
+# Collect the per-platform userData/cache locations for every known app name.
+targets=()
+case "$(uname -s)" in
+  Linux)
+    config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
+    cache_home="${XDG_CACHE_HOME:-$HOME/.cache}"
+    for name in "${APP_NAMES[@]}"; do
+      targets+=("$config_home/$name" "$cache_home/$name")
+    done
+    ;;
+  Darwin)
+    for name in "${APP_NAMES[@]}"; do
+      targets+=(
+        "$HOME/Library/Application Support/$name"
+        "$HOME/Library/Caches/$name"
+        "$HOME/Library/Logs/$name"
+      )
+    done
+    # Keyed by appId, not APP_NAME.
+    targets+=("$HOME/Library/Preferences/com.goatcad.app.plist")
+    ;;
+  MINGW*|MSYS*|CYGWIN*)
+    for name in "${APP_NAMES[@]}"; do
+      [ -n "${APPDATA:-}" ] && targets+=("$APPDATA/$name")
+      [ -n "${LOCALAPPDATA:-}" ] && targets+=("$LOCALAPPDATA/$name")
+    done
+    ;;
+  *)
+    echo "reset: unsupported platform '$(uname -s)'" >&2
+    exit 1
+    ;;
+esac
+
+# Only ever remove something that looks like an Electron profile we wrote, so a
+# stale name in APP_NAMES can't take an unrelated directory with it.
+looks_like_app_data() {
+  local dir="$1"
+  for marker in "config.json" "Preferences" "Local State" "libraries.json"; do
+    [ -e "$dir/$marker" ] && return 0
+  done
+  return 1
+}
+
+found=()
+for target in "${targets[@]}"; do
+  [ -e "$target" ] || continue
+  if [ -d "$target" ] && ! looks_like_app_data "$target"; then
+    echo "skip (not recognizable as GoatCAD data): $target"
+    continue
+  fi
+  found+=("$target")
+done
+
+if [ ${#found[@]} -eq 0 ]; then
+  echo "Nothing to reset — GoatCAD has no local config or cache."
+  exit 0
+fi
+
+echo "The following GoatCAD data will be deleted:"
+for target in "${found[@]}"; do
+  size="$(du -sh "$target" 2>/dev/null | cut -f1)"
+  echo "  ${size:-?}	$target"
+done
+
+if [ "$DRY_RUN" -eq 1 ]; then
+  echo
+  echo "(dry run — nothing deleted)"
+  exit 0
+fi
+
+if [ "$ASSUME_YES" -ne 1 ]; then
+  echo
+  read -r -p "Delete these? [y/N] " reply
+  case "$reply" in
+    [yY]|[yY][eE][sS]) ;;
+    *) echo "Aborted."; exit 1 ;;
+  esac
+fi
+
+for target in "${found[@]}"; do
+  rm -rf "$target"
+  echo "removed $target"
+done
+
+echo "Done — the next launch will behave like a fresh install."

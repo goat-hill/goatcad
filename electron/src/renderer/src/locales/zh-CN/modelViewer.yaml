@@ -1,0 +1,8 @@
+loading: 正在准备 3D 模型…
+loadFailed: 无法加载此 3D 模型
+isoViewTitle: 等轴测视图
+frontViewTitle: 前视图
+topViewTitle: 俯视图
+rightViewTitle: 右视图
+gaugeTitle: 比例尺
+dims: '{x} × {y} × {z} mm'

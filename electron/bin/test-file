@@ -1,0 +1,16 @@
+#!/bin/bash
+# Run part of the suite: forwards every argument to `vitest run`.
+#
+#   ./bin/test-file src/main/__tests__/agentScripting.test.ts
+#   ./bin/test-file --no-file-parallelism --reporter=verbose
+#
+# bin/test runs the whole suite and forwards nothing, which is the gap that
+# tempts people into `npx vitest run <file>` — an install, and prohibited.
+# This closes it. The full suite is still the gate; this is for narrowing down
+# a failure or a hang.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+npm run test -- "$@"

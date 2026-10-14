@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro'
+import Hero from './Hero.astro'
+import Showcase from './Showcase.astro'
+import Agent from './Agent.astro'
+import Pitch from './Pitch.astro'
+import { PRODUCT_NAME, SITE_URL, COMPANY_NAME, COMPANY_URL } from '../brand'
+import { release, isPublished } from '../data/release'
+import { fmt, homePath, strings, type Locale } from '../i18n'
+
+/*
+ * The landing page, in any of its languages: pages/index.astro renders it in
+ * English at `/`, pages/[locale]/index.astro in the rest under their prefix.
+ */
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const s = strings(locale)
+
+/*
+ * SoftwareApplication structured data for search engines. Every field maps to
+ * something true and stable: the price is genuinely 0, and the version comes
+ * from release.json so it moves with the bump job. There is no license field
+ * while the site makes no license claim (BRAND.md §2). No aggregateRating —
+ * inventing one is exactly the kind of fluff the audience smells. The publisher
+ * is the company, linked to goat-hill.com, which lists GoatCAD in turn.
+ */
+const app = {
+  '@type': 'SoftwareApplication',
+  name: PRODUCT_NAME,
+  description: fmt(s.meta.description),
+  url: new URL(homePath(locale), SITE_URL).href,
+  inLanguage: locale,
+  applicationCategory: 'DesignApplication',
+  operatingSystem: 'macOS, Windows, Linux',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  publisher: { '@type': 'Organization', name: COMPANY_NAME, url: COMPANY_URL },
+  ...(isPublished(release) && {
+    softwareVersion: release.version,
+    downloadUrl: `${SITE_URL}/docs/installation`
+  })
+}
+
+/*
+ * WebSite structured data is the strongest input to the site name Google shows
+ * above each result, and Google reads it only from the home page. One node for
+ * the whole domain; the url is the home page itself, trailing slash included.
+ */
+const website = {
+  '@type': 'WebSite',
+  name: PRODUCT_NAME,
+  url: `${SITE_URL}/`
+}
+
+const jsonLd = { '@context': 'https://schema.org', '@graph': [website, app] }
+---
+
+<Base locale={locale} translated>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  <Hero locale={locale} />
+  <Showcase locale={locale} />
+  <Agent locale={locale} />
+  <Pitch locale={locale} />
+</Base>

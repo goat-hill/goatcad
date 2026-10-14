@@ -1,0 +1,76 @@
+---
+import type { Platform } from '../../data/release'
+
+/*
+ * Monochrome platform marks for download surfaces. Inline SVG in currentColor —
+ * no icon font, no sprite, no network request (the ~0 KB-JS / no-external-
+ * requests rules in WEB.md §3 apply to assets too).
+ *
+ * Drawn here rather than pulled from an icon set on purpose: an icon package
+ * would be a dependency carrying hundreds of glyphs to ship three, and these
+ * three shapes never change.
+ *
+ * Trademark note: the Apple mark and Tux belong to Apple and to Larry Ewing
+ * respectively. Using them to identify which build a download is for is
+ * ordinary nominative use and is what every desktop app's download page does,
+ * but they are not ours — they must never appear as part of GoatCAD's own
+ * identity (BRAND.md), only as labels on a platform's artifact.
+ */
+interface Props {
+  platform: Platform
+  class?: string
+}
+
+const { platform, class: className } = Astro.props
+---
+
+{platform === 'mac' && (
+  <svg
+    class={className}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M17.05 12.62c-.02-2.2 1.8-3.26 1.88-3.31-1.02-1.5-2.62-1.7-3.19-1.73-1.36-.14-2.65.8-3.34.8-.69 0-1.75-.78-2.87-.76-1.48.02-2.84.86-3.6 2.18-1.53 2.66-.39 6.6 1.1 8.76.73 1.06 1.6 2.25 2.74 2.2 1.1-.04 1.52-.71 2.85-.71 1.33 0 1.7.71 2.87.69 1.18-.02 1.93-1.08 2.65-2.14.83-1.22 1.18-2.4 1.2-2.47-.03-.01-2.3-.89-2.32-3.51z" />
+    <path d="M14.86 6.2c.6-.74 1.01-1.76.9-2.78-.87.04-1.93.58-2.56 1.31-.56.65-1.06 1.7-.93 2.7.97.08 1.96-.5 2.59-1.23z" />
+  </svg>
+)}
+
+{platform === 'win' && (
+  <svg
+    class={className}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M3 5.79l7.35-1v7.1H3V5.79zM11.35 4.65L21 3.33v7.56h-9.65V4.65zM3 12.89h7.35v7.1L3 18.98v-6.09zM11.35 12.89H21v7.78l-9.65-1.32v-6.46z" />
+  </svg>
+)}
+
+{platform === 'linux' && (
+  /* Tux, reduced to a silhouette that survives 16px. Everything light on a
+       real Tux — belly, face, eyes — is a knockout in the same path
+       (fill-rule: evenodd), so the surface behind shows through and the icon
+       stays one color. The feet matter more than they look: at this size the
+       two stubs at the bottom are what separate a penguin from a blob. */
+  <svg
+    class={className}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    fill-rule="evenodd"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M12 1.9c-2.3 0-3.85 1.8-3.85 4.2 0 .78.06 1.32-.13 1.83-.2.53-.6 1.02-1.13 1.73-1.6 2.05-2.7 3.8-3.25 5.6-.32 1.05.1 1.95 1.05 2.28.42.15.63.36.8.76.32.76.98 1.38 1.86 1.8-.5.5-1.3.92-2.06 1.06-.6.11-.75.6-.28.9.72.45 1.9.4 2.83-.05.5-.24.9-.57 1.16-.94.52.1 1.1.15 1.7.15s1.18-.05 1.7-.15c.26.37.66.7 1.16.94.93.45 2.11.5 2.83.05.47-.3.32-.79-.28-.9-.76-.14-1.56-.56-2.06-1.06.88-.42 1.54-1.04 1.86-1.8.17-.4.38-.61.8-.76.92-.32 1.32-1.2 1-2.22-.55-1.8-1.65-3.55-3.25-5.6-.53-.71-.93-1.2-1.13-1.73-.19-.51-.13-1.05-.13-1.83 0-2.4-1.55-4.2-3.85-4.2zM12 10.2c2.15 0 3.75 2.25 3.75 4.75 0 2.05-1.65 3.45-3.75 3.45s-3.75-1.4-3.75-3.45c0-2.5 1.6-4.75 3.75-4.75zM10.62 5.05a.8 1.05 0 100 2.1.8 1.05 0 000-2.1zM13.38 5.05a.8 1.05 0 100 2.1.8 1.05 0 000-2.1zM12 7.35l1.45 1.05L12 9.45l-1.45-1.05z" />
+  </svg>
+)}
+
+<style>
+  svg {
+    width: 1.15em;
+    height: 1.15em;
+    flex: none;
+  }
+</style>

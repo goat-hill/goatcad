@@ -1,0 +1,35 @@
+tabTitle: 欢迎
+hero:
+  tagline: 现代化、AI 原生的电路板设计工作台。
+start:
+  title: 开始
+  openProject: 打开项目…
+  openProjectDesc: 打开现有的 .kicad_pro 项目
+  openFolder: 打开文件夹…
+  newProject: 新建项目…
+  newProjectDesc: 新建原理图和电路板
+  openFile: 打开文件…
+  openSample: 打开示例项目…
+  openSampleDesc: 从 GitHub 下载示例设计
+explore:
+  title: 探索
+recent:
+  title: 最近
+  filesTitle: 文件
+  clear: 清除
+  remove: 从最近列表中移除
+samples:
+  title: 打开示例项目
+  loading: 正在加载示例…
+  empty: 目前没有可用的示例项目。
+  size: '{size} MB'
+  cancel: 取消
+  retry: 重试
+  open: 打开
+  downloading: 正在下载…
+  errors:
+    offline: 无法连接到 GitHub。请检查网络连接后重试。
+    rateLimited: GitHub 正在限制来自此网络的请求。请几分钟后重试。
+    unavailable: 无法加载示例项目。请稍后重试。
+footer:
+  showOnStartup: 启动时显示欢迎页面

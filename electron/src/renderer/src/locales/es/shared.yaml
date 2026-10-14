@@ -1,0 +1,487 @@
+insertSearch:
+  noMatches: Sin coincidencias
+  placeholder: Herramientas…
+  label: Buscar herramientas
+  sections:
+    edit: Editar
+    view: Ver
+  groups:
+    select: Selección
+    place: Colocar
+    connect: Conectar
+    routeOptions: Opciones de enrutado
+    draw: Dibujar
+    zones: Zonas
+    units: Unidades
+    utilities: Utilidades
+    navigate: Navegar
+    display: Visualización
+    layers: Capas
+  ops:
+    undo: Deshacer
+    redo: Rehacer
+    rotateCCW: Girar en sentido antihorario
+    rotateCW: Girar en sentido horario
+    mirrorHorizontal: Reflejar horizontalmente
+    mirrorVertical: Reflejar verticalmente
+    fitView: Zum para encajar
+    zoomIn: Acercar
+    zoomOut: Alejar
+    centerOnCursor: Centrar en el cursor
+    zoomToSelection: Zum a selección
+    find: Buscar…
+    sketchPads: Pads en boceto
+    inactiveLayers: 'Capas inactivas: {mode}'
+properties:
+  selection: Selección
+  browseFootprint: Elegir huella…
+  openFootprint: Abrir en el editor de huellas
+  openDatasheet: Abrir hoja de datos
+  posX: Pos X
+  posY: Pos Y
+  x: X
+  y: Y
+  startX: Inicio X
+  startY: Inicio Y
+  endX: Fin X
+  endY: Fin Y
+  midX: Medio X
+  midY: Medio Y
+  centerX: Centro X
+  centerY: Centro Y
+  radius: Radio
+  angle: Ángulo
+  length: Longitud
+  width: Ancho
+  height: Alto
+  marginLeft: Margen izq.
+  marginTop: Margen sup.
+  marginRight: Margen der.
+  marginBottom: Margen inf.
+  showPinNames: Mostrar nombres
+  showPinNumbers: Mostrar números
+  pinNameOffset: Desplaz. nombre
+  show: Mostrar
+  showName: Mostrar nombre
+  doNotAutoplace: Sin autocolocar
+  strokeWidth: Trazo
+  strokeColor: Color de trazo
+  fill: Relleno
+  fillColor: Color de relleno
+  textColor: Color
+  size: Tamaño
+  text: Texto
+  name: Nombre
+  derivedFrom: Derivado de
+  number: Número
+  reference: Referencia
+  value: Valor
+  footprint: Huella
+  datasheet: Hoja de datos
+  description: Descripción
+  keywords: Palabras clave
+  electricalType: Tipo
+  graphicStyle: Estilo
+  hidden: Oculto
+  inBom: En BOM
+  onBoard: En placa
+  excludeFromSim: Excl. sim.
+  inPosFiles: En arch. pos.
+  duplicatePinNumbersAreJumpers: Pines puente
+  power: Alimentación
+  fpFilters: Filtros huella
+  unitName: Nombre unidad
+  unitsInterchangeable: Unid. intercamb.
+  net: Red
+  trackLength: Pista
+  arcLength: Arco
+  routedLength: Enrutada
+  padToDie: Pad a die
+  fullLength: Total
+  layer: Capa
+  type: Tipo
+  shape: Forma
+  drill: Taladro
+  roundRatio: Relación esquina
+  strokeType: Estilo de trazo
+  side: Cara
+  locked: Bloqueado
+  hatchStyle: Rayado
+  hatchPitch: Paso rayado
+  minThickness: Grosor mín.
+  fillMode: Relleno
+  hatchThickness: Ancho rayado
+  hatchGap: Separación rayado
+  hatchOrientation: Ángulo rayado
+  priority: Prioridad
+  padConnection: Conexión pads
+  padClearance: Margen pads
+  maskMargin: Expansión máscara
+  pasteMargin: Margen pasta
+  pasteRatio: Relación pasta
+  bridgedMask: Máscara puenteada
+  thermalGap: Espacio térmico
+  thermalBridge: Radio térmico
+  teardropsEnabled: Lágrimas
+  teardropBestLength: Long. óptima
+  teardropMaxLength: Long. máxima
+  teardropBestWidth: Anch. óptima
+  teardropMaxWidth: Anch. máxima
+  teardropCurved: Bordes curvos
+  teardropTwoSegments: Dos segmentos
+  teardropMaxTrackWidth: Límite anch. pista
+  teardropPreferZone: Preferir zona
+  removeIslands: Islas
+  keepout: Área restringida
+  blockTracks: Bloquear pistas
+  blockVias: Bloquear vías
+  blockPads: Bloquear pads
+  blockPour: Bloquear relleno
+  blockFootprints: Bloquear huellas
+  points: Puntos
+  columns: Columnas
+  rows: Filas
+  noEditable: No hay propiedades que editar
+  knockout: Calado
+  keepUpright: Mantener derecho
+  holeShape: Forma agujero
+  holeSizeY: Agujero Y
+  cornerRadius: Radio esquina
+  border: Borde
+  externalBorder: Borde externo
+  headerBorder: Borde cabecera
+  rowSeparators: Separ. filas
+  colSeparators: Separ. columnas
+  separatorWidth: Ancho separador
+  borderWidth: Ancho borde
+  pinLength: Longitud pin
+  scale: Escala
+  private: Privado
+  minIslandArea: Área mín. isla
+  layerTop: Capa superior
+  layerBottom: Capa inferior
+  pinType: Tipo de pin
+  bold: Negrita
+  italic: Cursiva
+  hAlign: Alin. H
+  vAlign: Alin. V
+  thickness: Grosor
+  thicknessAuto: Grosor auto
+  nameSize: Tamaño nombre
+  numberSize: Tamaño número
+  commonToAllUnits: Todas unid.
+  paper: Papel
+  pads: Pads
+  rotation: Rotación
+  mirror: Reflejar
+  diameter: Diámetro
+  kind: Clase
+  libId: ID biblioteca
+  symbolUnit: Unidad
+  bodyStyle: Estilo cuerpo
+  bodyStyleStandard: Estándar
+  bodyStyleAlternate: Alternativo
+propertyChanges:
+  added: Añadido
+  removed: Eliminado
+propertySections:
+  text: Propiedades del texto
+  shape: Forma
+  fill: Relleno
+  border: Borde
+  margins: Márgenes
+  pad: Pad
+  hole: Agujero
+  via: Vía
+  fields: Campos
+  attributes: Atributos
+  overrides: Sustituciones
+  keepout: Área restringida
+  islands: Islas
+  thermal: Alivio térmico
+  teardrops: Lágrimas
+  pinDisplay: Visualización de pines
+  units: Unidades y estilos de cuerpo
+  length: Longitud
+propertiesPanel:
+  title: Propiedades
+  manufacture: Salidas de fabricación
+  components: Componentes
+  schematicSetup: Configuración del esquema
+  updateFromSchematic: Actualizar desde esquema
+  syncAdded: '{count} huella por añadir | {count} huellas por añadir | {count} huellas por añadir'
+  syncRemoved: '{count} huella que no está en el esquema | {count} huellas que no están en el esquema | {count} huellas que no están en el esquema'
+  syncEdited: '{count} huella por actualizar | {count} huellas por actualizar | {count} huellas por actualizar'
+  syncNoSchematic: El proyecto no tiene ningún esquema desde el que actualizar.
+  syncUnannotated: Sin anotar
+  boardSetup: Configuración de la placa
+  colorInherited: Predeterminado
+  colorReset: Restablecer el color predeterminado
+preview3dToggle:
+  board: Vista 3D de la placa
+  footprint: Vista previa del modelo 3D
+nonActiveDisplay:
+  modes:
+    show: mostradas
+    dim: atenuadas
+    hide: ocultas
+layersPanel:
+  title: Capas
+  buttonTitle: Capas
+  presetLabel: Preajuste
+  selectPreset: Seleccionar…
+  savePresetTitle: Guardar estas capas como un preajuste con nombre
+  deletePresetTitle: Eliminar este preajuste
+  deletePresetDisabledTitle: Seleccione un preajuste guardado para eliminarlo
+  activeLayerTitle: Capa activa
+  toggleVisibilityTitle: Alternar visibilidad de la capa
+gridSettingsPanel:
+  title: Rejilla
+  buttonTitle: Rejilla
+  unit: Unidad
+  spacing: Espaciado
+  showGrid: Mostrar rejilla
+  snap: Ajustar
+viewportStatus:
+  axisX: X
+  axisY: Y
+  gridMm: '{value} mm'
+  gridMil: '{value} mil'
+  gridIn: '{value} in'
+  unitMm: mm
+  unitMil: mil
+  unitIn: in
+viewportPopover:
+  pin: Fijar al panel lateral
+  unpin: Desfijar a la esquina de la vista
+selectionFilterPanel:
+  title: Filtro de selección
+  allItems: Todos los elementos
+  locked: Bloqueados
+  button: Filtro
+  buttonTitle: Filtro de selección
+  kinds:
+    footprint: Huellas
+    track: Pistas
+    via: Vías
+    zone: Zonas
+    pad: Pads
+    graphic: Gráficos
+    text: Textos
+    point: Puntos
+    symbol: Símbolos
+    wire: Cables
+    label: Etiquetas
+    junction: Uniones
+    no_connect: No conectados
+    sheet: Hojas
+    sheet_pin: Pines de hoja
+    image: Imágenes
+    rule_area: Áreas de reglas
+    field: Texto de campos
+    pin: Pines
+layerPresets:
+  all: Todas las capas
+  frontAssembly: Vista frontal de ensamblado
+  front: Capas frontales
+  backAssembly: Vista trasera de ensamblado
+  back: Capas traseras
+  copper: Todas las capas de cobre
+  innerCopper: Capas de cobre internas
+  none: Sin capas
+componentsTable:
+  filterPlaceholder: Filtrar componentes…
+  groupSymbols: Agrupar símbolos
+  columns: Columnas
+  columnsFieldHeader: Campo
+  columnsShowHeader: Visible
+  columnsGroupHeader: Agrupar
+  recordCount: '{count} componentes'
+  rowForeignTitle: En otra hoja; haga clic para abrirla
+  collapseGroup: Contraer grupo
+  expandGroup: Expandir grupo
+  mixedValue: (mixto)
+  noComponentsFiltered: Ningún componente coincide con el filtro.
+  noComponentsAtAll: No hay componentes en este esquema.
+  fields:
+    reference: Referencia
+    sheet: Hoja
+    value: Valor
+    dnp: DNP
+    excludeFromBom: Excluir de la BOM
+    excludeFromBoard: Excluir de la placa
+    footprint: Huella
+    datasheet: Hoja de datos
+layerNames:
+  fCu: Cobre frontal
+  bCu: Cobre trasero
+  fSilkS: Serigrafía frontal
+  bSilkS: Serigrafía trasera
+  fMask: Máscara frontal
+  bMask: Máscara trasera
+  fPaste: Pasta frontal
+  bPaste: Pasta trasera
+  fFab: Fabricación frontal
+  bFab: Fabricación trasera
+  fCrtYd: Patio frontal
+  bCrtYd: Patio trasero
+  edgeCuts: Contorno de la placa
+netHighlight:
+  status: Red
+  clear: Quitar
+  highlight: Resaltar red
+  clearMenu: Quitar resaltado de red
+selectOther:
+  title: Seleccionar
+  all: Seleccionar todo
+  menu: Seleccionar otro…
+primitives:
+  board: Placa
+  footprint: Huella
+  pad: Pad
+  track: Pista
+  trackArc: Arco de pista
+  tuningPattern: Patrón de afinado
+  via: Vía
+  zone: Zona
+  ruleArea: Área de reglas
+  line: Línea
+  arc: Arco
+  circle: Círculo
+  rectangle: Rectángulo
+  polygon: Polígono
+  curve: Curva
+  text: Texto
+  textBox: Cuadro de texto
+  table: Tabla
+  point: Punto
+  symbol: Símbolo
+  pin: Pin
+  field: Campo
+  wire: Cable
+  bus: Bus
+  busEntry: Entrada de bus
+  junction: Unión
+  noConnect: No conectado
+  label: Etiqueta
+  directiveLabel: Etiqueta de directiva
+  sheet: Hoja
+  sheetPin: Pin de hoja
+  graphic: Gráfico
+  image: Imagen
+libraryChooser:
+  title:
+    placeSymbol: Colocar símbolo
+    placePower: Colocar símbolo de alimentación
+  search:
+    symbol: Buscar símbolos…
+    power: Buscar símbolos de alimentación…
+    footprint: Buscar huellas…
+  searchTitle: 'Buscar ({keys})'
+  scopes:
+    design: En este diseño
+    project: Proyecto
+    global: Míos
+    system: Estándar
+  sections:
+    design: En este diseño
+    recent: Recientes
+    fits: Encaja con el símbolo
+  columns:
+    name: Nombre
+    description: Descripción
+  fits: Encaja
+  moreResults: '{n} más; siga escribiendo para acotar'
+  noMatches: Sin coincidencias
+  indexing: Indexando bibliotecas…
+  noModel: Sin modelo 3D
+  loading: Cargando…
+  noFootprint: No hay ninguna huella asignada
+  noFootprintOption: Ninguna
+  footprintMissing: Ninguna biblioteca contiene esta huella
+  unreadable: No se pudo leer este archivo.
+  details:
+    name: Nombre
+    description: Descripción
+    keywords: Palabras clave
+    source: Origen
+    pinMap: Pines
+    datasheet: Hoja de datos
+  pinMap:
+    allMatch: Todos los pines tienen pad ({n})
+    pinsWithoutPad: 'Sin pad para: {list}'
+    padsWithoutPin: 'Sin pin para el pad: {list}'
+  openDatasheet: Abrir
+  cancel: Cancelar
+  place: Colocar
+  assign: Asignar
+  assignMany: Asignar a {n} componentes
+  change: Cambiar
+librarySync:
+  checking: Comprobando la biblioteca…
+  matches: 'Coincide con la biblioteca | Los {count} coinciden con la biblioteca | Los {count} coinciden con la biblioteca'
+  differs: Desincronizado con la biblioteca
+  differsSome: '{count} de {total} desincronizados con la biblioteca'
+  missing: No está en ninguna biblioteca
+  missingSome: '{count} de {total} no están en ninguna biblioteca'
+libraryLink:
+  title: Biblioteca
+  update: Actualizar desde la biblioteca…
+  updateHint: Reconstruir desde la copia de la biblioteca, conservando la posición, la referencia y las redes
+  changeSymbol: Cambiar símbolo…
+  changeFootprint: Cambiar huella…
+  changeHintSymbol: Sustituir por otro símbolo de biblioteca
+  changeHintFootprint: Sustituir por otra huella de biblioteca
+  editSymbol: Editar símbolo…
+  editFootprint: Editar huella…
+  editHintSymbol: Editar la copia del símbolo de esta hoja, sin modificar la biblioteca
+  editHintFootprint: Editar la copia de la huella de esta placa, sin modificar la biblioteca
+  editLibrarySymbol: Editar símbolo de biblioteca…
+  editLibraryFootprint: Editar huella de biblioteca…
+  editLibraryHintSymbol: Abrir el símbolo de biblioteca en el editor de símbolos
+  editLibraryHintFootprint: Abrir la huella de biblioteca en el editor de huellas
+partUpdate:
+  updateTitleSymbol: Actualizar símbolos desde la biblioteca
+  updateTitleFootprint: Actualizar huellas desde la biblioteca
+  changeTitleSymbol: Cambiar símbolos
+  changeTitleFootprint: Cambiar huellas
+  fromPartSymbol: Símbolo de biblioteca
+  fromPartFootprint: Huella de biblioteca
+  newPartSymbol: Nuevo símbolo
+  newPartFootprint: Nueva huella
+  newPartPlaceholderSymbol: Biblioteca:Símbolo
+  newPartPlaceholderFootprint: Biblioteca:Huella
+  eachOwn: Cada uno desde el suyo
+  updateHintSymbol: Cada símbolo se reconstruye desde su propio símbolo de biblioteca. Indique uno aquí para reconstruirlos todos a partir de él.
+  updateHintFootprint: Cada huella se reconstruye desde su propia huella de biblioteca. Indique una aquí para reconstruirlas todas a partir de ella.
+  updateToHintSymbol: Todos los símbolos del ámbito se reconstruyen desde este símbolo de biblioteca.
+  updateToHintFootprint: Todas las huellas del ámbito se reconstruyen desde esta huella de biblioteca.
+  browse: Examinar…
+  scopeSymbol: Símbolos
+  scopeFootprint: Huellas
+  scopeSelectionSymbol: 'Símbolos seleccionados ({count})'
+  scopeSelectionFootprint: 'Huellas seleccionadas ({count})'
+  scopeReference: Referencia coincidente
+  scopeValue: Valor coincidente
+  scopeLibId: Identificador de biblioteca coincidente
+  scopeAllSymbol: Todos los símbolos del esquema
+  scopeAllFootprint: Todas las huellas de la placa
+  wildcards: '* coincide con cualquier secuencia de caracteres, ? con uno solo'
+  reset: Tomar de la biblioteca
+  fields: Campos
+  all: Todo
+  none: Nada
+  outcomeSymbol: Símbolos a reconstruir
+  outcomeFootprint: Huellas a reconstruir
+  loading: Leyendo la biblioteca…
+  notFound: 'Ninguna biblioteca contiene {libId}'
+  matches: Coincide con la biblioteca
+  differs: Desincronizado con la biblioteca
+  nothingSymbol: No hay símbolos en este ámbito.
+  nothingFootprint: No hay huellas en este ámbito.
+  cancel: Cancelar
+  confirmUpdate: Actualizar
+  confirmChange: Cambiar
+agentViewport:
+  close: Cerrar la vista del agente
+  reveal: 'Mostrar la vista del agente: {label}'

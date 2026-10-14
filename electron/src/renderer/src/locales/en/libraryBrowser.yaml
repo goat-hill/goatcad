@@ -1,0 +1,62 @@
+# The Libraries navigator (sidebar 'Libraries' panel).
+searchPlaceholder: Filter…
+nav:
+  symbols: Symbols
+  footprints: Footprints
+  models3d: 3D models
+  models3dNote: 3D models are browsed through their footprint.
+  # {n} is the number of standard KiCad libraries grouped under this node.
+  system: 'System ({n})'
+  # Count-less variant (footprint categories load lazily).
+  systemPlain: System
+  # Labelled rather than a bare "+", which on a "Symbols" header reads as "new symbol".
+  addLibrary: Add library
+  addSymbol: Add a symbol library…
+  addFootprint: Add a footprint library…
+  # Distinct from models3dNote (the empty-state line): this explains why the
+  # group has no add action. Not "coming soon" — 3D genuinely has no library
+  # tier; footprints carry the link and the folders are set in Settings.
+  models3dManaged: 3D model search paths are managed by environment variables in Settings.
+  remove: Remove
+  # Tooltips on the availability markers shown at the right of each library row,
+  # indicating which of the other two primitive types the item links to.
+  hasSymbol: Has an associated symbol
+  hasFootprint: Has an associated footprint
+  has3dModel: Has an associated 3D model
+download: Download official KiCad libraries
+downloading: Downloading…
+# Index-backed search results + build state.
+rebuildIndex: Rebuild the library index
+indexing: 'Indexing… {done}/{total}'
+indexingWait: Building the library index…
+# Shown when a broad query matches more items than the tree renders at once (the
+# per-type cap that keeps search from freezing the UI). {n} is that cap.
+resultsCapped: 'Showing the first {n} matches per type — refine your search to narrow.'
+noResults: No matches.
+typeShort:
+  symbol: SYM
+  footprint: FP
+  model: 3D
+# Add-library menu. Scope is the only choice we ask for — it is the one with
+# consequences (a project entry travels with the design, a global one does not).
+# Whether the artifact is a file or a directory follows from which group was
+# clicked, so the picker is our problem, not the user's.
+# Labels are assembled in LibraryNavigator so the extension can render as code
+# (BRAND.md "In-app UI copy"): `.kicad_sym` / `.pretty/` name the artifact more
+# precisely and far more briefly than prose, and the trailing slash is what
+# tells the user to look for a folder. The dialog titles carry the sentence the
+# button has no room for.
+add:
+  newSymbolLibrary: New symbol library
+  newFootprintLibrary: New footprint library
+  addSymbolLibrary: Add symbol library
+  addFootprintLibrary: Add footprint library
+  symbolExt: .kicad_sym
+  footprintExt: .pretty/
+  toProject: to project…
+  toAllProjects: to all projects…
+  needsProject: No active project
+  symbolFileTitle: Select a symbol library file (.kicad_sym)
+  footprintFolderTitle: Select a footprint library folder (name ends in .pretty)
+scanningEmptySymbols: 'No .kicad_sym files were found in that folder.'
+scanningEmptyFootprints: No footprints were found in that folder.

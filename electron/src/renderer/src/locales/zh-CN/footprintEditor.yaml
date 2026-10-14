@@ -1,0 +1,130 @@
+commands:
+  editFootprintProperties: 编辑封装属性
+  editPad: 编辑焊盘 {number}
+  editLine: 编辑图线
+  editPolygon: 编辑多边形
+  editRuleArea: 编辑规则域
+  editShape: 编辑形状
+  addPad: 添加焊盘
+  addLine: 添加图线
+  addArc: 添加弧线
+  addRectangle: 添加矩形
+  addCircle: 添加圆形
+  addPolygon: 添加多边形
+  addText: 添加文本
+  addBezier: 添加曲线
+  addTextBox: 添加文本框
+  addPoint: 添加点
+  rotate: 旋转
+  mirror: 镜像
+  flip: 换面
+  moveAnchor: 移动封装锚点
+  editModel: 编辑 3D 模型
+  addModel: 链接 3D 模型
+  removeModel: 移除 3D 模型
+edit:
+  cut: 剪切
+  copy: 复制
+  paste: 粘贴
+  duplicate: 创建副本
+  delete: 删除
+  rotate: 逆时针旋转
+  rotateClockwise: 顺时针旋转
+  flip: 换面
+tools:
+  flip: 换面
+  anchor: 放置封装锚点
+  gridOrigin: 设置栅格原点
+  resetGridOrigin: 重置栅格原点
+properties:
+  fromBoard: 来自电路板
+zoneConnect:
+  inherit: 来自填充区
+  solid: 实心
+  thermal: 缓释热焊盘
+  none: 无
+  thermalTht: 缓释热焊盘 (仅 THT)
+readonlyBanner:
+  title: 只读的官方库元件
+  body: 你无法直接编辑此元件。点击下方将其复制到项目工作区。
+  exportComponentTitle: 导出元件
+  exportPart: 导出元件
+saveModal:
+  title: 保存封装选项
+  subtitle: 此封装来自只读库。请将副本保存到项目中再进行编辑。
+  saveLocalTitle: 另存为项目本地封装
+  saveLocalDesc: 在工作区目录中创建可复用的 `.kicad_mod` 封装文件。
+  saveLocalPlaceholder: filename.kicad_mod
+propertiesPanel:
+  footprintProperties: 封装属性
+  descr: 描述
+  model3d: 3D 模型
+  modelPath: 路径
+  modelOffset: 偏移 (mm)
+  modelScale: 比例
+  modelRotate: 旋转 (°)
+  addModel: 链接 3D 模型…
+  removeModel: 移除 3D 模型
+  browse: 浏览…
+  padInspector: 焊盘 [{number}] 检查器
+  number: 编号
+  type: 类型
+  padTypes:
+    smd: 贴片
+    throughHole: 通孔
+    npThroughHole: 非电镀通孔
+  shape: 形状
+  shapeTypes:
+    rect: 矩形
+    circle: 圆形
+    oval: 椭圆 / 胶囊形
+    roundrect: 圆角矩形
+  drillSize: 钻孔尺寸
+  roundRatio: 圆角比例
+  graphicInspector: 图形项检查器
+  startX: 起点 X
+  startY: 起点 Y
+  endX: 终点 X
+  endY: 终点 Y
+  polygonInspector: 多边形检查器
+  points: 点
+  fill: 填充
+  fillTypes:
+    none: 无 (仅轮廓)
+    solid: 实心 (填充)
+    hatch: 影线
+    reverseHatch: 反向影线
+    crossHatch: 交叉影线
+  ruleAreaInspector: 规则域检查器
+  minThickness: 最小线宽
+  hatchStyle: 影线样式
+  hatchStyleTypes:
+    none: 无 (仅轮廓)
+    edge: 边缘 (边框影线)
+    full: 完全 (填充影线)
+  hatchPitch: 影线间距
+  selectHint: 在 2D 布局中选择任意焊盘或图线，即可直接在此侧边栏中查看和编辑详细信息。
+viewRail:
+  sketchGraphics: 草图图形
+  sketchText: 草图文本
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+  pad: 焊盘
+  line: 图线
+  arc: 弧线
+  rectangle: 矩形
+  circle: 圆形
+  polygon: 多边形
+  text: 文本
+  bezier: 曲线
+  textBox: 文本框
+  point: 点
+  lineModeTitle: 绘线模式 — 45° / 90° / 自由 ({hotkey})
+  lineMode: '绘线模式：{mode}'
+  lineFree: 自由
+viewport3d:
+  title: 3D 预览
+  noFootprintMsg: 打开封装以查看其 3D 视图。
+  noModelMsg: 此封装未链接 3D 模型。
+  notFoundMsg: 找不到链接的 3D 模型。

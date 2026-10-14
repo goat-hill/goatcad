@@ -1,0 +1,39 @@
+# Node
+node_modules
+dist
+out
+.eslintcache
+*.log*
+
+# Mac
+.DS_Store
+
+# Claude - Skip worktrees and local settings
+.claude/*
+!.claude/skills/
+!.claude/settings.json
+
+# Astro generated types (web/)
+.astro
+
+# wrangler dev local state (web/)
+.wrangler
+
+# Typescript
+*.tsbuildinfo
+
+# Clipper2 upstream sources fetched by electron/wasm/clipper2/build.sh
+electron/wasm/clipper2/upstream/
+
+# GoatHerd
+.goatherd/
+
+
+# Development-only distributor API keys, read by src/main/partsDevCredentials.ts
+# when the app is unpackaged. Real secrets — never commit one.
+.env
+.env.*
+!.env.example
+
+# pdfium upstream checkout + depot_tools fetched by electron/wasm/pdfium/build.sh
+electron/wasm/pdfium/upstream/

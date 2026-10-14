@@ -1,0 +1,6 @@
+title: 原理图配置
+sections:
+  rules: 电气规则
+  netClasses: 网络类
+  exclusions: 排除项
+noProject: 此设计没有项目文件，因此无法保存规则严重级别，也没有排除项。检查按 KiCad 的默认设置运行。

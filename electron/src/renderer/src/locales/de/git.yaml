@@ -1,0 +1,81 @@
+pane:
+  title: Git
+  refresh: Git-Status aktualisieren
+  switchBranch: Branch wechseln
+  noBranch: Kein Branch
+  pull: Pull
+  push: Push
+  publish: Branch veröffentlichen
+  publishShort: Veröffentlichen
+  noUpstream: Branch hat keinen Upstream zum Pullen
+  pushing: Push läuft…
+  pulling: Pull läuft…
+  pushed: Gepusht
+  pulled: Auf dem neuesten Stand
+  commitPlaceholder: Commit-Nachricht
+  commit: Committen
+  commitAll: Alles committen
+  commitAllHint: Alle Änderungen vormerken und committen
+  mergeChanges: Änderungen aus Zusammenführung
+  stagedChanges: Vorgemerkte Änderungen
+  changes: Änderungen
+  noChanges: Keine Änderungen
+  openFile: Datei öffnen
+  addTo: Hinzufügen zu
+  ignoreTracked: Bereits versioniert. Ein .gitignore-Eintrag verhindert nur, dass Git neue Dateien bemerkt.
+  showSymbols: Geänderte Symbole anzeigen
+  hideSymbols: Geänderte Symbole ausblenden
+  loadingSymbols: Symbole werden gelesen…
+  symbolsUnreadable: Die Symbole dieser Bibliothek konnten nicht gelesen werden.
+  noSymbolChanges: Kein Symbol geändert
+  stage: Änderungen vormerken
+  unstage: Vormerkung aufheben
+  stageAll: Alle Änderungen vormerken
+  unstageAll: Alle Vormerkungen aufheben
+  discard: Änderungen verwerfen
+  discardAll: Alle Änderungen verwerfen
+  markResolved: Als gelöst markieren
+  confirmDiscard: Änderungen an {name} verwerfen? Das kann nicht rückgängig gemacht werden.
+  confirmDeleteUntracked: Unversionierte Datei {name} löschen? Das kann nicht rückgängig gemacht werden.
+  confirmDiscardAll: 'Änderungen an {count} Datei verwerfen? Das kann nicht rückgängig gemacht werden. | Änderungen an {count} Dateien verwerfen? Unversionierte Dateien werden gelöscht. Das kann nicht rückgängig gemacht werden.'
+  notARepo: Dieser Ordner ist kein Git-Repository.
+  initRepo: Repository initialisieren
+  initRepoHint: git init in diesem Ordner ausführen
+  gitNotInstalled: Git wurde auf diesem System nicht gefunden.
+  statusError: Git-Status konnte nicht gelesen werden.
+error:
+  noRemote: Kein Remote konfiguriert. Mit git remote add eines hinzufügen.
+  noUpstream: Branch hat keinen Upstream. Pushen, um ihn zu veröffentlichen.
+  auth: Git konnte sich nicht beim Remote anmelden. SSH-Schlüssel oder Credential-Helper einrichten und erneut versuchen.
+  diverged: Branch und Remote haben sich beide geändert. In einem Terminal zusammenführen oder rebasen und erneut versuchen.
+  rejected: Der Remote hat Commits, die lokal fehlen. Zuerst pullen, dann pushen.
+  network: Remote konnte nicht erreicht werden.
+  conflictsBeforeCommit: Konflikte vor dem Commit lösen und vormerken.
+diff:
+  tabWorking: '{name} (Arbeitsverzeichnis)'
+  tabStaged: '{name} (vorgemerkt)'
+  sideWorking: Arbeitsverzeichnis vs. vorgemerkt
+  sideStaged: Vorgemerkt vs. letzter Commit
+  split: Nebeneinander
+  unified: Inline
+  visual: Visuell
+  text: Text
+  openFile: Datei öffnen
+  stage: Vormerken
+  unstage: Vormerkung aufheben
+  loading: Diff wird geladen…
+  unreadable: Diese Datei konnte nicht gezeichnet werden. Zu Text wechseln, um die Änderungen zu sehen.
+  unitTitle: Welche Einheit dieses Symbols angezeigt wird
+  noDifferences: Keine Unterschiede
+  binary: Binärdatei geändert. Kein Text zum Vergleichen.
+  truncated: Die ersten {count} Zeilen des Diffs werden angezeigt.
+  notChanged: Diese Datei hat hier keine Änderungen mehr.
+  error: 'Diff konnte nicht gelesen werden: {error}'
+  added: '+{count}'
+  removed: '−{count}'
+visual:
+  diff: Diff
+  before: Vorher
+  after: Nachher
+  noChanges: Keine Änderungen an der Zeichnung. Zu Text wechseln, um die Änderungen zu sehen.
+  nothingOnSide: Keine Änderungen auf dieser Seite.

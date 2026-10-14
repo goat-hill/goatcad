@@ -1,0 +1,19 @@
+title: 创建项目
+inFolder: 位于
+name: 项目名称
+foundTitle: 在此文件夹中找到
+rootSheetLabel: 用作根图纸
+boardsIncluded: 将包含：{names}
+blankSheet: 改为新建空白原理图
+emptyNote: 将创建一个空白原理图和电路板。
+create: 创建项目
+cancel: 取消
+existsTitle: 此文件夹中已有项目
+existsBody: '{name} 已在此处。是否打开它而不是再创建一个？'
+open: 打开项目
+errors:
+  empty: 请输入项目名称。
+  separator: 项目名称不能包含斜杠。
+  reserved: 该名称已被操作系统保留。
+  dots: 项目名称不能以点开头或结尾。
+  exists: 此处已存在同名文件。

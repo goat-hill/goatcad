@@ -1,0 +1,6 @@
+title: Configuración del esquema
+sections:
+  rules: Reglas eléctricas
+  netClasses: Clases de red
+  exclusions: Exclusiones
+noProject: Este diseño no tiene archivo de proyecto, así que no se pueden guardar las severidades de las reglas y no hay exclusiones. Las comprobaciones se ejecutan con los valores predeterminados de KiCad.

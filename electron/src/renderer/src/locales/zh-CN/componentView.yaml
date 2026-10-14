@@ -1,0 +1,42 @@
+kind:
+  symbol: 符号
+  footprint: 封装
+  model: 3D 模型
+scope:
+  system: 系统
+  global: 全局
+  project: 项目
+noneAssociated: 无关联
+open: 打开
+openTitle: 在完整的编辑器标签页中打开
+loading: 正在加载…
+indexLoading: 正在加载库索引…
+notFound: 无法解析此库项目。
+panes:
+  symbol: 符号
+  footprint: 封装
+  model3d: 3D 模型
+fields:
+  reference: 位号
+  value: 数值
+  units: 单元
+  pins: 引脚
+  description: 描述
+  library: 库
+  category: 类别
+  pads: 焊盘
+  model: 3D 模型
+noPreview: 无可用预览
+footprintAssigned: 已分配的封装
+footprintNone: 未分配封装。
+footprintCandidates: 候选封装（来自筛选规则）
+footprintNoCandidates: 未设置封装筛选规则——任何封装均适用。
+model3dVia: 通过已分配的封装解析。
+model3dPath: 模型路径
+model3dNone: 未分配封装，因此没有 3D 模型。
+model3dPending: 3D 模型预览尚未接入。
+reverseHeading: 使用者
+reverseNote: 哪些元件使用此封装需要反向查找——按需计算，此处不显示。
+usedByNone: 已索引的库中没有任何项目使用它。
+choice: '{name} — {library}'
+more: '另外 {n} 个'

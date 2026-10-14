@@ -1,0 +1,186 @@
+---
+import {
+  isPublished,
+  PLATFORM_LABELS,
+  PLATFORM_ARTIFACTS,
+  type Platform,
+  type Release
+} from '../data/release'
+import { liveChannels } from '../data/channels'
+import PlatformIcon from './art/PlatformIcon.astro'
+
+interface Props {
+  /** The release to link. An unpublished one shows every card's button disabled instead. */
+  release: Release
+}
+
+/*
+ * The docs install page's payload: one card per platform, each handing over the
+ * thing the reader came for — a direct download, plus the package-manager
+ * command if that channel is live.
+ *
+ * Everything here is derived, never authored: artifact URLs come from
+ * release.json (written by the bump job from the assets a release actually
+ * uploaded) and commands come from channels.ts (docs/RELEASES.md §6). That
+ * is the whole point — a hand-written install table drifts from the pipeline
+ * the first time an artifact changes, and nobody notices until a link 404s.
+ */
+const { release } = Astro.props
+const published = isPublished(release)
+const platforms: Platform[] = ['mac', 'win', 'linux']
+
+/*
+ * One hint line per card, in the same slot on all three, answering the question
+ * a reader actually has at the moment of clicking. Linux's is a link because
+ * "which Linux download?" is the only genuinely ambiguous choice on this page —
+ * a Debian/Ubuntu user wants the .deb and apt, not the AppImage.
+ */
+const HINTS: Record<Platform, string> = {
+  mac: 'macOS 12 or later',
+  win: 'No admin rights needed',
+  linux: 'On Debian or Ubuntu, use the .deb'
+}
+---
+
+<div class="matrix" data-install-matrix>
+  {platforms.map((p) => {
+    const artifact = PLATFORM_ARTIFACTS[p]
+    const channels = liveChannels(p)
+    return (
+      <section class="card" data-platform={p}>
+        <p class="os">
+          <PlatformIcon platform={p} />
+          {PLATFORM_LABELS[p]}
+          <span class="arch">{artifact.arch}</span>
+        </p>
+
+        {published ? (
+          <a class="btn get" href={release.assets![p]}>
+            Download {artifact.kind}
+          </a>
+        ) : (
+          <span class="btn get" aria-disabled="true">
+            Download {artifact.kind}
+          </span>
+        )}
+
+        <p class="hint">
+          {p === 'linux' ? <a href="#linux-debian-and-ubuntu">{HINTS[p]}</a> : HINTS[p]}
+        </p>
+
+        {channels.map((c) => (
+          <div class="channel">
+            <code>{c.install}</code>
+          </div>
+        ))}
+      </section>
+    )
+  })}
+</div>
+
+{published && (
+  <p class="all">
+    Version {release.version}
+    {release.assets!.linuxDeb && (
+      <span>
+        {' '}
+        · <a href={release.assets!.linuxDeb}>Debian package</a>
+      </span>
+    )}
+  </p>
+)}
+
+<style>
+  .matrix {
+    display: grid;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 620px) {
+    .matrix {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  /* The three cards are deliberately identical in shape — platform, arch,
+     button, one hint line — so the row reads as one control and no card ends in
+     dead space. Anything only one platform has goes in the shared line under
+     the row, not inside a card. */
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.1rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--bg-panel);
+  }
+
+  .os {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-weight: 600;
+    color: var(--text-bright);
+    letter-spacing: -0.01em;
+  }
+
+  /* Architecture belongs to the platform, not to the button — as a trailing
+     chip it answers "which build is this?" without a stray line of text
+     floating under the CTA. */
+  .arch {
+    margin-left: auto;
+    padding: 0.05rem 0.4rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  /* Layout only — the .btn recipe (gradient, glow, hover sweep) is shared with
+     the hero CTA and lives in global.css, so the same act looks the same on
+     both surfaces. */
+  .get {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Nothing to download yet: the card keeps its shape, the button reads as off. */
+  .get[aria-disabled='true'] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .hint {
+    margin-top: auto;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .channel {
+    width: 100%;
+    margin-top: 0.35rem;
+  }
+
+  .channel code {
+    display: block;
+    overflow-x: auto;
+    padding: 0.35rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 0.8rem;
+    white-space: pre;
+  }
+
+  .all {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+</style>

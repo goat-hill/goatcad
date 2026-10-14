@@ -1,0 +1,142 @@
+---
+/*
+ * The pitch: the claims the product leads with (decided 2026-07-16). The
+ * first claim — a modern, unified IDE for every step of the EE design
+ * process — lives in Showcase.astro above, as the text over the cross-fading
+ * editor captures (moved there 2026-07-16); this section carries the rest:
+ *
+ *   1. A drop-in replacement for KiCad: your files are the native format.
+ *
+ * Laid out like the agent section above it: the heading and lede on top, the
+ * visual full-width under them — here a row of the four file kinds, each glyph
+ * large enough to read as the icon it is in the app. (A "shoulders of giants"
+ * homage to KiCad was tried as the visual and cut as corny, 2026-07-16.)
+ *
+ * The framing rule from docs/BRAND.md §2 still applies: "drop-in" is a
+ * claim about your files and workflow carrying over unchanged — nothing here
+ * defines GoatCAD relative to KiCad or disparages it.
+ */
+
+import { fmt, strings, type Locale } from '../i18n'
+import { FILE_ICONS, type FileIconName } from '../data/icons'
+
+/*
+ * Drawn from fileAssociations in electron-builder.yml / KICAD_EXTENSIONS in
+ * src/main/launchArgs.ts, minus .kicad_pro — deliberately trimmed to four so
+ * the chips sit as an even 2×2 grid (2026-07-16). If the app's formats
+ * change, revisit this list.
+ *
+ * Each chip wears the glyph the app's File Explorer gives that file kind
+ * (src/data/icons.ts, ported from FileIcon.vue), so the shapes are the ones you
+ * will see in GoatCAD. The color is the page's, not the app's: the chips are
+ * page chrome, drawn in the accent like the extension beside them. The app's
+ * violet/cyan belong to its own UI, and a mock of that UI (Agent.astro's tab)
+ * is where they appear in full.
+ */
+interface Props {
+  locale?: Locale
+}
+
+const s = strings(Astro.props.locale ?? 'en')
+
+const formats: { ext: string; label: string; icon: FileIconName }[] = [
+  { ext: '.kicad_sch', label: s.pitch.schematic, icon: 'schematic' },
+  { ext: '.kicad_pcb', label: s.pitch.board, icon: 'board' },
+  { ext: '.kicad_mod', label: s.pitch.footprint, icon: 'footprint' },
+  { ext: '.kicad_sym', label: s.pitch.symbolLibrary, icon: 'symbol' }
+]
+---
+
+<section id="pitch" class="pitch">
+  <div class="page">
+    <header class="intro">
+      <h2>{s.pitch.heading}</h2>
+      <p class="lede">{fmt(s.pitch.lede)}</p>
+    </header>
+
+    <ul class="formats">
+      {formats.map((f) => (
+        <li>
+          <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+            <Fragment set:html={FILE_ICONS[f.icon]} />
+          </svg>
+          <code>{f.ext}</code>
+          <span>{f.label}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .pitch {
+    padding-block: clamp(3.5rem, 8vw, 5.5rem);
+    border-top: 1px solid var(--border);
+  }
+
+  h2 {
+    font-size: var(--step-h2);
+  }
+
+  .lede {
+    margin-top: 1.25rem;
+    max-width: var(--measure);
+    color: var(--text-muted);
+  }
+
+  /* The four kinds in one row, each a tile with its glyph large. */
+  .formats {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  .formats li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+    padding: 1.4rem 1.4rem 1.3rem;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color var(--transition);
+  }
+
+  .formats li:hover {
+    border-color: var(--accent);
+  }
+
+  /* The app's 16-unit file glyph drawn at three times its size; the strokes
+     scale with it, as they would in the app zoomed in. */
+  .formats .icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0.9rem;
+    color: var(--accent);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .formats code {
+    color: var(--accent);
+    font-size: 1rem;
+  }
+
+  .formats span {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  /* Two by two on narrow viewports. */
+  @media (max-width: 800px) {
+    .formats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

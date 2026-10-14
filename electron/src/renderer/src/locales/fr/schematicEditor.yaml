@@ -1,0 +1,268 @@
+errors:
+  empty: Cette schématique est vide.
+  parseTitle: Impossible d'ouvrir ce fichier comme schématique KiCad
+actions:
+  initializeBlank: Initialiser une schématique KiCad
+titleBlock:
+  title: Titre
+  date: Date d'émission
+  rev: Révision
+  company: Société
+  comment1: Commentaire 1
+  comment2: Commentaire 2
+  comment3: Commentaire 3
+  comment4: Commentaire 4
+  comment5: Commentaire 5
+  comment6: Commentaire 6
+  comment7: Commentaire 7
+  comment8: Commentaire 8
+  comment9: Commentaire 9
+directiveShapes:
+  round: Rond
+  dot: Point
+  diamond: Losange
+  rectangle: Rectangle
+edit:
+  cut: Couper
+  copy: Copier
+  paste: Coller
+  duplicate: Dupliquer
+  repeat: Répéter le dernier élément
+  delete: Supprimer
+commands:
+  editField: Modifier {field}
+  editFieldMultiple: Modifier {field} ({count} composants)
+  editFlag: Modifier {token}
+  editFlagMultiple: Modifier {token} ({count} composants)
+  editSymbol: Modifier le symbole
+  editLabel: Modifier le label
+  editWire: Modifier le fil
+  editJunction: Modifier la jonction
+  editText: Modifier le texte
+  editTextBox: Modifier la boîte de texte
+  editGraphic: Modifier le graphique
+  editSheet: Modifier la feuille
+  editSheetPin: Modifier la pin de feuille
+  editDirectiveLabel: Modifier le label de directive
+  editBus: Modifier le bus
+  editBusEntry: Modifier l'entrée de bus
+  editImage: Modifier l'image
+  editTable: Modifier la table
+itemTypes:
+  symbol: '{count} symbole | {count} de symboles | {count} symboles'
+  wire: '{count} fil | {count} de fils | {count} fils'
+  label: '{count} label | {count} de labels | {count} labels'
+  junction: '{count} jonction | {count} de jonctions | {count} jonctions'
+  noConnect: "{count} indicateur de non-connexion | {count} d'indicateurs de non-connexion | {count} indicateurs de non-connexion"
+  sheet: '{count} feuille | {count} de feuilles | {count} feuilles'
+labelKinds:
+  label: Label local
+  globalLabel: Label global
+  hierarchicalLabel: Label hiérarchique
+  directiveLabel: Label de directive
+toolbar:
+  undoTitle: Annuler (Ctrl/Cmd+Z)
+  redoTitle: Rétablir (Ctrl/Cmd+Y)
+  grid: Grille
+  showGrid: Afficher la grille
+tools:
+  select: Sélectionner
+  annotateTitle: Annoter la schématique…
+annotate:
+  title: Annoter la schématique
+  scope: Portée
+  scopeDesign: Schématique entière
+  scopeSheet: Feuille courante seulement
+  scopeSelection: 'Sélection ({count} symbole) | Sélection ({count} de symboles) | Sélection ({count} symboles)'
+  recurse: Récursion dans les sous-feuilles
+  order: Ordre
+  orderXY: Trier les symboles par position X
+  orderYX: Trier les symboles par position Y
+  options: Options
+  optionsKeep: Garder l'annotation existante
+  optionsReset: Réinitialiser l'annotation existante
+  numbering: Numérotation
+  numberingAfter: 'Utiliser le premier nombre libre après :'
+  numberingSheet100: Premier libre après numéro de feuille × 100
+  numberingSheet1000: Premier libre après numéro de feuille × 1000
+  preview: '{changed} symbole sur {count} sera renuméroté | {changed} symboles sur {count} seront renumérotés | {changed} symboles sur {count} seront renumérotés'
+  cancel: Annuler
+  confirm: Annoter
+incrementAnnotations:
+  title: Incrémenter les annotations
+  action: Incrémenter les annotations…
+  first: 'Référence de départ :'
+  increment: 'Incrémenter de :'
+  currentSheet: Feuille courante seulement
+  allSheets: Toutes les feuilles
+  preview: 'Une référence va changer | {count} de références vont changer | {count} références vont changer'
+  cancel: Annuler
+  confirm: Incrémenter
+footprintChooser:
+  parts: '{n} composants'
+insertOverlay:
+  ops:
+    symbol: Symbole
+    power: Symbole d'alimentation
+    wire: Fil
+    label: Label
+    globalLabel: Label global
+    hierarchicalLabel: Label hiérarchique
+    noConnect: Indicateur de non-connexion
+    junction: Jonction
+    text: Texte
+    sheet: Feuille
+    sheetPin: Pin de feuille
+    directiveLabel: Label de directive
+    bus: Bus
+    busEntry: Entrée de bus
+    line: Ligne
+    rectangle: Rectangle
+    circle: Cercle
+    arc: Arc
+    bezier: Bézier
+    table: Table
+    image: Image…
+    ruleArea: Surface à règles
+    textBox: Boîte de texte
+image:
+  pickTitle: Placer une image
+  filter: Images
+  unreadable: Ce fichier n'a pas pu être lu comme une image.
+units:
+  menu: Unité
+  unitLabel: 'Unité {unit}'
+  alreadyPlaced: "L'unité {unit} est déjà placée (sur la feuille {sheet})"
+  swap: 'Permuter {target} et {current}'
+  duplicate: 'Dupliquer {unit}'
+  rootSheet: Racine
+  cycleBodyStyle: Changer de style de corps
+  openInLibraryEditor: Ouvrir dans l'éditeur de symboles
+  showDatasheet: Afficher la documentation
+labelPopover:
+  netPlaceholder: Nom du net
+  textPlaceholder: Texte
+  netClassPlaceholder: Classe d'équipotentielle
+  pinPlaceholder: Nom de pin
+  kinds:
+    label: Local
+    globalLabel: Global
+    hierarchicalLabel: Hiérarch.
+    directiveLabel: Directive
+sheetPopover:
+  nameLabel: Nom de la feuille
+  namePlaceholder: Nom de la feuille
+  fileLabel: Nom du fichier
+  invalidName: Ce nom de fichier est déjà pris ou invalide.
+componentsPanel:
+  title: Composants
+  design: Design
+  count: '{count} composant | {count} de composants | {count} composants'
+  showInSchematic: Afficher dans la schématique
+  loading: Lecture du design…
+  unreadable: La schématique racine de ce design n'a pas pu être lue.
+modes:
+  schematic: Schématique
+properties:
+  selectionTitle: Sélection
+  snapToGrid: Aimanter à la grille
+  items: Éléments
+  multiSelectHint: Faites glisser pour déplacer toute la sélection ; Delete la supprime.
+  reference: Référence
+  value: Valeur
+  libraryId: ID librairie
+  unit: Unité
+  position: Position
+  rotation: Rotation
+  footprint: Empreinte
+  unassigned: Non assignée
+  symbolHint: Faites glisser pour déplacer. Shift-clic ou un cadre de sélection pour sélectionner plusieurs éléments.
+  type: Type
+  wireTypeValue: Fil
+  net: Net
+  length: Longueur
+  points: Points
+  width: Largeur
+  defaultWidth: défaut
+  file: Fichier
+  pageNumber: N° de page
+  pageDuplicate: Une autre feuille utilise déjà ce numéro de page.
+  pageEmpty: Cette feuille n'a pas de numéro de page.
+  sheetName: Nom feuille
+  paperSize: Format papier
+  paperUser: Personnalisé
+  paperWidth: Largeur papier
+  paperHeight: Hauteur papier
+  orientation: Orientation
+  landscape: Paysage
+  portrait: Portrait
+  text: Texte
+  junctionTypeValue: Jonction
+  noConnectTypeValue: Indicateur de non-connexion
+  defaultHint: Sélectionnez un élément pour l'inspecter. Panoramique avec le bouton du milieu ou Ctrl/Cmd-glisser ; zoom avec la molette.
+viewRail:
+  netHighlight: Surbrillance des nets
+  showHiddenPins: Afficher les pins cachées
+  showHiddenFields: Afficher les champs cachés
+symbolUpdate:
+  updateAction: Mettre à jour les symboles depuis la librairie…
+  changeAction: Changer de symbole…
+  quickFix: Mettre à jour depuis la librairie
+  options:
+    resetFieldText: Texte des champs
+    resetEmptyFields: Champs laissés vides par la librairie
+    removeExtraFields: Supprimer les champs absents du symbole de librairie
+    resetFieldVisibility: Visibilité des champs
+    resetFieldEffects: Tailles et styles des champs
+    resetFieldPositions: Positions des champs
+    resetPinTextVisibility: Visibilité des noms et numéros de pins
+    resetAlternatePins: Fonctions de pin alternatives
+    resetAttributes: Attributs du symbole
+    resetCustomPower: Valeurs des symboles d'alimentation personnalisés
+  tooFewUnits: "{count} symbole est ignoré : le nouveau symbole a trop peu d'unités. | {count} de symboles sont ignorés : le nouveau symbole a trop peu d'unités. | {count} symboles sont ignorés : le nouveau symbole a trop peu d'unités."
+align:
+  menu: Aligner
+  distributeMenu: Répartir
+  left: Aligner à gauche
+  centerX: Aligner au centre horizontal
+  right: Aligner à droite
+  top: Aligner en haut
+  centerY: Aligner au centre vertical
+  bottom: Aligner en bas
+  distributeHorizontal: Répartir horizontalement
+  distributeVertical: Répartir verticalement
+find:
+  title: Chercher et remplacer…
+  toggleReplace: Afficher/masquer le remplacement
+  scope: Chercher dans
+  scopeSheet: Cette feuille
+  scopeDesign: Toutes les feuilles
+  replacePlaceholder: Remplacer
+  replace: Remplacer
+  replaceAll: Tout remplacer
+  replaceReferences: Références
+  duplicates: 'Cela donne la référence {references} à plusieurs composants.'
+  replaceAnyway: Remplacer quand même
+  cancel: Annuler
+hierarchy:
+  enterSheet: Entrer dans la feuille
+  leaveSheet: Quitter la feuille
+hints:
+  elbow: / change le sens du coude
+  busEntry: R la tourne · Shift+Z place l'autre diagonale
+  bezier: Cliquez le début, la fin, puis chaque point de contrôle
+  ruleArea: Cliquez à nouveau le premier coin, double-cliquez ou Entrée pour fermer
+  table: Cliquez un coin, puis cliquez à nouveau pour définir ses lignes et colonnes
+  sheetPin: Cliquez un bord de feuille
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+drag:
+  follow: Les fils suivent · maintenez Shift pour déplacer seul
+  alone: Les fils restent en place
+  title: Glisser
+  nets: Nets
+  netsChange: Modifie la netlist
+  merges: Relie {a} et {b}
+  splits: Coupe {net}
+  connects: Connecte {member} à {net}

@@ -1,0 +1,139 @@
+severity:
+  error: エラー
+  warning: 警告
+  ignore: 無視
+status:
+  passing: 合格
+  findings: '{count} 件の検出'
+notSupported: 未対応
+defaultSeverity: デフォルト：{severity}
+restore: 復元
+drcGroups:
+  electrical: 電気的
+  dfm: 製造のための設計
+  schematicParity: 回路図の等価性
+  signalIntegrity: 信号品質
+  readability: 可読性
+  misc: その他
+ercGroups:
+  connections: 接続
+  conflicts: 競合
+  misc: その他
+drc:
+  shorting_items: ２つのネットを短絡するアイテム
+  tracks_crossing: 配線の交差
+  clearance: クリアランス違反
+  creepage: 沿面距離違反
+  via_dangling: ビアがレイヤーに未接続か、単一のレイヤーにのみ接続
+  track_dangling: 配線が未接続
+  starved_thermal: ゾーンへのサーマルリリーフ接続が不完全
+  copper_edge_clearance: 基板端クリアランス違反
+  hole_clearance: 穴のクリアランス違反
+  hole_to_hole: ドリル穴と他の穴が近過ぎる
+  holes_co_located: ドリル穴が近過ぎる
+  track_width: トラック幅
+  track_angle: 配線の角度
+  track_segment_length: 配線セグメント長
+  annular_width: アニュラー幅
+  drill_out_of_range: 穴サイズが許容範囲外
+  microvia_drill_out_of_range: マイクロビアの穴サイズが許容範囲外
+  via_diameter: ビア直径
+  courtyards_overlap: コートヤードのオーバーラップ
+  missing_courtyard: フットプリントにコートヤードの定義がない
+  malformed_courtyard: フットプリントのコートヤードが不正
+  invalid_outline: 基板外形が異常な形状
+  copper_sliver: 導体スライバー
+  solder_mask_bridge: 異なるネットのアイテムがハンダマスクのアパーチャで接続されている
+  connection_width: 導体の接続が細すぎる
+  track_on_post_machined_layer: 後加工またはバックドリル層上のパッド/ビアに接続されたトラック
+  track_not_centered_on_via: 配線の端点がビアの中心にない
+  tuning_profile_track_geometries: 等長配線の調整プロファイル配線形状
+  duplicate_footprints: 重複したフットプリント
+  missing_footprint: 見つからないフットプリント
+  extra_footprint: 余計なフットプリント
+  footprint_symbol_mismatch: フットプリントの属性がシンボルと一致しない
+  footprint_symbol_field_mismatch: フットプリントとシンボルのカスタムフィールドが一致しない
+  footprint_filters_mismatch: フットプリントがシンボルのフットプリントフィルターと一致しない
+  net_conflict: パッドのネットが回路図と不一致
+  unconnected_items: アイテム間の接続が見つからない
+  length_out_of_range: 配線長が許容範囲外
+  skew_out_of_range: 配線間の遅延差（スキュー）が許容範囲外
+  too_many_vias: 接続上のビアが多すぎるか少なすぎる
+  diff_pair_gap_out_of_range: 差動ペアのギャップが許容範囲外
+  diff_pair_uncoupled_length_too_long: 差動の非結合長が長すぎる
+  silk_overlap: シルクスクリーンのクリアランス
+  silk_over_copper: ハンダマスクでシルクスクリーンが切り取られている
+  silk_edge_clearance: 基板端でシルクスクリーンが切り取られている
+  text_height: 文字の高さが許容範囲外
+  text_thickness: 文字の太さが許容範囲外
+  mirrored_text_on_front_layer: 表面レイヤーのミラーテキスト
+  nonmirrored_text_on_back_layer: 裏面レイヤーの非ミラーテキスト
+  items_not_allowed: アイテム禁止
+  text_on_edge_cuts: Edge.Cuts レイヤー上の文字またはグラフィックス
+  zones_intersect: 導体ゾーンの交差
+  isolated_copper: 分離された導体塗りつぶし
+  footprint: フットプリントが無効
+  padstack: パッドスタックがおかしい
+  pth_inside_courtyard: コートヤード内部に PTH がある
+  npth_inside_courtyard: コートヤード内部に NPTH がある
+  item_on_disabled_layer: 無効な導体レイヤー上のアイテム
+  unresolved_variable: 未解決のテキスト変数
+  assertion_failure: アサーション失敗
+  footprint_type_mismatch: フットプリントのコンポーネントタイプとフットプリントのパッドが一致しない
+  lib_footprint_issues: フットプリントがライブラリにない
+  lib_footprint_mismatch: フットプリントがライブラリのコピーと一致しない
+  through_hole_pad_without_hole: スルーホール パッドに穴がない
+  missing_tuning_profile: 等長配線の調整プロファイルがない
+erc:
+  pin_not_connected: ピンが接続されていない
+  pin_not_driven: 入力ピンが出力ピンによって駆動されていない
+  power_pin_not_driven: 電源入力ピンが電源出力ピンによって駆動されていない
+  no_connect_connected: '"未接続" フラグが付いたピンが接続されている'
+  no_connect_dangling: '"未接続" フラグが接続されていない'
+  label_dangling: ラベルが接続されていない
+  isolated_pin_label: ラベルが1つのピンにのみ接続されている
+  single_global_label: グローバル ラベルが回路図中で一度しか使われていない
+  same_local_global_label: ローカルラベルとグローバルラベルが同じ名前です
+  wire_dangling: 配線がどこにも接続されてない
+  endpoint_off_grid: シンボルのピンまたは配線の端が接続グリッドから外れている
+  four_way_junction: 4つの接続ポイントが結合されます
+  label_multiple_wires: ラベルは複数のワイヤを接続します
+  unconnected_wire_endpoint: 未接続の配線終端
+  duplicate_reference: 重複したリファレンス指定子
+  pin_to_pin: ピン間の衝突問題
+  unit_value_mismatch: 同じシンボルのユニットが異なる値
+  different_unit_footprint: 異なるフットプリントが同じシンボルの別ユニットに割り当てられている
+  different_unit_net: 異なるネットが同じシンボルの別ユニットにある共有ピンに割り当てられている
+  duplicate_sheet_names: 与えられたシートの中でシート名が重複している
+  hier_label_mismatch: 階層ラベルとシートピンの不一致
+  multiple_net_names: このバスまたはネットに与えられた複数の名前
+  bus_to_bus_conflict: バスは図形的には接続されているが、バス メンバーを共有していない
+  bus_to_net_conflict: バスとネット間の無効な接続
+  net_not_bus_member: ネットは図形的にはバスに接続されているが、バスのメンバーではない
+  ground_pin_not_ground: グランドピンがグランドネットに接続されていない
+  stacked_pin_name: ピンの名前がスタック化されたピンに似ている
+  field_name_whitespace: フィールド名の末尾か先頭(または両方)に空白文字を含んでいます
+  unannotated: シンボルがアノテーションされていない
+  unresolved_variable: 未解決のテキスト変数
+  undefined_netclass: 未定義のネットクラス
+  simulation_model_issue: SPICE モデルの問題
+  similar_labels: 同様のラベル (大文字/小文字だけ相違)
+  similar_power: 電源ピンが同様 (大文字/小文字だけ相違)
+  similar_label_and_power: 電源ピンとラベルが同様です (大文字/小文字だけ相違)
+  lib_symbol_issues: ライブラリ シンボルの問題
+  lib_symbol_mismatch: シンボルがライブラリのコピーと一致しない
+  footprint_link_issues: フットプリント接続の問題
+  footprint_filter: アサインされたフットプリントがフットプリントフィルターに一致しない
+  extra_units: シンボルが定義しているよりも多くのユニットがある
+  missing_unit: シンボルに配置されていないユニットがある
+  missing_input_pin: シンボルに配置されていない入力ピンがある
+  missing_bidi_pin: シンボルに配置されていない双方向ピンがある
+  missing_power_pin: シンボルに配置されていない電源入力ピンがある
+exclusions:
+  note: KiCad のチェックで除外された検出結果を、プロジェクトファイルから読み込んで表示しています。GoatCAD は各除外を、KiCad がマーカーを描いた位置ではなく、ルールと対象アイテムで照合します。そのため、アイテムを移動しても除外はここで有効なままです（KiCad では検出結果が再び表示されます）。除外の追加と削除は KiCad で行います。
+  none: このプロジェクトには除外がありません。
+  matched: '{count} 件の検出を除外'
+  unmatched: 一致する検出なし
+  unmatchedHint: 現在 GoatCAD が検出する結果の中に、この検出結果はありません。修正済みか、対象アイテムが削除されたか、GoatCAD が KiCad と異なる名前でアイテムを識別しています。
+  noItems: 照合不可
+  noItemsHint: この除外は位置だけを指定しており、対象のアイテムを指定していないため、GoatCAD はどの検出結果を指すのか判断できません。

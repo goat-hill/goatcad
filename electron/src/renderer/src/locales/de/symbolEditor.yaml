@@ -1,0 +1,179 @@
+errors:
+  empty: Diese Symbolbibliothek ist leer.
+  parseTitle: Kann nicht als KiCad-Symbolbibliothek geöffnet werden
+groups:
+  fields: Felder
+  pinDisplay: Pin-Anzeige
+  attributes: Attribute
+  units: Einheiten
+  alternate: 'Funktion {n}'
+pinTypes:
+  input: Eingang
+  output: Ausgang
+  bidirectional: Bidirektional
+  tri_state: Tri-State
+  passive: Passiv
+  free: Frei
+  unspecified: Nicht spezifiziert
+  power_in: Spannungseingang
+  power_out: Spannungsausgang
+  open_collector: Offener Kollektor
+  open_emitter: Offener Emitter
+  no_connect: Nicht angeschlossen
+pinStyles:
+  line: Linie
+  inverted: Invertiert
+  clock: Takt
+  inverted_clock: Invertierter Takt
+  input_low: Eingang low
+  clock_low: Takt low
+  output_low: Ausgang low
+  edge_clock_high: Takt (Flanke)
+  non_logic: Nicht-Logik
+powerKinds:
+  none: Keine
+  global: Global
+  local: Lokal
+fillTypes:
+  none: Keine
+  outline: Umriss
+  background: Hintergrund
+  color: Farbe
+  hatch: Schraffur
+  reverse_hatch: Umgekehrte Schraffur
+  cross_hatch: Kreuzschraffur
+edit:
+  cut: Ausschneiden
+  copy: Kopieren
+  paste: Einfügen
+  duplicate: Duplizieren
+  delete: Löschen
+  rotate: Gegen den Uhrzeigersinn drehen
+  rotateClockwise: Im Uhrzeigersinn drehen
+  mirrorHorizontal: Horizontal spiegeln
+  mirrorVertical: Vertikal spiegeln
+  repeat: Letztes Element wiederholen
+units:
+  label: Einheit
+  title: Welche Einheit dieses mehrteiligen Symbols bearbeitet werden soll
+  option: Einheit {letter}
+  namedOption: '{letter} — {name}'
+  add: Einheit hinzufügen
+  remove: Einheit entfernen
+  addTitle: Diesem Symbol eine Einheit hinzufügen
+  removeTitle: Die bearbeitete Einheit und alles darauf Gezeichnete entfernen
+bodyStyles:
+  label: Stil
+  title: Welcher Körperstil dieses Symbols angezeigt werden soll
+  standard: Standard
+  alternate: Alternativ (De Morgan)
+  option: Stil {number}
+  viewOnly: Nur Ansicht
+  viewOnlyTitle: Das Bearbeiten alternativer Körperstile wird noch nicht unterstützt
+tools:
+  pin: Pin
+  rectangle: Rechteck
+  line: Linie
+  polygon: Polygon
+  circle: Kreis
+  arc: Bogen
+  bezier: Kurve
+  text: Text
+  anchor: Symbolanker verschieben
+  textBox: Textfeld
+  repeat: Letztes Element wiederholen
+export:
+  png: Als PNG exportieren…
+  failed: Das Bild konnte nicht exportiert werden
+actions:
+  editFields: Bearbeiten
+  editFieldsTitle: Felder hinzufügen, entfernen und umsortieren
+  focusField: Auf der Zeichenfläche auswählen
+fieldsDialog:
+  title: Felder
+  name: Name
+  value: Wert
+  show: Sichtbar
+  add: Feld hinzufügen
+  done: Fertig
+  remove: Dieses Feld entfernen
+  rename: Dieses Feld umbenennen
+  moveUp: Nach oben
+  moveDown: Nach unten
+  mandatory: KiCad benötigt dieses Feld
+  defaultName: Feld
+pinTable:
+  title: Pins
+  number: '#'
+  name: Name
+  type: Typ
+  unit: E
+  duplicateHint: Diese Pin-Nummer wird mehrfach verwendet
+  empty: Dieses Symbol hat noch keine Pins.
+  add: Pin hinzufügen
+  remove: Pins entfernen
+  removeHint: Zu entfernende Pins auswählen
+  removeN: Pin entfernen | {count} Pins entfernen
+  import: Importieren…
+  export: Exportieren…
+  importTitle: Pin-Tabelle importieren
+  importButton: Importieren
+  exportTitle: Pin-Tabelle exportieren
+  csvFilter: Kommagetrennte Werte
+  importPrompt: '{count} Pin importieren? | {count} Pins importieren?'
+  importSkipped: '{count} Zeile übersprungen | {count} Zeilen übersprungen'
+  importReplace: Alle Pins ersetzen
+  importAppend: An vorhandene Pins anhängen
+  importCancel: Abbrechen
+  importEmpty: Aus dieser Datei konnten keine Pins gelesen werden.
+  importFailed: Diese Datei konnte nicht gelesen werden.
+  exportFailed: Diese Datei konnte nicht geschrieben werden.
+alternates:
+  add: Eine Pin-Funktion hinzufügen
+  remove: Diese Pin-Funktion entfernen
+  defaultName: Neue Funktion
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+viewRail:
+  showHiddenPins: Verborgene Pins anzeigen
+  showHiddenFields: Verborgene Felder anzeigen
+commands:
+  editField: '{field} bearbeiten'
+  editFieldStyle: Feld bearbeiten
+  addField: Feld hinzufügen
+  removeField: Feld entfernen
+  renameField: Feld umbenennen
+  reorderFields: Felder umsortieren
+  editPin: Pin bearbeiten
+  editGraphic: Grafik bearbeiten
+  editUnitScope: Einheitenzuordnung ändern
+  addPin: Pin hinzufügen
+  removePins: Pin entfernen | {count} Pins entfernen
+  importPins: Pins importieren
+  addRectangle: Rechteck hinzufügen
+  addLine: Linie hinzufügen
+  addPolygon: Polygon hinzufügen
+  moveAnchor: Symbolanker verschieben
+  addCircle: Kreis hinzufügen
+  addArc: Bogen hinzufügen
+  addBezier: Kurve hinzufügen
+  addText: Text hinzufügen
+  addTextBox: Textfeld hinzufügen
+  addAlternate: Pin-Funktion hinzufügen
+  removeAlternate: Pin-Funktion entfernen
+  editAlternate: Pin-Funktion bearbeiten
+  deleteItems: Element löschen | {count} Elemente löschen
+  rotate: Drehen
+  duplicateItems: Element duplizieren | {count} Elemente duplizieren
+  pasteItems: Element einfügen | {count} Elemente einfügen
+  cutItems: Element ausschneiden | {count} Elemente ausschneiden
+  repeatItems: Element wiederholen | {count} Elemente wiederholen
+  mirrorHorizontal: Horizontal spiegeln
+  mirrorVertical: Vertikal spiegeln
+  resizeGraphic: Grafikgröße ändern
+  addUnit: Einheit hinzufügen
+  removeUnit: Einheit entfernen
+  newSymbol: Neues Symbol
+  deleteSymbol: Symbol löschen
+  renameSymbol: Symbol umbenennen

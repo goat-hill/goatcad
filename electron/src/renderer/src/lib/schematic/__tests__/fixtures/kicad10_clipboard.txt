@@ -1,0 +1,179 @@
+(lib_symbols
+	(symbol "Device:R"
+		(pin_numbers
+			(hide yes)
+		)
+		(pin_names
+			(offset 0)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Value" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font (size 1.27 1.27))
+			)
+		)
+		(symbol "R_0_1"
+			(rectangle
+				(start -1.016 -2.54)
+				(end 1.016 2.54)
+				(stroke (width 0.254) (type default))
+				(fill (type none))
+			)
+		)
+		(symbol "R_1_1"
+			(pin passive line
+				(at 0 3.81 270)
+				(length 1.27)
+				(name ""
+					(effects
+						(font (size 1.27 1.27))
+					)
+				)
+				(number "1"
+					(effects
+						(font (size 1.27 1.27))
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -3.81 90)
+				(length 1.27)
+				(name ""
+					(effects
+						(font (size 1.27 1.27))
+					)
+				)
+				(number "2"
+					(effects
+						(font (size 1.27 1.27))
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+)
+(label "POWER_GOOD"
+	(at 101.6 76.2 0)
+	(effects
+		(font (size 1.27 1.27))
+		(justify left bottom)
+	)
+	(uuid "b29511ee-e6d8-4da8-a85d-842b37737727")
+)
+(wire
+	(pts
+		(xy 76.2 76.2) (xy 101.6 76.2)
+	)
+	(stroke (width 0) (type default))
+	(uuid "4c5e482d-b6c7-49c0-93b3-028eefcf49f3")
+)
+(symbol
+	(lib_id "Device:R")
+	(at 88.9 76.2 90)
+	(unit 1)
+	(body_style 1)
+	(exclude_from_sim no)
+	(in_bom yes)
+	(on_board yes)
+	(in_pos_files yes)
+	(dnp no)
+	(uuid "4a756083-78bc-43a0-bb4d-1ff7a43be14e")
+	(property "Reference" "R1"
+		(at 88.9 71.12 90)
+		(show_name no)
+		(do_not_autoplace no)
+		(effects
+			(font (size 1.27 1.27))
+		)
+	)
+	(property "Value" "10k"
+		(at 88.9 73.66 90)
+		(show_name no)
+		(do_not_autoplace no)
+		(effects
+			(font (size 1.27 1.27))
+		)
+	)
+	(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(at 88.9 77.978 90)
+		(hide yes)
+		(show_name no)
+		(do_not_autoplace no)
+		(effects
+			(font (size 1.27 1.27))
+		)
+	)
+	(property "Datasheet" ""
+		(at 88.9 76.2 0)
+		(show_name no)
+		(do_not_autoplace no)
+		(effects
+			(font (size 1.27 1.27))
+		)
+	)
+	(property "Description" ""
+		(at 88.9 76.2 0)
+		(show_name no)
+		(do_not_autoplace no)
+		(effects
+			(font (size 1.27 1.27))
+		)
+	)
+	(pin "1"
+		(uuid "781afc52-1b63-4c7f-9036-847e3b21fc33")
+	)
+	(pin "2"
+		(uuid "9447d5c3-f155-43ea-a55f-03bd34ae96e8")
+	)
+	(instances
+		(project "power_supply"
+			(path ""
+				(reference "R1")
+				(unit 1)
+			)
+		)
+	)
+)

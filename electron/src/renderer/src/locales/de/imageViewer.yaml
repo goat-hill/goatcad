@@ -1,0 +1,4 @@
+loading: Bild wird geladen…
+loadFailed: Dieses Bild konnte nicht geladen werden
+actualSizeTitle: Originalgröße (100 %)
+dims: '{w} × {h} px · {zoom} %'

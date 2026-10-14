@@ -1,0 +1,159 @@
+# Manufacture mode — the fab-package surface (fabrication-export-workstream.md).
+# UI copy: verb-first, sentence case, name artifacts literally (BRAND.md).
+# Panel title (top bar). The tab itself is titled by the PCB filename.
+title: Fabrication outputs
+
+# Header: board name (read-only) + export-profile picker.
+board: Board
+exportProfile: Export profile
+
+# Left selection nav: the outputs. Clicking one opens its configure + preview.
+outputs:
+  gerber: Gerbers
+  drill: Drill
+  bom: BOM
+  cpl: Pick & place
+
+# Right pane: configure + preview for the selected output.
+detail:
+  configure: Configure
+  preview: Preview
+
+# Gerber configure.
+gerber:
+  category:
+    copper: Copper
+    technical: Technical
+    board: Board
+  format: Format
+  coordinateFormat: Coordinate format
+  units: Units
+  naming: File naming
+  namingValue:
+    kicad: KiCad (.gbr)
+    protel: Protel extensions
+  layerCountNote: 'Layers are read from the board; the preview renders the exact Gerbers.'
+  previewLoading: Loading board…
+  previewEmpty: Select at least one layer to preview.
+
+# Drill (Excellon) configure.
+drill:
+  format: Format
+  formatValue: Excellon
+  units: Units
+  zeros: Zeros
+  zerosValue:
+    none: Keep
+    leading: Suppress leading
+    trailing: Suppress trailing
+  options: Options
+  merge: Merge PTH + NPTH
+  map: Drill map (Gerber)
+  # Hole/tool count above the drill preview.
+  stats: '{holes} holes · {tools} tools'
+
+# BOM configure + sample table.
+bom:
+  options: Options
+  group: Group identical parts
+  includeDnp: Include DNP parts
+  partNumber: Part number
+  format: Format
+  formatValue: CSV
+  col:
+    comment: Comment
+    designator: Designator
+    footprint: Footprint
+  export: Export BOM
+  loading: Loading components…
+  empty: No BOM parts — the board has no footprints, or all are excluded.
+  # Summary above the file: individual parts vs distinct line items.
+  stats: '{total} components · {unique} unique'
+  # DNP parts listed under the BOM (excluded from it by default).
+  dnpLabel: 'DNP (not populated):'
+
+# Pick & place (CPL) configure + placement map.
+cpl:
+  units: Units
+  side: Assembly side
+  sideValue:
+    both: Top + bottom
+    top: Top only
+  group: Group identical parts
+  rotationNote: Standard KiCad centroids; per-fab rotation maps are M2+.
+  export: Export CPL
+  # Placement count above the map.
+  stats: '{total} placements · {top} top · {bottom} bottom'
+  empty: No placements — the board has no footprints, or all are excluded.
+  # Right-hand component list.
+  listTitle: Components
+  top: Top
+  bottom: Bottom
+  # The pick-and-place file's origin on the board view: where its coordinates
+  # are measured from. originOff labels an arrow at the view's edge pointing
+  # to it when it is off the view; {distance} is millimeters from the view's center.
+  origin: CPL origin
+  originOff: 'CPL origin · {distance} mm'
+
+# Export controls (header, right).
+outputFolder: Output folder
+zip: Zip
+export: Export package
+# Shown on the button while the package is being written to disk.
+exporting: Exporting…
+
+# Pre-flight: the checks read before a package is written (lib/fabPreflight.ts).
+# Only an unclosed outline blocks export; the rest is for review.
+preflight:
+  title: Pre-flight
+  # Group headings, in reading order.
+  group:
+    blocking: Blocks export
+    review: To review
+    passed: Passed
+  # One title per check.
+  check:
+    outline: Board outline
+    drcErrors: Design rule errors
+    drcWarnings: Design rule warnings
+    unfilledZones: Zone fills
+    drillSize: Drill sizes
+    holeSpacing: Hole spacing
+    partNumbers: Part numbers
+    values: Part values
+  outline:
+    found: The Edge.Cuts outline is not one closed shape, so no fab can cut the board.
+    passed: The outline is one closed shape.
+  drc:
+    errors: '{count} error | {count} errors'
+    warnings: '{count} warning | {count} warnings'
+    noErrors: No design rule errors.
+    noWarnings: No design rule warnings.
+  zones:
+    found: '{count} zone was never filled: {names} | {count} zones were never filled: {names}'
+    passed: Every zone is filled.
+  drill:
+    found: "{count} hole is under this fab's {limit} mm minimum; the smallest is {actual} mm. | {count} holes are under this fab's {limit} mm minimum; the smallest is {actual} mm."
+    passed: 'Every hole is at least {limit} mm.'
+  spacing:
+    found: "Two holes are {actual} mm apart; this fab's minimum is {limit} mm."
+    passed: 'Holes are at least {limit} mm apart.'
+  partNumbers:
+    found: '{count} part has no {field} number: {refs} | {count} parts have no {field} number: {refs}'
+    passed: 'Every part has a {field} number.'
+  values:
+    found: '{count} part has no value: {refs} | {count} parts have no value: {refs}'
+    passed: Every part has a value.
+  # A capped list of names, and how many it left out.
+  more: '{list} and {more} more'
+  showOnBoard: Show on board
+  # Above the checklist while the board's tab holds edits its file does not.
+  unsaved:
+    title: Unsaved changes
+    detail: The board has edits that are not saved. The package is written from the saved file, so save to include them.
+  # The verdict beside Export.
+  status:
+    checking: Checking the board…
+    blocked: Export blocked
+    review: '{count} to review | {count} to review'
+    ready: Ready to export

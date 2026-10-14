@@ -1,0 +1,127 @@
+errors:
+  createFile: 'Error creating file: {error}'
+  deleteFile: 'Error deleting file: {error}'
+  renameFile: 'Error renaming file: {error}'
+  library: 'Error updating libraries: {error}'
+  # Shown from both surfaces that list recents — the Welcome page and File ▸ Open Recent.
+  openRecent: Selected directory could not be loaded. It may have been moved or deleted.
+  saveFile: 'Error saving file: {error}'
+confirm:
+  # Delete moves the item to the OS trash, so the wording promises recovery
+  # rather than warning of permanence.
+  deleteFile: Move "{name}" to the trash?
+  # Rename forwarding (projects.md §8.2): when other files reference the renamed file,
+  # the confirm is the preview — it stands in for undo, so it must be specific.
+  renameForward: "Rename \"{from}\" to \"{to}\"?\n\n{count} other file will be updated to follow it:\n{files} | Rename \"{from}\" to \"{to}\"?\n\n{count} other files will be updated to follow it:\n{files}"
+  renameForwardFile: '• {name} ({count} sheet reference) | • {name} ({count} sheet references)'
+  # Delete of a referenced schematic (§4.4): name the files left dangling.
+  deleteFileReferenced: "Move \"{name}\" to the trash?\n\n{count} file references it and will be left with a dangling sheet link:\n{files} | Move \"{name}\" to the trash?\n\n{count} files reference it and will be left with dangling sheet links:\n{files}"
+  deleteImpactFile: '• {name} ({count} sheet reference) | • {name} ({count} sheet references)'
+# Native Save / Don't Save / Cancel box shown when a tab or window with unsaved
+# edits is closed. These are the only renderer strings that reach an OS dialog,
+# so they are plain sentences: no markup, and no reliance on app styling.
+unsaved:
+  message: Do you want to save the changes you made to {name}?
+  # Closing a window with several edited files. Never shown for one file — that
+  # is `message`, which names it — so the count is always two or more and this
+  # needs no singular branch.
+  messageMany: Do you want to save the changes to the following {count} files?
+  # Follows the file list in the many-file case. States the cost of "Don't Save"
+  # rather than repeating the question.
+  detail: Your changes will be lost if you don't save them.
+  # Button labels. Save is common.save; "Don't Save" is the discard verb and
+  # must stay distinct from Cancel, which abandons the close itself.
+  dontSave: Don't save
+  saveAll: Save all
+# Branch picker popover (click the branch in the explorer's Git footer or the Git pane).
+branchPicker:
+  # Input placeholder: filtering existing branches and naming a new one share
+  # the same box, VS Code-style.
+  placeholder: Switch branches or type a new name…
+  # Row shown when the typed name matches no existing branch; clicking it
+  # creates the branch from the current HEAD and switches to it.
+  create: Create branch "{name}"
+  loading: Loading branches…
+  noBranches: No branches found.
+# Quick Open palette (Ctrl/Cmd+P): fuzzy file search over the open project.
+quickOpen:
+  # Input placeholder; "go to" (navigation), not "search" (full-text).
+  placeholder: Go to file…
+  noResults: No matching files found
+shortcuts:
+  title: Keyboard shortcuts
+  openFolder: Open folder
+  openProject: Open project
+  goToFile: Go to file
+  newSchematic: New schematic
+  newWindow: New window
+  closeTab: Close tab
+  nextTab: Next tab
+  previousTab: Previous tab
+  # The window shows one editor pane or two; these three work the split.
+  splitTab: Move tab to other pane
+  splitDirection: Toggle side-by-side / stacked panes
+  focusOtherGroup: Focus other pane
+  updatePcb: Update PCB from schematic
+  save: Save
+  # The activity bar's buttons, by their keys.
+  showExplorer: Show Explorer
+  showLibraries: Show Libraries
+  openPartSearch: Open part search
+  newTerminal: New terminal
+  openAgent: Open agent
+  openSettings: Open Settings
+  gitFocusCommit: Write commit message
+  # Commits the staged changes, or every change when nothing is staged.
+  gitCommit: Commit (in message box)
+  gitStageAll: Stage all changes
+  gitPush: Push
+  gitPull: Pull
+  toggleDevTools: Toggle DevTools
+# Update PCB from Schematic (File menu, F8, the board's Properties panel): the
+# board sync's dry run, listed before it is applied. KiCad's name for the
+# command, so its users find it.
+updatePcb:
+  # The board's Properties panel button that opens it, whose name it carries.
+  title: Update from schematic
+  board: Board
+  loading: Comparing schematic and board…
+  upToDate: Board already matches schematic.
+  # KiCad's options of these names, the ones offered.
+  options: Options
+  replace: Replace footprints with those specified by symbols
+  prune: Delete footprints with no symbols
+  fields: Update footprint fields from symbols
+  columns:
+    reference: Reference
+    value: Value
+    footprint: Footprint
+    change: Change
+  # A row's Change cell: what the update does to that footprint.
+  change:
+    added: Added
+    # Not in the schematic, removed (Delete footprints with no symbols on) or left (off).
+    deleted: Deleted
+    kept: Not in schematic, kept
+    # An updated footprint's changes, joined with commas, the first capitalized.
+    reference: reference
+    value: value
+    footprint: footprint
+    nets: pad nets
+    fields: fields
+    attributes: attributes
+  skip:
+    noFootprint: No footprint assigned
+    footprintNotFound: '{libId} is in no library'
+    noUuid: Symbol has no UUID
+  confirm: Update PCB
+  errors:
+    noBoard: Project has no board (.kicad_pcb).
+    noSchematic: Project has no root schematic to update from.
+    # The schematic has parts numbered like R?; the sync matches parts by reference.
+    notAnnotated: 'Annotate the schematic first. Unannotated: {references}'
+# File ▸ Export ▸ Netlist.
+netlist:
+  errors:
+    noSchematic: Project has no root schematic to export.
+    write: 'Could not write the netlist: {error}'

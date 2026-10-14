@@ -1,0 +1,195 @@
+appId: com.goatcad.app
+productName: GoatCAD
+# Shown in the macOS About panel and Windows file properties. The license is
+# package.json's (GPL-3.0-or-later, docs/BRAND.md §2).
+copyright: Copyright © Goat Hill Electronics LLC
+directories:
+  buildResources: build
+# Notarizes and staples the .dmg after it is built and signed. electron-builder
+# only notarizes the .app, and Gatekeeper assesses the disk image too — see the
+# hook's header and docs/RELEASES.md §7.4.
+afterAllArtifactBuild: build/notarize-dmg.js
+# Declares GoatCAD as a handler for KiCad files so double-click opens them here.
+# Keep in sync with KICAD_EXTENSIONS in src/main/launchArgs.ts.
+fileAssociations:
+  - ext: kicad_pro
+    name: KiCad Project
+    description: KiCad Project File
+    mimeType: application/x-kicad-project
+    role: Editor
+  - ext: kicad_sch
+    name: KiCad Schematic
+    description: KiCad Schematic File
+    mimeType: application/x-kicad-schematic
+    role: Editor
+  - ext: kicad_pcb
+    name: KiCad Board
+    description: KiCad PCB Layout File
+    mimeType: application/x-kicad-pcb
+    role: Editor
+  - ext: kicad_mod
+    name: KiCad Footprint
+    description: KiCad Footprint File
+    mimeType: application/x-kicad-footprint
+    role: Editor
+  - ext: kicad_sym
+    name: KiCad Symbol Library
+    description: KiCad Symbol Library File
+    mimeType: application/x-kicad-symbol
+    role: Editor
+  - ext: gbr
+    name: Gerber Layer
+    description: Gerber Fabrication Output (RS-274X)
+    mimeType: application/vnd.gerber
+    role: Viewer
+files:
+  - '!**/.vscode/*'
+  - '!src/*'
+  - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!{.eslintcache,eslint.config.mjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
+  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+  # Development-only: the bin/ wrappers, the screenshot and record harnesses,
+  # the vitest configs, and the wasm/ build sources (the built .wasm lives in
+  # out/). None of it runs in the packaged app, and it reads as source.
+  - '!{bin,scripts,wasm}/**'
+  - '!vitest.*.ts'
+  - '!vitest.config.ts'
+asarUnpack:
+  - resources/**
+# Closes ways to inject code into or patch the installed app (docs/RELEASES.md
+# §9). grantFileProtocolExtraPrivileges stays at its default because the
+# renderer is loaded from file://.
+electronFuses:
+  runAsNode: false
+  enableNodeOptionsEnvironmentVariable: false
+  enableNodeCliInspectArguments: false
+  enableEmbeddedAsarIntegrityValidation: true
+  onlyLoadAppFromAsar: true
+win:
+  executableName: GoatCAD
+  # Stated, not inherited. These are electron-builder's current defaults, but
+  # docs/RELEASES.md §2 documents x64 as a guarantee, and a default that moves
+  # on a major bump would break that claim silently. Windows-on-ARM is not a
+  # target today; x64 runs there under emulation.
+  target:
+    - target: nsis
+      arch: x64
+nsis:
+  artifactName: ${name}-${version}-setup.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+  createDesktopShortcut: always
+  # Also pinned defaults: together these are RELEASES.md §2's "per-user install,
+  # no admin rights" — perMachine: false keeps the install and its file
+  # associations under HKCU, so the installer never needs an elevation prompt.
+  oneClick: true
+  perMachine: false
+  # The updater downloads the whole installer: .blockmap files are not
+  # published (release.yml uploads the .exe and latest.yml only), so a
+  # differential update would only fail over to the full download anyway.
+  differentialPackage: false
+mac:
+  # Apple silicon only — no universal build and no x64 slice. Intel Macs are a
+  # deliberate non-target (docs/RELEASES.md §2.1); shipping for them would
+  # either double every download or add a second artifact for a shrinking
+  # audience.
+  target:
+    - target: dmg
+      arch: arm64
+    # Not advertised anywhere: the zip is what electron-updater consumes on
+    # macOS (§4.1). Dropping it silently breaks mac auto-update.
+    - target: zip
+      arch: arm64
+  # Signed with a Developer ID Application certificate and notarized by Apple's
+  # notary service. Both halves are required: signing alone still gets "Apple
+  # cannot check it for malicious software" on a downloaded build, because that
+  # message is about the missing notarization ticket, not the signature.
+  #
+  # Stated, not inherited — hardenedRuntime and the entitlements path are already
+  # electron-builder's defaults for a non-MAS build, but notarization *rejects* a
+  # bundle without the hardened runtime, so a default that moved would fail every
+  # release rather than degrade quietly.
+  hardenedRuntime: true
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+  # The macOS 26 icon: an asset catalog compiled from build/icon.icon by
+  # ./bin/build-mac-icon and committed, so packaging needs no Xcode 26. macOS 26
+  # draws it with Liquid Glass (CFBundleIconName below); older macOS ignores it
+  # and reads the icon.icns electron-builder derives from build/icon.png.
+  # mac.icon must not name the .icon bundle itself: electron-builder would then
+  # compile it with actool at build time, on every machine that packages.
+  extraResources:
+    - from: build/Assets.car
+      to: Assets.car
+  # A mapping, not a list: electron-builder merges extendInfo into Info.plist
+  # as an object, so a YAML list lands as keys "0", "1", ... under the root and
+  # macOS never sees any of them.
+  extendInfo:
+    # The app-icon name inside Assets.car — the bundle's basename, set by
+    # bin/build-mac-icon's --app-icon.
+    CFBundleIconName: icon
+    # These strings are the reason macOS shows under its own permission dialog,
+    # so each is a complete sentence saying why access is needed (Apple's rule;
+    # it explicitly rejects "Application requests access to ..." boilerplate).
+    # Desktop matters as much as the other two: session restore stats every saved
+    # project path at launch, so a project kept on the Desktop prompts on the next
+    # cold start — before any window is on screen.
+    NSDesktopFolderUsageDescription: In order to open your design files, GoatCAD needs permission to access your Desktop folder.
+    NSDocumentsFolderUsageDescription: In order to open your design files, GoatCAD needs permission to access your Documents folder.
+    NSDownloadsFolderUsageDescription: In order to open your design files, GoatCAD needs permission to access your Downloads folder.
+    NSCameraUsageDescription: Application requests access to the device's camera.
+    NSMicrophoneUsageDescription: Application requests access to the device's microphone.
+  # Credentials never live in this file. electron-builder reads them from the
+  # environment — CI supplies APPLE_API_KEY (a path to the App Store Connect .p8),
+  # APPLE_API_KEY_ID, and APPLE_API_ISSUER; see .github/workflows/release.yml.
+  #
+  # With no credentials present this flag is a no-op: electron-builder logs
+  # "skipped macOS notarization" and still exits 0, so a contributor without an
+  # Apple account can build a working local .dmg. That same leniency is why a
+  # release must not trust a green build — ./bin/verify-mac-signing is the gate.
+  notarize: true
+dmg:
+  # ${arch} in the name even though only one is built: it makes the file
+  # self-describing on disk, and a second arch could never silently overwrite
+  # the first.
+  artifactName: ${name}-${version}-${arch}.${ext}
+  # Off by default (dmg-builder checks `sign === true`), which is why the disk
+  # image shipped unsigned while the .app inside it was fully signed and
+  # notarized — `spctl --assess` on the .dmg reported "no usable signature".
+  # dmg-builder threads codeSigningInfo's keychain into `codesign --keychain`,
+  # so this works under CI's build keychain as well as a local login keychain.
+  #
+  # Signing alone does not satisfy Gatekeeper — a signed but un-notarized image
+  # assesses as "Unnotarized Developer ID". The image needs its own notarization
+  # ticket too; see docs/RELEASES.md §7.4.
+  sign: true
+linux:
+  # Binary name; keep lowercase — it is the `goatcad` command, while productName
+  # (GoatCAD) names the install dir.
+  executableName: goatcad
+  # Use desktopName (package.json, kept in sync with APP_ID) as the .desktop
+  # filename and StartupWMClass, so Electron's app_id matches and desktop
+  # environments associate running windows with the launcher entry.
+  syncDesktopName: true
+  # No snap: its strict confinement blocks reading system files (e.g. a local
+  # KiCad install's /usr/share/kicad libraries), which is exactly how we
+  # provision standard libraries. KiCad itself ships no snap either — Flatpak is
+  # its sandboxed option. AppImage + deb can both read system paths.
+  target:
+    - AppImage
+    - deb
+  maintainer: electronjs.org
+  category: Development
+appImage:
+  artifactName: ${name}-${version}.${ext}
+npmRebuild: false
+# Where the packaged app checks for updates (src/main/updater.ts), and where
+# release.yml uploads every build: the R2 bucket behind download.goatcad.com,
+# under a folder nobody can guess (docs/RELEASES.md §8). This is the one
+# definition of that folder — .github/scripts/r2-release.sh reads it from here.
+# The block also makes electron-builder write the latest*.yml feeds into dist/.
+# Changing the URL strands every installed copy's updater on the old folder.
+publish:
+  provider: generic
+  url: https://download.goatcad.com/releases/4f7013dc33ab2a013631d219

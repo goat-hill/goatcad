@@ -1,0 +1,110 @@
+---
+import Wordmark from './Wordmark.astro'
+import DownloadButtons from './DownloadButtons.astro'
+import HeroArt from './art/HeroArt.astro'
+import HeroSky from './art/HeroSky.astro'
+import { strings, type Locale } from '../i18n'
+
+/*
+ * The art seam (docs/BRAND.md §4): this component knows nothing about the
+ * motif beyond the <HeroSky /> and <HeroArt /> slots below. Swapping motifs
+ * must never require touching this file's layout, copy, or CTA.
+ */
+
+interface Props {
+  locale?: Locale
+}
+
+const { locale = 'en' } = Astro.props
+const s = strings(locale)
+---
+
+<section class="hero">
+  <HeroSky />
+
+  <div class="hero-content page">
+    <Wordmark as="h1" size="hero" />
+    <p class="tagline">{s.meta.tagline}</p>
+    <DownloadButtons locale={locale} />
+  </div>
+
+  <div class="hero-art-wrap">
+    <HeroArt />
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: min(88vh, 820px);
+    padding-top: 4rem;
+    overflow: hidden;
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.25rem;
+    position: relative;
+    z-index: 1;
+    padding-bottom: clamp(3rem, 12vw, 8rem);
+  }
+
+  /* The content box spans the width and its bottom padding overlaps the art;
+     let the empty parts pass pointer events through so the art's hover
+     scenes underneath still answer. The content itself takes them back. */
+  .hero-content {
+    pointer-events: none;
+  }
+  .hero-content > :global(*) {
+    pointer-events: auto;
+  }
+
+  .tagline {
+    font-size: var(--step-lead);
+    color: var(--text);
+    max-width: 34ch;
+  }
+
+  /* The art is decorative and sits behind the content, bled to the full width
+     of the viewport and anchored to the bottom of the hero. */
+  .hero-art-wrap {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 0;
+    pointer-events: none;
+    /* Fades the art into the page below instead of ending on a hard edge. */
+    mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 100%);
+  }
+
+  @media (max-width: 600px) {
+    .hero {
+      min-height: auto;
+      padding-block: 3rem 0;
+    }
+
+    /* On a phone there's no room to set the art behind the text: it takes
+       its own space below it, kept as short as it can be so the screenshot
+       isn't pushed far down the page. Its top — empty sky, the glow, the
+       tower's masts — slides up under the last line of text, and its plain
+       foreground below the goats (~4vw) is cropped off by the hero's
+       overflow. */
+    .hero-content {
+      padding-bottom: 1.5rem;
+    }
+    .hero-art-wrap {
+      position: relative;
+      margin-top: calc(-1.5rem - 22vw);
+      margin-bottom: -4vw;
+      /* Cropped, the foreground ends a shade off the page background: fade
+         it out at the bottom as well as the top. */
+      mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 86%, transparent);
+    }
+  }
+</style>

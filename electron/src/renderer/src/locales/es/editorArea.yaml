@@ -1,0 +1,41 @@
+closeTab: Cerrar pestaña
+symbolTabTitle: '{file} › {symbol}'
+designCopyTooltip: '{part}, tal como lo contiene {file}; la biblioteca no se modifica'
+childTab:
+  boardSetup: Configuración de la placa
+  schematicSetup: Configuración del esquema
+  components: Componentes
+  manufacture: Salidas de fabricación
+split:
+  sendTab: Mover la pestaña al otro panel ({shortcut})
+  resize: Redimensionar paneles
+empty:
+  openFolder: Abrir carpeta
+  openProject: Abrir proyecto
+  newSchematic: Nuevo esquema
+  newWindow: Nueva ventana
+loadingFileContents: Cargando el contenido del archivo…
+writeContentPlaceholder: Escriba el contenido aquí…
+find:
+  placeholder: Buscar
+  matchCase: Coincidir mayúsculas y minúsculas
+  matchWholeWord: Coincidir palabra completa
+  useRegex: Usar expresión regular
+  previousMatch: Coincidencia anterior
+  nextMatch: Coincidencia siguiente
+  close: Cerrar
+  noResults: Sin resultados
+  results: '{current} de {total}'
+formatNotice:
+  older: 'Formato de {kind} de KiCad {release}'
+  olderBody: 'Este archivo de {kind} se migrará al formato de KiCad 10 al guardar.'
+  newer: 'Solo lectura: formato de {kind} de KiCad {release}'
+  newerUnknown: 'Solo lectura: formato de {kind} de una versión más reciente de KiCad'
+  newerBody: 'GoatCAD guarda archivos de KiCad 10, por lo que este archivo de {kind} se abre en modo de solo lectura.'
+  unsupported: 'Solo lectura: formato de {kind} anterior a KiCad 6'
+  unsupportedBody: 'Guárdelo primero en KiCad para editarlo aquí.'
+  kinds:
+    schematic: esquema
+    board: placa
+    symbolLibrary: biblioteca de símbolos
+    footprint: huella

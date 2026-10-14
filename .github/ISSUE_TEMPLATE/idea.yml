@@ -1,0 +1,19 @@
+# Filled in by GoatCAD's Share app feedback, which prefills these fields by id
+# (electron/src/renderer/src/lib/feedback.ts) — keep the ids in sync.
+name: Idea
+description: Something you would like GoatCAD to do.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Details
+      description: What you would like GoatCAD to do, and what it would help with. Paste a screenshot here if you have one.
+    validations:
+      required: true
+  - type: textarea
+    id: system-info
+    attributes:
+      label: System info
+      description: Filled in by GoatCAD (Help ▸ Share App Feedback…).
+      render: text

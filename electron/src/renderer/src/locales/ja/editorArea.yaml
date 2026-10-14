@@ -1,0 +1,41 @@
+closeTab: タブを閉じる
+symbolTabTitle: '{file} › {symbol}'
+designCopyTooltip: '{file} が保持する {part} — ライブラリは変更されません'
+childTab:
+  boardSetup: 基板の設定
+  schematicSetup: 回路図の設定
+  components: コンポーネント
+  manufacture: 製造用出力
+split:
+  sendTab: タブをもう一方のペインに移動 ({shortcut})
+  resize: ペインのサイズを変更
+empty:
+  openFolder: フォルダーを開く
+  openProject: プロジェクトを開く
+  newSchematic: 新規回路図
+  newWindow: 新しいウィンドウ
+loadingFileContents: ファイルの内容を読み込み中…
+writeContentPlaceholder: ここに内容を入力…
+find:
+  placeholder: 検索
+  matchCase: 大文字と小文字を区別
+  matchWholeWord: 単語単位で検索
+  useRegex: 正規表現を使用
+  previousMatch: 前の一致
+  nextMatch: 次の一致
+  close: 閉じる
+  noResults: 結果なし
+  results: '{current} / {total}'
+formatNotice:
+  older: 'KiCad {release} の{kind}形式'
+  olderBody: 'この{kind}は保存時に KiCad 10 形式に移行されます。'
+  newer: '読み取り専用：KiCad {release} の{kind}形式'
+  newerUnknown: '読み取り専用：新しい KiCad の{kind}形式'
+  newerBody: 'GoatCAD は KiCad 10 形式で保存するため、この{kind}は読み取り専用で開きます。'
+  unsupported: '読み取り専用：KiCad 6 より前の{kind}形式'
+  unsupportedBody: '編集するには、まず KiCad で保存してください。'
+  kinds:
+    schematic: 回路図
+    board: 基板
+    symbolLibrary: シンボルライブラリ
+    footprint: フットプリント

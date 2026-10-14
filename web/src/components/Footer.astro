@@ -1,0 +1,97 @@
+---
+import { COMPANY_NAME, COMPANY_URL } from '../brand'
+import { strings, type Locale } from '../i18n'
+
+interface Props {
+  locale?: Locale
+}
+
+const s = strings(Astro.props.locale ?? 'en')
+
+// The company name links to goat-hill.com (same tab, followed): it ties
+// GoatCAD to its maker for search engines. The footer's link style already
+// matches the copyright text at rest.
+
+const year = new Date().getFullYear()
+---
+
+<footer class="footer">
+  <div class="footer-inner page">
+    <p class="copy">
+      &copy; {year} <a href={COMPANY_URL}>{COMPANY_NAME}</a>
+    </p>
+    <nav aria-label={s.nav.footer}>
+      <ul>
+        <li>
+          <a href="/docs">{s.nav.docs}</a>
+        </li>
+        <li class="pending">
+          {s.nav.blog} <span class="soon">{s.nav.soon}</span>
+        </li>
+        <li>
+          <a href="/privacy">{s.nav.privacy}</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--border);
+    padding-block: 2rem;
+  }
+
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .copy {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  ul {
+    list-style: none;
+    display: flex;
+    /* Baseline, not center: Blog's "soon" pill makes its item taller, and
+       centering lifts its text off the line the other links sit on. */
+    align-items: baseline;
+    gap: 1.5rem;
+  }
+
+  a {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  a:hover {
+    color: var(--text-bright);
+    text-decoration: none;
+  }
+
+  .pending {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    opacity: 0.7;
+    cursor: default;
+  }
+
+  .soon {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    padding: 0.05rem 0.4rem;
+  }
+</style>

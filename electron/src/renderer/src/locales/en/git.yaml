@@ -1,0 +1,103 @@
+# The Git pane (components/git/GitPane.vue) and the diff tab (components/git/DiffView.vue).
+pane:
+  title: Git
+  refresh: Refresh
+  switchBranch: Switch branch
+  # Detached HEAD before status resolves a short oid.
+  noBranch: No branch
+  pull: Pull
+  push: Push
+  # A branch with no upstream: Push publishes it (git push -u).
+  publish: Publish branch
+  # The push button's short label in place of a count, before the branch has an upstream.
+  publishShort: Publish
+  noUpstream: Branch has no upstream to pull from
+  pushing: Pushing…
+  pulling: Pulling…
+  pushed: Pushed
+  pulled: Up to date
+  commitPlaceholder: Commit message
+  commit: Commit
+  # The button when nothing is staged: it stages every change, then commits.
+  commitAll: Commit all
+  # Tooltip on "Commit all": what it will do, since nothing is staged.
+  commitAllHint: Stage every change and commit
+  # Uppercase comes from CSS (section eyebrows).
+  mergeChanges: Merge changes
+  stagedChanges: Staged changes
+  changes: Changes
+  noChanges: No changes
+  openFile: Open file
+  # Row menu: "Add to .gitignore" — the filename renders as code after this.
+  addTo: Add to
+  ignoreTracked: Already tracked. A .gitignore entry only stops git noticing new files.
+  # A changed .kicad_sym row expands to the symbols that changed in it.
+  showSymbols: Show changed symbols
+  hideSymbols: Hide changed symbols
+  loadingSymbols: Reading symbols…
+  symbolsUnreadable: Could not read this library's symbols.
+  # The library changed, but no symbol did (a header or formatting edit).
+  noSymbolChanges: No symbol changed
+  # "Stage" is the git verb (add to the index), not a theater noun.
+  stage: Stage
+  unstage: Unstage
+  stageAll: Stage all
+  unstageAll: Unstage all
+  discard: Discard changes
+  discardAll: Discard all changes
+  markResolved: Mark resolved
+  confirmDiscard: Discard changes to {name}? This cannot be undone.
+  confirmDeleteUntracked: Delete untracked file {name}? This cannot be undone.
+  confirmDiscardAll: 'Discard changes to {count} file? This cannot be undone. | Discard changes to {count} files? Untracked files are deleted. This cannot be undone.'
+  notARepo: This folder is not a Git repository.
+  # `git init` in the project folder, so a new project gets history without a terminal.
+  initRepo: Initialize repository
+  initRepoHint: Run git init in this folder
+  gitNotInstalled: Git was not found on this system.
+  statusError: Could not read Git status.
+# Why a push, pull or commit failed. Git's own message is the row's tooltip.
+error:
+  noRemote: No remote configured. Add one with git remote add.
+  noUpstream: Branch has no upstream. Push to publish it.
+  auth: Git could not sign in to the remote. Set up an SSH key or credential helper, then retry.
+  diverged: Branch and remote have both changed. Merge or rebase in a terminal, then retry.
+  rejected: Remote has commits you don't. Pull first, then push.
+  network: Could not reach the remote.
+  conflictsBeforeCommit: Resolve and stage the conflicts before committing.
+diff:
+  # Tab title suffixes, VS Code's: which pair of versions the tab compares.
+  tabWorking: '{name} (working tree)'
+  tabStaged: '{name} (staged)'
+  # What the tab compares: the working tree against what is staged, or what is
+  # staged against the last commit.
+  sideWorking: Working tree vs. staged
+  sideStaged: Staged vs. last commit
+  split: Side by side
+  unified: Inline
+  visual: Visual
+  text: Text
+  openFile: Open file
+  stage: Stage
+  unstage: Unstage
+  loading: Loading diff…
+  # The versions were read but one does not parse (a merge left markers in it, say).
+  unreadable: Could not draw this file. Switch to Text to see what changed.
+  unitTitle: Which unit of this symbol to show
+  noDifferences: No differences
+  binary: Binary file changed. No text to compare.
+  # A file whose change is too long to draw in full.
+  truncated: Showing the first {count} lines of the diff.
+  notChanged: This file no longer has changes here.
+  error: 'Could not read the diff: {error}'
+  added: '+{count}'
+  removed: '−{count}'
+# The visual diff of a schematic or symbol library (components/git/VisualDiffView.vue).
+visual:
+  # Before and after overlaid: removals drawn back in red.
+  diff: Diff
+  before: Before
+  after: After
+  # Only formatting or file metadata changed; the Text view shows it.
+  noChanges: No changes to the drawing. Switch to Text to see what changed.
+  # Before of a file whose changes are all additions, or After of one whose changes are all removals.
+  nothingOnSide: No changes on this side.

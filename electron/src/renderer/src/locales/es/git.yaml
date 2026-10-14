@@ -1,0 +1,81 @@
+pane:
+  title: Git
+  refresh: Actualizar
+  switchBranch: Cambiar de rama
+  noBranch: Sin rama
+  pull: Pull
+  push: Push
+  publish: Publicar rama
+  publishShort: Publicar
+  noUpstream: La rama no tiene upstream del que hacer pull
+  pushing: Haciendo push…
+  pulling: Haciendo pull…
+  pushed: Push completado
+  pulled: Al día
+  commitPlaceholder: Mensaje de commit
+  commit: Commit
+  commitAll: Commit de todo
+  commitAllHint: Preparar todos los cambios y hacer commit
+  mergeChanges: Cambios de fusión
+  stagedChanges: Cambios preparados
+  changes: Cambios
+  noChanges: Sin cambios
+  openFile: Abrir archivo
+  addTo: Añadir a
+  ignoreTracked: Ya está bajo seguimiento. Una entrada de .gitignore solo impide que git detecte archivos nuevos.
+  showSymbols: Mostrar símbolos modificados
+  hideSymbols: Ocultar símbolos modificados
+  loadingSymbols: Leyendo símbolos…
+  symbolsUnreadable: No se pudieron leer los símbolos de esta biblioteca.
+  noSymbolChanges: Ningún símbolo ha cambiado
+  stage: Preparar
+  unstage: Quitar de preparados
+  stageAll: Preparar todo
+  unstageAll: Quitar todo de preparados
+  discard: Descartar cambios
+  discardAll: Descartar todos los cambios
+  markResolved: Marcar como resuelto
+  confirmDiscard: '¿Descartar los cambios en {name}? Esta acción no se puede deshacer.'
+  confirmDeleteUntracked: '¿Eliminar el archivo sin seguimiento {name}? Esta acción no se puede deshacer.'
+  confirmDiscardAll: '¿Descartar los cambios en {count} archivo? Esta acción no se puede deshacer. | ¿Descartar los cambios en {count} archivos? Los archivos sin seguimiento se eliminan. Esta acción no se puede deshacer. | ¿Descartar los cambios en {count} archivos? Los archivos sin seguimiento se eliminan. Esta acción no se puede deshacer.'
+  notARepo: Esta carpeta no es un repositorio Git.
+  initRepo: Inicializar repositorio
+  initRepoHint: Ejecutar git init en esta carpeta
+  gitNotInstalled: No se encontró Git en este sistema.
+  statusError: No se pudo leer el estado de Git.
+error:
+  noRemote: No hay ningún remoto configurado. Añada uno con git remote add.
+  noUpstream: La rama no tiene upstream. Haga push para publicarla.
+  auth: Git no pudo autenticarse en el remoto. Configure una clave SSH o un asistente de credenciales y vuelva a intentarlo.
+  diverged: La rama y el remoto han cambiado los dos. Fusione o haga rebase en un terminal y vuelva a intentarlo.
+  rejected: El remoto tiene commits que usted no tiene. Haga pull primero y después push.
+  network: No se pudo conectar con el remoto.
+  conflictsBeforeCommit: Resuelva y prepare los conflictos antes de hacer commit.
+diff:
+  tabWorking: '{name} (árbol de trabajo)'
+  tabStaged: '{name} (preparado)'
+  sideWorking: Árbol de trabajo frente a preparado
+  sideStaged: Preparado frente al último commit
+  split: En paralelo
+  unified: En línea
+  visual: Visual
+  text: Texto
+  openFile: Abrir archivo
+  stage: Preparar
+  unstage: Quitar de preparados
+  loading: Cargando diferencias…
+  unreadable: No se pudo dibujar este archivo. Cambie a Texto para ver qué ha cambiado.
+  unitTitle: Qué unidad de este símbolo mostrar
+  noDifferences: Sin diferencias
+  binary: Archivo binario modificado. No hay texto que comparar.
+  truncated: Se muestran las primeras {count} líneas de las diferencias.
+  notChanged: Este archivo ya no tiene cambios aquí.
+  error: 'No se pudieron leer las diferencias: {error}'
+  added: '+{count}'
+  removed: '−{count}'
+visual:
+  diff: Diferencias
+  before: Antes
+  after: Después
+  noChanges: No hay cambios en el dibujo. Cambie a Texto para ver qué ha cambiado.
+  nothingOnSide: No hay cambios en este lado.

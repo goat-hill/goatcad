@@ -1,0 +1,25 @@
+title: Enviar comentarios sobre la aplicación
+kind:
+  bug: Informe de error
+  idea: Idea
+summary: Resumen
+summaryPlaceholder: Una línea, como un titular
+details: Detalles
+detailsBugPlaceholder: '¿Qué hizo, qué esperaba y qué ocurrió en su lugar?'
+detailsIdeaPlaceholder: '¿Qué le gustaría que hiciera GoatCAD y en qué le ayudaría?'
+truncated: Demasiado largo para enviarlo completo. Se recortará el final; pegue el resto en el issue de GitHub.
+screenshot: Captura de pantalla
+copyScreenshot: Copiar captura de pantalla
+screenshotHint: No se adjunta automáticamente. Cópiela y péguela en el issue de GitHub.
+screenshotCopied: Copiada. Péguela en el issue de GitHub.
+screenshotCopyFailed: No se pudo copiar la captura de pantalla.
+noScreenshot: No se pudo capturar esta ventana.
+includeSystemInfo: Incluir información del sistema
+showSystemInfo: Mostrar
+hideSystemInfo: Ocultar
+note: Abre un nuevo issue en GitHub, donde puede revisarlo antes de publicarlo. Necesita una cuenta de GitHub.
+openFailed: No se pudo abrir el navegador. Copie el enlace y ábralo allí.
+copyLink: Copiar enlace
+linkCopied: Copiado
+cancel: Cancelar
+continue: Continuar en GitHub

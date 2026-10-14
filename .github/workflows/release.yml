@@ -1,0 +1,179 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+env:
+  TAG: ${{ github.ref_name }}
+  BUCKET: goatcad
+
+jobs:
+  # Cheap gates, before the three-OS build matrix: a release that would ship
+  # half-translated should fail in seconds, not after 20 minutes of packaging.
+  check-version:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: electron
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify tag matches package.json version
+        run: |
+          tag_version="${GITHUB_REF_NAME#v}"
+          pkg_version="$(jq -r .version package.json)"
+          if [ "$tag_version" != "$pkg_version" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME (version $tag_version) does not match electron/package.json version $pkg_version. Bump electron/package.json's version to match before tagging."
+            exit 1
+          fi
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Deliberately not in CI: an untranslated key falls back to English, so it
+      # never blocks a feature PR. It does block a release. Failures name the
+      # exact keys.
+      - name: Verify all locales are fully translated
+        run: npm run test:i18n
+
+  build:
+    needs: check-version
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # The latest*.yml files are update metadata, not installers: shipping
+          # them is what makes auto-update possible at all (docs/RELEASES.md
+          # §2). They cost nothing to upload and cannot be added retroactively to
+          # a release people already downloaded.
+          - os: ubuntu-latest
+            script: build:linux
+            platform: linux
+            files: dist/*.AppImage dist/*.deb dist/latest-linux.yml
+          - os: windows-latest
+            script: build:win
+            platform: windows
+            files: dist/*.exe dist/latest.yml
+          - os: macos-latest
+            script: build:mac
+            platform: macos
+            # forceCodeSigning turns electron-builder's "skipped macOS
+            # application code signing" warning into a hard failure. It lives
+            # here rather than in electron-builder.yml on purpose: as config it
+            # would also break `./bin/package --mac` for any contributor without
+            # an Apple certificate, and a local build has no reason to be signed.
+            build_args: -c.mac.forceCodeSigning=true
+            files: dist/*.dmg dist/*.zip dist/latest-mac.yml
+
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: electron
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          # Actions ignore `defaults.run.working-directory`; path is from the
+          # repo root.
+          cache-dependency-path: electron/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Apple credentials, macOS leg only. Shared with mac-signing-check.yml so
+      # the hand-triggered check exercises exactly this path (docs/RELEASES.md §7).
+      - name: Prepare macOS signing credentials
+        if: runner.os == 'macOS'
+        uses: ./.github/actions/mac-signing-credentials
+        with:
+          certificate-p12-base64: ${{ secrets.APPLE_CSC_LINK }}
+          certificate-password: ${{ secrets.APPLE_CSC_KEY_PASSWORD }}
+          api-key-base64: ${{ secrets.APPLE_API_KEY }}
+          api-key-id: ${{ secrets.APPLE_API_KEY_ID }}
+          api-issuer: ${{ secrets.APPLE_API_ISSUER }}
+
+      # --publish=never is deliberate and stays that way: electron-builder would
+      # otherwise create and upload the GitHub release itself, bypassing the
+      # draft-then-human-publishes flow the whole pipeline is built on
+      # (docs/RELEASES.md §5). The publish block in electron-builder.yml is
+      # still read — it is what generates the latest*.yml metadata above.
+      - name: Build
+        run: npm run ${{ matrix.script }} -- --publish=never ${{ matrix.build_args }}
+        # Marks the build as ours in Share app feedback's report (src/main/feedback.ts).
+        env:
+          GOATCAD_OFFICIAL_BUILD: '1'
+
+      # The real gate. electron-builder reports success whether or not the app
+      # was signed and notarized, and a .dmg built on this runner would open
+      # fine here regardless — it never carries a quarantine attribute. Only an
+      # explicit check separates "shipped" from "shipped broken".
+      - name: Verify macOS signature and notarization
+        if: runner.os == 'macOS'
+        run: ./bin/verify-mac-signing
+
+      # Straight to R2 rather than a workflow artifact, which counts against the
+      # account's GitHub storage — and a release is ~600 MB. The update feed is
+      # held back until the release is published (docs/RELEASES.md §8).
+      # `files` is unquoted on purpose: bash expands its globs.
+      - name: Upload to R2
+        shell: bash
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ENDPOINT: https://${{ secrets.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com
+        run: bash ../.github/scripts/r2-release.sh upload ${{ matrix.platform }} ${{ matrix.files }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout the release scripts
+        uses: actions/checkout@v4
+        with:
+          # r2-release.sh reads the download folder from electron-builder.yml.
+          sparse-checkout: |
+            .github/scripts
+            electron/electron-builder.yml
+          sparse-checkout-cone-mode: false
+
+      # The draft carries no files, only links to the R2 copies.
+      - name: Write the release body
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ENDPOINT: https://${{ secrets.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com
+        run: |
+          set -euo pipefail
+          base="$(bash .github/scripts/r2-release.sh url-base)"
+          files="$(bash .github/scripts/r2-release.sh files)"
+          {
+            echo "Builds for $TAG, stored on R2 rather than attached here:"
+            echo
+            while read -r name; do
+              if [ -n "$name" ]; then echo "- [$name]($base/$name)"; fi
+            done <<< "$files"
+            echo
+            echo "Publishing this release puts them on goatcad.com and in the update feed."
+          } > release-body.md
+
+      - name: Create draft release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          body_path: release-body.md

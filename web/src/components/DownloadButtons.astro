@@ -1,0 +1,299 @@
+---
+import { release, isPublished, PLATFORM_LABELS, type Platform } from '../data/release'
+import { liveChannels } from '../data/channels'
+import PlatformIcon from './art/PlatformIcon.astro'
+import { fmt, strings, type Locale } from '../i18n'
+
+interface Props {
+  locale?: Locale
+}
+
+const s = strings(Astro.props.locale ?? 'en')
+
+const published = isPublished(release)
+const platforms: Platform[] = ['mac', 'win', 'linux']
+const channels = liveChannels()
+
+/*
+ * The script at the bottom promotes the visitor's platform and demotes the
+ * rest to quiet secondary links. It is progressive enhancement only: every
+ * platform link is already server-rendered, so if the script fails, or JS is
+ * off, the full list stays as it is. An unknown platform leaves it untouched.
+ *
+ * - Phones and tablets are checked before the OS match: Android says "linux",
+ *   iOS "like Mac OS X", and iPadOS passes as a desktop Mac, told apart only by
+ *   its touch points. Nothing here installs on them, so they get no download:
+ *   the line says where it runs (without the version, which means nothing
+ *   until you are at a computer and would wrap in its pill), and where the
+ *   share sheet exists, a button hands the link on to a computer.
+ * - On a desktop the version joins the secondary-links row, so the promoted
+ *   button carries one line of small print rather than two.
+ *
+ * It stays is:inline, unlike the site's other scripts, so it runs as soon as
+ * it is parsed and the buttons are reordered before first paint; a deferred
+ * module could let them visibly jump. Inline scripts ship verbatim, which is
+ * why these notes live here and the script carries none. It sits at the top
+ * level rather than inside the published conditional because prettier cannot
+ * parse a script there; with no release there is no [data-platform-list] and
+ * it exits on its first line.
+ *
+ * The words it writes come from the page's language through data attributes —
+ * the share button and the phone line on `.downloads`, each platform's bare
+ * name on its link — since an inline script cannot import the strings.
+ */
+---
+
+{published && (
+  <div class="downloads" data-share={s.download.share} data-available={s.download.available}>
+    {/*
+        Every platform link is rendered server-side, so the page is fully usable
+        with JS disabled. The inline script below only *promotes* the matching
+        one — it is an enhancement, never the mechanism.
+      */}
+    <ul class="platform-list" data-platform-list>
+      {platforms.map((p) => (
+        <li data-platform={p}>
+          <a class="btn" href={release.assets![p]} data-download data-label={PLATFORM_LABELS[p]}>
+            <PlatformIcon platform={p} />
+            {fmt(s.download.downloadFor, { platform: PLATFORM_LABELS[p] })}
+          </a>
+        </li>
+      ))}
+    </ul>
+    {/*
+        Live package-manager channels only — `live: false` entries render
+        nothing at all, so the landing page never advertises a command that
+        errors (docs/RELEASES.md §1). Same source as the docs install
+        matrix, so the two cannot disagree.
+      */}
+    {channels.length > 0 && (
+      <ul class="channels">
+        {channels.map((c) => (
+          <li>
+            <code>{c.install}</code>
+          </li>
+        ))}
+      </ul>
+    )}
+    <p class="meta">
+      <span>{fmt(s.download.version, { version: release.version! })}</span>
+    </p>
+  </div>
+)}
+{/*
+      Nothing published yet: no installers to link, so it only says builds
+      are coming; the docs are in the nav.
+    */}
+{!published && (
+  <div class="downloads">
+    <p class="meta">
+      <span>{s.download.comingSoon}</span>
+    </p>
+  </div>
+)}
+
+<style>
+  .downloads {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .platform-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  /*
+    Enhanced state: once the script identifies the OS, non-matching platforms
+    demote to quiet text links beneath the primary button. Without JS every
+    platform stays an equal, fully-styled button — a worse hierarchy, but never
+    a broken one.
+  */
+  .platform-list[data-resolved] {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .platform-list[data-resolved] li[hidden] {
+    display: none;
+  }
+
+  /* The phone's share button, also made by the script. */
+  .platform-list :global(button.btn) {
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* :global() is required, not stylistic: this row is created by the inline
+     script at runtime, so it never receives Astro's scoping attribute and a
+     scoped selector would silently not match. */
+  .platform-list[data-resolved] :global(.others) {
+    display: flex;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  /* These small text rows sit directly over the hero art, which costs them
+     contrast. A quiet scrim pill — same recipe as the sticky nav — plus
+     brighter-than-muted text keeps them legible whatever the motif behind
+     them does (BRAND.md expects the art to churn). */
+  .platform-list[data-resolved] :global(.others),
+  .meta {
+    padding: 0.3rem 0.9rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    backdrop-filter: blur(6px);
+  }
+
+  .platform-list[data-resolved] :global(.others a) {
+    color: var(--text);
+  }
+
+  .platform-list[data-resolved] :global(.others a:hover) {
+    color: var(--text-bright);
+  }
+
+  /* The version, moved into this row by the script. */
+  .platform-list[data-resolved] :global(.others .version) {
+    color: var(--text);
+  }
+
+  .platform-list[data-resolved] :global(.others .separator) {
+    color: var(--text-muted);
+  }
+
+  /* Same scrim treatment as .meta below — these sit over the hero art too. */
+  .channels {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .channels code {
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid var(--border-strong);
+    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    backdrop-filter: blur(6px);
+    color: var(--text);
+    font-size: 0.85rem;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text);
+    font-size: 0.9rem;
+  }
+</style>
+
+<script is:inline>
+  ;(function () {
+    function promote() {
+      var list = document.querySelector('[data-platform-list]')
+      if (!list || list.hasAttribute('data-resolved')) return
+
+      var uaData = navigator.userAgentData
+      var hay =
+        ((uaData && uaData.platform) || navigator.platform || '') + ' ' + navigator.userAgent
+      hay = hay.toLowerCase()
+
+      var mobile =
+        (uaData && uaData.mobile) ||
+        /iphone|ipad|ipod|android/.test(hay) ||
+        (hay.indexOf('mac') > -1 && navigator.maxTouchPoints > 1)
+      if (mobile) {
+        onPhone(list)
+        return
+      }
+
+      var os = null
+      if (hay.indexOf('mac') > -1) os = 'mac'
+      else if (hay.indexOf('win') > -1) os = 'win'
+      else if (hay.indexOf('linux') > -1 || hay.indexOf('android') > -1) os = 'linux'
+
+      if (!os) return
+
+      var match = list.querySelector('li[data-platform="' + os + '"]')
+      if (!match) return
+
+      var others = []
+      list.querySelectorAll('li[data-platform]').forEach(function (li) {
+        if (li !== match) {
+          others.push(li)
+          li.hidden = true
+        }
+      })
+
+      list.prepend(match)
+
+      if (others.length) {
+        var row = document.createElement('li')
+        row.className = 'others'
+        others.forEach(function (li) {
+          var a = li.querySelector('a')
+          var link = document.createElement('a')
+          link.href = a.href
+          link.textContent = a.getAttribute('data-label')
+          row.appendChild(link)
+        })
+
+        var meta = list.parentNode.querySelector('.meta')
+        if (meta) {
+          var separator = document.createElement('span')
+          separator.className = 'separator'
+          separator.setAttribute('aria-hidden', 'true')
+          separator.textContent = '·'
+          var version = document.createElement('span')
+          version.className = 'version'
+          version.textContent = meta.textContent.replace(/\s+/g, ' ').trim()
+          row.appendChild(separator)
+          row.appendChild(version)
+          meta.remove()
+        }
+
+        list.appendChild(row)
+      }
+
+      list.setAttribute('data-resolved', '')
+    }
+
+    function onPhone(list) {
+      list.querySelectorAll('li[data-platform]').forEach(function (li) {
+        li.hidden = true
+      })
+
+      if (navigator.share) {
+        var li = document.createElement('li')
+        var button = document.createElement('button')
+        button.type = 'button'
+        button.className = 'btn'
+        button.textContent = list.parentNode.getAttribute('data-share')
+        button.addEventListener('click', function () {
+          navigator.share({ title: 'GoatCAD', url: location.origin + '/' }).catch(function () {})
+        })
+        li.appendChild(button)
+        list.prepend(li)
+      }
+
+      var meta = list.parentNode.querySelector('.meta')
+      if (meta) meta.textContent = list.parentNode.getAttribute('data-available')
+
+      list.setAttribute('data-resolved', '')
+    }
+
+    promote()
+  })()
+</script>

@@ -1,0 +1,701 @@
+# The toolbar tool search (shared/ToolbarSearch.vue), one copy for every
+# editor. noMatches: the dropdown's empty state. placeholder: the field at
+# rest, beside its hotkey cap — keep it short. label: tooltip and accessible
+# name (the hotkey is appended in code).
+insertSearch:
+  noMatches: No matches
+  placeholder: Tools…
+  label: Search tools
+  # The dropdown's two section titles, and the group eyebrows within them
+  # (shown uppercase). One vocabulary for every editor (lib/toolSearch.ts).
+  sections:
+    edit: Edit
+    view: View
+  groups:
+    select: Selection
+    place: Place
+    connect: Connect
+    routeOptions: Route options
+    draw: Draw
+    zones: Zones
+    units: Units
+    utilities: Utilities
+    navigate: Navigate
+    display: Display
+    layers: Layers
+  # Entries every editor shares. The view toggles name the state they turn
+  # on; the row shows whether it is on.
+  ops:
+    undo: Undo
+    redo: Redo
+    rotateCCW: Rotate counterclockwise
+    rotateCW: Rotate clockwise
+    mirrorHorizontal: Mirror horizontally
+    mirrorVertical: Mirror vertically
+    # The first chip on every view rail, and its tooltip.
+    fitView: Zoom to fit
+    # Keys and tool-search rows only (lib/viewCommands.ts). Center on cursor
+    # acts where the pointer is, so it runs from its key (F4).
+    zoomIn: Zoom in
+    zoomOut: Zoom out
+    centerOnCursor: Center on cursor
+    zoomToSelection: Zoom to selection
+    # The board, footprint and symbol editors' find (Edit menu and tool search).
+    find: Find…
+    sketchPads: Sketch pads
+    # {mode} is one of nonActiveDisplay.modes; picking it cycles to the next.
+    inactiveLayers: 'Inactive layers: {mode}'
+
+# Central label registry for KiCad SExpr properties, shared by every editor's
+# right-bar PropertyTable (shared/PropertyTable.vue) so a label like X or Width
+# is defined once, not redefined per editor. A field may override any of these
+# with its own label. These render into the narrow left column of a property
+# table (shared/PropertyRow.vue): the column sizes to its longest label, so a
+# long translation squeezes the input rather than clipping. Keep them terse.
+properties:
+  # The panel's one group for a selection of several kinds: only what they all share.
+  selection: Selection
+  # Row buttons beside a symbol's Footprint and Datasheet values.
+  browseFootprint: Choose footprint…
+  openFootprint: Open in footprint editor
+  openDatasheet: Open datasheet
+  # "Pos" is short for Position. X/Y are axis names and stay as-is.
+  posX: Pos X
+  posY: Pos Y
+  # Bare axis names for a primitive's own coordinate (a pin, a text).
+  x: X
+  y: Y
+  # Corner / midpoint / center coordinates of a graphic primitive.
+  startX: Start X
+  startY: Start Y
+  endX: End X
+  endY: End Y
+  midX: Mid X
+  midY: Mid Y
+  centerX: Center X
+  centerY: Center Y
+  radius: Radius
+  # Rotation in degrees.
+  angle: Angle
+  # Pin length (mm).
+  length: Length
+  # Width/Height of a pad, or the stroke thickness of a track or graphic line.
+  # Both senses share this label, as they do in KiCad.
+  width: Width
+  height: Height
+  # Inner padding of a text box, per side. Terse because all four sit in one
+  # group and the column sizes to the longest of them.
+  marginLeft: Margin L
+  marginTop: Margin T
+  marginRight: Margin R
+  marginBottom: Margin B
+  # Symbol-level pin display (KiCad's Symbol Properties). Asked positively even
+  # though the file stores the negative ("hide").
+  showPinNames: Show names
+  showPinNumbers: Show numbers
+  pinNameOffset: Name offset
+  # A field's own flags. `show` is asked positively where the file stores
+  # `(hide yes)`; `showName` draws the field's key beside its value ("MPN: 1234");
+  # `doNotAutoplace` exempts it from KiCad's field autoplacer.
+  show: Show
+  showName: Show name
+  doNotAutoplace: No autoplace
+  # Graphic outline stroke width, kept distinct from the size Width above.
+  strokeWidth: Stroke
+  # Explicit stroke color override (blank = inherit the theme/net color).
+  strokeColor: Stroke color
+  # Fill style of a closed graphic (none / outline / background).
+  fill: Fill
+  # Explicit fill color override (blank = inherit).
+  fillColor: Fill color
+  # A text's own font color, KiCad 7+ (blank = inherit the theme's).
+  textColor: Color
+  # Text height (mm).
+  size: Size
+  # Free text content of a text graphic.
+  text: Text
+  # Generic: names a footprint, a zone, or a pin. A noun.
+  name: Name
+  # The symbol a derived (`extends`) symbol inherits its body and pins from.
+  derivedFrom: Derived From
+  # A pin (or pad) number/designator. Often numeric but may be alphanumeric.
+  number: Number
+  # Symbol identity fields (KiCad (property …) rows).
+  reference: Reference
+  value: Value
+  footprint: Footprint
+  datasheet: Datasheet
+  description: Description
+  keywords: Keywords
+  # A pin's electrical type (Passive/Input/…) and graphic style (Line/Clock/…).
+  electricalType: Type
+  graphicStyle: Style
+  # Boolean-flag labels (checkbox rows).
+  hidden: Hidden
+  inBom: In BOM
+  onBoard: On board
+  excludeFromSim: Excl. sim
+  # Placed in the position (pick-and-place) files — KiCad's "Exclude from
+  # position files", asked positively like In BOM.
+  inPosFiles: In pos files
+  # KiCad's "Duplicate pin numbers are jumpers": pins sharing a number are tied
+  # inside the part.
+  duplicatePinNumbersAreJumpers: Jumper pins
+  # A power symbol: not one, a global net, or a net local to its sheet.
+  power: Power
+  # The footprint filter patterns a symbol offers the footprint picker
+  # (KiCad's Footprint Filters tab), space-separated.
+  fpFilters: Fp filters
+  # A multi-unit symbol's gate name (KiCad's unit_name, "NMOS"), and KiCad's
+  # "All units are interchangeable".
+  unitName: Unit name
+  unitsInterchangeable: Swappable units
+  # A net name on a track/pad.
+  net: Net
+  # Under a track's Length subheading, as KiCad's track readout gives them: the
+  # track's or arc's own, its net's Routed (tracks, arcs and via heights), the
+  # pads' Pad to die, and the Full length of both. Short: the heading says length.
+  trackLength: Track
+  arcLength: Arc
+  routedLength: Routed
+  padToDie: Pad to die
+  fullLength: Full
+  # A KiCad layer code (F.Cu, B.SilkS, …). The codes themselves are never
+  # translated — only this label is. See layerNames below for their descriptions.
+  layer: Layer
+  # Pad/graphic attributes shared across editors.
+  type: Type
+  shape: Shape
+  drill: Drill
+  # Roundrect pad corner radius as a fraction of the shorter side (0–0.5).
+  roundRatio: Corner ratio
+  # Stroke line style (default/dash/dot/…).
+  strokeType: Stroke style
+  # Board side a footprint sits on (F.Cu / B.Cu).
+  side: Side
+  # Locked flag (footprint / pad).
+  locked: Locked
+  # Zone hatch display style + pitch, and the minimum copper thickness.
+  hatchStyle: Hatch
+  hatchPitch: Hatch pitch
+  minThickness: Min thickness
+  # How a copper zone pours: solid, or a hatch pattern; then the hatch's web
+  # width, the gap between its webs, and the angle its grid is turned by.
+  fillMode: Fill
+  hatchThickness: Hatch width
+  hatchGap: Hatch gap
+  hatchOrientation: Hatch angle
+  # Copper-zone fill settings (PCB editor). Priority: higher pours first.
+  priority: Priority
+  padConnection: Pad connection
+  padClearance: Pad clearance
+  # A footprint's or pad's local overrides: how far the solder mask opening
+  # grows past the pad, how far the paste shrinks inside it, and that paste
+  # clearance as a percentage of the pad size.
+  maskMargin: Mask expansion
+  pasteMargin: Paste clearance
+  pasteRatio: Paste ratio
+  # A footprint's mask openings may merge between its own pads (KiCad's "Allow
+  # bridged solder mask apertures between pads"); the mask-bridge check passes them.
+  bridgedMask: Allow bridged mask
+  thermalGap: Thermal gap
+  # Width of a thermal relief's connecting spokes.
+  thermalBridge: Thermal spoke
+  # A pad's or via's Teardrops rows (KiCad's property group). Ratios are of the pad or via size.
+  teardropsEnabled: Teardrops
+  teardropBestLength: Best length
+  teardropMaxLength: Max length
+  teardropBestWidth: Best width
+  teardropMaxWidth: Max width
+  teardropCurved: Curved edges
+  teardropTwoSegments: Span two segments
+  # The widest track that still gets one, as a share of the pad or via size.
+  teardropMaxTrackWidth: Track width limit
+  teardropPreferZone: Prefer zone connection
+  # Whether isolated copper islands are removed after filling.
+  removeIslands: Islands
+  # Marks the zone as a rule area (keepout) instead of poured copper.
+  keepout: Keepout
+  # Keepout blocks — checked means the item kind is kept OUT of the area.
+  blockTracks: Block tracks
+  blockVias: Block vias
+  blockPads: Block pads
+  blockPour: Block copper pour
+  blockFootprints: Block footprints
+  # Read-only vertex count for a polygon/zone (edited on canvas).
+  points: Points
+  # Read-only shape of a table (its cells are edited on canvas).
+  columns: Columns
+  rows: Rows
+  # Shown in place of rows when a selection has nothing the panel can edit.
+  noEditable: No properties to edit
+  # A text drawn as a cut-out of a filled box; and kept readable when its footprint turns.
+  knockout: Knockout
+  keepUpright: Keep upright
+  # Rows from KiCad's properties panel: a pad's hole, a rectangle's corner, a
+  # text box's or table's lines, a zone's islands and a via's span.
+  holeShape: Hole shape
+  holeSizeY: Hole Y
+  cornerRadius: Corner radius
+  border: Border
+  externalBorder: External border
+  headerBorder: Header border
+  rowSeparators: Row separators
+  colSeparators: Column separators
+  separatorWidth: Separator width
+  # A sheet's or table's outline width; a directive label's pin; an image's scale;
+  # and a library field kept with its symbol, never copied to a placement (KiCad 9).
+  borderWidth: Border width
+  pinLength: Pin length
+  scale: Scale
+  private: Private
+  minIslandArea: Min island area
+  layerTop: Top layer
+  layerBottom: Bottom layer
+  # A board pad's electrical type, as the schematic's pin gives it.
+  pinType: Pin type
+  # Text font weight/slant, and text justification axes.
+  bold: Bold
+  italic: Italic
+  hAlign: Align H
+  vAlign: Align V
+  # Board-level + placement fields (PCB editor).
+  thickness: Thickness
+  # Text weight derived from the size and bold flag, which is how KiCad files
+  # leave it: ticked means the file carries no thickness of its own.
+  thicknessAuto: Auto weight
+  # Per-pin font sizes for the pin's name and number text (KiCad's Pin
+  # Properties dialog calls them Name/Number text size).
+  nameSize: Name size
+  numberSize: Number size
+  # A pin or graphic that belongs to every gate of a multi-unit symbol rather
+  # than to the one being edited (KiCad's "Common to all units in symbol").
+  commonToAllUnits: All units
+  paper: Paper
+  pads: Pads
+  rotation: Rotation
+  # Schematic placement + label fields.
+  mirror: Mirror
+  diameter: Diameter
+  kind: Kind
+  libId: Library ID
+  # The gate of a multi-unit part a placed symbol shows (U1A, U1B …).
+  symbolUnit: Unit
+  # Which body a placed symbol draws: the standard one or its De Morgan alternate.
+  bodyStyle: Body style
+  bodyStyleStandard: Standard
+  bodyStyleAlternate: Alternate
+# The visual diff's mark on an item's properties: it is new, or it went away.
+propertyChanges:
+  added: Added
+  removed: Removed
+# Subheadings inside a properties group, as KiCad's properties panel groups its rows.
+propertySections:
+  text: Text properties
+  shape: Shape
+  fill: Fill
+  border: Border
+  margins: Margins
+  pad: Pad
+  hole: Hole
+  via: Via
+  fields: Fields
+  attributes: Attributes
+  overrides: Overrides
+  keepout: Keepout
+  islands: Islands
+  thermal: Thermal relief
+  # KiCad's Teardrops property group on a pad or via.
+  teardrops: Teardrops
+  pinDisplay: Pin display
+  units: Units and body styles
+  # A track's and its net's lengths, read-only, under the track's own rows.
+  length: Length
+propertiesPanel:
+  # Header for the right-bar properties panel (the schema-driven table).
+  title: Properties
+  # Action under the board-level table (nothing selected): open the fab-outputs view.
+  manufacture: Fabrication outputs
+  # Schematic properties panel, nothing selected, under Schematic setup: opens the design's Components tab.
+  components: Components
+  # Schematic properties panel, nothing selected: opens the design's Schematic setup tab (ERC rule severities).
+  schematicSetup: Schematic setup
+  # First of the board's pages (nothing selected): opens the update dialog for this board, which carries this title.
+  updateFromSchematic: Update from schematic
+  # Update from schematic's tooltip, joined with commas: the counts its green, red and yellow badges show.
+  syncAdded: '{count} footprint to add | {count} footprints to add'
+  syncRemoved: '{count} footprint not in schematic | {count} footprints not in schematic'
+  syncEdited: '{count} footprint to update | {count} footprints to update'
+  # Update from schematic, disabled: the project has no schematic.
+  syncNoSchematic: Project has no schematic to update from.
+  # Badge on Update from schematic: the schematic has parts without a number (R?), so it cannot sync.
+  syncUnannotated: Not annotated
+  # Above Fabrication outputs: opens the board's Board setup tab (stackup, rules, checks).
+  boardSetup: Board setup
+  # A color row with no explicit color: the item takes the theme's. Distinct
+  # from the ‹…› placeholder, which means the selection disagrees — reusing that
+  # glyph here read as "several items selected" on a single item.
+  colorInherited: Default
+  # Tooltip of the × beside a set color. A native picker offers no "no color"
+  # option, so this button is the only way back to the theme's.
+  colorReset: Reset to default color
+# The canvas-toolbar button that cycles how layers other than the active one
+# draw (components/shared/NonActiveDisplayButton.vue).
+# The lone toggle in the board and footprint editors' top-right corner that
+# switches the canvas to its 3D preview and back. An on/off toggle names its
+# view only: its lit state says whether it shows.
+preview3dToggle:
+  board: 3D board view
+  footprint: 3D model preview
+nonActiveDisplay:
+  # The inactive-layers chip's current mode, read into insertSearch.ops.inactiveLayers.
+  modes:
+    show: shown
+    dim: dimmed
+    hide: hidden
+layersPanel:
+  title: Layers
+  # Hover text on the viewport pill: its name alone (DESIGN.md §Viewport status strips).
+  buttonTitle: Layers
+  presetLabel: Preset
+  selectPreset: Select…
+  savePresetTitle: Save these layers as a named preset
+  deletePresetTitle: Delete this preset
+  # Shown on the disabled trash, so the button explains why it will not work.
+  deletePresetDisabledTitle: Select a saved preset to delete it
+  activeLayerTitle: Active layer
+  toggleVisibilityTitle: Toggle layer visibility
+gridSettingsPanel:
+  # Panel header. Kept short ("Grid", not "Grid Settings") to match the terse
+  # Properties / Layers panel titles.
+  title: Grid
+  # Hover text on the viewport pill: its name alone (DESIGN.md §Viewport status strips).
+  buttonTitle: Grid
+  # Unit of measurement — the mm/mil toggle. Contrast
+  # schematicEditor.properties.unit, which is a sub-part of a multi-unit symbol.
+  unit: Unit
+  spacing: Spacing
+  # Row labels for the two boolean grid toggles (checkbox rows).
+  showGrid: Show grid
+  snap: Snap
+# The viewport's bottom-corner status pills (shared/ViewportStatusBar.vue).
+viewportStatus:
+  # Axis labels on the cursor readout. Single letters, as on the drawing's own
+  # axes, and not translated for the same reason a layer code is not.
+  axisX: X
+  axisY: Y
+  # The grid pill: current spacing plus its unit, which is also what tells the
+  # reader which unit the X/Y numbers beside it are in — they carry no unit of
+  # their own. With snap off the spacing governs nothing, so only the unit shows.
+  gridMm: '{value} mm'
+  gridMil: '{value} mil'
+  gridIn: '{value} in'
+  unitMm: mm
+  unitMil: mil
+  unitIn: in
+# The pin on a viewport popover, which otherwise closes on the next click, pan
+# or zoom over the drawing.
+viewportPopover:
+  pin: Pin to the side panel
+  # On a pinned panel's header in the side panel; the panel goes back to its pill.
+  unpin: Unpin to the viewport corner
+selectionFilterPanel:
+  # Panel header. Rendered upper-case by the panel chrome.
+  title: Selection filter
+  # Master checkbox above the kind grid: ticks or clears every kind at once, and
+  # shows a dash when only some are on. "Items" because it governs the kinds of
+  # item below and deliberately NOT the Locked row, which is a state.
+  allItems: All items
+  # Whether a click may land on an item the file marks locked. A state rather
+  # than a kind of item, which is why it sits apart from the list below.
+  locked: Locked
+  # The viewport button that owns the filter, in the bottom-right status strip.
+  # Gold while the filter is narrowed. Keep it SHORT — it sits beside the cursor
+  # coordinates in a small pill.
+  button: Filter
+  # Hover text on the viewport pill: its name alone (DESIGN.md §Viewport status strips).
+  buttonTitle: Selection filter
+  # One checkbox per kind of item the editor can select. All are PLURAL: each
+  # names a class of thing, not one of them. Several appear in more than one
+  # editor and are deliberately worded the same in each.
+  kinds:
+    # PCB and footprint editor.
+    footprint: Footprints
+    # Copper tracks — straight segments and arcs alike, filtered together.
+    track: Tracks
+    via: Vias
+    # Copper pour areas.
+    zone: Zones
+    pad: Pads
+    # Non-copper drawn shapes: lines, arcs, circles, rectangles, polygons.
+    graphic: Graphics
+    # Free-standing text items.
+    text: Text
+    # KiCad 10's snap and reference markers.
+    point: Points
+    # Schematic.
+    symbol: Symbols
+    wire: Wires
+    label: Labels
+    junction: Junctions
+    # The "not connected" marker placed on a deliberately unused pin.
+    no_connect: No-connects
+    # Sub-sheet boxes in a hierarchical schematic.
+    sheet: Sheets
+    # The connection points on a sub-sheet box's border.
+    sheet_pin: Sheet pins
+    # Bitmap pictures placed on a schematic sheet.
+    image: Images
+    # Rule areas: in a schematic, outlines that apply net class rules to what they
+    # enclose; on a board, keepout zones (KiCad names both "rule areas").
+    rule_area: Rule areas
+    # A symbol's Reference / Value text, which moves independently of the symbol.
+    field: Field text
+    # Symbol editor.
+    pin: Pins
+layerPresets:
+  all: All layers
+  frontAssembly: Front assembly view
+  front: Front layers
+  backAssembly: Back assembly view
+  back: Back layers
+  copper: All copper layers
+  innerCopper: Inner copper layers
+  none: No layers
+componentsTable:
+  filterPlaceholder: Filter components…
+  groupSymbols: Group symbols
+  columns: Columns
+  columnsFieldHeader: Field
+  # Column headings in a "choose which columns to display" menu. Nouns, not
+  # verbs: "Show" here means "visible".
+  columnsShowHeader: Show
+  columnsGroupHeader: Group
+  recordCount: '{count} components'
+  rowForeignTitle: On another sheet — click to open it
+  collapseGroup: Collapse group
+  expandGroup: Expand group
+  mixedValue: (mixed)
+  noComponentsFiltered: No components match the filter.
+  noComponentsAtAll: No components in this schematic.
+  # Column headings for the schematic's component (symbol fields) table.
+  # These are KiCad's standard BOM field names — prefer whatever KiCad's own
+  # translation uses for the target language over a fresh translation.
+  fields:
+    # A component's designator: R1, C3, U2. A noun.
+    reference: Reference
+    sheet: Sheet
+    # The component's value — "100nF", "10k". A noun, never the verb.
+    value: Value
+    # Do Not Populate: leave this part off the assembled board. Widely kept as
+    # the English abbreviation "DNP" even in translated ECAD tools; keep it
+    # unless the target language has an established equivalent.
+    dnp: DNP
+    # BOM = Bill of Materials.
+    excludeFromBom: Exclude from BOM
+    excludeFromBoard: Exclude from board
+    footprint: Footprint
+    datasheet: Datasheet
+layerNames:
+  fCu: Front copper
+  bCu: Back copper
+  fSilkS: Front silkscreen
+  bSilkS: Back silkscreen
+  fMask: Front mask
+  bMask: Back mask
+  fPaste: Front paste
+  bPaste: Back paste
+  fFab: Front fabrication
+  bFab: Back fabrication
+  fCrtYd: Front courtyard
+  bCrtYd: Back courtyard
+  edgeCuts: Board outline
+# Highlight Net (`), on a board and a schematic: the net under the pointer
+# stays lit until cleared (~).
+netHighlight:
+  # The status pill's label; the net's name follows it.
+  status: Net
+  # The pill's key hint: ~ clears the highlight.
+  clear: Clear
+  # The canvas menu's entries.
+  highlight: Highlight net
+  clearMenu: Clear net highlighting
+# Select Other (shared/SelectOtherMenu.vue): the list of everything under the
+# pointer, opened by holding a press on an item or from the canvas menu. title:
+# the list's heading. all: the last row, which selects every item listed.
+selectOther:
+  title: Select
+  all: Select all
+  # The canvas menu's entry: the list of what is under the point the menu was opened at.
+  menu: Select other…
+# What each kind of primitive — a board's, a schematic's, a symbol's, a
+# footprint's — is called, singular, once for every editor: the title of its
+# group in the properties panel, and its row in Select Other. Plural class names
+# (the selection filter's) and tool names (which name the tool that places the
+# primitive) are worded apart on purpose and live with those. A message that
+# names a primitive inside a sentence keeps its own wording.
+primitives:
+  board: Board
+  footprint: Footprint
+  pad: Pad
+  track: Track
+  trackArc: Track arc
+  tuningPattern: Tuning pattern
+  via: Via
+  zone: Zone
+  ruleArea: Rule area
+  line: Line
+  arc: Arc
+  circle: Circle
+  rectangle: Rectangle
+  polygon: Polygon
+  curve: Curve
+  text: Text
+  textBox: Text box
+  table: Table
+  point: Point
+  symbol: Symbol
+  pin: Pin
+  field: Field
+  wire: Wire
+  bus: Bus
+  busEntry: Bus entry
+  junction: Junction
+  noConnect: No-connect
+  label: Label
+  directiveLabel: Directive label
+  sheet: Sheet
+  sheetPin: Sheet pin
+  graphic: Graphic
+  image: Image
+# The one library chooser (docs/libraries-workstream.md).
+libraryChooser:
+  # Titles for the tools whose button says only what they place ("Symbol").
+  title:
+    placeSymbol: Place symbol
+    placePower: Place power symbol
+  search:
+    symbol: Search symbols…
+    power: Search power symbols…
+    footprint: Search footprints…
+  # The search box's tooltip: the keys that return to it from a preview.
+  searchTitle: 'Search ({keys})'
+  scopes:
+    design: In this design
+    project: Project
+    global: Mine
+    system: Standard
+  sections:
+    design: In this design
+    recent: Recent
+    fits: Fits symbol
+  # The list's column headings.
+  columns:
+    name: Name
+    description: Description
+  fits: Fits
+  moreResults: '{n} more — keep typing to narrow'
+  noMatches: No matches
+  indexing: Indexing libraries…
+  noModel: No 3D model
+  loading: Loading…
+  noFootprint: No footprint assigned
+  noFootprintOption: None
+  footprintMissing: No library holds this footprint
+  unreadable: This file could not be read.
+  details:
+    name: Name
+    description: Description
+    keywords: Keywords
+    source: Source
+    pinMap: Pins
+    datasheet: Datasheet
+  pinMap:
+    allMatch: Every pin has a pad ({n})
+    pinsWithoutPad: 'No pad for: {list}'
+    padsWithoutPin: 'No pin for pad: {list}'
+  openDatasheet: Open
+  cancel: Cancel
+  place: Place
+  assign: Assign
+  assignMany: Assign to {n} parts
+  change: Change
+# A placed part's library section, under its properties
+# (LibraryLinkSection.vue, docs/libraries-workstream.md §5).
+librarySync:
+  checking: Checking the library…
+  matches: 'Matches library | All {count} match library'
+  differs: Out of sync with library
+  differsSome: '{count} of {total} out of sync with library'
+  missing: Not in any library
+  missingSome: '{count} of {total} are in no library'
+libraryLink:
+  title: Library
+  update: Update from library…
+  updateHint: Rebuild from the library copy, keeping place, reference and nets
+  changeSymbol: Change symbol…
+  changeFootprint: Change footprint…
+  changeHintSymbol: Swap for another library symbol
+  changeHintFootprint: Swap for another library footprint
+  editSymbol: Edit symbol…
+  editFootprint: Edit footprint…
+  editHintSymbol: Edit this sheet's copy of the symbol, leaving the library alone
+  editHintFootprint: Edit this board's copy of the footprint, leaving the library alone
+  editLibrarySymbol: Edit library symbol…
+  editLibraryFootprint: Edit library footprint…
+  editLibraryHintSymbol: Open the library symbol in the symbol editor
+  editLibraryHintFootprint: Open the library footprint in the footprint editor
+# Update from library / Change, one dialog for symbols and footprints (PartUpdateDialog.vue).
+partUpdate:
+  updateTitleSymbol: Update symbols from library
+  updateTitleFootprint: Update footprints from library
+  changeTitleSymbol: Change symbols
+  changeTitleFootprint: Change footprints
+  fromPartSymbol: Library symbol
+  fromPartFootprint: Library footprint
+  newPartSymbol: New symbol
+  newPartFootprint: New footprint
+  newPartPlaceholderSymbol: Library:Symbol
+  newPartPlaceholderFootprint: Library:Footprint
+  # Under Update, with several parts named: each rebuilds from its own.
+  eachOwn: Each from its own
+  updateHintSymbol: Each symbol is rebuilt from its own library symbol. Name one here to rebuild them all from it.
+  updateHintFootprint: Each footprint is rebuilt from its own library footprint. Name one here to rebuild them all from it.
+  updateToHintSymbol: Every symbol in scope is rebuilt from this library symbol.
+  updateToHintFootprint: Every footprint in scope is rebuilt from this library footprint.
+  browse: Browse…
+  scopeSymbol: Symbols
+  scopeFootprint: Footprints
+  scopeSelectionSymbol: 'Selected symbols ({count})'
+  scopeSelectionFootprint: 'Selected footprints ({count})'
+  scopeReference: Matching reference
+  scopeValue: Matching value
+  scopeLibId: Matching library identifier
+  scopeAllSymbol: Every symbol in the schematic
+  scopeAllFootprint: Every footprint on the board
+  wildcards: '* matches any run of characters, ? any one'
+  # The checklist: what comes fresh from the library rather than staying as it is.
+  reset: Take from the library
+  fields: Fields
+  all: All
+  none: None
+  outcomeSymbol: Symbols to rebuild
+  outcomeFootprint: Footprints to rebuild
+  loading: Reading library…
+  notFound: 'No library holds {libId}'
+  matches: Matches library
+  differs: Out of sync with library
+  nothingSymbol: No symbols in this scope.
+  nothingFootprint: No footprints in this scope.
+  cancel: Cancel
+  confirmUpdate: Update
+  confirmChange: Change
+# An AI agent's viewport on a board or schematic canvas: a dashed box round
+# where the agent is working, labeled with the agent's own text.
+agentViewport:
+  # The × on the box's label, and its tooltip: takes the box away and ends any
+  # routing the agent is doing in it, landing nothing.
+  close: Close the agent's viewport
+  # A marker at the canvas edge, pointing toward a box out of view; clicking it
+  # moves the view to the box. {label} is the box's label.
+  reveal: "Show the agent's viewport: {label}"

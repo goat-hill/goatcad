@@ -1,0 +1,8 @@
+loading: Preparando el modelo 3D…
+loadFailed: No se pudo cargar este modelo 3D
+isoViewTitle: Vista isométrica
+frontViewTitle: Vista frontal
+topViewTitle: Vista superior
+rightViewTitle: Vista derecha
+gaugeTitle: Indicador de escala
+dims: '{x} × {y} × {z} mm'

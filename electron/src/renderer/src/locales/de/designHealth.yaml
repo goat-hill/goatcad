@@ -1,0 +1,178 @@
+pill:
+  clean: Prüfungen
+  title: Designregelprüfungen
+  errors: '{count} Fehler | {count} Fehler'
+  warnings: '{count} Warnung | {count} Warnungen'
+drawer:
+  title: Probleme
+  performance: Leistung
+  settings: Einstellungen
+  close: Problemliste schließen
+  rerun: Alle Prüfungen erneut ausführen
+  clean: Die Prüfungen haben keine Probleme gefunden.
+  checking: Die Platine wird geprüft…
+  pending: Die Prüfungen sind noch nicht gelaufen. Führen Sie sie erneut aus, um die Probleme aufzulisten.
+  needs: '{actual}, benötigt {limit}'
+  allows: '{actual}, erlaubt {limit}'
+  byRule: '{text} ({rule})'
+  markers: Markierungen auf der Arbeitsfläche
+  markersAll: Alle
+  markersErrors: Nur Fehler
+  markersOff: Aus
+  count: '{count} Befund | {count} Befunde'
+  excluded: In KiCad ausgeschlossen
+  excludedHint: Befunde, die die KiCad-Ausschlüsse des Projekts nennen. Sie werden nicht mitgezählt, und Agenten sehen sie nicht. Die Platineneinstellungen und die Schaltplaneinstellungen listen jeden Ausschluss auf.
+  severity:
+    error: Fehler
+    warning: Warnung
+performance:
+  empty: Auf dieser Platine ist noch nichts gelaufen.
+  total: Gesamt
+  ms: '{ms} ms'
+  seconds: '{s} s'
+  more: '{count} weiterer Schritt | {count} weitere Schritte'
+  fewer: Weniger Schritte
+  tasks:
+    refill: Flächenfüllung
+    check: Designprüfungen
+    ratsnest: Luftlinien
+  scope:
+    all: alle Flächen
+    whole: ganze Platine
+    since: um die Änderung
+  autoZoneFill: Automatisches Füllen der Flächen
+  autoDrc: Automatische DRC
+  mode:
+    greedy: Gierig
+    full: Vollständig
+    'off': Aus
+rules:
+  unconnectedPin: Nicht verbundener Pin
+  unconnectedWireEnd: Leitung endet im Leeren
+  offGrid: Außerhalb des Verbindungsrasters
+  pinConflict: Pins, die kein Netz teilen sollten
+  inputUndriven: Eingang ohne Treiber
+  wireDangling: Leitung ohne Verbindung
+  labelDangling: Label ohne Verbindung
+  labelSinglePin: Label an einem Netz mit nur einem Pin
+  noConnectConnected: Nicht-verbunden-Markierung an verdrahtetem Pin
+  noConnectDangling: Nicht-verbunden-Markierung ohne Ziel
+  multipleNetNames: Zwei Namen an einer Leitung
+  labelMultipleWires: Label verbindet mehrere Leitungen
+  netNotBusMember: Netz gehört nicht zu seinem Bus
+  busToBusConflict: Bus und Anschluss ohne gemeinsames Element
+  busToNetConflict: Netz und Bus an einer Leitung
+  unconnectedSheetPort: Blatt-Pin oder hierarchisches Label ohne Verbindung
+  unannotated: Bauteil nicht annotiert
+  duplicateReference: Zwei Bauteile mit derselben Referenz
+  extraUnits: Einheit, die das Bauteil nicht hat
+  unitValueMismatch: Einheiten mit unterschiedlichen Werten
+  missingUnit: Einheit nicht platziert
+  missingPowerPin: Nicht platzierte Einheit mit Versorgungspins
+  missingInputPin: Nicht platzierte Einheit mit Eingangspins
+  missingBidiPin: Nicht platzierte Einheit mit bidirektionalen Pins
+  differentUnitFootprint: Einheiten mit unterschiedlichen Footprints
+  differentUnitNet: Gemeinsamer Pin an zwei Netzen
+  duplicateSheetName: Zwei Blätter mit demselben Namen
+  similarLabels: Labels, die sich nur in der Groß-/Kleinschreibung unterscheiden
+  similarPower: Versorgungsnamen, die sich nur in der Groß-/Kleinschreibung unterscheiden
+  similarLabelAndPower: Label und Versorgungsname, die sich nur in der Groß-/Kleinschreibung unterscheiden
+  sameLocalGlobalLabel: Name als lokales und globales Label verwendet
+  groundPinNotGround: Masse-Pin nicht an Masse
+  stackedPinName: Fehlerhafte gestapelte Pinnummer
+  fieldNameWhitespace: Feldname mit überzähligen Leerzeichen
+  undefinedNetclass: Undefinierte Netzklasse
+  unresolvedVariable: Nicht definierte Textvariable
+  singleGlobalLabel: Globales Label nur einmal verwendet
+  fourWayJunction: Vier Elemente an einem Punkt
+  symbolLibraryIssue: Symbolbibliothek nicht erreichbar
+  footprintLinkIssue: Footprint nicht erreichbar
+  footprintFilter: Footprint außerhalb seiner Filter
+  powerInputUndriven: Versorgungsnetz ohne Treiber
+  sheetPinUnmatched: Blatt-Pin ohne hierarchisches Label
+  hierarchicalLabelUnmatched: Hierarchisches Label ohne Blatt-Pin
+  symbolLibraryMismatch: Symbol weicht von der Bibliothek ab
+  padsOverlap: Pads überlappen
+  netTieShort: Kupfer verbindet Pads außerhalb einer Netzbrücke
+  netTieGroups: Netzbrücken-Gruppe nennt ein fehlendes Pad
+  silkClippedByMask: Bestückungsdruck von Lötstoppmaske beschnitten
+  padstack: Fragwürdiges Pad
+  padstackInvalid: Ungültiges Pad
+  throughHolePadWithoutHole: THT-Pad ohne Bohrung
+  malformedCourtyard: Courtyard nicht geschlossen
+  holesCoLocated: Bohrungen an derselben Stelle
+  holeToHole: Bohrungen berühren sich
+  silkWidth: Breite des Bestückungsdrucks (KLC)
+  referenceText: Stil des Referenztexts (KLC)
+  valueText: Stil des Werttexts (KLC)
+  missingCourtyard: Kein Courtyard (KLC)
+  courtyardEnclosure: Courtyard umschließt das Bauteil nicht (KLC)
+  footprintTypeMismatch: Bestückungsart passt nicht zu den Pads (KLC)
+  duplicatePin: Zwei Pins mit derselben Nummer
+  powerSymbol: Versorgungssymbol benennt kein Netz
+  powerSymbolHiddenPin: Pin des Versorgungssymbols ausgeblendet
+  hiddenPowerPin: Ausgeblendeter Versorgungseingang
+  offGridPin: Pin außerhalb des Rasters
+  referencePrefix: Referenzpräfix kann nicht nummeriert werden
+  zeroSizeGraphic: Form ohne Größe
+  customRules: Eigene Regeln nicht angewendet
+  copperClearance: Kupfer zu nah
+  copperShort: Kupfer zweier Netze berührt sich
+  tracksCrossing: Leiterbahnen kreuzen sich
+  trackOnPostMachinedLayer: Leiterbahn auf rückgebohrter oder nachbearbeiteter Lage
+  holeClearance: Bohrung zu nah an Kupfer
+  holesTooClose: Bohrungen zu nah beieinander
+  copperEdgeClearance: Kupfer zu nah am Platinenrand
+  unconnectedItems: Nicht gerouteter Anschluss
+  trackWidth: Leiterbahn zu schmal
+  viaDiameter: Durchkontaktierung zu klein
+  annularWidth: Restring zu schmal
+  drillOutOfRange: Bohrung zu klein zum Bohren
+  microviaDrillOutOfRange: Microvia-Bohrung zu klein zum Bohren
+  courtyardsOverlap: Courtyards überlappen
+  pthInsideCourtyard: Durchkontaktierte Bohrung in fremdem Courtyard
+  npthInsideCourtyard: Nicht durchkontaktierte Bohrung in fremdem Courtyard
+  invalidOutline: Platinenumriss nicht geschlossen
+  itemsNotAllowed: Element in einer Sperrfläche
+  zonesIntersect: Flächen eines Netzes überlappen bei gleicher Priorität
+  isolatedCopper: Flächeninsel ohne Verbindung
+  starvedThermal: Zu wenige Thermostege
+  trackDangling: Leiterbahnende ist mit nichts verbunden
+  viaDangling: Durchkontaktierung ist mit nichts verbunden
+  connectionWidth: Kupferverbindung zu schmal
+  copperSliver: Kupfersplitter
+  textHeight: Text zu klein
+  textThickness: Textstrich zu dünn
+  mirroredTextOnFront: Gespiegelter Text auf einer Vorderseitenlage
+  nonmirroredTextOnBack: Ungespiegelter Text auf einer Rückseitenlage
+  textOnEdgeCuts: Text auf der Platinenkantenlage
+  drcError: DRC-Fehlermarkierung im Text
+  drcWarning: DRC-Warnungsmarkierung im Text
+  trackSegmentLength: Länge des Leiterbahnsegments außerhalb des Bereichs
+  trackAngle: Leiterbahnwinkel nicht erlaubt
+  trackNotCenteredOnVia: Leiterbahn nicht mittig auf ihrer Durchkontaktierung
+  partTypeMismatch: Footprint-Typ passt nicht zu seinen Pads
+  footprint: Fehlerhafter Footprint
+  noCourtyard: Footprint hat keinen Courtyard
+  itemOnDisabledLayer: Element auf einer Lage, die die Platine nicht hat
+  assertionFailure: Zusicherung einer benutzerdefinierten Regel schlägt fehl
+  missingTuningProfile: Netzklasse nennt ein fehlendes Tuning-Profil
+  silkOverlap: Bestückungsdruck überlappt Bestückungsdruck
+  silkOverCopper: Bestückungsdruck von einer Maskenöffnung beschnitten
+  silkEdgeClearance: Bestückungsdruck von der Platinenkante beschnitten
+  solderMaskBridge: Lötstoppmaske zwischen Netzen zu schmal
+  lengthOutOfRange: Netzlänge außerhalb des Bereichs
+  skewOutOfRange: Längenversatz der Netze außerhalb des Bereichs
+  tooManyVias: Anzahl der Durchkontaktierungen außerhalb des Bereichs
+  diffPairGap: Abstand des differenziellen Paars außerhalb des Bereichs
+  diffPairUncoupledLength: Differenzielles Paar zu lang ungekoppelt
+  creepage: Kupfer über die Platinenoberfläche zu nah
+  libraryFootprintIssue: Footprint nicht in seiner Bibliothek gefunden
+  libraryFootprintMismatch: Footprint weicht von seiner Bibliothekskopie ab
+  duplicateFootprints: Zwei Footprints teilen eine Referenz
+  missingFootprint: Bauteil fehlt auf der Platine
+  extraFootprint: Footprint nicht im Schaltplan
+  footprintSymbolMismatch: Footprint weicht von seinem Symbol ab
+  footprintSymbolFieldMismatch: Footprint-Feld weicht von seinem Symbol ab
+  footprintFiltersMismatch: Footprint außerhalb der Filter seines Symbols
+  netConflict: Pad-Netz weicht vom Schaltplan ab

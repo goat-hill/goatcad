@@ -1,0 +1,23 @@
+title: ターミナル
+tabTooltip: '{process} — {cwd}'
+status:
+  running: '{process} を実行中'
+  working: '{process} は作業中です'
+  waiting: '{process} はプロンプト待ちです'
+  attention: '{process} が操作を求めています'
+  idle: 実行中のプロセスはありません
+  exited: 'シェルが終了しました (コード {code})'
+exitNotice: '[プロセスはコード {code} で終了しました]'
+missingCli: '{cli} がシェルで見つかりませんでした。インストールしてから ({docs} を参照)、このタブを閉じて開き直してください。それまでこのタブは通常のシェルです。'
+menu:
+  copy: コピー
+  paste: 貼り付け
+  selectAll: すべて選択
+  clear: クリア
+close:
+  message: '{process} を実行中のターミナルを閉じますか？'
+  messageMany: '実行中の {count} 個のターミナルを閉じますか？'
+  detail: プロセスは停止されます。
+  detailMany: これらのプロセスは停止されます。
+  confirm: ターミナルを閉じる
+  confirmMany: ターミナルを閉じる

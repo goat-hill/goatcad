@@ -1,0 +1,23 @@
+title: Terminal
+tabTooltip: '{process} — {cwd}'
+status:
+  running: '{process} en cours d’exécution'
+  working: '{process} travaille'
+  waiting: '{process} attend une invite'
+  attention: '{process} requiert votre attention'
+  idle: Aucun processus en cours
+  exited: 'Le shell s’est terminé (code {code})'
+exitNotice: '[processus terminé avec le code {code}]'
+missingCli: '{cli} est introuvable par votre shell. Installez-le (voir {docs}), puis fermez cet onglet et rouvrez-le. D’ici là, cet onglet est un simple shell.'
+menu:
+  copy: Copier
+  paste: Coller
+  selectAll: Tout sélectionner
+  clear: Effacer
+close:
+  message: 'Fermer le terminal qui exécute {process} ?'
+  messageMany: 'Fermer {count} terminaux en cours d’exécution ?'
+  detail: Le processus sera arrêté.
+  detailMany: Ces processus seront arrêtés.
+  confirm: Fermer le terminal
+  confirmMany: Fermer les terminaux

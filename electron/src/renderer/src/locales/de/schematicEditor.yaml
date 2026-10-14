@@ -1,0 +1,268 @@
+errors:
+  empty: Dieser Schaltplan ist leer.
+  parseTitle: Kann nicht als KiCad-Schaltplan geöffnet werden
+actions:
+  initializeBlank: KiCad-Schaltplan anlegen
+titleBlock:
+  title: Titel
+  date: Ausgabedatum
+  rev: Revision
+  company: Firma
+  comment1: Kommentar 1
+  comment2: Kommentar 2
+  comment3: Kommentar 3
+  comment4: Kommentar 4
+  comment5: Kommentar 5
+  comment6: Kommentar 6
+  comment7: Kommentar 7
+  comment8: Kommentar 8
+  comment9: Kommentar 9
+directiveShapes:
+  round: Rund
+  dot: Punkt
+  diamond: Raute
+  rectangle: Rechteck
+edit:
+  cut: Ausschneiden
+  copy: Kopieren
+  paste: Einfügen
+  duplicate: Duplizieren
+  repeat: Letztes Element wiederholen
+  delete: Löschen
+commands:
+  editField: '{field} bearbeiten'
+  editFieldMultiple: '{field} bearbeiten ({count} Bauteile)'
+  editFlag: '{token} bearbeiten'
+  editFlagMultiple: '{token} bearbeiten ({count} Bauteile)'
+  editSymbol: Symbol bearbeiten
+  editLabel: Bezeichner bearbeiten
+  editWire: Verbindung bearbeiten
+  editJunction: Knoten bearbeiten
+  editText: Text bearbeiten
+  editTextBox: Textfeld bearbeiten
+  editGraphic: Grafik bearbeiten
+  editSheet: Blatt bearbeiten
+  editSheetPin: Blattanschluss bearbeiten
+  editDirectiveLabel: Direktiven-Bezeichner bearbeiten
+  editBus: Bus bearbeiten
+  editBusEntry: Buseintrag bearbeiten
+  editImage: Bild bearbeiten
+  editTable: Tabelle bearbeiten
+itemTypes:
+  symbol: '{count} Symbol | {count} Symbole'
+  wire: '{count} Verbindung | {count} Verbindungen'
+  label: '{count} Bezeichner | {count} Bezeichner'
+  junction: '{count} Knoten | {count} Knoten'
+  noConnect: '{count} Nichtanschluss-Markierung | {count} Nichtanschluss-Markierungen'
+  sheet: '{count} Blatt | {count} Blätter'
+labelKinds:
+  label: Lokaler Bezeichner
+  globalLabel: Globaler Bezeichner
+  hierarchicalLabel: Hierarchischer Bezeichner
+  directiveLabel: Direktiven-Bezeichner
+toolbar:
+  undoTitle: Rückgängig (Strg/Cmd+Z)
+  redoTitle: Wiederherstellen (Strg/Cmd+Y)
+  grid: Raster
+  showGrid: Raster anzeigen
+tools:
+  select: Auswahl
+  annotateTitle: Schaltplan annotieren…
+annotate:
+  title: Schaltplan annotieren
+  scope: Bereich
+  scopeDesign: Gesamter Schaltplan
+  scopeSheet: Nur aktuelles Blatt
+  scopeSelection: 'Auswahl ({count} Symbol) | Auswahl ({count} Symbole)'
+  recurse: Unterblätter einbeziehen
+  order: Reihenfolge
+  orderXY: Symbole nach X-Position sortieren
+  orderYX: Symbole nach Y-Position sortieren
+  options: Optionen
+  optionsKeep: Bestehende Annotationen beibehalten
+  optionsReset: Bestehende Annotationen zurücksetzen
+  numbering: Nummerierung
+  numberingAfter: 'Erste freie Nummer nach:'
+  numberingSheet100: Erste freie nach Blattnummer × 100
+  numberingSheet1000: Erste freie nach Blattnummer × 1000
+  preview: '{changed} von {count} Symbol wird neu nummeriert | {changed} von {count} Symbolen werden neu nummeriert'
+  cancel: Abbrechen
+  confirm: Annotieren
+incrementAnnotations:
+  title: Annotationen hochzählen
+  action: Annotationen hochzählen…
+  first: 'Start-Referenz:'
+  increment: 'Erhöhen um:'
+  currentSheet: Nur aktuelles Blatt
+  allSheets: Alle Blätter
+  preview: 'Eine Referenz wird geändert | {count} Referenzen werden geändert'
+  cancel: Abbrechen
+  confirm: Hochzählen
+footprintChooser:
+  parts: '{n} Bauteile'
+insertOverlay:
+  ops:
+    symbol: Symbol
+    power: Spannungssymbol
+    wire: Verbindung
+    label: Bezeichner
+    globalLabel: Globaler Bezeichner
+    hierarchicalLabel: Hierarchischer Bezeichner
+    noConnect: Nichtanschluss-Markierung
+    junction: Knoten
+    text: Text
+    sheet: Blatt
+    sheetPin: Blattanschluss
+    directiveLabel: Direktiven-Bezeichner
+    bus: Bus
+    busEntry: Buseintritt
+    line: Linie
+    rectangle: Rechteck
+    circle: Kreis
+    arc: Bogen
+    bezier: Kurve
+    table: Tabelle
+    image: Bild…
+    ruleArea: Regelfläche
+    textBox: Textfeld
+image:
+  pickTitle: Bild platzieren
+  filter: Bilder
+  unreadable: Diese Datei konnte nicht als Bild gelesen werden.
+units:
+  menu: Einheit
+  unitLabel: 'Einheit {unit}'
+  alreadyPlaced: 'Einheit {unit} ist bereits platziert (auf Blatt {sheet})'
+  swap: '{target} und {current} tauschen'
+  duplicate: '{unit} duplizieren'
+  rootSheet: Stammblatt
+  cycleBodyStyle: Körperstil wechseln
+  openInLibraryEditor: Im Symboleditor öffnen
+  showDatasheet: Datenblatt anzeigen
+labelPopover:
+  netPlaceholder: Netzname
+  textPlaceholder: Text
+  netClassPlaceholder: Netzklasse
+  pinPlaceholder: Anschlussname
+  kinds:
+    label: Lokal
+    globalLabel: Global
+    hierarchicalLabel: Hierarchisch
+    directiveLabel: Direktive
+sheetPopover:
+  nameLabel: Blattname
+  namePlaceholder: Blattname
+  fileLabel: Dateiname
+  invalidName: Dieser Dateiname ist bereits vergeben oder ungültig.
+componentsPanel:
+  title: Bauteile
+  design: Entwurf
+  count: '{count} Bauteil | {count} Bauteile'
+  showInSchematic: Im Schaltplan zeigen
+  loading: Entwurf wird gelesen…
+  unreadable: Der Hauptschaltplan dieses Entwurfs konnte nicht gelesen werden.
+modes:
+  schematic: Schaltplan
+properties:
+  selectionTitle: Auswahl
+  snapToGrid: Am Raster fangen
+  items: Elemente
+  multiSelectHint: Zum Verschieben der gesamten Auswahl ziehen; Entf entfernt sie.
+  reference: Referenz
+  value: Wert
+  libraryId: Bibliotheks-ID
+  unit: Einheit
+  position: Position
+  rotation: Drehung
+  footprint: Footprint
+  unassigned: Nicht zugewiesen
+  symbolHint: Zum Verschieben ziehen. Umschalt-Klick oder Auswahlrahmen ziehen, um mehrere Elemente zu wählen.
+  type: Typ
+  wireTypeValue: Verbindung
+  net: Netz
+  length: Länge
+  points: Punkte
+  width: Breite
+  defaultWidth: Standard
+  file: Datei
+  pageNumber: Seitennummer
+  pageDuplicate: Ein anderes Blatt verwendet bereits diese Seitennummer.
+  pageEmpty: Dieses Blatt hat keine Seitennummer.
+  sheetName: Blattname
+  paperSize: Papierformat
+  paperUser: Benutzerdefiniert
+  paperWidth: Papierbreite
+  paperHeight: Papierhöhe
+  orientation: Ausrichtung
+  landscape: Querformat
+  portrait: Hochformat
+  text: Text
+  junctionTypeValue: Knoten
+  noConnectTypeValue: Nichtanschluss-Markierung
+  defaultHint: Ein Element auswählen, um es zu untersuchen. Verschieben mit der mittleren Maustaste oder Strg/Cmd-Ziehen; Zoomen mit dem Mausrad.
+viewRail:
+  netHighlight: Netze hervorheben
+  showHiddenPins: Verborgene Pins anzeigen
+  showHiddenFields: Verborgene Felder anzeigen
+symbolUpdate:
+  updateAction: Symbole aus Bibliothek aktualisieren…
+  changeAction: Symbol ändern…
+  quickFix: Aus Bibliothek aktualisieren
+  options:
+    resetFieldText: Feldtext
+    resetEmptyFields: Felder, die die Bibliothek leer lässt
+    removeExtraFields: Felder entfernen, die das Bibliothekssymbol nicht hat
+    resetFieldVisibility: Feldsichtbarkeit
+    resetFieldEffects: Feldgrößen und -stile
+    resetFieldPositions: Feldpositionen
+    resetPinTextVisibility: Sichtbarkeit von Pinnamen und -nummern
+    resetAlternatePins: Alternative Pinfunktionen
+    resetAttributes: Symbolattribute
+    resetCustomPower: Benutzerdefinierte Werte von Versorgungssymbolen
+  tooFewUnits: '1 Symbol wird übersprungen: Das neue Symbol hat zu wenige Einheiten. | {count} Symbole werden übersprungen: Das neue Symbol hat zu wenige Einheiten.'
+align:
+  menu: Ausrichten
+  distributeMenu: Verteilen
+  left: Links ausrichten
+  centerX: Horizontal zentriert ausrichten
+  right: Rechts ausrichten
+  top: Oben ausrichten
+  centerY: Vertikal zentriert ausrichten
+  bottom: Unten ausrichten
+  distributeHorizontal: Horizontal verteilen
+  distributeVertical: Vertikal verteilen
+find:
+  title: Suchen und ersetzen…
+  toggleReplace: Ersetzen ein-/ausblenden
+  scope: Suchen in
+  scopeSheet: Diesem Blatt
+  scopeDesign: Allen Blättern
+  replacePlaceholder: Ersetzen
+  replace: Ersetzen
+  replaceAll: Alle ersetzen
+  replaceReferences: Referenzen
+  duplicates: 'Dadurch erhält mehr als ein Bauteil die Referenz {references}.'
+  replaceAnyway: Trotzdem ersetzen
+  cancel: Abbrechen
+hierarchy:
+  enterSheet: Blatt betreten
+  leaveSheet: Blatt verlassen
+hints:
+  elbow: / kehrt die Ecke um
+  busEntry: R dreht · Umschalt+Z setzt die andere Diagonale
+  bezier: Den Anfang, das Ende und dann jeden Kontrollpunkt klicken
+  ruleArea: Die erste Ecke erneut klicken, Doppelklick oder Enter schließt
+  table: Eine Ecke klicken, dann erneut klicken, um Zeilen und Spalten festzulegen
+  sheetPin: Eine Blattkante klicken
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+drag:
+  follow: Verbindungen folgen · Umschalt halten, um allein zu verschieben
+  alone: Verbindungen bleiben liegen
+  title: Ziehen
+  nets: Netze
+  netsChange: Ändert die Netzliste
+  merges: Verbindet {a} und {b}
+  splits: Trennt {net}
+  connects: Verbindet {member} mit {net}

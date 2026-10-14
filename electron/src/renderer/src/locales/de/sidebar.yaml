@@ -1,0 +1,65 @@
+activityBar:
+  explorer: Explorer
+  git: Git
+  partManager: Bibliotheken
+  partSearch: Bauteilsuche
+  feedback: App-Feedback geben
+  settings: Einstellungen
+project:
+  title: PROJEKT
+  none: Kein Projekt
+  isolated: Änderungen sind isoliert — Umbenennungen aktualisieren keine anderen Dateien, und es werden nur globale Bibliotheken geladen.
+  selectPrompt: Projekt auswählen
+  switch: Aktives Projekt wechseln
+  createProject: Projekt erstellen…
+  why: Netzklassen, Entwurfsregeln, Projektbibliotheken und die Blatthierarchie liegen alle in einer Projektdatei.
+  schematics: Schaltpläne
+  boards: Platinen
+  symbolLibraries: Symbolbibliotheken
+  footprintLibraries: Footprint-Bibliotheken
+  newSchematicTitle: Neuer Schaltplan
+  newBoardTitle: Neue Platine
+  symbolLibraryActions: Symbolbibliothek anlegen oder hinzufügen
+  footprintLibraryActions: Footprint-Bibliothek anlegen oder hinzufügen
+  newLibraryPlaceholder: Bibliotheksname
+  newLibraryError: Gültigen, eindeutigen Namen eingeben
+fileExplorer:
+  title: DATEI-EXPLORER
+  newFile: Neue Datei
+  refreshExplorer: Explorer aktualisieren
+  newFilePlaceholder: dateiname.kicad_sch
+  emptyState: Sie haben noch keinen Ordner geöffnet.
+  openFolder: Ordner öffnen
+  emptyWorkspace: Leerer Arbeitsbereich.
+fileMenu:
+  open: Öffnen
+  new: Neu
+  newSchematic: Schaltplan
+  newBoard: Platine
+  newSymbolLibrary: Symbolbibliothek
+  newFootprintLibrary: Footprint-Bibliothek
+  newSymbol: Neues Symbol
+  newFootprint: Neuer Footprint
+  reveal: Im Ordner anzeigen
+  copyPath: Pfad kopieren
+  rename: Umbenennen
+  delete: Löschen
+  needsFile: Zuerst eine Datei oder einen Ordner auswählen.
+  needsSymbolLibrary: Zuerst eine Symbolbibliothek öffnen oder auswählen.
+  needsFootprintLibrary: Zuerst eine Footprint-Bibliothek öffnen oder auswählen.
+schematics:
+  title: SCHALTPLÄNE
+  sheetTitle: '{namePath}  ·  {fileName}'
+partManager:
+  title: Bibliotheken
+  sharedLibraries: GEMEINSAME BIBLIOTHEKEN
+  browse: Bibliotheken durchsuchen
+  filterPlaceholder: Bauteile filtern...
+  noLibrariesConfigured: Noch keine Bibliotheken. Wenn KiCad installiert ist, werden sie automatisch erkannt — andernfalls herunterladen oder hinzufügen.
+  configureLibraries: Bibliotheken verwalten
+  noCustomFootprints: Keine eigenen Footprint-Dateien gefunden.
+  rootCategory: (Wurzel)
+  tooManyResults: Zu viele Treffer, einige ausgeblendet
+  includes3dModel: Enthält ein 3D-Modell
+gitStatus:
+  branchTitle: Git-Branch — zum Wechseln klicken

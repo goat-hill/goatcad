@@ -1,0 +1,52 @@
+menu:
+  file: Fichier
+  edit: Édition
+  new: Nouveau
+  needsProject: Ouvrez d’abord un dossier de projet
+  newProject: Nouveau projet…
+  newWindow: Nouvelle fenêtre
+  openProject: Ouvrir un projet…
+  openFolder: Ouvrir un dossier…
+  openFile: Ouvrir un fichier…
+  openRecent: Ouvrir un élément récent
+  recentProjects: Projets
+  recentFiles: Fichiers et dossiers
+  noRecent: Aucun projet récent
+  clearRecent: Effacer les éléments récents
+  save: Enregistrer
+  saveAs: Enregistrer sous…
+  saveAll: Tout enregistrer
+  schematicSetup: Configuration de la schématique
+  components: Composants
+  boardSetup: Options du CI
+  manufacture: Sorties de fabrication
+  export: Exporter
+  exportNetlist: Netliste…
+  exit: Quitter
+  view: Affichage
+  splitTab: Déplacer l’onglet vers l’autre volet
+  splitDirection: Basculer côte à côte / empilé
+  focusOtherGroup: Activer l’autre volet
+  toggleDevTools: Basculer les outils de développement
+  go: Atteindre
+  goBack: Précédent
+  goForward: Suivant
+  goLeaveSheet: Quitter la feuille
+  goPreviousSheet: Feuille précédente
+  goNextSheet: Feuille suivante
+  updatePcb: Mettre à jour le PCB depuis la schématique…
+  needsSchematic: Ouvrez d’abord un projet comportant une schématique
+  help: Aide
+  welcome: Bienvenue
+  keyboardShortcutsReference: Référence des raccourcis clavier
+  shareFeedback: Envoyer un avis sur l’application…
+  aboutGoatCAD: À propos de GoatCAD
+windowTitle:
+  workspace: '{tabPrefix}{project}'
+  tabOnly: '{tab}'
+  default: GoatCAD
+  withApp: '{title} — GoatCAD'
+controls:
+  minimize: Réduire
+  maximize: Agrandir
+  close: Fermer

@@ -1,0 +1,9 @@
+# Add Library's copy-or-reference choice. Deliberately terse: the URI line below
+# the options shows the exact table row that will be written, which says more
+# than prose about the consequences would.
+title: 'Add {name}'
+copy: Copy into project
+reference: Add as reference
+uriLabel: Library path
+add: Add
+cancel: Cancel

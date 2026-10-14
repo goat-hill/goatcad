@@ -1,0 +1,26 @@
+# The Create Project dialog. One dialog for both shapes a create can take —
+# scaffold a blank design, or adopt design files already in the folder — because
+# which one applies is a property of the folder, not a choice the user makes.
+title: Create project
+inFolder: in
+name: Project name
+# Shown when the folder has loose design files a project can adopt.
+foundTitle: Found in this folder
+rootSheetLabel: Use as the root sheet
+# Boards need no choice: a project file stores no board path, so a board in the
+# folder belongs to the project by sitting there.
+boardsIncluded: 'Will be included: {names}'
+blankSheet: Create a new blank schematic instead
+emptyNote: A blank schematic and board will be created.
+create: Create project
+cancel: Cancel
+# The folder already holds a project, so this is an open, not a create.
+existsTitle: This folder already has a project
+existsBody: '{name} is already here. Open it instead of creating another?'
+open: Open project
+errors:
+  empty: Enter a project name.
+  separator: A project name cannot contain slashes.
+  reserved: That name is reserved by the operating system.
+  dots: A project name cannot start or end with a dot.
+  exists: A file with that name already exists here.

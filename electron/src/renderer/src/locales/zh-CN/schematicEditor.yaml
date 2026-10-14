@@ -1,0 +1,268 @@
+errors:
+  empty: 此原理图为空。
+  parseTitle: 无法将其作为 KiCad 原理图打开
+actions:
+  initializeBlank: 初始化 KiCad 原理图
+titleBlock:
+  title: 标题
+  date: 发行日期
+  rev: 修订
+  company: 厂商
+  comment1: 注释 1
+  comment2: 注释 2
+  comment3: 注释 3
+  comment4: 注释 4
+  comment5: 注释 5
+  comment6: 注释 6
+  comment7: 注释 7
+  comment8: 注释 8
+  comment9: 注释 9
+directiveShapes:
+  round: 圆形
+  dot: 点
+  diamond: 菱形
+  rectangle: 矩形
+edit:
+  cut: 剪切
+  copy: 复制
+  paste: 粘贴
+  duplicate: 创建副本
+  repeat: 复刻最后项
+  delete: 删除
+commands:
+  editField: 编辑{field}
+  editFieldMultiple: 编辑{field} ({count} 个元件)
+  editFlag: 编辑{token}
+  editFlagMultiple: 编辑{token} ({count} 个元件)
+  editSymbol: 编辑符号
+  editLabel: 编辑标签
+  editWire: 编辑连线
+  editJunction: 编辑结点
+  editText: 编辑文本
+  editTextBox: 编辑文本框
+  editGraphic: 编辑图形
+  editSheet: 编辑图纸
+  editSheetPin: 编辑图纸引脚
+  editDirectiveLabel: 编辑指令标签
+  editBus: 编辑总线
+  editBusEntry: 编辑总线入口
+  editImage: 编辑图片
+  editTable: 编辑表格
+itemTypes:
+  symbol: '{count} 个符号'
+  wire: '{count} 条连线'
+  label: '{count} 个标签'
+  junction: '{count} 个结点'
+  noConnect: '{count} 个“无连接”标志'
+  sheet: '{count} 张图纸'
+labelKinds:
+  label: 局部标签
+  globalLabel: 全局标签
+  hierarchicalLabel: 层次标签
+  directiveLabel: 指令标签
+toolbar:
+  undoTitle: 撤销 (Ctrl/Cmd+Z)
+  redoTitle: 重做 (Ctrl/Cmd+Y)
+  grid: 栅格
+  showGrid: 显示栅格
+tools:
+  select: 选择
+  annotateTitle: 批注原理图…
+annotate:
+  title: 批注原理图
+  scope: 范围
+  scopeDesign: 整个原理图
+  scopeSheet: 仅当前图纸
+  scopeSelection: '选中项 ({count} 个符号)'
+  recurse: 递归到子图纸
+  order: 顺序
+  orderXY: 按 X 坐标排序符号
+  orderYX: 按 Y 坐标排序符号
+  options: 选项
+  optionsKeep: 保留现有的批注
+  optionsReset: 重置现有的批注
+  numbering: 编号方式
+  numberingAfter: 使用该数字之后的可用编号：
+  numberingSheet100: 页码 × 100 后的可用编号
+  numberingSheet1000: 页码 × 1000 后的可用编号
+  preview: '{count} 个符号中有 {changed} 个将重新编号'
+  cancel: 取消
+  confirm: 批注
+incrementAnnotations:
+  title: 递增位号
+  action: 递增位号…
+  first: 起始位号：
+  increment: 递增量：
+  currentSheet: 仅当前图纸
+  allSheets: 全部图纸
+  preview: '{count} 个位号将会更改'
+  cancel: 取消
+  confirm: 递增
+footprintChooser:
+  parts: '{n} 个元件'
+insertOverlay:
+  ops:
+    symbol: 符号
+    power: 电源符号
+    wire: 连线
+    label: 标签
+    globalLabel: 全局标签
+    hierarchicalLabel: 层次标签
+    noConnect: “无连接”标志
+    junction: 结点
+    text: 文本
+    sheet: 图纸
+    sheetPin: 图纸引脚
+    directiveLabel: 指令标签
+    bus: 总线
+    busEntry: 总线入口
+    line: 图线
+    rectangle: 矩形
+    circle: 圆形
+    arc: 弧线
+    bezier: 贝塞尔曲线
+    table: 表格
+    image: 图片…
+    ruleArea: 规则域
+    textBox: 文本框
+image:
+  pickTitle: 放置图片
+  filter: 图片
+  unreadable: 无法将该文件读取为图片。
+units:
+  menu: 单元
+  unitLabel: '单元 {unit}'
+  alreadyPlaced: '单元 {unit} 已放置 (位于图纸 {sheet})'
+  swap: '交换 {target} 和 {current}'
+  duplicate: '创建 {unit} 的副本'
+  rootSheet: 根图纸
+  cycleBodyStyle: 切换图形样式
+  openInLibraryEditor: 在符号编辑器中打开
+  showDatasheet: 显示数据手册
+labelPopover:
+  netPlaceholder: 网络名称
+  textPlaceholder: 文本
+  netClassPlaceholder: 网络类
+  pinPlaceholder: 引脚名称
+  kinds:
+    label: 局部
+    globalLabel: 全局
+    hierarchicalLabel: 层次
+    directiveLabel: 指令
+sheetPopover:
+  nameLabel: 图纸名称
+  namePlaceholder: 图纸名称
+  fileLabel: 文件名称
+  invalidName: 该文件名已被占用或无效。
+componentsPanel:
+  title: 元件
+  design: 设计
+  count: '{count} 个元件'
+  showInSchematic: 在原理图中显示
+  loading: 正在读取设计…
+  unreadable: 无法读取此设计的顶层原理图。
+modes:
+  schematic: 原理图
+properties:
+  selectionTitle: 选中项
+  snapToGrid: 吸附到栅格
+  items: 项目
+  multiSelectHint: 拖动以移动所有选中项；按 Delete 删除。
+  reference: 位号
+  value: 值
+  libraryId: 库 ID
+  unit: 单元
+  position: 坐标
+  rotation: 旋转
+  footprint: 封装
+  unassigned: 未分配
+  symbolHint: 拖动以移动。按住 Shift 点击或拖出选择框可选择多个项目。
+  type: 类型
+  wireTypeValue: 连线
+  net: 网络
+  length: 长度
+  points: 点
+  width: 宽度
+  defaultWidth: 默认
+  file: 文件
+  pageNumber: 页码
+  pageDuplicate: 已有其他图纸使用此页码。
+  pageEmpty: 此图纸没有页码。
+  sheetName: 图纸名称
+  paperSize: 纸张尺寸
+  paperUser: 自定义
+  paperWidth: 纸张宽度
+  paperHeight: 纸张高度
+  orientation: 方向
+  landscape: 横向
+  portrait: 纵向
+  text: 文本
+  junctionTypeValue: 结点
+  noConnectTypeValue: “无连接”标志
+  defaultHint: 选择一个项目以查看其属性。按住鼠标中键或 Ctrl/Cmd 拖动可平移；滚动滚轮可缩放。
+viewRail:
+  netHighlight: 高亮网络
+  showHiddenPins: 显示隐藏引脚
+  showHiddenFields: 显示隐藏字段
+symbolUpdate:
+  updateAction: 与库符号同步…
+  changeAction: 替换符号…
+  quickFix: 与库同步
+  options:
+    resetFieldText: 字段文本
+    resetEmptyFields: 库中为空的字段
+    removeExtraFields: 移除库符号中不存在的字段
+    resetFieldVisibility: 字段可见性
+    resetFieldEffects: 字段尺寸和样式
+    resetFieldPositions: 字段位置
+    resetPinTextVisibility: 引脚名称和编号可见性
+    resetAlternatePins: 引脚复用功能
+    resetAttributes: 符号属性
+    resetCustomPower: 自定义电源符号的值
+  tooFewUnits: '已跳过 {count} 个符号：新符号的单元数量太少。'
+align:
+  menu: 对齐
+  distributeMenu: 分布
+  left: 向左对齐
+  centerX: 左右对齐
+  right: 向右对齐
+  top: 顶端对齐
+  centerY: 上下对齐
+  bottom: 底端对齐
+  distributeHorizontal: 水平分布
+  distributeVertical: 垂直分布
+find:
+  title: 查找和替换…
+  toggleReplace: 切换替换
+  scope: 搜索范围
+  scopeSheet: 当前图纸
+  scopeDesign: 全部图纸
+  replacePlaceholder: 替换
+  replace: 替换
+  replaceAll: 全部替换
+  replaceReferences: 位号
+  duplicates: '这会使多个元件使用位号 {references}。'
+  replaceAnyway: 仍然替换
+  cancel: 取消
+hierarchy:
+  enterSheet: 进入图纸
+  leaveSheet: 离开图纸
+hints:
+  elbow: / 切换拐角方向
+  busEntry: R 旋转 · Shift+Z 放置另一条对角线
+  bezier: 依次点击起点、终点，然后点击各控制点
+  ruleArea: 再次点击第一个角点、双击或按 Enter 闭合
+  table: 点击一个角，再次点击以设置行数和列数
+  sheetPin: 点击图纸边缘
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+drag:
+  follow: 连线跟随 · 按住 Shift 单独移动
+  alone: 连线保持不动
+  title: 拖动
+  nets: 网络
+  netsChange: 会改变网表
+  merges: 合并 {a} 和 {b}
+  splits: 断开 {net}
+  connects: 将 {member} 连接到 {net}

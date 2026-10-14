@@ -1,0 +1,6 @@
+title: Schaltplaneinstellungen
+sections:
+  rules: Elektrische Regeln
+  netClasses: Netzklassen
+  exclusions: Ausschlüsse
+noProject: Dieser Entwurf hat keine Projektdatei, daher können Regelschweregrade nicht gespeichert werden und es gibt keine Ausschlüsse. Die Prüfungen laufen mit den KiCad-Standardwerten.

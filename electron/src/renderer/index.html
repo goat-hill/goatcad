@@ -1,0 +1,27 @@
+<!doctype html>
+<html spellcheck="false">
+  <head>
+    <meta charset="UTF-8" />
+    <title>GoatCAD</title>
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-src 'self' goatcad-media:"
+    />
+    <!-- The theme CSS is injected by main.ts, which in dev only runs after Vite
+         has transformed the module graph. Until then the page paints nothing of
+         its own, so the window's backgroundColor (the saved theme's, set in
+         main/index.ts) shows through that gap. -->
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+#!/bin/bash
+# Make node_modules match the committed lockfile. Nothing else.
+#
+# `npm ci` deletes node_modules and reinstalls exactly what package-lock.json
+# names: no registry resolution, no version drift, and no tracked file changes.
+# It is idempotent — running it twice does nothing the second time — and its
+# worst case is rebuilding node_modules identically.
+#
+# Why it exists: a worktree's node_modules is copied at creation and then goes
+# stale as the branch advances, so `npm outdated` reports on a tree nobody is
+# upgrading and the gates test code you are not shipping. Run this first, and
+# after any revert of a dependency commit.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+npm ci

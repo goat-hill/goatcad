@@ -1,0 +1,168 @@
+---
+import { LOCALES, LOCALE_NAMES, LOCALE_STORAGE_KEY, homePath, strings, type Locale } from '../i18n'
+
+interface Props {
+  locale: Locale
+}
+
+/*
+ * The language menu at the end of the nav. A <details> disclosure, so it opens
+ * and every language is a real link with JS off; the script only adds closing
+ * on an outside click or Escape. Each option is labelled in its own language
+ * (LOCALE_NAMES) and carries `lang` + `hreflang`, so a screen reader speaks it
+ * in that language. Nothing redirects by browser language — choosing here is
+ * the only way the language changes. The choice is saved (LOCALE_STORAGE_KEY),
+ * so `/` and the English-only pages' logo follow it on later visits.
+ *
+ * The summary shows the current language's name; on a phone, where the nav has
+ * no room for it, only the globe.
+ */
+const { locale } = Astro.props
+const s = strings(locale)
+---
+
+<details class="lang" data-lang-menu data-storage-key={LOCALE_STORAGE_KEY}>
+  <summary aria-label={`${s.nav.language}: ${LOCALE_NAMES[locale]}`}>
+    <svg class="globe" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="9"></circle>
+      <path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"></path>
+    </svg>
+    <span class="current">{LOCALE_NAMES[locale]}</span>
+    <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M7 10l5 5 5-5"></path>
+    </svg>
+  </summary>
+  <ul class="menu">
+    {LOCALES.map((l) => (
+      <li>
+        <a
+          href={homePath(l)}
+          lang={l}
+          hreflang={l}
+          aria-current={l === locale ? 'true' : undefined}
+        >
+          {LOCALE_NAMES[l]}
+        </a>
+      </li>
+    ))}
+  </ul>
+</details>
+
+<script>
+  const menu = document.querySelector<HTMLDetailsElement>('[data-lang-menu]')
+  if (menu) {
+    const key = menu.dataset.storageKey!
+    menu.querySelectorAll<HTMLAnchorElement>('.menu a').forEach((link) => {
+      link.addEventListener('click', () => {
+        try {
+          localStorage.setItem(key, link.lang)
+        } catch {
+          // Private mode or blocked storage: the link still works, it just isn't remembered.
+        }
+      })
+    })
+    document.addEventListener('click', (event) => {
+      if (menu.open && !menu.contains(event.target as Node)) menu.open = false
+    })
+    menu.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || !menu.open) return
+      menu.open = false
+      menu.querySelector('summary')?.focus()
+    })
+  }
+</script>
+
+<style>
+  .lang {
+    position: relative;
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.55rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    transition:
+      color var(--transition),
+      border-color var(--transition);
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary:hover,
+  .lang[open] summary {
+    color: var(--text-bright);
+    border-color: var(--border-strong);
+  }
+
+  svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .globe {
+    width: 16px;
+    height: 16px;
+    stroke-width: 1.5;
+  }
+
+  .chevron {
+    width: 14px;
+    height: 14px;
+    stroke-width: 2;
+    transition: transform var(--transition);
+  }
+
+  .lang[open] .chevron {
+    transform: rotate(180deg);
+  }
+
+  .menu {
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    right: 0;
+    min-width: 10rem;
+    list-style: none;
+    padding: 0.3rem;
+    background: var(--bg-raised);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    box-shadow: 0 12px 32px -12px rgb(0 0 0 / 0.6);
+  }
+
+  .menu a {
+    display: block;
+    padding: 0.4rem 0.7rem;
+    border-radius: calc(var(--radius) - 2px);
+    color: var(--text);
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .menu a:hover {
+    background: var(--bg-elevated);
+    color: var(--text-bright);
+    text-decoration: none;
+  }
+
+  .menu a[aria-current] {
+    color: var(--accent-ink);
+  }
+
+  @media (max-width: 520px) {
+    .current {
+      display: none;
+    }
+  }
+</style>

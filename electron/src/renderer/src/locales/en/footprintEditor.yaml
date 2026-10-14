@@ -1,0 +1,163 @@
+commands:
+  editFootprintProperties: Edit footprint properties
+  editPad: Edit pad {number}
+  editLine: Edit line
+  editPolygon: Edit polygon
+  editRuleArea: Edit rule area
+  editShape: Edit shape
+  addPad: Add pad
+  addLine: Add line
+  addArc: Add arc
+  addRectangle: Add rectangle
+  addCircle: Add circle
+  addPolygon: Add polygon
+  addText: Add text
+  addBezier: Add curve
+  addTextBox: Add text box
+  addPoint: Add point
+  rotate: Rotate
+  mirror: Mirror
+  # KiCad's name for Flip: the selection moves to the other side of the board.
+  flip: Change side
+  # Place Footprint Anchor: the footprint's origin moves to the clicked point.
+  moveAnchor: Move footprint anchor
+  editModel: Edit 3D model
+  addModel: Link 3D model
+  removeModel: Remove 3D model
+# The canvas right-click menu and the title bar's Edit menu.
+edit:
+  cut: Cut
+  copy: Copy
+  paste: Paste
+  duplicate: Duplicate
+  delete: Delete
+  rotate: Rotate counterclockwise
+  rotateClockwise: Rotate clockwise
+  flip: Change side
+# Toolbar chips and tool-search rows that are not drawing tools.
+tools:
+  # Mirrors the selection onto the other side of the board, swapping its
+  # layers front for back (KiCad's Flip).
+  flip: Change side
+  # Click a point to make it the footprint's origin (KiCad's Place Footprint Anchor).
+  anchor: Place footprint anchor
+  # Click a point to lay the grid from it. A view setting, not saved in the file.
+  gridOrigin: Set grid origin
+  resetGridOrigin: Reset grid origin
+# With nothing selected: the footprint's own clearance, mask and paste overrides.
+properties:
+  # Placeholder in an empty override: the value comes from the board's setup.
+  fromBoard: From board
+# How the footprint's pads join a copper zone (KiCad's "Pad connection to zones").
+zoneConnect:
+  # No override: each zone's own setting decides.
+  inherit: From zone
+  solid: Solid
+  thermal: Thermal reliefs
+  none: None
+  # Thermal reliefs on through-hole pads only, solid on SMD pads.
+  thermalTht: Thermal reliefs (THT only)
+readonlyBanner:
+  title: Read-only official library component
+  body: You cannot edit this part directly. Click below to copy it to your project workspace.
+  exportComponentTitle: Export component
+  exportPart: Export part
+saveModal:
+  title: Save footprint options
+  subtitle: This footprint is from a read-only library. Save a copy to your project to edit it.
+  saveLocalTitle: Save as local project footprint
+  saveLocalDesc: Create a reusable `.kicad_mod` footprint file in your workspace directory.
+  saveLocalPlaceholder: filename.kicad_mod
+propertiesPanel:
+  footprintProperties: Footprint properties
+  descr: Descr
+  # 3D model link
+  model3d: 3D model
+  modelPath: Path
+  modelOffset: Offset (mm)
+  modelScale: Scale
+  modelRotate: Rotate (°)
+  addModel: Link 3D model…
+  removeModel: Remove 3D model
+  browse: Browse…
+  padInspector: Pad [{number}] inspector
+  number: Number
+  type: Type
+  padTypes:
+    smd: SMD
+    throughHole: Through-hole
+    npThroughHole: NP through-hole
+  shape: Shape
+  shapeTypes:
+    rect: Rectangular
+    circle: Circular
+    oval: Oval / pill
+    roundrect: Rounded rect
+  drillSize: Drill size
+  roundRatio: Round ratio
+  graphicInspector: Graphic item inspector
+  startX: Start X
+  startY: Start Y
+  endX: End X
+  endY: End Y
+  polygonInspector: Polygon inspector
+  points: Points
+  fill: Fill
+  fillTypes:
+    none: None (outline only)
+    solid: Solid (filled)
+    hatch: Hatch
+    reverseHatch: Reverse hatch
+    crossHatch: Cross hatch
+  ruleAreaInspector: Rule area inspector
+  minThickness: Min thickness
+  hatchStyle: Hatch style
+  hatchStyleTypes:
+    none: None (outline only)
+    edge: Edge (border hatch)
+    full: Full (filled hatch)
+  hatchPitch: Hatch pitch
+  selectHint: Select any pad or graphic line in the 2D layout to inspect and edit details directly in this sidebar.
+# The canvas's left view rail. The sketch toggles draw each kind of item as its
+# bare outline (KiCad's footprint-editor display modes).
+viewRail:
+  # The rail's toggles: each is the chip's tooltip and its tool-search name.
+  # Sketch pads is shared (shared.insertSearch.ops).
+  sketchGraphics: Sketch graphics
+  sketchText: Sketch text
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+  # Toolbar button labels for the drawing tools — each names the tool that
+  # places the item. If the language distinguishes a tool from the thing it
+  # creates, these are tools.
+  pad: Pad
+  line: Line
+  arc: Arc
+  rectangle: Rectangle
+  circle: Circle
+  polygon: Polygon
+  text: Text
+  # A cubic Bezier curve, KiCad's fp_curve.
+  bezier: Curve
+  textBox: Text box
+  # KiCad 10's point: a marker that snaps and measures, and plots nothing.
+  point: Point
+  # The line and polygon tools' angle constraint (KiCad's Line Modes): the chip's
+  # tooltip, and its tool-search name, where {mode} is 45°, 90° or lineFree.
+  lineModeTitle: Line mode — 45° / 90° / free ({hotkey})
+  lineMode: 'Line mode: {mode}'
+  lineFree: free
+# The 3D preview: the footprint rendered on a small piece of board, so its
+# pads, silkscreen and holes read the way they will on the real thing.
+viewport3d:
+  title: 3D preview
+  # Shown when there is no parsed footprint yet — still loading, or unparsable
+  # (the 2D view shows the parse error itself).
+  noFootprintMsg: Open a footprint to see it in 3D.
+  # A footprint with no (model ...) node at all. The board and pads still
+  # render; only the part body is absent.
+  noModelMsg: No 3D model is linked to this footprint.
+  # Shown when a model is linked but its file can't be located on disk. The
+  # hover detail lists the link that failed.
+  notFoundMsg: The linked 3D model could not be found.

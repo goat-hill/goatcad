@@ -1,0 +1,108 @@
+title: 元件搜索
+searchPlaceholder: 按料号或关键字搜索分销商
+search: 搜索
+modes:
+  universal: 全部
+browse:
+  all: 所有类别
+  searchCategory: 搜索此类别（{count} 个元件）
+  backToCategories: 返回类别
+  empty: 此分销商未公开类别列表。
+searching: 正在搜索…
+cancel: 取消
+cancelled: 已取消搜索。
+retry: 重试
+emptyPrompt: 搜索制造商料号（MPN），查看哪些分销商有货、价格多少以及对应的数据手册。
+noResults: 没有与该搜索匹配的元件。
+paging:
+  showing: 第 {from}–{to} 项，共 {total} 项
+  none: 无结果
+  previous: 上一页
+  next: 下一页
+  perPage: 每页
+groupCount: '{count} 个元件'
+quantity: 按数量计价
+providerFailed: '无法搜索 {name}。{reason}'
+searchFailed: 无法执行搜索：{error}
+attribution: 价格、库存和产品数据来自 {names}。
+setup:
+  title: 连接分销商
+  body: 在 DigiKey 或 Mouser 上搜索真实的制造商元件——价格、库存、数据手册和 CAD 模型链接。需要从分销商处获取免费的 API 密钥，只需几分钟。
+  action: 设置分销商
+providers:
+  digikey:
+    steps:
+      - 登录 DigiKey 开发者门户并添加一个 Production 应用——不要用 Sandbox 应用，它使用的是另一台服务器。
+      - 在产品列表中勾选 Product Information V4。GoatCAD 只使用这一项。
+      - 将 OAuth Callback 留空。它只适用于三方 OAuth，而 GoatCAD 并不使用。
+      - 将应用的 Client ID 和 Client Secret 复制到下面的输入框中。
+  mouser:
+    steps:
+      - 登录 Mouser 的 API 中心。
+      - 申请 Search API 的密钥。Mouser 会通过电子邮件发送给你。
+      - 将密钥粘贴到下面的输入框中。
+filters:
+  title: 筛选
+  apply: 应用筛选
+  pending: 尚未应用
+  availability: 供货情况
+  inStock: 有库存
+  rohs: 符合 RoHS
+  hasDatasheet: 有数据手册
+  has3dModel: 有 3D 模型
+  manufacturer: 制造商
+  packaging: 包装
+  status: 状态
+  series: 系列
+  searchWithin: 在结果中搜索…
+  removeFilter: 移除此筛选条件
+  clearAll: 全部清除
+  findOption: 查找…
+  noOptions: 没有匹配的选项
+  scopeNote: 此分销商仅支持这些筛选条件。如需按类别和规格筛选，请直接搜索 DigiKey。
+columns:
+  part: 制造商料号
+  mpn: 制造商料号
+  manufacturer: 制造商
+  status: 状态
+  seller: 分销商
+  stock: 库存
+  price: 价格
+  packaging: 包装
+  sortBy: 按{name}排序
+  expand: 显示详情
+part:
+  manufacturer: 制造商
+  distributorPart: 分销商料号
+  inStock: 库存 {count}
+  stockUnknown: 库存未知
+  outOfStock: 缺货
+  priceAt: "{price} {'@'} {quantity}"
+  noPrice: 无价格
+  moq: 起订 {quantity}
+  datasheet: 数据手册
+  product: 在 {name} 上查看
+  cadOpen: 打开 CAD 模型页面
+  cadCheck: 查找 CAD 模型
+  cadNone: 未列出 CAD 模型
+  parametersFrom: 规格来自 {name}
+lifecycle:
+  active: 在产
+  nrnd: 不推荐用于新设计
+  obsolete: 停产
+  unknown: 未知
+fields:
+  apiKey: API 密钥
+  clientId: Client ID
+  clientSecret: Client Secret
+errors:
+  no-credentials: 尚未为此分销商设置 API 密钥。
+  invalid-credentials: 此分销商拒绝了该 API 密钥。请检查后重试。
+  forbidden: 此 API 密钥未获授权进行元件搜索。请在分销商的开发者门户中检查订阅。
+  rate-limited: 请求过于频繁。请在 {detail} 秒后重试。
+  quota-exhausted: 今天此分销商的请求次数已用完，将于 UTC 午夜重置。
+  network: 无法连接到分销商。请检查网络连接。
+  timeout: 分销商未及时响应，可能正忙——请重试。
+  provider-error: 分销商返回了错误。
+  bad-response: 无法读取分销商的响应。
+  storage-unavailable: 密钥未保存，因为此计算机的安全存储不可用。

@@ -1,0 +1,361 @@
+errors:
+  empty: This schematic is empty.
+  parseTitle: Unable to open this as a KiCad schematic
+actions:
+  initializeBlank: Initialize KiCad schematic
+# The title block rows of the sheet on screen, as KiCad's Page Settings names them.
+titleBlock:
+  title: Title
+  date: Issue date
+  rev: Revision
+  company: Company
+  comment1: Comment 1
+  comment2: Comment 2
+  comment3: Comment 3
+  comment4: Comment 4
+  comment5: Comment 5
+  comment6: Comment 6
+  comment7: Comment 7
+  comment8: Comment 8
+  comment9: Comment 9
+# The flag drawn at the end of a directive label's stem.
+directiveShapes:
+  round: Round
+  dot: Dot
+  diamond: Diamond
+  rectangle: Rectangle
+# Edit-command labels for the title bar's Edit menu; the shortcut column comes
+# from the hotkey registry.
+edit:
+  cut: Cut
+  copy: Copy
+  paste: Paste
+  duplicate: Duplicate
+  # KiCad's own name for the command, so it is what a KiCad user searches for.
+  repeat: Repeat last item
+  delete: Delete
+commands:
+  editField: Edit {field}
+  editFieldMultiple: Edit {field} ({count} components)
+  editFlag: Edit {token}
+  editFlagMultiple: Edit {token} ({count} components)
+  editSymbol: Edit symbol
+  editLabel: Edit label
+  editWire: Edit wire
+  editJunction: Edit junction
+  editText: Edit text
+  editTextBox: Edit text box
+  editGraphic: Edit graphic
+  editSheet: Edit sheet
+  editSheetPin: Edit sheet pin
+  editDirectiveLabel: Edit directive label
+  editBus: Edit bus
+  editBusEntry: Edit bus entry
+  editImage: Edit image
+  editTable: Edit table
+itemTypes:
+  symbol: '{count} symbol | {count} symbols'
+  wire: '{count} wire | {count} wires'
+  label: '{count} label | {count} labels'
+  junction: '{count} junction | {count} junctions'
+  noConnect: '{count} no-connect flag | {count} no-connect flags'
+  sheet: '{count} sheet | {count} sheets'
+labelKinds:
+  label: Local label
+  globalLabel: Global label
+  hierarchicalLabel: Hierarchical label
+  directiveLabel: Directive label
+toolbar:
+  undoTitle: Undo (Ctrl/Cmd+Z)
+  redoTitle: Redo (Ctrl/Cmd+Y)
+  # Used by the properties panel (grid spacing label + show-grid checkbox),
+  # not the floating toolbar, which carries only tools now.
+  grid: Grid
+  showGrid: Show grid
+tools:
+  # The select tool's name, its toolbar tooltip (hotkey appended in code). The
+  # placement tools' tooltips use insertOverlay.ops, the names the tool search
+  # shows, so the two always agree.
+  select: Select
+  # The annotate chip sits after the placement tools; it opens a dialog, hence
+  # the ellipsis. No hotkey — KiCad has none for it either.
+  annotateTitle: Annotate schematic…
+# The Annotate Schematic dialog: KiCad's dialog of that name, with its
+# vocabulary (users switching from KiCad expect it), trimmed to the choices
+# that change the result (lib/kicad/annotate.ts).
+annotate:
+  title: Annotate schematic
+  # Group eyebrows (uppercase, short).
+  scope: Scope
+  scopeDesign: Entire schematic
+  scopeSheet: Current sheet only
+  # The number is how many symbols are selected; 0 disables the option.
+  scopeSelection: 'Selection ({count} symbol) | Selection ({count} symbols)'
+  # Checkbox under Scope: with "Current sheet only", also number the sheets
+  # beneath it. KiCad's wording.
+  recurse: Recurse into subsheets
+  order: Order
+  orderXY: Sort symbols by X position
+  orderYX: Sort symbols by Y position
+  # "Options" is KiCad's heading for the keep/reset pair.
+  options: Options
+  optionsKeep: Keep existing annotations
+  optionsReset: Reset existing annotations
+  numbering: Numbering
+  # Followed by a number field: new designators start above that number.
+  numberingAfter: 'Use first free number after:'
+  # "× 100" — the sheet's page number times 100, so C203 reads as page 2.
+  numberingSheet100: First free after sheet number × 100
+  numberingSheet1000: First free after sheet number × 1000
+  # Preview line under the options. {changed} of {count} symbols get a new
+  # designator; the plural follows {count}, the symbols considered.
+  preview: '{changed} of {count} symbol will be renumbered | {changed} of {count} symbols will be renumbered'
+  cancel: Cancel
+  # The confirm button — a verb.
+  confirm: Annotate
+# KiCad's Increment Annotations From…: designators from a start one up move by a step.
+incrementAnnotations:
+  title: Increment annotations
+  # Tool search entry and the dialog it opens.
+  action: Increment annotations…
+  first: 'Start designator:'
+  increment: 'Increment by:'
+  currentSheet: Current sheet only
+  allSheets: All sheets
+  preview: 'One designator will change | {count} designators will change'
+  cancel: Cancel
+  confirm: Increment
+# The library chooser opened for several parts at once: its header names how many.
+footprintChooser:
+  parts: '{n} parts'
+insertOverlay:
+  ops:
+    symbol: Symbol
+    power: Power symbol
+    wire: Wire
+    label: Label
+    globalLabel: Global label
+    hierarchicalLabel: Hierarchical label
+    noConnect: No-connect flag
+    junction: Junction
+    text: Text
+    sheet: Sheet
+    sheetPin: Sheet pin
+    directiveLabel: Directive label
+    bus: Bus
+    busEntry: Bus entry
+    line: Line
+    rectangle: Rectangle
+    circle: Circle
+    arc: Arc
+    bezier: Bezier
+    table: Table
+    image: Image…
+    ruleArea: Rule area
+    textBox: Text box
+# The image tool's file picker, and what it says when the file is no picture.
+image:
+  pickTitle: Place image
+  filter: Images
+  unreadable: That file could not be read as an image.
+# A placed part's units and body styles, and the part commands beside them in
+# the canvas context menu.
+units:
+  # Context-menu submenu listing the gates of a multi-unit part.
+  menu: Unit
+  unitLabel: 'Unit {unit}'
+  # Asked when the unit picked is already shown by another placement of the
+  # part. {sheet} is that placement's sheet.
+  alreadyPlaced: 'Unit {unit} is already placed (on sheet {sheet})'
+  swap: 'Swap {target} and {current}'
+  duplicate: 'Duplicate {unit}'
+  # The root sheet's name in the question above.
+  rootSheet: Root
+  cycleBodyStyle: Cycle body style
+  openInLibraryEditor: Open in symbol editor
+  showDatasheet: Show datasheet
+labelPopover:
+  netPlaceholder: Net name
+  textPlaceholder: Text
+  # A directive label's text is the net class its Netclass field names.
+  netClassPlaceholder: Net class
+  pinPlaceholder: Pin name
+  kinds:
+    # Short forms of labelKinds.* for the segmented switch inside the
+    # placement popover (three buttons side by side — keep them narrow).
+    label: Local
+    globalLabel: Global
+    hierarchicalLabel: Hierarchical
+    directiveLabel: Directive
+# In-place naming after drawing a child sheet rectangle. Tab
+# advances name → file; Enter commits; Escape cancels the whole draw.
+sheetPopover:
+  nameLabel: Sheet name
+  namePlaceholder: Sheet name
+  fileLabel: File name
+  invalidName: That file name is taken or invalid.
+# The Components tab: every part of one design, across all its sheets, as an
+# editable table. Opened from a sheet's properties panel; titled by the design's
+# top-level schematic.
+componentsPanel:
+  title: Components
+  # Eyebrow over the top-level schematic's filename in the tab's header.
+  design: Design
+  count: '{count} component | {count} components'
+  # Button: opens the selected part's sheet and reveals the symbol on it.
+  showInSchematic: Show in schematic
+  loading: Reading the design…
+  unreadable: This design's top-level schematic could not be read.
+modes:
+  # Also the schematic properties panel's heading (the panel names the view).
+  schematic: Schematic
+properties:
+  selectionTitle: Selection
+  snapToGrid: Snap to grid
+  items: Items
+  multiSelectHint: Drag to move everything selected; Delete removes it.
+  reference: Reference
+  value: Value
+  libraryId: Library ID
+  # Which sub-part of a multi-unit symbol this is — e.g. gate B of a quad NAND,
+  # shown as "1", "2". NOT a unit of measurement (that is
+  # shared.gridSettingsPanel.unit). KiCad calls this a symbol "unit".
+  unit: Unit
+  position: Position
+  rotation: Rotation
+  footprint: Footprint
+  unassigned: Unassigned
+  symbolHint: Drag to move. Shift-click or drag a selection box to select multiple items.
+  # Row label whose value says what kind of item is selected (Wire, Junction,
+  # No-connect flag). "Type" as in category/kind — not a data type, and not the
+  # verb "to type". Contrast footprintEditor.propertiesPanel.type, which is a
+  # pad's type (SMD / through-hole).
+  type: Type
+  wireTypeValue: Wire
+  # An electrical net: the set of pins wired together. Standard ECAD term —
+  # prefer KiCad's own translation for the target language.
+  net: Net
+  length: Length
+  points: Points
+  width: Width
+  defaultWidth: default
+  # A hierarchical sheet's file name, the .kicad_sch it draws from.
+  file: File
+  # A hierarchical sheet's page number, for the instance on screen (KiCad's
+  # Sheet Properties "Page number"). Any text, usually a number.
+  pageNumber: Page number
+  # Notes under the page number row. Non-blocking: the page is written as typed.
+  pageDuplicate: Another sheet already uses this page number.
+  pageEmpty: This sheet has no page number.
+  # The sheet on screen (nothing selected): its name as its box in the parent
+  # file gives it (KiCad's Sheet Properties "Sheet name").
+  sheetName: Sheet name
+  # The sheet's page as KiCad's Page Settings gives it.
+  paperSize: Paper size
+  # A page size the file gives by width and height (KiCad's "User").
+  paperUser: Custom
+  paperWidth: Paper width
+  paperHeight: Paper height
+  orientation: Orientation
+  landscape: Landscape
+  portrait: Portrait
+  # Row label for a label's text content — the words the user typed. A noun.
+  # Contrast footprintEditor.viewport.text, the toolbar button for the tool
+  # that adds a text item.
+  text: Text
+  junctionTypeValue: Junction
+  noConnectTypeValue: No-connect flag
+  defaultHint: Select an item to inspect it. Pan with middle mouse or Ctrl/Cmd-drag; zoom with the wheel.
+# The canvas's left view rail. Each is a toggle's tooltip and its tool-search
+# name, naming what the toggle turns on; the chip's lit state says whether it is.
+viewRail:
+  # Lights the net under the pointer across the sheet.
+  netHighlight: Highlight nets
+  # Draws placed symbols' hidden pins, dimmed (KiCad's View ▸ Show hidden pins).
+  showHiddenPins: Show hidden pins
+  # Draws placed symbols' hidden fields, dimmed (KiCad's View ▸ Show hidden fields).
+  showHiddenFields: Show hidden fields
+# KiCad's Update Symbols from Library and Change Symbols dialogs, one
+# component for both; option labels are KiCad's own.
+symbolUpdate:
+  # Menu and tool-search entries; each opens the dialog.
+  updateAction: Update symbols from library…
+  changeAction: Change symbol…
+  # The design-health drawer's one-click remedy for a copy behind its library.
+  quickFix: Update from library
+  options:
+    resetFieldText: Field text
+    resetEmptyFields: Fields the library leaves empty
+    removeExtraFields: Remove fields the library symbol lacks
+    resetFieldVisibility: Field visibility
+    resetFieldEffects: Field sizes and styles
+    resetFieldPositions: Field positions
+    resetPinTextVisibility: Pin name and number visibility
+    resetAlternatePins: Alternate pin functions
+    resetAttributes: Symbol attributes
+    # A power symbol's Value names its net, so an update keeps it unless ticked.
+    resetCustomPower: Custom power symbol values
+  tooFewUnits: '1 symbol is skipped: the new symbol has too few units. | {count} symbols are skipped: the new symbol has too few units.'
+# Align and distribute a multi-selection (context menu submenus and the tool
+# search), KiCad's names.
+align:
+  menu: Align
+  distributeMenu: Distribute
+  # Each aligns to the item under the pointer, else to the outermost.
+  left: Align to left
+  centerX: Align to horizontal center
+  right: Align to right
+  top: Align to top
+  centerY: Align to vertical center
+  bottom: Align to bottom
+  distributeHorizontal: Distribute horizontally
+  distributeVertical: Distribute vertically
+# Find and replace over the canvas (Ctrl/Cmd+F). The query's own labels —
+# placeholder, switches, "3 of 9" — are the text editor's (editorArea.find).
+find:
+  # Edit menu and tool-search entry.
+  title: Find and replace…
+  toggleReplace: Toggle replace
+  scope: Search in
+  scopeSheet: This sheet
+  scopeDesign: All sheets
+  replacePlaceholder: Replace
+  replace: Replace
+  replaceAll: Replace all
+  # KiCad's option: without it references are found but never renamed.
+  replaceReferences: References
+  # Shown before a replace that would give two parts one reference.
+  duplicates: 'This gives more than one part the reference {references}.'
+  replaceAnyway: Replace anyway
+  cancel: Cancel
+# Moving through the sheet hierarchy, KiCad's names.
+hierarchy:
+  # Opens the child sheet a selected sheet box names (also a double click).
+  enterSheet: Enter sheet
+  # Goes up to the sheet that holds this one.
+  leaveSheet: Leave sheet
+# The armed tool's one-line coaching in the status strip, as in the board editor.
+# The armed tool's coaching, only where the tool does not explain itself.
+hints:
+  elbow: / turns the elbow
+  busEntry: R turns it · Shift+Z places the other diagonal
+  bezier: Click the start, the end, then each control point
+  ruleArea: Click the first corner again, double-click or Enter to close
+  table: Click a corner, then click again to set its rows and columns
+  sheetPin: Click a sheet edge
+viewport:
+  # Same shape in every editor's status strip (shared/ViewportStatusBar.vue).
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+# While a selection drags (schematic-editor-workstream §6): the hint in the corner, then
+# the Drag group Properties shows over the selection with what the drop does to the nets.
+drag:
+  follow: Wires follow · hold Shift to move alone
+  alone: Wires stay put
+  title: Drag
+  nets: Nets
+  # Under the Nets row when the drop would join two nets or break one.
+  netsChange: Changes the netlist
+  merges: Joins {a} and {b}
+  splits: Breaks {net}
+  connects: Connects {member} to {net}

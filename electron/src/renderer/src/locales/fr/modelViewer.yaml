@@ -1,0 +1,8 @@
+loading: Préparation du modèle 3D…
+loadFailed: Impossible de charger ce modèle 3D
+isoViewTitle: Vue isométrique
+frontViewTitle: Vue de face
+topViewTitle: Vue de dessus
+rightViewTitle: Vue de droite
+gaugeTitle: Échelle graduée
+dims: '{x} × {y} × {z} mm'

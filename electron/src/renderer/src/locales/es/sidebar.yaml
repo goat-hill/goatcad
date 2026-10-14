@@ -1,0 +1,65 @@
+activityBar:
+  explorer: Explorador
+  git: Git
+  partManager: Bibliotecas
+  partSearch: Búsqueda de componentes
+  feedback: Enviar comentarios sobre la aplicación
+  settings: Configuración
+project:
+  title: PROYECTO
+  none: Sin proyecto
+  isolated: Las ediciones están aisladas; los cambios de nombre no actualizarán otros archivos y solo se cargan las bibliotecas globales.
+  selectPrompt: Seleccione un proyecto
+  switch: Cambiar el proyecto activo
+  createProject: Crear proyecto…
+  why: Las clases de red, las reglas de diseño, las bibliotecas del proyecto y la jerarquía de hojas se guardan en un archivo de proyecto.
+  schematics: Esquemas
+  boards: Placas
+  symbolLibraries: Bibliotecas de símbolos
+  footprintLibraries: Bibliotecas de huellas
+  newSchematicTitle: Nuevo esquema
+  newBoardTitle: Nueva placa
+  symbolLibraryActions: Crear o añadir biblioteca de símbolos
+  footprintLibraryActions: Crear o añadir biblioteca de huellas
+  newLibraryPlaceholder: Nombre de la biblioteca
+  newLibraryError: Introduzca un nombre válido y único
+fileExplorer:
+  title: EXPLORADOR DE ARCHIVOS
+  newFile: Nuevo archivo
+  refreshExplorer: Actualizar explorador
+  newFilePlaceholder: nombre.kicad_sch
+  emptyState: Aún no ha abierto ninguna carpeta.
+  openFolder: Abrir carpeta
+  emptyWorkspace: Espacio de trabajo vacío.
+fileMenu:
+  open: Abrir
+  new: Nuevo
+  newSchematic: Esquema
+  newBoard: Placa
+  newSymbolLibrary: Biblioteca de símbolos
+  newFootprintLibrary: Biblioteca de huellas
+  newSymbol: Nuevo símbolo
+  newFootprint: Nueva huella
+  reveal: Mostrar en la carpeta
+  copyPath: Copiar ruta
+  rename: Cambiar nombre
+  delete: Eliminar
+  needsFile: Seleccione primero un archivo o una carpeta.
+  needsSymbolLibrary: Abra o seleccione primero una biblioteca de símbolos.
+  needsFootprintLibrary: Abra o seleccione primero una biblioteca de huellas.
+schematics:
+  title: ESQUEMAS
+  sheetTitle: '{namePath}  ·  {fileName}'
+partManager:
+  title: Bibliotecas
+  sharedLibraries: BIBLIOTECAS COMPARTIDAS
+  browse: Explorar bibliotecas
+  filterPlaceholder: Filtrar componentes…
+  noLibrariesConfigured: Aún no hay bibliotecas. Si KiCad está instalado, se detectan automáticamente; si no, descárguelas o añádalas.
+  configureLibraries: Gestionar bibliotecas
+  noCustomFootprints: No se encontraron archivos de huellas personalizados.
+  rootCategory: (Raíz)
+  tooManyResults: Demasiados resultados; algunos están ocultos
+  includes3dModel: Incluye modelo 3D
+gitStatus:
+  branchTitle: Rama de Git; haga clic para cambiar

@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+# Regenerate resources/THIRD_PARTY_NOTICES.txt, and the list Settings ▸ About
+# shows (src/renderer/src/lib/licenses.json), from the installed packages and
+# the built components' *.licenses.txt (scripts/third-party-notices.mjs). Run
+# after any dependency change; the default suite fails while either is stale.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+node scripts/third-party-notices.mjs

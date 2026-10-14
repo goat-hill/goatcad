@@ -1,0 +1,123 @@
+title: 製造用出力
+board: 基板
+exportProfile: エクスポートプロファイル
+outputs:
+  gerber: Gerber
+  drill: ドリル
+  bom: BOM
+  cpl: 部品配置
+detail:
+  configure: 設定
+  preview: プレビュー
+gerber:
+  category:
+    copper: 導体
+    technical: 技術
+    board: 基板
+  format: フォーマット
+  coordinateFormat: 座標形式
+  units: 単位
+  naming: ファイル名
+  namingValue:
+    kicad: KiCad (.gbr)
+    protel: Protel 拡張子
+  layerCountNote: 'レイヤーは基板から読み込まれます。プレビューには実際の Gerber が描画されます。'
+  previewLoading: 基板を読み込み中…
+  previewEmpty: プレビューするレイヤーを 1 つ以上選択してください。
+drill:
+  format: フォーマット
+  formatValue: Excellon
+  units: 単位
+  zeros: ゼロ
+  zerosValue:
+    none: ゼロを保持
+    leading: 先頭ゼロ省略
+    trailing: 後方ゼロ省略
+  options: オプション
+  merge: PTH と NPTH を統合
+  map: ドリルマップ (Gerber)
+  stats: '{holes} 穴 · {tools} ツール'
+bom:
+  options: オプション
+  group: 同一部品をグループ化
+  includeDnp: 未実装 (DNP) 部品を含める
+  partNumber: 部品番号
+  format: フォーマット
+  formatValue: CSV
+  col:
+    comment: コメント
+    designator: 指定子
+    footprint: フットプリント
+  export: BOM をエクスポート
+  loading: コンポーネントを読み込み中…
+  empty: BOM 部品がありません — 基板にフットプリントがないか、すべて除外されています。
+  stats: '{total} 個のコンポーネント · {unique} 種類'
+  dnpLabel: '未実装 (DNP)：'
+cpl:
+  units: 単位
+  side: 実装面
+  sideValue:
+    both: 表面 + 裏面
+    top: 表面のみ
+  group: 同一部品をグループ化
+  rotationNote: 標準の KiCad 重心を使用します。製造業者ごとの回転マップは M2 以降です。
+  export: CPL をエクスポート
+  stats: '{total} 配置 · 表面 {top} · 裏面 {bottom}'
+  empty: 配置がありません — 基板にフットプリントがないか、すべて除外されています。
+  listTitle: コンポーネント
+  top: 表面
+  bottom: 裏面
+  origin: CPL 原点
+  originOff: 'CPL 原点 · {distance} mm'
+outputFolder: 出力フォルダー
+zip: Zip
+export: パッケージをエクスポート
+exporting: エクスポート中…
+preflight:
+  title: 事前チェック
+  group:
+    blocking: エクスポートを妨げる問題
+    review: 要確認
+    passed: 合格
+  check:
+    outline: 基板外形
+    drcErrors: デザインルールエラー
+    drcWarnings: デザインルール警告
+    unfilledZones: ゾーンの塗りつぶし
+    drillSize: ドリルサイズ
+    holeSpacing: 穴の間隔
+    partNumbers: 部品番号
+    values: 部品の値
+  outline:
+    found: Edge.Cuts の外形が 1 つの閉じた形状ではないため、製造業者は基板を切り出せません。
+    passed: 外形は 1 つの閉じた形状です。
+  drc:
+    errors: '{count} 件のエラー'
+    warnings: '{count} 件の警告'
+    noErrors: デザインルールエラーはありません。
+    noWarnings: デザインルール警告はありません。
+  zones:
+    found: '{count} 個のゾーンが一度も塗りつぶされていません：{names}'
+    passed: すべてのゾーンが塗りつぶされています。
+  drill:
+    found: '{count} 個の穴がこの製造業者の最小値 {limit} mm を下回っています。最小は {actual} mm です。'
+    passed: 'すべての穴が {limit} mm 以上です。'
+  spacing:
+    found: '2 つの穴の間隔が {actual} mm です。この製造業者の最小値は {limit} mm です。'
+    passed: '穴の間隔はすべて {limit} mm 以上です。'
+  partNumbers:
+    found: '{count} 個の部品に {field} 番号がありません：{refs}'
+    passed: 'すべての部品に {field} 番号があります。'
+  values:
+    found: '{count} 個の部品に値がありません：{refs}'
+    passed: すべての部品に値があります。
+  more: '{list} ほか {more} 件'
+  showOnBoard: 基板上で表示
+  unsaved:
+    title: 未保存の変更
+    detail: 基板に保存されていない編集があります。パッケージは保存済みのファイルから書き出されるため、含めるには保存してください。
+  status:
+    checking: 基板をチェック中…
+    blocked: エクスポート不可
+    review: '要確認 {count} 件'
+    ready: エクスポート可能

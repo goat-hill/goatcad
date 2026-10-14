@@ -1,0 +1,91 @@
+errors:
+  createFile: 'ファイルの作成中にエラーが発生しました：{error}'
+  deleteFile: 'ファイルの削除中にエラーが発生しました：{error}'
+  renameFile: 'ファイル名の変更中にエラーが発生しました：{error}'
+  library: 'ライブラリの更新中にエラーが発生しました：{error}'
+  openRecent: 選択したディレクトリを読み込めませんでした。移動または削除された可能性があります。
+  saveFile: 'ファイルの保存中にエラーが発生しました：{error}'
+confirm:
+  deleteFile: 「{name}」をゴミ箱に移動しますか？
+  renameForward: "「{from}」の名前を「{to}」に変更しますか？\n\nこれに合わせて他の {count} 個のファイルが更新されます：\n{files}"
+  renameForwardFile: '• {name} (シート参照 {count} 件)'
+  deleteFileReferenced: "「{name}」をゴミ箱に移動しますか？\n\n{count} 個のファイルがこれを参照しており、シートリンクが切れたままになります：\n{files}"
+  deleteImpactFile: '• {name} (シート参照 {count} 件)'
+unsaved:
+  message: '{name} への変更を保存しますか？'
+  messageMany: 次の {count} 個のファイルへの変更を保存しますか？
+  detail: 保存しない場合、変更は失われます。
+  dontSave: 保存しない
+  saveAll: すべて保存
+branchPicker:
+  placeholder: ブランチを切り替えるか、新しい名前を入力…
+  create: ブランチ「{name}」を作成
+  loading: ブランチを読み込み中…
+  noBranches: ブランチが見つかりません。
+quickOpen:
+  placeholder: ファイルへ移動…
+  noResults: 一致するファイルが見つかりません
+shortcuts:
+  title: キーボードショートカット
+  openFolder: フォルダーを開く
+  openProject: プロジェクトを開く
+  goToFile: ファイルへ移動
+  newSchematic: 新規回路図
+  newWindow: 新しいウィンドウ
+  closeTab: タブを閉じる
+  nextTab: 次のタブ
+  previousTab: 前のタブ
+  splitTab: タブをもう一方のペインに移動
+  splitDirection: ペインの左右／上下を切り替え
+  focusOtherGroup: もう一方のペインにフォーカス
+  updatePcb: 回路図から基板を更新
+  save: 保存
+  showExplorer: エクスプローラーを表示
+  showLibraries: ライブラリを表示
+  openPartSearch: パーツ検索を開く
+  newTerminal: 新しいターミナル
+  openAgent: エージェントを開く
+  openSettings: 設定を開く
+  gitFocusCommit: コミットメッセージを入力
+  gitCommit: コミット (メッセージ欄で)
+  gitStageAll: すべての変更をステージ
+  gitPush: プッシュ
+  gitPull: プル
+  toggleDevTools: 開発者ツールの切り替え
+updatePcb:
+  title: 回路図から更新
+  board: 基板
+  loading: 回路図と基板を比較中…
+  upToDate: 基板は既に回路図と一致しています。
+  options: オプション
+  replace: フットプリントをシンボルで指定されたものに置換
+  prune: シンボルのないフットプリントを削除
+  fields: シンボルからフットプリントのフィールドを更新
+  columns:
+    reference: リファレンス
+    value: 値
+    footprint: フットプリント
+    change: 変更
+  change:
+    added: 追加
+    deleted: 削除
+    kept: 回路図にないが保持
+    reference: リファレンス
+    value: 値
+    footprint: フットプリント
+    nets: パッドのネット
+    fields: フィールド
+    attributes: 属性
+  skip:
+    noFootprint: フットプリントが割り当てられていません
+    footprintNotFound: '{libId} はどのライブラリにもありません'
+    noUuid: シンボルに UUID がありません
+  confirm: 基板を更新
+  errors:
+    noBoard: プロジェクトに基板 (.kicad_pcb) がありません。
+    noSchematic: プロジェクトに更新元となるルート回路図がありません。
+    notAnnotated: '先に回路図をアノテーションしてください。未アノテーション：{references}'
+netlist:
+  errors:
+    noSchematic: プロジェクトにエクスポートするルート回路図がありません。
+    write: 'ネットリストを書き込めませんでした：{error}'

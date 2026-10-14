@@ -1,0 +1,23 @@
+title: 终端
+tabTooltip: '{process} — {cwd}'
+status:
+  running: 正在运行 {process}
+  working: '{process} 正在工作'
+  waiting: '{process} 正在等待提示词'
+  attention: '{process} 需要你的关注'
+  idle: 没有正在运行的进程
+  exited: Shell 已退出（代码 {code}）
+exitNotice: '[进程已退出，代码 {code}]'
+missingCli: '你的 shell 找不到 {cli}。请安装它（参见 {docs}），然后关闭此标签页并重新打开。在此之前，此标签页只是一个普通 shell。'
+menu:
+  copy: 复制
+  paste: 粘贴
+  selectAll: 全选
+  clear: 清除
+close:
+  message: 关闭正在运行 {process} 的终端？
+  messageMany: 关闭 {count} 个正在运行的终端？
+  detail: 该进程将被停止。
+  detailMany: 这些进程将被停止。
+  confirm: 关闭终端
+  confirmMany: 关闭终端

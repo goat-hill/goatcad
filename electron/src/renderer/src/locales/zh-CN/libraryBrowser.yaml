@@ -1,0 +1,41 @@
+searchPlaceholder: 筛选…
+nav:
+  symbols: 符号
+  footprints: 封装
+  models3d: 3D 模型
+  models3dNote: 3D 模型通过其所属封装浏览。
+  system: 系统（{n}）
+  systemPlain: 系统
+  addLibrary: 添加库
+  addSymbol: 添加符号库…
+  addFootprint: 添加封装库…
+  models3dManaged: 3D 模型搜索路径由“设置”中的环境变量管理。
+  remove: 移除
+  hasSymbol: 有关联的符号
+  hasFootprint: 有关联的封装
+  has3dModel: 有关联的 3D 模型
+download: 下载官方 KiCad 库
+downloading: 正在下载…
+rebuildIndex: 重建库索引
+indexing: 正在索引… {done}/{total}
+indexingWait: 正在构建库索引…
+resultsCapped: 每种类型仅显示前 {n} 个匹配项——请细化搜索以缩小范围。
+noResults: 无匹配项。
+typeShort:
+  symbol: 符号
+  footprint: 封装
+  model: 3D
+add:
+  newSymbolLibrary: 新建符号库
+  newFootprintLibrary: 新建封装库
+  addSymbolLibrary: 添加符号库
+  addFootprintLibrary: 添加封装库
+  symbolExt: .kicad_sym
+  footprintExt: .pretty/
+  toProject: 到项目…
+  toAllProjects: 到所有项目…
+  needsProject: 没有活动项目
+  symbolFileTitle: 选择符号库文件（.kicad_sym）
+  footprintFolderTitle: 选择封装库文件夹（名称以 .pretty 结尾）
+scanningEmptySymbols: 在该文件夹中未找到 .kicad_sym 文件。
+scanningEmptyFootprints: 在该文件夹中未找到封装。

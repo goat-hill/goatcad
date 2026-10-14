@@ -1,0 +1,12 @@
+#!/bin/bash
+# Serve web/dist through the real Cloudflare Workers runtime (miniflare), so
+# assets behaviour — 404 handling, trailing slashes — matches production. The
+# Astro dev server does NOT model these. Builds first; pass --remote to hit the
+# real edge. See docs/WEB.md.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+npm run build
+npm run preview:workers -- "$@"

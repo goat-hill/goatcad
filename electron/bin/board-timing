@@ -1,0 +1,21 @@
+#!/bin/bash
+# Time a complex board in the built app: open it with a fresh profile, then
+# pan, zoom, hover, select and move a footprint, with the heap. A manual check,
+# not a CI gate. See scripts/board-timing.mjs for options (--runs, --board,
+# --no-build, --visible, --record, --profile).
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+want_visible=false
+for a in "$@"; do [ "$a" = "--visible" ] && want_visible=true; done
+
+if [ "$want_visible" = true ]; then
+  exec node scripts/board-timing.mjs "$@"
+elif command -v xvfb-run >/dev/null 2>&1; then
+  exec xvfb-run -a node scripts/board-timing.mjs "$@"
+else
+  echo "board-timing: xvfb-run not found — running on the real \$DISPLAY." >&2
+  exec node scripts/board-timing.mjs "$@"
+fi

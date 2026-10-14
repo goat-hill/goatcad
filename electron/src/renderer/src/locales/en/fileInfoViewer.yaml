@@ -1,0 +1,8 @@
+# File-info tab — shown when a file's type has no editor or viewer
+# (unknown/binary files, e.g. .zip). States that GoatCAD won't open it and
+# shows minimal metadata.
+
+notOpened: GoatCAD doesn't open this type of file
+# Stat labels (nouns), left column of a small key/value readout.
+size: Size
+modified: Modified

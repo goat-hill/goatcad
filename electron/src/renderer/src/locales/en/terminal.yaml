@@ -1,0 +1,50 @@
+# Terminal tabs — an interactive shell as a full editor tab.
+# UI copy: verb-first, sentence case (BRAND.md).
+
+# Tab title before the first process poll answers, and whenever a session has no
+# shell name to show. Also the activity-bar button's tooltip.
+title: Terminal
+
+# Tab tooltip. {process} is the running command (or the shell), {cwd} the
+# directory it started in — the two things that tell two terminals apart.
+tabTooltip: '{process} — {cwd}'
+
+# Tab indicator, read out by screen readers and shown as the dot's tooltip. An
+# agent that reports itself (Claude Code's hooks) gets the finer three: working
+# on a turn, waiting at its prompt, or waiting on the user for a permission.
+status:
+  running: Running {process}
+  working: '{process} is working'
+  waiting: '{process} is waiting for a prompt'
+  attention: '{process} needs your attention'
+  idle: No process running
+  exited: 'Shell exited (code {code})'
+
+# Written into the terminal itself when the shell ends, so the pane never just
+# goes silent. Styled dim by the escape codes around it.
+exitNotice: '[process exited with code {code}]'
+
+# Written at the top of an agent tab whose CLI the shell could not find, so
+# the tab holds a plain shell instead. {cli} is the executable's name and {docs}
+# the vendor's install page; both are passed in, never translated.
+missingCli: '{cli} was not found by your shell. Install it (see {docs}), then close this tab and open it again. Until then this tab is a plain shell.'
+
+# Right-click menu on the terminal surface.
+menu:
+  copy: Copy
+  paste: Paste
+  selectAll: Select all
+  clear: Clear
+
+# Native confirm when closing a tab that is still running something. {process}
+# is the command — naming it is the whole point, so the user knows what they are
+# about to end.
+close:
+  message: 'Close terminal running {process}?'
+  # Closing a window ends all of its terminals at once, so that ask is plural and
+  # lists them rather than naming one and quietly killing the rest.
+  messageMany: 'Close {count} running terminals?'
+  detail: The process will be stopped.
+  detailMany: These processes will be stopped.
+  confirm: Close terminal
+  confirmMany: Close terminals

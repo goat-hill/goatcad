@@ -1,0 +1,135 @@
+---
+import Wordmark from './Wordmark.astro'
+import LanguageSwitcher from './LanguageSwitcher.astro'
+import { LOCALE_STORAGE_KEY, fmt, homePath, homePaths, strings, type Locale } from '../i18n'
+
+interface Props {
+  locale?: Locale
+  /** Only pages that exist in every language show the switcher (Base.astro). */
+  switcher?: boolean
+}
+
+const { locale = 'en', switcher = false } = Astro.props
+const s = strings(locale)
+
+/* Keep Blog non-interactive until its page exists. Docs stay English, so every
+   language links the same /docs. On an English-only page (no switcher) the logo
+   follows the language the visitor picked, via the script below. */
+---
+
+<header class="nav">
+  <div class="nav-inner page">
+    <a
+      class="brand"
+      href={homePath(locale)}
+      aria-label={fmt(s.nav.home)}
+      data-home-link={switcher ? undefined : JSON.stringify(homePaths())}
+      data-storage-key={LOCALE_STORAGE_KEY}
+    >
+      <Wordmark />
+    </a>
+    <div class="end">
+      <nav aria-label={s.nav.main}>
+        <ul>
+          <li>
+            <a href="/docs">{s.nav.docs}</a>
+          </li>
+          <li class="pending">
+            {s.nav.blog} <span class="soon">{s.nav.soon}</span>
+          </li>
+        </ul>
+      </nav>
+      {switcher && <LanguageSwitcher locale={locale} />}
+    </div>
+  </div>
+</header>
+
+<script>
+  const home = document.querySelector<HTMLAnchorElement>('a[data-home-link]')
+  if (home) {
+    try {
+      const picked = localStorage.getItem(home.dataset.storageKey!)
+      const paths = JSON.parse(home.dataset.homeLink!) as Record<string, string>
+      if (picked && paths[picked]) home.href = paths[picked]
+    } catch {
+      // No storage: the logo keeps pointing at the English home.
+    }
+  }
+</script>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: 60px;
+  }
+
+  .brand:hover {
+    text-decoration: none;
+  }
+
+  .end {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.85rem, 2.5vw, 1.75rem);
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: clamp(0.85rem, 2.5vw, 1.75rem);
+    /* Baseline, not center: Blog's "soon" pill makes its item taller, and
+       centering lifts its text off the line the other links sit on. */
+    align-items: baseline;
+  }
+
+  nav a {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  nav a:hover {
+    color: var(--text-bright);
+    text-decoration: none;
+  }
+
+  .pending {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    opacity: 0.7;
+    cursor: default;
+  }
+
+  .soon {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    padding: 0.05rem 0.4rem;
+  }
+
+  /* Nav links are supporting cast on a landing page; below 520px only Docs stays
+     beside the wordmark, and the rest would only crowd it. */
+  @media (max-width: 520px) {
+    nav ul li:not(:first-child) {
+      display: none;
+    }
+  }
+</style>

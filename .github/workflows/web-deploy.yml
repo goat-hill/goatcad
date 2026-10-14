@@ -1,0 +1,54 @@
+name: Deploy Web
+
+# Deploys the GoatCAD marketing site (web/) to Cloudflare Workers.
+# See docs/WEB.md §5 for the runbook and the one-time manual setup.
+on:
+  push:
+    branches: [master]
+    # Only the site triggers a site deploy. The Electron app changes far more
+    # often, and a deploy per app commit would be pure noise.
+    paths:
+      - 'web/**'
+      - '.github/workflows/web-deploy.yml'
+  workflow_dispatch:
+
+# A newer commit makes an in-flight deploy irrelevant, but never cancel one
+# mid-upload: cancel-in-progress could leave a half-uploaded asset manifest.
+concurrency:
+  group: web-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Gate the deploy on the same checks CI runs, so a direct push to master
+      # can't ship a site that would have failed a PR.
+      - name: Typecheck
+        run: npm run check
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: web

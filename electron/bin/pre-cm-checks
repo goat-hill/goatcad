@@ -1,0 +1,21 @@
+#!/bin/bash
+# The pre-COMMIT gate: format, lint, typecheck, test. ~13s with warm caches
+# (format, lint and typecheck each keep one under node_modules/.cache), ~21s cold.
+#
+# Run this freely during development — it is the fast, high-signal loop, and
+# everything in it can fail on your changes. Formatting runs here rather than
+# later because this is the last point before staging, which is where the land
+# skill wants the formatters to have run.
+#
+# It deliberately does NOT build. Bundling proves nothing typecheck has not
+# already proven for renderer-only work, and `npm run build` re-runs the whole
+# typecheck before it — see bin/pre-merge-checks.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+npm run format
+npm run lint
+npm run typecheck
+npm run test

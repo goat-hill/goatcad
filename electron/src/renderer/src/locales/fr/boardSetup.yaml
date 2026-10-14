@@ -1,0 +1,317 @@
+title: Options du CI
+sections:
+  stackup: Stackup
+  constraints: Contraintes
+  tuningPatterns: Modèles d'ajustage de longueur
+  teardrops: Teardrops
+  tuningProfiles: Profils d'ajustage
+  netClasses: Classes d'équipotentielles
+  customRules: Règles utilisateur
+  rules: Règles de conception
+  exclusions: Exclusions
+groups:
+  copper: Épaisseur
+  holes: Perçages
+  microvias: Microvias
+  silk: Sérigraphie
+  arcs: Approximation des arcs
+  zones: Remplissage des zones
+  lengthTuning: Ajustage de longueur
+  tuneSingle: Simple piste
+  tunePair: Paire différentielle
+  tuneSkew: Décalage de paire différentielle
+  teardropRound: Formes rondes
+  teardropRect: Formes rectangulaires
+  teardropTrack: Piste à piste
+actions:
+  save: Enregistrer
+  manage: Gérer
+profile:
+  name: Configuration des contraintes
+  custom: Personnalisée
+  edited: modifiée
+  saveAs: Enregistrer sous…
+stackup:
+  preset:
+    label: Configuration du stackup
+  copperLayers:
+    label: Couches cuivre
+  copperFinish:
+    label: Finition de surface
+columns:
+  layer: Couche
+  type: Type
+  material: Matériau
+  thickness: Épaisseur
+  weight: Grammage
+  epsilonR: Dk
+  epsilonRHint: Constante diélectrique (permittivité relative). Plus elle est élevée, plus les signaux ralentissent ; elle fixe l'impédance des pistes.
+  lossTangent: Df
+  lossTangentHint: Facteur de dissipation. La part du signal absorbée par le stratifié — ne compte qu'en haute fréquence.
+  color: Couleur
+  colorUnsetMask: Non spécifié (vert)
+  colorUnsetSilk: Non spécifié (blanc)
+table:
+  addDielectric: Ajouter un diélectrique
+  removeLayer: Retirer la couche
+  copper: Épaisseur
+  dielectric: Diélectrique
+  total: Total
+constraints:
+  minClearance:
+    label: Isolation minimum
+  minTrackWidth:
+    label: Largeur minimum de piste
+  minConnectionWidth:
+    label: Largeur minimum de connexion
+  minViaAnnularWidth:
+    label: Anneau minimum
+  minViaDiameter:
+    label: Diamètre minimum de via
+  minCopperHoleClearance:
+    label: Isolation cuivre-trou
+  minCopperEdgeClearance:
+    label: Isolation au bord du CI
+  minThroughHoleDiameter:
+    label: Perçage minimum
+  minHoleToHole:
+    label: Isolation trou à trou
+  minMicroviaDiameter:
+    label: Diamètre minimum de microvia
+  minMicroviaDrill:
+    label: Perçage minimum de microvia
+  minSilkClearance:
+    label: Isolation minimum des éléments
+  minTextHeight:
+    label: Hauteur minimum du texte
+  minTextThickness:
+    label: Épaisseur minimum du texte
+  maxError:
+    label: Écart maximum autorisé
+  zonesAllowExternalFillets:
+    label: Autoriser les congés hors du contour de zone
+  minResolvedSpokes:
+    label: Nombre minimum de rayons de frein thermique
+  useHeightForLengthCalcs:
+    label: Inclure la hauteur du stackup dans la longueur de piste
+tuningPatterns:
+  minAmplitude:
+    label: Amplitude minimum (A)
+  maxAmplitude:
+    label: Amplitude maximum (A)
+  spacing:
+    label: Espacement (s)
+  cornerRadiusPercent:
+    label: Rayon des coins (r), %
+  singleSided:
+    label: Simple face
+teardrops:
+  enabled: Teardrops où une piste rejoint une piste plus large
+  bestLength: Longueur optimale (L)
+  maxLength: Longueur maximale (L)
+  bestWidth: Largeur optimale (W)
+  maxWidth: Largeur maximale (W)
+  trackWidthLimit: Limite de largeur de piste (w/d)
+  curved: Bords courbes
+  twoSegments: Couvrir deux segments de piste
+  preferZone: Préférer la connexion à la zone
+netClassColumns:
+  name: Classe
+  clearance: Isolation
+  trackWidth: Larg. piste
+  viaDiameter: Diam. via
+  viaDrill: Trou via
+  microviaDiameter: Diam. µVia
+  microviaDrill: Trou µVia
+  diffPairWidth: Larg. PD
+  diffPairGap: Dist. PD
+  pcbColor: Couleur PCB
+  tuningProfile: Profil d'ajustage
+  wireWidth: Larg. fil
+  busWidth: Larg. bus
+  schematicColor: Couleur
+  lineStyle: Style de ligne
+netClasses:
+  title: Classes d'équipotentielles
+  fromInterface: Configurer une interface standard…
+  interfaceSupports: USB 2.0, MIPI CSI-2, alimentation RF 50 Ω
+  interfaceAdds: Définit les dimensions de paire d'une classe d'équipotentielle, un profil d'ajustage calculé pour le stackup, et des règles utilisateur
+  layerColor: Couche
+  themeColor: Thème
+  importColors: Importer les couleurs de la schématique
+  add: Ajouter une classe
+  remove: Retirer la classe
+  newName: Nouvelle classe
+patterns:
+  pair: Paire différentielle (selon le nommage P/N ou +/- de KiCad)
+  title: Assignations
+  add: Ajouter une assignation
+  remove: Retirer l'assignation
+  matching: Nets correspondants
+  syntax:
+    any: toute suite de caractères
+    one: un caractère quelconque
+    regex: expression régulière, nom entier
+  invalid: Expression non valide — ne correspond à rien
+  overlap: '{count} aussi dans {classes}'
+patternColumns:
+  pattern: Motif de net
+  netClass: Classe
+  nets: Nets
+extraSizes:
+  title: Tailles personnalisées
+  width: Largeur de piste
+  diameter: Diamètre de via
+  drill: Perçage de via
+  addTrack: Ajouter une largeur de piste
+  addVia: Ajouter une via
+  remove: Retirer la taille
+currentWidth:
+  title: Largeur selon le courant
+  current: Courant
+  rise: Élévation de température
+  layer: Couche
+  copper: Épaisseur
+  width: Largeur min.
+  source: Selon IPC-2221
+  outOfRange: Hors de la plage d'ajustement d'IPC-2221
+section:
+  core: Core
+  prepreg: Prepreg
+  silkTop: F.Silkscreen
+  maskTop: F.Mask
+  silkBottom: B.Silkscreen
+  maskBottom: B.Mask
+  total: Épaisseur finie
+noProject: "Ce CI n'a pas de fichier projet : les contraintes, les classes d'équipotentielles et les sévérités des règles ne peuvent pas être enregistrées. Le stackup est stocké dans le CI lui-même et s'enregistre normalement."
+tuningProfiles:
+  add: Ajouter un profil d'ajustage
+  remove: Retirer le profil
+  newName: Profil
+  empty: Aucun profil d'ajustage. Une classe d'équipotentielle en prend un dans sa colonne Profil d'ajustage.
+  name: Nom
+  type: Type
+  single: Simple
+  differential: Différentiel
+  target: Cible
+  timeDomain: Domaine temporel
+  viaDelay: Délai de via
+  none: Aucun
+  usedBy: Utilisé par
+  addLayer: Ajouter une couche
+  removeLayer: Retirer la couche
+  solve: Calculer
+  solveAll: Calculer toutes les couches
+  solveHint: Largeur (et délai) pour la cible sur le stackup, comme les calcule la calculatrice de KiCad
+  readout: Z
+  columns:
+    layer: Couche
+    topReference: Référence dessus
+    bottomReference: Référence dessous
+    width: Largeur
+    gap: Gap
+    delay: Délai
+  errors:
+    target-not-positive: Définissez d'abord une impédance cible
+    signal-layer-missing: Couche de signal introuvable dans le stackup
+    zero-signal-thickness: L'épaisseur de la couche de signal doit être supérieure à 0
+    reference-missing: Couche de référence introuvable dans le stackup
+    reference-same-as-signal: La couche de référence doit différer de la couche de signal
+    top-reference-missing: Couche de référence du dessus introuvable dans le stackup
+    top-reference-not-above: La référence du dessus doit être au-dessus de la couche de signal
+    bottom-reference-missing: Couche de référence du dessous introuvable dans le stackup
+    bottom-reference-not-below: La référence du dessous doit être en dessous de la couche de signal
+    zero-dielectric: La hauteur du diélectrique doit être supérieure à 0
+    gap-required: Définissez d'abord le gap de la paire ; la largeur est calculée pour celui-ci
+    width-required: Définissez d'abord la largeur
+    width-and-gap-required: Définissez d'abord la largeur et le gap
+    gap-on-single: Un profil asymétrique n'a pas de gap
+    width-failed: Impossible de calculer la largeur de piste
+    gap-failed: Impossible de calculer le gap de la paire différentielle
+    no-width: Impossible de calculer la largeur de piste
+    no-gap: Impossible de calculer le gap de la paire différentielle
+    no-delay: Impossible de calculer le délai de propagation de la piste
+pending:
+  added: Ajouté par Appliquer
+  edited: Modifié par Appliquer
+customRules:
+  add: Ajouter une règle
+  edit: Modifier la règle
+  remove: Retirer la règle
+  save: Enregistrer
+  addSave: Ajouter
+  oneRule: Écrivez une seule règle, (rule "nom" …), et rien d'autre.
+  empty: Aucune règle utilisateur. Les Règles utilisateur de KiCad, ou la configuration d'une interface standard, les écrivent dans .kicad_dru.
+  columns:
+    rule: Règle
+    appliesTo: S'applique à
+    constraint: Contrainte
+    limit: Limite
+interfacePreset:
+  title: Configurer une interface standard
+  apply: Appliquer
+  discard: Abandonner
+  interface: Interface
+  mode: Mode
+  target: Cible
+  stackup: Stackup
+  reference: réf.
+  customRules: Règles utilisateur
+  classUpdates: 'Modifications de {netClass}'
+  profileUpdates: "Profil d'ajustage {profile}"
+  classUnchanged: La classe a déjà ces dimensions.
+  constraints: Contraintes
+  stackupSummary: '{count} couches cuivre, {thickness} mm'
+  fabLimitsValues: 'piste ≥ {track}, isolation ≥ {clearance}'
+  notSet: non défini
+  defaultClearance: Isolation de la classe Default
+  frequency: Fréquence de conception
+  differential: différentiel
+  uncontrolled: 'celle du standard, non tenue : la classe garde les dimensions du CI'
+  netClass: Classe d'équipotentielle
+  nets: Nets
+  assignNets: "{netClass} n'a pas encore de nets. Elle est configurée quand même ; les nets assignés dans Assignations la prennent, et leurs paires sont alors vérifiées."
+  noClasses: Ajoutez une classe d'équipotentielle ci-dessus et assignez-lui ses nets, puis configurez-la ici.
+  matched: '{count} net, {pairs} paires : | {count} de nets, {pairs} paires : | {count} nets, {pairs} paires :'
+  pairGap: Gap de paire
+  groundGap: Gap de masse
+  linked: Liés pour l'impédance cible ; définissez l'un et l'autre est calculé
+  derivedGap: Utiliser le gap dérivé
+  layers: Couches
+  gapSource:
+    given: ''
+    fromWidth: Calculé pour la largeur
+    classClearance: ''
+    fabClearance: L'isolation minimum du fabricant (Contraintes)
+    widened: Élargi jusqu'à une largeur que le fabricant réalise
+  columns:
+    gap: Gap
+    width: Largeur
+  writeFailed: "{file} n'a pas pu être écrit."
+  modes:
+    usb2:
+      high: High Speed, 480 Mb/s
+      full: Full Speed, 12 Mb/s
+      full-uncontrolled: Full Speed, 12 Mb/s, impédance non tenue
+    rf-50:
+      sub1g: Sub-GHz, 868/915 MHz
+      2g4: 2,4 GHz
+      5g: 5 GHz
+    ethernet-mdi:
+      1g: 1000BASE-T
+      100m: 10/100BASE-T
+    rgmii:
+      1g: 1 Gb/s
+      100m: 10/100 Mb/s
+    csi2:
+      1g0: 1,0 Gb/s par voie
+      1g5: 1,5 Gb/s par voie
+      2g5: 2,5 Gb/s par voie
+  errors:
+    unknown-preset: Interface inconnue.
+    unknown-mode: Mode inconnu.
+    no-nets: "Nommez une classe d'équipotentielle autre que Default, et des motifs qui correspondent chacun à un net."
+    unpaired: "KiCad apparie les nets par un suffixe P/N ou +/- ; ceux-ci n'ont pas de partenaire parmi les correspondances :"
+    bad-layer: 'La ligne ne peut pas passer sur ces couches :'
+    solve-failed: Le stackup ne permet pas d'atteindre cette cible.
+    below-fab: "Sous l'isolation ou la largeur de piste minimum du fabricant (Contraintes)."

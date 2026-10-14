@@ -1,0 +1,578 @@
+commands:
+  editBoard: Modifier le CI
+  editStackup: Modifier le stackup
+  applyProfile: Appliquer le profil de fabrication
+  applyStackup: Appliquer le stackup
+  addDielectric: Ajouter une couche diélectrique
+  removeLayer: Retirer la couche
+  editItem: Modifier l'élément
+  routeTrack: Router la piste
+  dragTrack: Glisser la piste
+  dragVia: Glisser la via
+  dragArc: Glisser l'arc
+  routePair: Router la paire différentielle
+  tune: Ajuster la longueur
+  retune: Réajuster
+  updateTuningPatterns: Mettre à jour tous les modèles d'ajustage
+  removeTuningPattern: Retirer le modèle d'ajustage | Retirer {count} de modèles d'ajustage | Retirer {count} modèles d'ajustage
+  editTeardrops: Éditer les teardrops
+  rebuildTeardrops: Reconstruire les teardrops
+  dragFootprint: Glisser l'empreinte | Glisser {count} d'empreintes | Glisser {count} empreintes
+  addVia: Ajouter une via
+  placeFootprint: Placer {reference}
+  changeTrackWidth: Changer la largeur de piste
+  changeViaSize: Changer la taille de via
+  addLine: Ajouter une ligne | Ajouter {count} de lignes | Ajouter {count} lignes
+  addArc: Ajouter un arc
+  addRectangle: Ajouter un rectangle
+  addCircle: Ajouter un cercle
+  addPolygon: Ajouter un polygone
+  addText: Ajouter un texte
+  addBezier: Ajouter une courbe
+  addTextBox: Ajouter une boîte de texte
+  addPoint: Ajouter un point
+  addZone: Ajouter une zone
+  editZone: Modifier la zone
+  editShape: Modifier la forme
+  refillZones: Remplir à nouveau les zones
+  rotateFootprints: Tourner l'empreinte | Tourner {count} d'empreintes | Tourner {count} empreintes
+  rotateItems: Tourner l'élément | Tourner {count} d'éléments | Tourner {count} éléments
+  moveFootprint: Déplacer {reference}
+  rotateFootprint: Tourner {reference}
+  flipFootprints: Changer l'empreinte de côté | Changer {count} d'empreintes de côté | Changer {count} empreintes de côté
+  flipItems: Changer l'élément de côté | Changer {count} d'éléments de côté | Changer {count} éléments de côté
+  updateFootprints: Mettre à jour l'empreinte depuis la librairie | Mettre à jour {count} d'empreintes depuis la librairie | Mettre à jour {count} empreintes depuis la librairie
+  changeFootprints: Changer l'empreinte | Changer {count} d'empreintes | Changer {count} empreintes
+  fanout: Fanout de {reference}
+  cleanup: Nettoyer pistes et vias
+  footprintFallback: Empreinte
+  editTrack: Modifier la piste
+  editVia: Modifier la via
+  lock: Verrouiller l'élément | Verrouiller {count} d'éléments | Verrouiller {count} éléments
+  unlock: Déverrouiller l'élément | Déverrouiller {count} d'éléments | Déverrouiller {count} éléments
+  mirror: Mettre l'élément en miroir | Mettre {count} d'éléments en miroir | Mettre {count} éléments en miroir
+  placeGridOrigin: Placer l'origine de la grille
+  resetGridOrigin: Réinitialiser l'origine de la grille
+  placeDrillOrigin: Placer l'origine de perçage
+  resetDrillOrigin: Réinitialiser l'origine de perçage
+  breakTrack: Briser la piste
+  moveTracksToLayer: Déplacer la piste vers {layer} | Déplacer {count} de pistes vers {layer} | Déplacer {count} pistes vers {layer}
+edit:
+  cut: Couper
+  copy: Copier
+  paste: Coller
+  duplicate: Dupliquer
+  delete: Supprimer
+  rotate: Rotation anti-horaire
+  rotateClockwise: Rotation horaire
+  flip: Changer de côté
+  fanout: Fanout…
+  breakTrack: Briser la piste
+  trackLayerNext: Passer à la couche suivante
+  trackLayerPrev: Passer à la couche précédente
+tools:
+  flip: Changer de côté
+  fanout: Fanout…
+fanout:
+  title: Fanout
+  style: Style
+  direction: Direction
+  surfaceRows: Rangées en surface
+  surfaceRowsHint: Rangées extérieures d'une grille laissées au routage en surface, sans via
+  styles:
+    auto: Auto
+    dogbone: Dogbone
+    under-pads: Sous les pads
+    inline: Rangées alignées
+    staggered: Rangées en quinconce
+  directions:
+    out: Vers l'extérieur
+    in: Vers l'intérieur
+    ne: Nord-est
+    se: Sud-est
+    sw: Sud-ouest
+    nw: Nord-ouest
+  willPlace: Placera {count} via | Placera {count} de vias | Placera {count} vias
+  placed: '{count} via placée | {count} de vias placées | {count} vias placées'
+  skipped: '{count} ignoré(s) : {reason}'
+  surface: '{count} laissé pour la surface | {count} laissés pour la surface | {count} laissés pour la surface'
+  refused: '{count} pad ne peut pas recevoir de via | {count} de pads ne peuvent pas recevoir de via | {count} pads ne peuvent pas recevoir de via'
+  skip:
+    no-net: pas de net
+    no-connect: non connecté
+    through-hole: traversant
+    joined: déjà relié à son net
+    via: a déjà une via
+  apply: Faire le fanout
+selection:
+  toggleLock: Verrouiller / déverrouiller
+  selectConnection: Sélectionner la connexion
+  selectNet: Sélectionner le net
+  deleteFullTrack: Effacer la piste complète
+origins:
+  placeGrid: Origine de la grille
+  resetGrid: Réinitialiser l'origine de la grille
+  placeDrill: Origine de perçage / placement
+  resetDrill: Réinitialiser l'origine de perçage / placement
+loadingBoard: 'Chargement du CI… {percent} %'
+viewRail:
+  zoneOutlines: Contours des zones seulement
+  sketchTracks: Pistes en contour
+  sketchVias: Vias en contour
+  hideRatsnest: Masquer le chevelu
+  boardArea: Teinte de la surface du CI
+  flip: Retourner l'affichage du CI
+  fpReferences: Références des empreintes
+  fpValues: Valeurs des empreintes
+  fpText: Textes des empreintes
+  assembly: Calque d'assemblage
+parseError:
+  title: Impossible d'analyser le fichier du CI
+collision:
+  title: Routeur
+  buttonTitle: Mode du routeur
+  explain:
+    highlight: Laisse tout en place et signale les violations d'isolation, mais ne les place pas tant que les violations de DRC ne sont pas autorisées.
+  settingsTitle: Réglages
+  settings:
+    allowViolations:
+      name: Autoriser les violations de DRC
+      note: Place la piste même à travers les violations d'isolation que Surligner signale.
+    freeAngle:
+      name: Mode angle libre
+      note: Les pistes vont droit vers le curseur, à n'importe quel angle.
+    shoveVias:
+      name: Pousser les vias
+    jumpOverObstacles:
+      name: Sauter les obstacles
+      note: Les pistes poussées qui rencontrent un pad le contournent par derrière, au lieu de bloquer le routage.
+    removeLoops:
+      name: Supprimer les pistes redondantes
+      note: Une nouvelle piste qui relie ce qu'une ancienne relie déjà la remplace.
+    smartPads:
+      name: Optimiser les connexions aux pads
+      note: Les pistes sortent des pads et y entrent par leur sortie la plus propre, jamais selon un angle bizarre.
+    smoothDragged:
+      name: Lisser les segments glissés
+      note: Un segment glissé s'aligne sur ses voisins, et un coin sur leur intersection.
+    optimizeDragged:
+      name: Optimiser toute la piste glissée
+      note: Toute la piste glissée est nettoyée, pas seulement la partie déplacée.
+    autoPosture:
+      name: Utiliser le chemin de la souris pour la posture
+      note: Une piste commence en diagonale ou droite selon la façon dont la souris quitte le clic.
+    startDiagonal:
+      name: Commencer en diagonale
+      note: Sans le chemin de la souris, les pistes commencent par la diagonale ; / l'inverse.
+    fixAllSegments:
+      name: Fixer tous les segments au clic
+      note: Un clic pose toute la piste jusqu'au curseur. Désactivé, le dernier segment reste libre.
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+  select: Sélectionner
+  route: Router
+  via: Via
+  layerPair:
+    title: Paire de couches
+    top: Couche du dessus
+    bottom: Couche du dessous
+    save: Enregistrer comme préréglage
+    remove: Retirer le préréglage
+    presets: Préréglages (Shift+V parcourt ceux cochés)
+    pickLayer: Placer une via vers la couche
+  hintKeys:
+    routeVia: Via
+    trackWidthNext: Largeur
+    trackWidthPrev: Plus fine
+    viaSizeNext: Taille via
+    routePosture: Posture
+    dropVia: Poser via
+    tuneSpacing: Espacement
+    tuneAmplitude: Amplitude
+    tuneTighter: Plus serré
+    tuneTaller: Plus haut
+    pairVia: Paire de vias
+    pairSize: Taille paire
+    routeKeys: Toutes les touches
+  keysCard:
+    title: Touches de routage
+    titlePair: Touches de paire différentielle
+    titleTune: Touches d'ajustage de longueur
+    pairVia: Paire de vias, vers où va la paire
+    pairSize: Taille de paire suivante / précédente
+    via: Via traversante, vers où va le routage
+    posture: Inverser la posture
+    corner: Mode de coin
+    width: Plus large / plus fine
+    viaSize: Via plus grande / plus petite
+    customSize: Taille de piste et de via personnalisée
+    finish: Terminer jusqu'au pad
+    end: Terminer le routage ici
+    unroute: Revenir d'un clic
+    mode: Mode du routeur
+    layer: Couche suivante / précédente
+    blindVia: Via aveugle ou enterrée sur la paire de couches
+    microVia: Microvia
+    tuneSpacing: Espacement des méandres plus / moins
+    tuneAmplitude: Amplitude des méandres plus / moins
+    viaPickLayer: Via vers une couche choisie dans une liste (traversante, aveugle)
+    layerPair: Préréglage de paire de couches suivant
+    cancel: Terminer le routage en gardant ce qui est cliqué
+    toggle: Afficher ou masquer cette carte
+    sections:
+      route: Routage
+      sizes: Largeur et taille
+      vias: Vias
+      layers: Couches
+  trackWidthOp: 'Largeur de piste : {size} mm'
+  viaSizeOp: 'Taille de via : {size} mm'
+  sizes:
+    trackWidth: Largeur de piste
+    trackWidthBetween: 'Largeur de piste · règle {min}–{max} mm'
+    trackWidthAtLeast: 'Largeur de piste · règle ≥ {min} mm'
+    viaSize: Taille de via (diamètre / perçage)
+    viaSizeAtLeast: 'Taille de via (diamètre / perçage) · règle ≥ {min} mm'
+    pairSize: Largeur / gap de paire
+    custom: Taille personnalisée…
+    customTitle: Taille personnalisée
+    customViaDiameter: Diamètre de via
+    customViaDrill: Perçage de via
+    customApply: Appliquer
+    netClass: "Classe d'équipot. · {size} mm"
+    netClassIdle: Classe d'équipot.
+    useConnected: Utiliser la largeur de la piste de départ
+    size: '{size} mm'
+    below: sous la règle
+    above: au-dessus de la règle
+    edit: Modifier les tailles…
+  routeMode: 'Mode de collision : {mode}'
+  routeModes:
+    shove: Pousser
+    walkaround: Contourner
+    highlight: Surligner
+  cornerMode: 'Mode de coin : {mode}'
+  cornerFree: libre
+  cornerRounded: 'arrondi {angle}°'
+  lineModeTitle: Mode de ligne — 45° / 90° / libre ({hotkey})
+  posture: Inverser la posture du coin
+  facts:
+    route: Routage
+    netClass: Classe d'équipot.
+    width: Largeur
+    via: Via
+    viaDiameter: Taille de via
+    viaDrill: Trou de via
+    widthOutside: 'Hors de {min}–{max} mm selon'
+    continued: reprise
+    custom: personnalisée
+    picked: choisie
+    profile: 'profil {name}'
+    pairRoute: Routage de paire
+    nets: Nets
+    gap: Gap
+    viaGap: Espacement via
+    clearance: Isolation
+    clearanceTo: Contre
+    length: Longueur
+    lengthRule: Règle de longueur
+    lengthOver: 'Au-delà du max. de la règle, {max} mm'
+    lengthBetween: '{min}–{max}'
+    lengthAtMost: '≤ {max}'
+    lengthAtLeast: '≥ {min}'
+  line: Ligne
+  arc: Arc
+  rectangle: Rectangle
+  circle: Cercle
+  polygon: Polygone
+  text: Texte
+  bezier: Courbe
+  textBox: Boîte de texte
+  point: Point
+  polygonContinueHint: Cliquez le premier point pour fermer
+  arcHint: Cliquez le début, la fin, puis le bombé
+  bezierHint: Cliquez le début, la fin, puis chaque point de contrôle
+  zone: Zone
+  zoneContinueHint: Cliquez le premier point pour fermer
+  placeFootprint: Placer une empreinte
+  refillTitle: Remplir à nouveau les zones ({hotkey})
+  refill: Remplir à nouveau les zones
+  rerunChecks: Relancer tous les contrôles de conception
+  fillProgress: 'Remplissage des zones… {settled} sur {total}'
+  renderBuilding: Construction du calque d'assemblage…
+viewport3d:
+  bottomViewTitle: Vue de dessous
+  building: 'Construction du CI… {percent} %'
+  loadingModels: 'Chargement des modèles… {settled} sur {total}'
+  missingModelsDetail: 'Impossible de résoudre :'
+  options:
+    layersGroup: Couches
+    boardBody: Corps du CI
+    copper: Cuivre
+    solderMask: Masque de soudure
+    solderPaste: Pâte à souder
+    silkscreen: Sérigraphie
+    holes: Trous métallisés
+    drawings: Commentaires et dessins
+    axes: Axes
+    gauge: Jauge d'échelle
+    models: Modèles des composants
+    modelsThroughHole: Traversants
+    modelsSmd: CMS
+    modelsUnspecified: Non spécifiés
+    modelsDnp: DNP
+    modelsNotInPosFiles: Hors fichiers de position
+    reset: Rétablir les valeurs par défaut
+  presentation:
+    title: Présentation
+    projection: Projection
+    projections:
+      perspective: Perspective
+      orthographic: Orthographique
+    lighting: Éclairage
+    lightings:
+      studio: Studio
+      soft: Doux
+      flat: Uniforme
+      dramatic: Dramatique
+    lightLevel: Intensité
+    background: Arrière-plan
+    backgrounds:
+      theme: Thème
+      transparent: Transparent
+      white: Blanc
+      black: Noir
+  exportImage:
+    section: Exporter
+    button: Exporter l'image…
+    menu: Image 3D…
+    needs3d: Passez d'abord le CI en vue 3D
+    title: Exporter l'image
+    size: Taille
+    sizeView: 'Vue actuelle ({width} × {height})'
+    sizePreset: '{width} × {height}'
+    sizeCustom: Personnalisée
+    width: Largeur
+    height: Hauteur
+    lockAspect: Conserver les proportions
+    preview: Aperçu
+    copy: Copier l'image
+    copied: Copiée dans le presse-papiers
+    copyFailed: Impossible de copier l'image
+    save: Enregistrer l'image…
+    failed: Impossible d'exporter l'image
+footprintUpdate:
+  updateAction: Mettre à jour les empreintes depuis la librairie…
+  changeAction: Changer d'empreinte…
+  options:
+    removeExtraTexts: Supprimer les textes absents de l'empreinte de librairie
+    resetTextLayers: Couches et visibilité des textes
+    resetTextEffects: Tailles et styles des textes
+    resetTextPositions: Positions des textes
+    resetTextContent: Texte des champs
+    resetFabricationAttributes: Attributs de fabrication
+    resetClearanceOverrides: Priorités d'isolation
+    reset3DModels: Modèles 3D
+  owned: 'La schématique nomme toujours {footprint}'
+  droppedPads: 'Pads perdus : {pads}'
+  addedPads: 'Nouveaux pads, sans net : {pads}'
+properties:
+  belowRule: 'Sous le minimum de {size} mm selon'
+  aboveRule: 'Au-dessus du maximum de {size} mm selon'
+routeRun:
+  selected: Router la sélection
+  selectedFromEnd: "Router la sélection depuis l'autre extrémité"
+  finishSelected: Tenter de finir la sélection (autoroute)
+  fromOtherEnd: "Router depuis l'autre extrémité"
+  skip: Passer à l'élément sélectionné suivant
+routerMenu:
+  cancel: Annuler
+  finish: Terminer
+  undoSegment: Annuler le dernier segment
+  attemptFinish: Tenter de finir
+  viaThrough: Placer une via traversante
+  viaBlind: Placer une via aveugle/enterrée
+  viaMicro: Placer une microvia
+  viaPickThrough: Choisir la couche et placer une via traversante…
+  viaPickBlind: Choisir la couche et placer une via aveugle/enterrée…
+  posture: Commuter la posture de piste
+  corner: Mode de coin de piste
+  cornerAngle: '{angle}°'
+  cornerArc: 'Arc {angle}°'
+  sizes: Tailles de piste et de via
+  mode: Mode du routeur
+pair:
+  route: Router une paire différentielle
+  dimensions: Paire différentielle
+  dimensionsOp: Dimensions de la paire différentielle…
+  width: Largeur de piste
+  gap: Gap
+  viaGap: Espacement via
+  coach: Cliquez un pad, une via ou une piste d'une paire
+tune:
+  length: Longueur
+  skew: Décalage
+  min: Min
+  max: Max
+  meter:
+    pairLength: Longueur de paire
+    delay: Délai
+    pairDelay: Délai de paire
+  target: Cible
+  noTarget: tant qu'elle tient
+  status: État
+  statuses:
+    tuned: ajusté
+    too_short: trop court
+    too_long: trop long
+  settings: Ajustage de longueur
+  settingsPair: Ajustage de longueur de paire différentielle
+  settingsSkew: Ajustage du décalage
+  settingsOp: Paramètres d'ajustage de longueur…
+  tools:
+    single: Ajuster la longueur de piste
+    pair: Ajuster la longueur de paire
+    skew: Ajuster le décalage de paire
+  coach:
+    start: Cliquez une piste là où commencent les méandres
+    startPair: Cliquez une piste d'une paire là où commencent les méandres
+    lay: Suivez la piste, puis cliquez pour poser les méandres
+    noTrack: Pas de piste ici
+    noMate: Aucune piste partenaire ne longe celle-ci
+    cannot: Les méandres ne peuvent pas commencer ici
+    inPattern: Les pistes d'un modèle d'ajustage ne peuvent pas être réajustées
+    selectFirst: Cliquez d'abord une piste à ajuster
+  targetField: Cible (0 pour aucune)
+  overrideRules: Passer outre les règles utilisateur
+  minAmplitude: Amplitude min.
+  maxAmplitude: Amplitude max.
+  spacing: Espacement
+  cornerRadius: Rayon des coins
+  singleSided: Simple face
+  mode: Mode d'ajustage
+  modes:
+    single: Simple piste
+    diff_pair: Paire différentielle
+    diff_pair_skew: Décalage
+  initialSide: Première bosse
+  sides:
+    left: Gauche
+    right: Droite
+    default: Par défaut
+  rounded: Arrondi
+limits:
+  title: Limites
+  hint: Ce que les règles exigent de la sélection, et ce qui a fixé chaque valeur
+  constraint:
+    clearance: Isolation
+    physical_clearance: Isolation physique
+    hole_clearance: Isolation de trou
+    physical_hole_clearance: Isolation physique de trou
+    hole_to_hole: Trou à trou
+    zone_connection: Connexion de zone
+    track_width: Largeur de piste
+    via_diameter: Diamètre de via
+    annular_width: Largeur d'anneau
+    hole_size: Taille de trou
+  sameNet: 0, un seul net
+  unset: Aucune limite
+  min: 'min {value}'
+  opt: 'opt {value}'
+  max: 'max {value}'
+  connection:
+    solid: Solide
+    thermal: 'Thermique, gap {gap}, rayon {spoke}'
+    none: Non connecté
+  steps: Comment cela a été décidé
+  none: Ces éléments ne partagent aucune couche cuivre ni aucun trou.
+  noneOne: Aucune limite de taille ne s'applique à cet élément.
+  outcome:
+    net-tie: Net tie, 0
+    override: La valeur propre de l'élément
+    board-minimum: Relevé au minimum du CI
+    applied: S'applique
+    condition-false: Condition non remplie
+    layer-mismatch: Pas sur cette couche
+    not-copper: Pas du cuivre
+    no-hole: Pas de trou
+    disallow-mismatch: Interdit d'autres types
+    local-clearance: L'isolation propre de la zone
+    fallback: Repli
+teardrops:
+  action: Éditer les teardrops…
+  selectionAction: Éditer les teardrops de la sélection…
+  title: Éditer les teardrops
+  actionGroup: Action
+  actions:
+    add: Ajouter avec les valeurs par défaut
+    set: Définir les valeurs
+    remove: Retirer
+    removeAll: Tout retirer
+  targets: Cibles
+  target:
+    vias: Vias
+    pthPads: Pads traversants
+    smdPads: Pads CMS
+    trackToTrack: Piste à piste
+  filter: Filtre
+  selectionOnly: 'Élément sélectionné seulement | Éléments sélectionnés seulement ({count}) | Éléments sélectionnés seulement ({count})'
+  roundOnly: Pads ronds seulement
+  existingOnly: Teardrops existantes seulement
+  net: Net
+  allNets: Tous les nets
+  netClass: Classe
+  allClasses: Toutes les classes
+  layer: Couche
+  allLayers: Toutes les couches
+  values: Valeurs
+  keep: Conserver
+  'yes': Oui
+  'no': Non
+  defaultsHint: Les valeurs par défaut de chaque forme sont dans Options du CI ▸ Teardrops.
+  confirm:
+    add: 'Ajouter des teardrops à {count} pad ou via | Ajouter des teardrops à {count} de pads et vias | Ajouter des teardrops à {count} pads et vias'
+    set: 'Définir les teardrops de {count} pad ou via | Définir les teardrops de {count} de pads et vias | Définir les teardrops de {count} pads et vias'
+    remove: 'Retirer les teardrops de {count} pad ou via | Retirer les teardrops de {count} de pads et vias | Retirer les teardrops de {count} pads et vias'
+    removeAll: Retirer toutes les teardrops
+cleanup:
+  action: Nettoyer pistes et vias…
+  selectionAction: Nettoyer la sélection…
+  title: Nettoyer pistes et vias
+  actions: Actions
+  refill: Remplir à nouveau les zones avant et après
+  options:
+    shorts: Supprimer les pistes reliant des nets différents
+    redundantVias: Supprimer les vias redondantes
+    danglingVias: Supprimer les vias connectées sur une seule couche
+    mergeTracks: Fusionner les pistes colinéaires
+    danglingTracks: Supprimer les pistes ayant une extrémité non connectée
+    tracksInPads: Supprimer les pistes entièrement dans les pads
+  filter: Filtrer les éléments
+  selectionOnly: 'Éléments sélectionnés seulement | Éléments sélectionnés seulement ({count}) | Éléments sélectionnés seulement ({count})'
+  net: Net
+  allNets: Tous les nets
+  layer: Couche
+  allLayers: Toutes les couches cuivre
+  loading: Recherche des modifications…
+  clean: Rien à nettoyer.
+  columns:
+    change: Modification
+    net: Net
+    layer: Couche
+    at: Position (mm)
+  change:
+    shortingTrack: Supprimer la piste court-circuitant deux nets
+    shortingVia: Supprimer la via court-circuitant deux nets
+    redundantVia: Supprimer la via redondante
+    duplicateTrack: Supprimer la piste dupliquée
+    zeroLengthTrack: Supprimer la piste de longueur nulle
+    trackInPad: Supprimer la piste dans le pad
+    danglingTrack: Supprimer la piste non connectée aux deux extrémités
+    danglingVia: Supprimer la via connectée sur moins de deux couches
+    mergeTracks: Fusionner les pistes colinéaires
+  confirm: 'Appliquer {count} modification | Appliquer {count} de modifications | Appliquer {count} modifications'
+  fix: Supprimer
+  fixAll: Tout supprimer
+setSizes:
+  action: Définir les tailles selon les règles
+  undo: Définir les tailles selon les règles

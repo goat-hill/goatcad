@@ -1,0 +1,89 @@
+move: Move item | Move {count} items
+delete: Delete item | Delete {count} items
+rotate: Rotate item | Rotate {count} items
+mirror: Mirror item | Mirror {count} items
+# Schematic clipboard steps; the count is how many items landed.
+paste: Paste item | Paste {count} items
+duplicate: Duplicate item | Duplicate {count} items
+# The board and footprint editors' Cut: the count is how many items left.
+cut: Cut item | Cut {count} items
+# A paste into a footprint of board items it cannot hold (tracks, vias, zones):
+# {count} items landed and {dropped} were left out.
+pasteLeavingOut: Paste item ({dropped} left out) | Paste {count} items ({dropped} left out)
+repeat: Repeat item | Repeat {count} items
+addSymbol: Add symbol
+addWire: Add wire
+addLabel: Add label
+addJunction: Add junction
+addNoConnect: Add no-connect flag
+addText: Add text
+addSheet: Add sheet
+addBus: Add bus
+addBusEntry: Add bus entry
+addDirectiveLabel: Add directive label
+addLine: Draw line
+addRectangle: Draw rectangle
+addCircle: Draw circle
+addArc: Draw arc
+addBezier: Draw bezier
+addRuleArea: Draw rule area
+addTable: Draw table
+addImage: Add image
+addTextBox: Add text box
+# A placed part shown as another of its units, or two placements trading theirs
+# (KiCad's Change Unit and Swap Units).
+changeUnit: Change unit
+swapUnits: Swap units
+changeBodyStyle: Change body style
+# Increment Annotations From…: the count is how many designators moved.
+incrementAnnotations: Increment annotation | Increment {count} annotations
+resizeSheet: Resize sheet
+# A free graphic reshaped by one of its handles.
+resizeGraphic: Resize graphic
+# One point of a wire or bus dragged by its grab handle.
+dragWireEnd: Drag wire end
+dragBusEnd: Drag bus end
+setPaper: Set page size
+addSheetPin: Add sheet pin
+# The wire tidy ran on its own, by the agent's schematic_cleanup; every wire
+# edit runs the same tidy inside its own step, unnamed.
+cleanup: Clean up wires
+# Annotate Schematic ran: the count is how many symbols got a new designator.
+annotate: Annotate symbol | Annotate {count} symbols
+# An agent generated a symbol into the project library, copied one in from
+# another library, or removed one. Each lands in the open library's tab as an
+# ordinary undoable step.
+generateSymbol: Generate symbol
+copySymbol: Copy symbol
+deleteSymbol: Delete symbol
+# board.sync carried the schematic onto the open board: one step, whatever it
+# added, updated or pruned.
+boardSync: Sync board from schematic
+# An MCP client bound a part's fields to a placed symbol. Named for what
+# changed on the sheet, not
+# for who asked: it sits in the same undo list as a hand edit and reads the same.
+bindPart: Bind part
+# An MCP client ran several edits as one transaction
+# (docs/agent-api.md). Named for the shape of the change
+# rather than for who asked, like bindPart above: what the undo reverses is a
+# group of edits, and that is the fact the user needs when reading the list.
+agentBatch: Agent edit | {count} agent edits
+# Field values or placement flags written onto several parts at once, by an MCP
+# client's bom_update; the count is how many parts changed.
+editComponents: Edit component | Edit {count} components
+# An MCP client edited or added one item of a footprint in the project library
+# (items_update / items_create with footprint); the footprint's own undo list.
+editFootprintItem: Edit footprint item
+addFootprintItem: Add footprint item
+# An MCP client edited or added one item of a symbol definition — in the project
+# library or a sheet's own copy (items_update / items_create with symbol).
+editSymbolItem: Edit symbol item
+addSymbolItem: Add symbol item
+# Tools ▸ Update symbols from library / Change symbol (KiCad's two dialogs).
+updateSymbols: Update symbol from library | Update {count} symbols from library
+changeSymbols: Change symbol | Change {count} symbols
+# Find and replace in the schematic: the texts one replace rewrote.
+replaceText: Replace text | Replace {count} texts
+# Align and distribute a multi-selection in the schematic.
+align: Align item | Align {count} items
+distribute: Distribute item | Distribute {count} items

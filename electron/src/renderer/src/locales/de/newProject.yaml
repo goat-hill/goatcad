@@ -1,0 +1,19 @@
+title: Projekt erstellen
+inFolder: in
+name: Projektname
+foundTitle: In diesem Ordner gefunden
+rootSheetLabel: Als Hauptblatt verwenden
+boardsIncluded: 'Wird einbezogen: {names}'
+blankSheet: Stattdessen einen neuen leeren Schaltplan erstellen
+emptyNote: Ein leerer Schaltplan und eine leere Platine werden erstellt.
+create: Projekt erstellen
+cancel: Abbrechen
+existsTitle: Dieser Ordner enthält bereits ein Projekt
+existsBody: '{name} ist bereits hier. Stattdessen öffnen, statt ein weiteres zu erstellen?'
+open: Projekt öffnen
+errors:
+  empty: Projektnamen eingeben.
+  separator: Ein Projektname darf keine Schrägstriche enthalten.
+  reserved: Dieser Name ist vom Betriebssystem reserviert.
+  dots: Ein Projektname darf nicht mit einem Punkt beginnen oder enden.
+  exists: Eine Datei mit diesem Namen ist hier bereits vorhanden.

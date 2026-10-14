@@ -1,0 +1,5 @@
+# Feed for testing the updater in an unpackaged run (electron-updater's
+# forceDevUpdateConfig). Same URL as publish.url in electron-builder.yml.
+provider: generic
+url: https://download.goatcad.com/releases/4f7013dc33ab2a013631d219
+updaterCacheDirName: goatcad-updater

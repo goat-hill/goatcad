@@ -1,0 +1,473 @@
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  /* GoatCAD's dark emerald-and-copper theme. This is the one color config for
+     application chrome and the 2D editor canvases; renderer code reads the
+     canvas variables rather than carrying a second palette. */
+  --vscode-bg-editor: #151c19; /* Deep forest-tinted charcoal */
+  --vscode-bg-viewport: #101513; /* WebGL canvas clear — keep in sync with ViewportEngine.backgroundColor */
+  --vscode-bg-sidebar: #1a221f; /* Sidebar background */
+  --vscode-bg-activity: #202b27; /* Activity bar background */
+  /* Share the activity-bar color to make the window frame continuous. */
+  --vscode-bg-title: var(--vscode-bg-activity);
+  /* An unfocused window's title bar, half way to the editor background: the
+     raised bar flattens into the window instead of standing off it. Which
+     direction "dimmer" runs is the theme's business — dark loses light, light
+     gains it (GNOME, macOS and Windows all converge the backdrop bar toward the
+     window body), so the two palettes set it separately. */
+  --vscode-bg-title-inactive: #1a2320;
+  --vscode-bg-dropdown: #25332e;
+  --vscode-bg-hover: #2b3b35;
+  --vscode-bg-active: #32473f;
+  /* Selection in a list that does NOT have focus (VS Code's "inactive selection"):
+     deliberately dimmer than both --vscode-bg-active and --vscode-bg-hover, so the
+     focused pane always reads as the strongest thing on screen. */
+  --vscode-bg-selection-inactive: #232f2a;
+  --vscode-border: #24302b;
+
+  --vscode-accent: #cca250; /* Premium Brushed Copper/Gold track color */
+  --vscode-accent-hover: #dfb35e;
+  --vscode-on-accent: #101513;
+  --vscode-accent-subtle: rgba(204, 162, 80, 0.06);
+  /* The brand mark's hills, solid so it reads on either theme's ground.
+     Mirrored in web/src/styles/tokens.css (--mark-*). */
+  --vscode-mark-far: #5a6661;
+  --vscode-mark-near: #cca250;
+  --vscode-accent-subtle-strong: rgba(204, 162, 80, 0.12);
+  --vscode-accent-border: rgba(204, 162, 80, 0.22);
+  --vscode-accent-find: rgba(204, 162, 80, 0.28);
+  --vscode-accent-find-current: rgba(204, 162, 80, 0.55);
+  --vscode-text: #c5d3cd; /* Soft mint-tinted gray text */
+  --vscode-text-light: #ffffff;
+  --vscode-text-muted: #748780; /* Secondary muted green-gray */
+  --vscode-error: #f48771;
+  --vscode-warning: #d0a215;
+  --vscode-success: #89d185;
+  /* Tinted fills for status badges and destructive hover — the semantic
+     siblings of --vscode-accent-subtle-strong, so a state reads as a shape and
+     a background rather than by hue alone. */
+  --vscode-error-subtle: rgba(244, 135, 113, 0.14);
+  --vscode-warning-subtle: rgba(208, 162, 21, 0.14);
+  --vscode-success-subtle: rgba(137, 209, 133, 0.14);
+
+  --vscode-tab-active: #151c19;
+  --vscode-tab-active-border: #cca250; /* Gold line indicating active tab */
+  --vscode-tab-inactive: #1c2522;
+  --vscode-tab-border: #24302b;
+
+  --vscode-input-bg: #202b27;
+  --vscode-input-border: #3b4d46;
+  --vscode-input-focus: #cca250;
+  --vscode-bg-3d-near: #1a231f;
+  --vscode-bg-3d-mid: #131a16;
+  --vscode-bg-3d-far: #0c110e;
+  --vscode-overlay-strong: rgba(26, 34, 31, 0.9);
+  --vscode-overlay: rgba(26, 34, 31, 0.85);
+  --vscode-overlay-muted: rgba(26, 34, 31, 0.6);
+  --vscode-overlay-control: rgba(255, 255, 255, 0.03);
+  --vscode-overlay-control-hover: rgba(255, 255, 255, 0.08);
+  --vscode-shadow-float: rgba(0, 0, 0, 0.3);
+  --vscode-property-value-bg: rgba(0, 0, 0, 0.22);
+  /* A large body of data being read — the library chooser's table and details —
+     sits on the document surface with its key column in the strongest text, a
+     step from the chrome around it. Aliases, so both themes follow. */
+  --vscode-data-bg: var(--vscode-bg-editor);
+  --vscode-data-fg: var(--vscode-text-light);
+  /* Modal dialogs: the scrim behind one and the shadow under it. */
+  --vscode-scrim: rgba(0, 0, 0, 0.65);
+  --vscode-shadow-modal: rgba(0, 0, 0, 0.5);
+  /* A tab bar or drawer a dragged tab or file would land in. */
+  --vscode-drop-target-subtle: rgba(14, 99, 156, 0.1);
+  /* Library item kinds (symbol / footprint / 3D model) and the neutral mark
+     for an association that is present but not the row's own kind. */
+  --vscode-kind-symbol: var(--vscode-accent);
+  --vscode-kind-footprint: #6cc08b;
+  --vscode-kind-model: #8a6fd0;
+  --vscode-kind-present: #5f7269;
+  /* The Component view tab's violet, so it reads as a surface, not a file. */
+  --vscode-component: #8a6fd0;
+  --vscode-component-text: #b9a6ea;
+  /* File-kind hues (FileIcon.vue). None is gold or green: those are the git
+     modified/added colors on the same rows. */
+  --vscode-file-schematic: #a193ee;
+  --vscode-file-board: #56b6c2;
+  --vscode-file-image: #d884b4;
+  --vscode-file-pdf: #d9695f;
+  --vscode-file-html: #e3844f;
+  --vscode-file-markdown: #6f9fe6;
+  --vscode-file-plain: #8a9a93;
+  --vscode-source-bg: #0b0f0d;
+  --vscode-source-text: #cdd7d1;
+  --vscode-source-paren: #8892b0;
+  --vscode-source-string: #89d185;
+  --vscode-source-number: #79c0ff;
+
+  --vscode-canvas-grid: #5c7166;
+  --vscode-canvas-axis: #435249;
+  --vscode-canvas-symbol: #cca250;
+  --vscode-canvas-selection: #66b3ff;
+  --vscode-canvas-selection-rim: #0b0f0d;
+  /* The schematic selection halo, composited at the overlay's 55%. */
+  --vscode-canvas-selection-halo: #66b3ff;
+  --vscode-canvas-wire: #4aba62;
+  /* Buses: KiCad draws them blue, apart from the wires they carry. A slate
+     blue here, deeper and more violet than the selection sky blue. */
+  --vscode-canvas-bus: #7b8ce0;
+  --vscode-canvas-no-connect: #d16d78;
+  /* DNP cross: KiCad's marker is a loud red on purpose — it has to read as
+     "this part is not fitted" across a whole sheet, so it sits outside the
+     muted canvas palette and well clear of the no-connect rose above it. */
+  --vscode-canvas-dnp: #ef4b40;
+  /* Net labels read in neutral ink, as KiCad's labels are uncolored ink beside
+     its teal Reference/Value. Scope is a ladder in lightness: the wider a name
+     reaches, the brighter it reads. A local label is the dimmer, a global label
+     the brightest, and a hierarchical label sits with the sheet color because
+     that is what it belongs to. The KIND is carried by shape (KiCad's flag and
+     glyph vocabulary, docs/references/kicad-label-shapes.md), so color
+     reinforces rather than has to distinguish on its own. */
+  --vscode-canvas-label: #d7e0dc;
+  --vscode-canvas-label-global: #e6ece9;
+  --vscode-canvas-label-hierarchical: #8daea0;
+  --vscode-canvas-text: #d7e0dc;
+  /* Roles with their own input though some share a color, so a palette can
+     part them: Reference and Value (KiCad colors them apart), free sheet notes,
+     a pin's line (KiCad's "pin"), a junction, and a power port's body and pin.
+     Pins and power ports follow the symbol color, as KiCad's default themes
+     draw them (LAYER_PIN = LAYER_DEVICE). Reference and Value take the color,
+     labels the ink: KiCad's teal identity fields. */
+  --vscode-canvas-reference: #9bc7b0;
+  --vscode-canvas-value: #9bc7b0;
+  /* Free sheet text is how a sheet is sectioned ("Power LED", "Boot pull-up"),
+     so it is the brightest ink on the canvas, a step above even a global label. */
+  --vscode-canvas-notes: #ffffff;
+  --vscode-canvas-pin: var(--vscode-canvas-symbol);
+  --vscode-canvas-junction: var(--vscode-canvas-wire);
+  --vscode-canvas-power: var(--vscode-canvas-symbol);
+  --vscode-canvas-pin-number: #d59d72;
+  --vscode-canvas-pin-name: #8fc7bd;
+  --vscode-canvas-pad-number: #eef3f0; /* Ink on copper — reads against the layer, not the canvas */
+  /* The two inks a board label takes, whichever reads better on the copper
+     under it (KiCad's rule): the same in both themes, since the copper, not
+     the canvas, is what the label sits on. */
+  --vscode-canvas-ink-on-dark: #eef3f0;
+  --vscode-canvas-ink-on-light: #121a16;
+  /* Drilled holes: the bore is the canvas seen through the board, one step
+     darker so it still reads as a void; the wall around it is what separates a
+     plated barrel from a bare-laminate one. */
+  --vscode-canvas-hole: #0b100e;
+  --vscode-canvas-hole-plated: #c8ab63;
+  --vscode-canvas-hole-unplated: #8e9d95;
+  /* A via the router has not placed yet: it spans no layers so far, so it is
+     a neutral gray rather than any layer's copper. */
+  --vscode-canvas-via: #b9c2bd;
+  --vscode-canvas-field: #a992c4;
+  --vscode-canvas-hidden: #748780;
+  --vscode-canvas-symbol-body: #2a2417;
+  --vscode-canvas-sheet: #8daea0;
+  /* Rule areas (KiCad's red dashed outline) and directive labels (its gray
+     net-class flag): annotation about the design, not part of it. */
+  --vscode-canvas-rule-area: #d9825f;
+  --vscode-canvas-directive: #a4b1ab;
+  --vscode-canvas-net-highlight: #e8c46a;
+  /* Airwires — thin and quiet: present everywhere on an unrouted board, so
+     they must read as guidance, never compete with copper. */
+  --vscode-canvas-ratsnest: #b8c7be;
+  /* The board's area under the layers, drawn translucent (BOARD_AREA_ALPHA). */
+  --vscode-canvas-board-area: #7f988a;
+  /* The snap crosshair, and the box-select rectangle by direction: a window
+     (left to right) selects what it encloses, a crossing what it touches. */
+  --vscode-canvas-crosshair: #a8c0b5;
+  --vscode-canvas-select-window: #2a9d8f;
+  --vscode-canvas-select-crossing: #e76f51;
+  /* Gerber views: drill hits, and a file whose layer is not recognized. */
+  --vscode-canvas-drill: #cfd6d2;
+  --vscode-canvas-layer-unknown: #ffffff;
+  /* A finding's canvas marker (FindingMarkers.ts): hues no layer, net or the
+     selection uses, edged so they hold on copper and on the empty canvas. */
+  --vscode-canvas-marker-error: #ff3fb4;
+  --vscode-canvas-marker-warning: #ffb020;
+  --vscode-canvas-marker-edge: #0b0f0d;
+  /* An agent's work on the person's canvas: its routing outline and ghost. */
+  --vscode-canvas-agent: #c39bff;
+  /* The 3D view's dimension gauge: one muted hue per axis, and its box. */
+  --vscode-gauge-x: #cf6672;
+  --vscode-gauge-y: #7fb07a;
+  --vscode-gauge-z: #6a92cf;
+  --vscode-gauge-box: #54685e;
+
+  /* Terminal (ANSI 0-15). A shell prints in these sixteen and nothing else, so
+     they are tokens like any other color: the terminal must follow the app's
+     theme rather than carry a palette of its own. Tuned toward the emerald
+     surround — desaturated a little, and bright enough at 11px on the terminal
+     background to stay legible. --vscode-source-* supplies bg/fg/cursor. */
+  --vscode-term-black: #2a3531;
+  --vscode-term-red: #e06c6c;
+  --vscode-term-green: #6fbf73;
+  --vscode-term-yellow: #d3a24f;
+  --vscode-term-blue: #6a9fd8;
+  --vscode-term-magenta: #b48ac9;
+  --vscode-term-cyan: #56b6ab;
+  --vscode-term-white: #c5d3cd;
+  --vscode-term-bright-black: #667a72;
+  --vscode-term-bright-red: #f48771;
+  --vscode-term-bright-green: #89d185;
+  --vscode-term-bright-yellow: #e8c46a;
+  --vscode-term-bright-blue: #79c0ff;
+  --vscode-term-bright-magenta: #cba6e0;
+  --vscode-term-bright-cyan: #6fd6c9;
+  --vscode-term-bright-white: #eef3f0;
+  --vscode-term-selection: rgba(204, 162, 80, 0.28);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  /* Dark, turned to daylight by rule rather than by eye (docs/DESIGN.md §2 Color):
+     every token keeps its dark hue and chroma, and its lightness is read off
+     one monotonic map from the dark value, so every ladder in dark (surfaces,
+     the label scope, Reference over pin text, notes as the strongest ink)
+     holds here in the same order. Surfaces mirror their step from the editor
+     ground; the canvas is the lightest ground, as it is the darkest in dark. */
+  --vscode-bg-editor: #f0f8f4;
+  --vscode-bg-viewport: #fbfffd;
+  --vscode-bg-sidebar: #e8f1ee;
+  --vscode-bg-activity: #dde8e4;
+  --vscode-bg-title: var(--vscode-bg-activity);
+  --vscode-bg-title-inactive: #e7f0ed;
+  /* Raised surfaces (menus, inputs) are the one inversion: they lift toward
+     white rather than step darker, as a lit surface does. */
+  --vscode-bg-dropdown: #fcfefd;
+  --vscode-bg-hover: #c9d9d3;
+  --vscode-bg-active: #bbcfc7;
+  --vscode-bg-selection-inactive: #d8e4df;
+  --vscode-border: #c4d0cb;
+
+  --vscode-accent: #805600;
+  --vscode-accent-hover: #6c4800;
+  --vscode-on-accent: #ffffff;
+  --vscode-accent-subtle: rgba(128, 86, 0, 0.07);
+  --vscode-mark-far: #a3b3ac;
+  --vscode-mark-near: #a8792a;
+  --vscode-accent-subtle-strong: rgba(128, 86, 0, 0.14);
+  --vscode-accent-border: rgba(128, 86, 0, 0.28);
+  --vscode-accent-find: rgba(128, 86, 0, 0.24);
+  --vscode-accent-find-current: rgba(128, 86, 0, 0.44);
+  --vscode-text: #2e3a35;
+  --vscode-text-light: #0d100f;
+  --vscode-text-muted: #657871;
+  --vscode-error: #9d3927;
+  --vscode-warning: #7c5800;
+  --vscode-success: #155f16;
+  --vscode-error-subtle: rgba(157, 57, 39, 0.12);
+  --vscode-warning-subtle: rgba(124, 88, 0, 0.12);
+  --vscode-success-subtle: rgba(21, 95, 22, 0.12);
+
+  --vscode-tab-active: var(--vscode-bg-editor);
+  --vscode-tab-active-border: var(--vscode-accent);
+  --vscode-tab-inactive: #e4eeeb;
+  --vscode-tab-border: var(--vscode-border);
+
+  --vscode-input-bg: var(--vscode-bg-dropdown);
+  --vscode-input-border: #97a7a0;
+  --vscode-input-focus: var(--vscode-accent);
+  --vscode-bg-3d-near: #e5f4ed;
+  --vscode-bg-3d-mid: #cdd9d2;
+  --vscode-bg-3d-far: #b4bdb8;
+  --vscode-overlay-strong: rgba(232, 241, 238, 0.92);
+  --vscode-overlay: rgba(232, 241, 238, 0.88);
+  --vscode-overlay-muted: rgba(232, 241, 238, 0.7);
+  --vscode-overlay-control: rgba(46, 58, 53, 0.05);
+  --vscode-overlay-control-hover: rgba(46, 58, 53, 0.1);
+  --vscode-shadow-float: rgba(31, 51, 43, 0.16);
+  /* Lighter than the panel so property values still read as editable cells. */
+  --vscode-property-value-bg: rgba(255, 255, 255, 0.7);
+  --vscode-data-bg: var(--vscode-bg-editor);
+  --vscode-data-fg: var(--vscode-text-light);
+  --vscode-scrim: rgba(31, 51, 43, 0.35);
+  --vscode-shadow-modal: rgba(31, 51, 43, 0.24);
+  --vscode-drop-target-subtle: rgba(98, 172, 234, 0.12);
+  --vscode-kind-symbol: var(--vscode-accent);
+  --vscode-kind-footprint: #117040;
+  --vscode-kind-model: #795ebd;
+  --vscode-kind-present: #889c92;
+  --vscode-component: #795ebd;
+  --vscode-component-text: #5d4a87;
+  --vscode-file-schematic: #6453a8;
+  --vscode-file-board: #006f79;
+  --vscode-file-image: #914472;
+  --vscode-file-pdf: #b0443d;
+  --vscode-file-html: #a04703;
+  --vscode-file-markdown: #3966a8;
+  --vscode-file-plain: #5f6e68;
+  --vscode-source-bg: #ffffff;
+  --vscode-source-text: #2c342f;
+  --vscode-source-paren: #616a87;
+  --vscode-source-string: #155f16;
+  --vscode-source-number: #00558c;
+
+  --vscode-canvas-grid: #899f93;
+  --vscode-canvas-axis: #abbcb1;
+  --vscode-canvas-symbol: #805600;
+  --vscode-canvas-selection: #005ea4;
+  --vscode-canvas-selection-rim: var(--vscode-source-bg);
+  /* Brighter than the selection stroke: at the overlay's 55% it lands where
+     KiCad's light theme puts its halo (#66b3ff at 80%), not on a dull blue. */
+  --vscode-canvas-selection-halo: #2996ff;
+  --vscode-canvas-wire: #007b2e;
+  --vscode-canvas-bus: #5563b3;
+  --vscode-canvas-no-connect: #a94956;
+  --vscode-canvas-dnp: #c9201d;
+  --vscode-canvas-label: #242b28;
+  --vscode-canvas-label-global: #1d211f;
+  --vscode-canvas-label-hierarchical: #4b6a5d;
+  --vscode-canvas-text: #242b28;
+  --vscode-canvas-reference: #315946;
+  --vscode-canvas-value: #315946;
+  --vscode-canvas-notes: #0d100f;
+  --vscode-canvas-pin: var(--vscode-canvas-symbol);
+  --vscode-canvas-junction: var(--vscode-canvas-wire);
+  --vscode-canvas-power: var(--vscode-canvas-symbol);
+  --vscode-canvas-pin-number: #835126;
+  --vscode-canvas-pin-name: #245b53;
+  /* The light copper palette (lib/theme.ts) sits where dark ink reads on it. */
+  --vscode-canvas-pad-number: #121a16;
+  --vscode-canvas-ink-on-dark: #eef3f0;
+  --vscode-canvas-ink-on-light: #121a16;
+  --vscode-canvas-hole: #e9efec;
+  --vscode-canvas-hole-plated: #775500;
+  --vscode-canvas-hole-unplated: #5e6c65;
+  --vscode-canvas-via: #454d49;
+  --vscode-canvas-field: #715b89;
+  --vscode-canvas-hidden: #657871;
+  --vscode-canvas-symbol-body: #f1e4c9;
+  --vscode-canvas-sheet: #4b6a5d;
+  --vscode-canvas-rule-area: #9e4d2a;
+  --vscode-canvas-directive: #54605a;
+  --vscode-canvas-net-highlight: #533a00;
+  --vscode-canvas-ratsnest: #3d4a42;
+  --vscode-canvas-board-area: #5b7365;
+  --vscode-canvas-crosshair: #41574d;
+  --vscode-canvas-select-window: #008275;
+  --vscode-canvas-select-crossing: #b03d20;
+  --vscode-canvas-drill: #2e3330;
+  --vscode-canvas-layer-unknown: var(--vscode-canvas-notes);
+  --vscode-canvas-marker-error: #d4148a;
+  --vscode-canvas-marker-warning: #c97a00;
+  --vscode-canvas-marker-edge: #ffffff;
+  --vscode-canvas-agent: #7445c9;
+  --vscode-gauge-x: #ae4856;
+  --vscode-gauge-y: #43723f;
+  --vscode-gauge-z: #466ca7;
+  --vscode-gauge-box: #92a79c;
+
+  /* Terminal (ANSI 0-15): the six hues through the same map, but the ANSI
+     ladder kept as programs assume it whatever the background — black the
+     darkest, white light, each bright the lighter of its pair — since they
+     pair these as foreground AND background (black on white, a bright
+     background under black text). White text is faint here, as in any light
+     terminal; a program that cares asks the terminal for its background. */
+  --vscode-term-black: #2d3833;
+  --vscode-term-red: #ae3f43;
+  --vscode-term-green: #1e7229;
+  --vscode-term-yellow: #815300;
+  --vscode-term-blue: #376aa0;
+  --vscode-term-magenta: #7c548f;
+  --vscode-term-cyan: #00736a;
+  --vscode-term-white: #c4cdc8;
+  --vscode-term-bright-black: #7a8e86;
+  --vscode-term-bright-red: #d05e5f;
+  --vscode-term-bright-green: #409047;
+  --vscode-term-bright-yellow: #a0702c;
+  --vscode-term-bright-blue: #5488c0;
+  --vscode-term-bright-magenta: #9a71ae;
+  --vscode-term-bright-cyan: #349187;
+  --vscode-term-bright-white: #eaf0ed;
+  --vscode-term-selection: rgba(128, 86, 0, 0.24);
+}
+
+:root {
+  --font-family:
+    'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell,
+    'Helvetica Neue', sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+
+  /* The goat-hill scene's night (shared/HillScene.vue): its tint, how dark it
+     gets, how long it takes to fall, and its stars. Shared so a surface that darkens along
+     with the scene (the Welcome tab) meets it without a seam. Dark in every
+     theme, since night is. */
+  --scene-night: #07121a;
+  --scene-night-opacity: 0.55;
+  --scene-night-fall: 1200ms;
+  --scene-starlight: #f4f1e6;
+
+  /* Type scale (DESIGN.md §2) — the only text sizes in the app. Adopt via
+     var(--text-*); never a raw px at a call site. */
+  --text-caption: 11px; /* the floor — hints, badges, eyebrows */
+  --text-body-sm: 12px; /* secondary text, dense panels, controls */
+  --text-body: 13px; /* primary text on a roomy surface; default control/button */
+  --text-heading: 15px; /* panel / section / dialog titles */
+  --text-display: 20px; /* page heroes, large CTAs */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--vscode-bg-editor);
+  color: var(--vscode-text);
+  font-family: var(--font-family);
+  font-size: 13px;
+  line-height: 1.4;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+input,
+textarea,
+button,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--vscode-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Custom Scrollbar styled for VSCode dark theme */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(121, 121, 121, 0.4);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 100, 100, 0.7);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}

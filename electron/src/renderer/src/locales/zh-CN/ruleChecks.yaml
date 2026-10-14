@@ -1,0 +1,139 @@
+severity:
+  error: 错误
+  warning: 警告
+  ignore: 忽略
+status:
+  passing: 通过
+  findings: '{count} 个问题'
+notSupported: 暂不支持
+defaultSeverity: '默认：{severity}'
+restore: 恢复
+drcGroups:
+  electrical: 电气
+  dfm: 可制造性设计 (DFM)
+  schematicParity: 原理图一致性检验
+  signalIntegrity: 信号完整性
+  readability: 可读性
+  misc: 其他
+ercGroups:
+  connections: 连接
+  conflicts: 冲突
+  misc: 其他
+drc:
+  shorting_items: 短路了两个不同网络的项目
+  tracks_crossing: 走线交叉
+  clearance: 间距违规
+  creepage: 爬电距离违规
+  via_dangling: 过孔未连接或仅连接了一层
+  track_dangling: 走线末端悬空
+  starved_thermal: 缓释热焊盘 (花焊盘) 与填充区的连接不完整
+  copper_edge_clearance: 电路板边缘间距违规
+  hole_clearance: 孔间距违规
+  hole_to_hole: 钻孔太靠近其他孔
+  holes_co_located: 钻孔的位置相同
+  track_width: 走线宽度
+  track_angle: 走线角度
+  track_segment_length: 走线段长度
+  annular_width: 孔环宽度
+  drill_out_of_range: 孔径超出范围
+  microvia_drill_out_of_range: 微孔孔径超出范围
+  via_diameter: 过孔直径
+  courtyards_overlap: 元件外框重叠
+  missing_courtyard: 封装没有定义外框
+  malformed_courtyard: 封装的外框有错误
+  invalid_outline: 电路板的外框形状有问题
+  copper_sliver: 铜箔毛刺
+  solder_mask_bridge: 阻焊开窗与不同网络的项目相连
+  connection_width: 铜连接过窄
+  track_on_post_machined_layer: 走线连接到后加工或背钻板层
+  track_not_centered_on_via: 走线端点未位于过孔中心
+  tuning_profile_track_geometries: 调整配置走线几何图形
+  duplicate_footprints: 重复的封装
+  missing_footprint: 缺少封装
+  extra_footprint: 多余的封装
+  footprint_symbol_mismatch: 封装特性与符号不匹配
+  footprint_symbol_field_mismatch: 封装字段与符号字段不匹配
+  footprint_filters_mismatch: 封装与符号的封装过滤规则不匹配
+  net_conflict: 焊盘网络与原理图不匹配
+  unconnected_items: 项目之间的连接缺失
+  length_out_of_range: 走线长度超出范围
+  skew_out_of_range: 走线之间的偏差超出范围
+  too_many_vias: 连接上的过孔过多或过少
+  diff_pair_gap_out_of_range: 差分对间隙超出范围
+  diff_pair_uncoupled_length_too_long: 差分未耦合长度太长
+  silk_overlap: 丝印间距
+  silk_over_copper: 被阻焊层截断的丝印
+  silk_edge_clearance: 被板边截断的丝印
+  text_height: 文字高度超出范围
+  text_thickness: 文本线宽超出范围
+  mirrored_text_on_front_layer: 顶层上的镜像文本
+  nonmirrored_text_on_back_layer: 底层上的非镜像文本
+  items_not_allowed: 不允许的项目
+  text_on_edge_cuts: Edge.Cuts 层上的文本或图形项
+  zones_intersect: 覆铜区相交
+  isolated_copper: 死铜
+  footprint: 封装无效
+  padstack: Padstack 存在问题
+  pth_inside_courtyard: PTH 在元件外框内
+  npth_inside_courtyard: NPTH 在元件外框内
+  item_on_disabled_layer: 已禁用铜层上的项目
+  unresolved_variable: 未解析的文本变量
+  assertion_failure: 断言失败
+  footprint_type_mismatch: 封装元件类型与封装焊盘不匹配
+  lib_footprint_issues: 在库中找不到封装
+  lib_footprint_mismatch: 封装与来源库中的封装存在不一致
+  through_hole_pad_without_hole: 通孔焊盘没有孔
+  missing_tuning_profile: 缺失的调整配置
+erc:
+  pin_not_connected: 引脚未连接
+  pin_not_driven: 输入引脚没有被任何输出引脚驱动
+  power_pin_not_driven: 输入电源引脚没有被任何输出电源引脚驱动
+  no_connect_connected: 带有“无连接”标志的引脚具有外部连接
+  no_connect_dangling: 未连接的“无连接”标志
+  label_dangling: 标签未连接
+  isolated_pin_label: 标签仅连接到一个引脚
+  single_global_label: 在原理图中只出现一次的全局标签
+  same_local_global_label: 局部标签和全局标签使用了相同名称
+  wire_dangling: 未连接到任何对象的连线
+  endpoint_off_grid: 符号引脚或连线端点不在连接栅格上
+  four_way_junction: 四个连接点被连接在一起
+  label_multiple_wires: 标签连接了不止一条连线
+  unconnected_wire_endpoint: 未连接的连线端点
+  duplicate_reference: 重复的位号
+  pin_to_pin: 引脚之间的冲突问题
+  unit_value_mismatch: 同一符号的单元的值不同
+  different_unit_footprint: 符号的另一个单元中分配了一个不同的封装
+  different_unit_net: 不同的网络被分配到符号另一单元中的一个共用引脚
+  duplicate_sheet_names: 给定的图纸中重复图纸名称
+  hier_label_mismatch: 层次标签和图纸引脚不匹配
+  multiple_net_names: 这个总线或网络的名称不止一个
+  bus_to_bus_conflict: 总线以图形方式连接，但不共享总线成员
+  bus_to_net_conflict: 总线和网络项目之间的连接无效
+  net_not_bus_member: 网络以图形方式连接到总线，但不是总线成员
+  ground_pin_not_ground: 接地引脚未连接到接地网络
+  stacked_pin_name: 引脚名称看起来像是堆叠引脚
+  field_name_whitespace: 字段名称包含前导/尾随空格
+  unannotated: 符号没有批注
+  unresolved_variable: 未解析的文本变量
+  undefined_netclass: 未定义的网络类
+  simulation_model_issue: SPICE 模型问题
+  similar_labels: 标签名相似 (仅大小写区别)
+  similar_power: 电源引脚名相似 (仅大小写区别)
+  similar_label_and_power: 电源引脚名与标签名相似 (仅大小写区别)
+  lib_symbol_issues: 库符号问题
+  lib_symbol_mismatch: 符号与来源库中的符号存在差异
+  footprint_link_issues: 封装链接问题
+  footprint_filter: 分配的封装不匹配封装筛选规则
+  extra_units: 符号的单元比定义的要多
+  missing_unit: 符号有未放置的单元
+  missing_input_pin: 符号有未放置的输入引脚
+  missing_bidi_pin: 符号有未放置的双向引脚
+  missing_power_pin: 符号有未放置的电源输入引脚
+exclusions:
+  note: 这些是在 KiCad 检查中被排除的问题，读取自项目文件。GoatCAD 按规则及其指明的项目来匹配每个排除项，而不是按 KiCad 绘制标记的位置，因此项目移动后排除项在这里仍然有效——而在 KiCad 中该问题会重新出现。排除项需在 KiCad 中添加和移除。
+  none: 此项目没有排除项。
+  matched: '排除 {count} 个问题'
+  unmatched: 未匹配任何问题
+  unmatchedHint: GoatCAD 当前发现的问题中没有与之对应的——它已被修复、其项目已不存在，或 GoatCAD 对其项目的命名与 KiCad 不同。
+  noItems: 无法匹配
+  noItemsHint: 此排除项只指明了一个位置，没有指明相关项目，因此 GoatCAD 无法判断它对应哪个问题。

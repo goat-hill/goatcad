@@ -1,0 +1,21 @@
+#!/bin/bash
+# Move package-lock.json forward within the ranges package.json already declares.
+#
+# Optional arguments narrow it to specific packages: `bin/deps-update astro`.
+#
+# --save=false is passed last, after any forwarded arguments, so that a stray
+# --save cannot override it: npm takes the last occurrence of a flag, and this
+# script's whole contract is that package.json does not move. (It is npm's own
+# default for `update` — stated explicitly here because the arguments above
+# could otherwise change it.) Crossing a major is a package.json edit and
+# belongs to the upgrade-deps skill, not here.
+#
+# Unlike bin/deps-sync this rewrites a tracked file and changes installed
+# versions, so it is followed by this project's gate and a commit. Not a thing
+# to run reflexively.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+npm update "$@" --save=false

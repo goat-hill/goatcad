@@ -1,0 +1,56 @@
+move: 移动 {count} 个项目
+delete: 删除 {count} 个项目
+rotate: 旋转 {count} 个项目
+mirror: 镜像 {count} 个项目
+paste: 粘贴 {count} 个项目
+duplicate: 复制 {count} 个项目
+cut: 剪切 {count} 个项目
+pasteLeavingOut: 粘贴 {count} 个项目（{dropped} 个被略去）
+repeat: 重复 {count} 个项目
+addSymbol: 添加符号
+addWire: 添加连线
+addLabel: 添加标签
+addJunction: 添加结点
+addNoConnect: 添加无连接标志
+addText: 添加文本
+addSheet: 添加图纸
+addBus: 添加总线
+addBusEntry: 添加总线入口
+addDirectiveLabel: 添加指令标签
+addLine: 绘制线
+addRectangle: 绘制矩形
+addCircle: 绘制圆
+addArc: 绘制圆弧
+addBezier: 绘制贝塞尔曲线
+addRuleArea: 绘制规则域
+addTable: 绘制表格
+addImage: 添加图像
+addTextBox: 添加文本框
+changeUnit: 更改单元
+swapUnits: 交换单元
+changeBodyStyle: 更改图形样式
+incrementAnnotations: 递增 {count} 个位号
+resizeSheet: 调整图纸大小
+resizeGraphic: 调整图形大小
+dragWireEnd: 拖动连线端点
+dragBusEnd: 拖动总线端点
+setPaper: 设置页面尺寸
+addSheetPin: 添加图纸引脚
+cleanup: 整理连线
+annotate: 批注 {count} 个符号
+generateSymbol: 生成符号
+copySymbol: 复制符号
+deleteSymbol: 删除符号
+boardSync: 从原理图同步电路板
+bindPart: 绑定元件
+agentBatch: '{count} 项智能体编辑'
+editComponents: 编辑 {count} 个元件
+editFootprintItem: 编辑封装项目
+addFootprintItem: 添加封装项目
+editSymbolItem: 编辑符号项目
+addSymbolItem: 添加符号项目
+updateSymbols: 从库更新 {count} 个符号
+changeSymbols: 更换 {count} 个符号
+replaceText: 替换 {count} 处文本
+align: 对齐 {count} 个项目
+distribute: 分布 {count} 个项目

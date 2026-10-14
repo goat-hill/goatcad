@@ -1,0 +1,178 @@
+pill:
+  clean: 检查
+  title: 设计规则检查
+  errors: '{count} 个错误'
+  warnings: '{count} 个警告'
+drawer:
+  title: 问题
+  performance: 性能
+  settings: 设置
+  close: 关闭问题列表
+  rerun: 重新运行所有检查
+  clean: 检查未发现问题。
+  checking: 正在检查电路板…
+  pending: 检查尚未运行。重新运行以列出问题。
+  needs: '{actual}，需要 {limit}'
+  allows: '{actual}，允许 {limit}'
+  byRule: '{text}（{rule}）'
+  markers: 画布标记
+  markersAll: 全部
+  markersErrors: 仅错误
+  markersOff: 关
+  count: '{count} 项发现'
+  excluded: 已在 KiCad 中排除
+  excludedHint: 项目的 KiCad 排除项所指的发现。它们不计入总数，智能体也看不到。电路板配置和原理图配置中列出了所有排除项。
+  severity:
+    error: 错误
+    warning: 警告
+performance:
+  empty: 此电路板尚未运行任何任务。
+  total: 总计
+  ms: '{ms} ms'
+  seconds: '{s} s'
+  more: 另外 {count} 个步骤
+  fewer: 收起步骤
+  tasks:
+    refill: 填充区填充
+    check: 设计检查
+    ratsnest: 飞线
+  scope:
+    all: 所有填充区
+    whole: 整个电路板
+    since: 编辑处周围
+  autoZoneFill: 自动填充
+  autoDrc: 自动 DRC
+  mode:
+    greedy: 贪婪
+    full: 完整
+    'off': 关
+rules:
+  unconnectedPin: 未连接的引脚
+  unconnectedWireEnd: 连线端点悬空
+  offGrid: 不在连接栅格上
+  pinConflict: 不应共用网络的引脚
+  inputUndriven: 输入没有驱动源
+  wireDangling: 连线未连接任何对象
+  labelDangling: 标签未连接任何对象
+  labelSinglePin: 标签所在网络只有一个引脚
+  noConnectConnected: 无连接标志位于已连线的引脚上
+  noConnectDangling: 无连接标志未标记任何对象
+  multipleNetNames: 一条连线有两个名称
+  labelMultipleWires: 标签连接了多条连线
+  netNotBusMember: 网络不是其总线的成员
+  busToBusConflict: 总线与端口没有共同成员
+  busToNetConflict: 网络与总线在同一条连线上
+  unconnectedSheetPort: 图纸引脚或层次标签未连接任何对象
+  unannotated: 元件未批注
+  duplicateReference: 两个元件使用同一位号
+  extraUnits: 元件不存在该单元
+  unitValueMismatch: 各单元的数值不同
+  missingUnit: 单元未放置
+  missingPowerPin: 未放置的单元含有电源引脚
+  missingInputPin: 未放置的单元含有输入引脚
+  missingBidiPin: 未放置的单元含有双向引脚
+  differentUnitFootprint: 各单元的封装不同
+  differentUnitNet: 共用引脚位于两个网络上
+  duplicateSheetName: 两张图纸同名
+  similarLabels: 仅大小写不同的标签
+  similarPower: 仅大小写不同的电源名称
+  similarLabelAndPower: 仅大小写不同的标签和电源名称
+  sameLocalGlobalLabel: 名称同时用作局部和全局标签
+  groundPinNotGround: 接地引脚未接地
+  stackedPinName: 堆叠引脚编号格式错误
+  fieldNameWhitespace: 字段名含多余空格
+  undefinedNetclass: 未定义的网络类
+  unresolvedVariable: 未定义的文本变量
+  singleGlobalLabel: 全局标签只使用了一次
+  fourWayJunction: 四个对象交于一点
+  symbolLibraryIssue: 无法访问符号库
+  footprintLinkIssue: 无法访问封装
+  footprintFilter: 封装不符合其筛选规则
+  powerInputUndriven: 电源轨没有驱动源
+  sheetPinUnmatched: 图纸引脚没有对应的层次标签
+  hierarchicalLabelUnmatched: 层次标签没有对应的图纸引脚
+  symbolLibraryMismatch: 符号落后于其库
+  padsOverlap: 焊盘重叠
+  netTieShort: 铜在网络连接点之外连接了焊盘
+  netTieGroups: 网络连接点组引用了不存在的焊盘
+  silkClippedByMask: 丝印被阻焊裁剪
+  padstack: 可疑焊盘
+  padstackInvalid: 无效焊盘
+  throughHolePadWithoutHole: 通孔焊盘没有孔
+  malformedCourtyard: 元件外框未闭合
+  holesCoLocated: 钻孔位于同一点
+  holeToHole: 钻孔相互接触
+  silkWidth: 丝印宽度（KLC）
+  referenceText: 位号文本样式（KLC）
+  valueText: 数值文本样式（KLC）
+  missingCourtyard: 无元件外框（KLC）
+  courtyardEnclosure: 元件外框未包围元件（KLC）
+  footprintTypeMismatch: 贴装类型与焊盘不符（KLC）
+  duplicatePin: 两个引脚编号相同
+  powerSymbol: 电源符号未指定网络
+  powerSymbolHiddenPin: 电源符号引脚被隐藏
+  hiddenPowerPin: 隐藏的电源输入引脚
+  offGridPin: 引脚不在栅格上
+  referencePrefix: 位号前缀无法编号
+  zeroSizeGraphic: 尺寸为零的形状
+  customRules: 自定义规则未应用
+  copperClearance: 铜间距过小
+  copperShort: 两个网络的铜相互接触
+  tracksCrossing: 走线交叉
+  trackOnPostMachinedLayer: 走线位于背钻或后加工层上
+  holeClearance: 孔与铜距离过近
+  holesTooClose: 钻孔间距过小
+  copperEdgeClearance: 铜距板边过近
+  unconnectedItems: 未布线的连接
+  trackWidth: 走线过窄
+  viaDiameter: 过孔过小
+  annularWidth: 孔周围的铜环过窄
+  drillOutOfRange: 孔太小，无法钻孔
+  microviaDrillOutOfRange: 微孔太小，无法钻孔
+  courtyardsOverlap: 元件外框重叠
+  pthInsideCourtyard: 金属化孔位于其他元件外框内
+  npthInsideCourtyard: 非金属化孔位于其他元件外框内
+  invalidOutline: 电路板外框未闭合
+  itemsNotAllowed: 对象位于 Keepout 区域内
+  zonesIntersect: 同一网络、同一优先级的填充区重叠
+  isolatedCopper: 无连接的填充区死铜
+  starvedThermal: 散热引线过少
+  trackDangling: 走线末端悬空
+  viaDangling: 过孔未连接任何对象
+  connectionWidth: 铜连接过窄
+  copperSliver: 铜碎片
+  textHeight: 文本过小
+  textThickness: 文本笔画过细
+  mirroredTextOnFront: 顶层上的镜像文本
+  nonmirroredTextOnBack: 底层上的非镜像文本
+  textOnEdgeCuts: 板边层上的文本
+  drcError: 文本中的设计规则错误标记
+  drcWarning: 文本中的设计规则警告标记
+  trackSegmentLength: 走线段长度超出范围
+  trackAngle: 走线角度不允许
+  trackNotCenteredOnVia: 走线未对准过孔中心
+  partTypeMismatch: 封装类型与焊盘不符
+  footprint: 封装格式错误
+  noCourtyard: 封装没有元件外框
+  itemOnDisabledLayer: 对象位于电路板不存在的层上
+  assertionFailure: 自定义规则断言失败
+  missingTuningProfile: 网络类引用了不存在的调整配置
+  silkOverlap: 丝印与丝印重叠
+  silkOverCopper: 丝印被阻焊开窗裁剪
+  silkEdgeClearance: 丝印被板边裁剪
+  solderMaskBridge: 网络之间的阻焊桥过窄
+  lengthOutOfRange: 网络长度超出范围
+  skewOutOfRange: 网络长度偏差超出范围
+  tooManyVias: 过孔数量超出范围
+  diffPairGap: 差分对间距超出范围
+  diffPairUncoupledLength: 差分对非耦合长度过长
+  creepage: 沿板面的铜爬电距离过近
+  libraryFootprintIssue: 在库中找不到封装
+  libraryFootprintMismatch: 封装与库副本不同
+  duplicateFootprints: 两个封装使用同一位号
+  missingFootprint: 电路板上缺少元件
+  extraFootprint: 封装不在原理图中
+  footprintSymbolMismatch: 封装与其符号不符
+  footprintSymbolFieldMismatch: 封装字段与其符号不符
+  footprintFiltersMismatch: 封装不符合其符号的筛选规则
+  netConflict: 焊盘网络与原理图不符

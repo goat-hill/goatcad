@@ -1,0 +1,38 @@
+---
+/*
+ * The square brand mark: Hill 1, the site's two hills. A copper near hill
+ * stands in front of a gray-green far hill, centered on the 64 grid. Both are
+ * solid and take --mark-far / --mark-near, so the mark follows the theme.
+ * Transparent background, per docs/BRAND.md §3. It lives behind this one seam so replacing it stays cheap.
+ *
+ * The same geometry is duplicated by necessity in `public/brand-mark.svg`
+ * (the standalone shareable file) and `public/favicon.svg` (cropped tighter,
+ * with a solid far hill for light tabs) — an .astro component cannot be served
+ * as a raw asset. Change one, change all three.
+ *
+ * Plain inline SVG only (BRAND.md §4): the mark is expected to flow into the
+ * Electron app, and that port should be a copy, not a rewrite.
+ *
+ * Sized in em so the parent's font-size scales it; decorative wherever the
+ * product name is written next to it, hence aria-hidden.
+ */
+---
+
+<svg
+  class="brand-mark"
+  viewBox="0 0 64 64"
+  width="1em"
+  height="1em"
+  aria-hidden="true"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path d="M4 49V35L18 23L26 29L38 15L60 33V49Z" fill="var(--mark-far, #5a6661)"></path>
+  <path d="M4 49V41L18 31L26 37L34 31L46 23L60 39V49Z" fill="var(--mark-near, #cca250)"></path>
+</svg>
+
+<style>
+  .brand-mark {
+    display: block;
+    flex-shrink: 0;
+  }
+</style>

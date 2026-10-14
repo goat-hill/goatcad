@@ -1,0 +1,18 @@
+<svg viewBox="4 4 56 56" xmlns="http://www.w3.org/2000/svg">
+  <title>GoatCAD</title>
+  <!--
+    brand-mark.svg cropped to the hills' 56-wide square for a browser tab.
+    Colors match the mark-far and mark-near tokens in web/src/styles/tokens.css.
+    make-og-assets.mjs renders favicon.png from this file.
+  -->
+  <style>
+    .far { fill: #5a6661; }
+    .near { fill: #cca250; }
+    @media (prefers-color-scheme: light) {
+      .far { fill: #a3b3ac; }
+      .near { fill: #a8792a; }
+    }
+  </style>
+  <path class="far" d="M4 49V35L18 23L26 29L38 15L60 33V49Z" />
+  <path class="near" d="M4 49V41L18 31L26 37L34 31L46 23L60 39V49Z" />
+</svg>

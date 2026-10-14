@@ -1,0 +1,83 @@
+#!/bin/bash
+#
+# Verify a packaged build actually runs: launch the real binary from dist/ with
+# a throwaway profile and check the renderer came up whole — preload bridge
+# present, Welcome tab mounted, no renderer errors.
+#
+# This is the one check a dev run cannot make. Fuses, the asar, and
+# the packaged preload exist only in the packaged app, and every failure mode
+# there is quiet: v0.1.0 shipped with a preload the renderer refused to load,
+# which showed up as a launched app with no welcome tab and broken UI, and
+# nothing in ./bin/pre-cm-checks or a green electron-builder run said a word.
+#
+# Run it after ./bin/package, or on its own. Headless on Linux through xvfb-run
+# when there is no display.
+#
+# Usage:
+#   ./bin/verify-packaged                 # package (--dir), then verify
+#   ./bin/verify-packaged --no-build      # verify what is already in dist/
+#   ./bin/verify-packaged --screenshot out.png
+#
+set -euo pipefail
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+
+build=1
+screenshot=()
+for arg in "$@"; do
+  case "$arg" in
+    --no-build) build=0 ;;
+    --screenshot=*) screenshot=(--screenshot "${arg#--screenshot=}") ;;
+    --help|-h) sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    *) echo "verify-packaged: unknown option '$arg' (try --help)" >&2; exit 2 ;;
+  esac
+done
+
+case "$(uname -s)" in
+  Linux) binary=dist/linux-unpacked/goatcad ;;
+  Darwin) binary=dist/mac-arm64/GoatCAD.app/Contents/MacOS/GoatCAD ;;
+  *) echo "verify-packaged: unsupported platform '$(uname -s)'" >&2; exit 1 ;;
+esac
+
+if [ "$build" = 1 ]; then
+  ./bin/package --dir
+fi
+if [ ! -x "$binary" ]; then
+  echo "verify-packaged: no packaged app at $binary — build first with ./bin/package --dir" >&2
+  exit 1
+fi
+
+port="${GOATCAD_VERIFY_PORT:-9333}"
+profile="$(mktemp -d)"
+log="$profile/app.log"
+cleanup() {
+  # xvfb-run wraps the app, so kill its children too, and wait before deleting
+  # the profile the app is still writing to.
+  if [ -n "${app_pid:-}" ]; then
+    # KILL, not TERM: Electron under xvfb shrugs off TERM and the wait hangs.
+    pkill -KILL -f "^$PWD/$binary" 2>/dev/null || true
+    pkill -KILL -P "$app_pid" 2>/dev/null || true
+    kill -KILL "$app_pid" 2>/dev/null || true
+    wait "$app_pid" 2>/dev/null || true
+  fi
+  rm -rf "$profile" 2>/dev/null || true
+}
+trap cleanup EXIT
+
+# A fresh profile, so the launch is a first launch: no session to restore, so
+# the Welcome tab is what must appear. No sandbox, because CI runs as root and
+# xvfb has no user namespace to give it.
+launch=("$PWD/$binary" --no-sandbox "--remote-debugging-port=$port")
+if [ "$(uname -s)" = Linux ] && [ -z "${DISPLAY:-}" ] && command -v xvfb-run >/dev/null; then
+  launch=(xvfb-run -a -s "-screen 0 1400x900x24" "${launch[@]}")
+fi
+GOATCAD_USER_DATA_DIR="$profile/userdata" "${launch[@]}" >"$log" 2>&1 &
+app_pid=$!
+
+if ! node scripts/verify-packaged.mjs --port "$port" "${screenshot[@]}"; then
+  echo "--- app output ---" >&2
+  grep -viE "dbus|libva|mesa|vulkan|gl_|gpu|gles|dri|fontconfig|^\s*$" "$log" | tail -30 >&2 || true
+  exit 1
+fi

@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+# Format the GoatCAD site with Prettier. The web/ equivalent of ./bin/format.
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+npm run format

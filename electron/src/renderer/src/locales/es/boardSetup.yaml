@@ -1,0 +1,317 @@
+title: Configuración de la placa
+sections:
+  stackup: Apilado
+  constraints: Restricciones
+  tuningPatterns: Patrones de afinado de longitud
+  teardrops: Lágrimas
+  tuningProfiles: Perfiles de afinado
+  netClasses: Clases de red
+  customRules: Reglas personalizadas
+  rules: Reglas de diseño
+  exclusions: Exclusiones
+groups:
+  copper: Grosor
+  holes: Orificios
+  microvias: Microvías
+  silk: Serigrafía
+  arcs: Aproximación de arcos
+  zones: Relleno de zonas
+  lengthTuning: Ajuste de longitud
+  tuneSingle: Pista única
+  tunePair: Par diferencial
+  tuneSkew: Desfase de par diferencial
+  teardropRound: Formas redondas
+  teardropRect: Formas rectangulares
+  teardropTrack: De pista a pista
+actions:
+  save: Guardar
+  manage: Gestionar
+profile:
+  name: Configuración de restricciones
+  custom: Personalizada
+  edited: editada
+  saveAs: Guardar como…
+stackup:
+  preset:
+    label: Configuración del apilado
+  copperLayers:
+    label: Capas de cobre
+  copperFinish:
+    label: Acabado superficial
+columns:
+  layer: Capa
+  type: Tipo
+  material: Material
+  thickness: Grosor
+  weight: Peso
+  epsilonR: Dk
+  epsilonRHint: Constante dieléctrica (permitividad relativa). Un valor mayor ralentiza las señales; determina la impedancia de las pistas.
+  lossTangent: Df
+  lossTangentHint: Factor de disipación. Cuánta señal absorbe el laminado; solo importa a alta frecuencia.
+  color: Color
+  colorUnsetMask: Sin especificar (verde)
+  colorUnsetSilk: Sin especificar (blanco)
+table:
+  addDielectric: Añadir dieléctrico
+  removeLayer: Eliminar capa
+  copper: Grosor
+  dielectric: Dieléctrico
+  total: Total
+constraints:
+  minClearance:
+    label: Holgura mínima
+  minTrackWidth:
+    label: Anchura mínima de pista
+  minConnectionWidth:
+    label: Anchura mínima de conexión
+  minViaAnnularWidth:
+    label: Anillo anular mínimo
+  minViaDiameter:
+    label: Diámetro mínimo de vía
+  minCopperHoleClearance:
+    label: Holgura de cobre a orificio
+  minCopperEdgeClearance:
+    label: Holgura al borde de la placa
+  minThroughHoleDiameter:
+    label: Tamaño mínimo de taladro
+  minHoleToHole:
+    label: Holgura de orificio a orificio
+  minMicroviaDiameter:
+    label: Diámetro mínimo de microvía
+  minMicroviaDrill:
+    label: Taladro mínimo de microvía
+  minSilkClearance:
+    label: Holgura mínima entre elementos
+  minTextHeight:
+    label: Altura mínima de texto
+  minTextThickness:
+    label: Grosor mínimo de texto
+  maxError:
+    label: Desviación máxima permitida
+  zonesAllowExternalFillets:
+    label: Permitir redondeos fuera del contorno de la zona
+  minResolvedSpokes:
+    label: Mínimo de radios del alivio térmico
+  useHeightForLengthCalcs:
+    label: Incluir la altura del apilado en la longitud de pista
+tuningPatterns:
+  minAmplitude:
+    label: Amplitud mínima (A)
+  maxAmplitude:
+    label: Amplitud máxima (A)
+  spacing:
+    label: Espaciado (s)
+  cornerRadiusPercent:
+    label: Radio de esquina (r), %
+  singleSided:
+    label: Un solo lado
+teardrops:
+  enabled: Lágrimas donde una pista se une a otra más ancha
+  bestLength: Longitud óptima (L)
+  maxLength: Longitud máxima (L)
+  bestWidth: Anchura óptima (W)
+  maxWidth: Anchura máxima (W)
+  trackWidthLimit: Límite de anchura de pista (w/d)
+  curved: Bordes curvos
+  twoSegments: Abarcar dos segmentos de pista
+  preferZone: Preferir conexión a zona
+netClassColumns:
+  name: Clase
+  clearance: Holgura
+  trackWidth: Anch. pista
+  viaDiameter: Tam. vía
+  viaDrill: Orificio vía
+  microviaDiameter: Tam. µvía
+  microviaDrill: Orificio µvía
+  diffPairWidth: Anch. PD
+  diffPairGap: Espacio PD
+  pcbColor: Color PCB
+  tuningProfile: Perfil de afinado
+  wireWidth: Anch. línea
+  busWidth: Anch. bus
+  schematicColor: Color
+  lineStyle: Estilo de línea
+netClasses:
+  title: Clases de red
+  fromInterface: Configurar interfaz estándar…
+  interfaceSupports: USB 2.0, MIPI CSI-2, alimentación RF de 50 Ω
+  interfaceAdds: Fija los tamaños de par de una clase de red, un perfil de afinado calculado para el apilado y reglas personalizadas
+  layerColor: Capa
+  themeColor: Tema
+  importColors: Importar colores del esquema
+  add: Añadir clase
+  remove: Eliminar clase
+  newName: Clase nueva
+patterns:
+  pair: Par diferencial (según la nomenclatura P/N o +/- de KiCad)
+  title: Asignaciones
+  add: Añadir asignación
+  remove: Eliminar asignación
+  matching: Redes coincidentes
+  syntax:
+    any: cualquier secuencia de caracteres
+    one: un carácter cualquiera
+    regex: expresión regular, nombre completo
+  invalid: No es una expresión válida; no coincide con nada
+  overlap: '{count} también en {classes}'
+patternColumns:
+  pattern: Patrón de red
+  netClass: Clase
+  nets: Redes
+extraSizes:
+  title: Tamaños personalizados
+  width: Anchura de pista
+  diameter: Diámetro de vía
+  drill: Taladro de vía
+  addTrack: Añadir anchura de pista
+  addVia: Añadir vía
+  remove: Eliminar tamaño
+currentWidth:
+  title: Anchura según la corriente
+  current: Corriente
+  rise: Aumento de temperatura
+  layer: Capa
+  copper: Grosor
+  width: Anchura mín.
+  source: Según IPC-2221
+  outOfRange: Fuera del rango ajustado de IPC-2221
+section:
+  core: Núcleo
+  prepreg: Prepreg
+  silkTop: F.Silkscreen
+  maskTop: F.Mask
+  silkBottom: B.Silkscreen
+  maskBottom: B.Mask
+  total: Grosor final
+noProject: Esta placa no tiene archivo de proyecto, así que no se pueden guardar las restricciones, las clases de red ni las severidades de las reglas. El apilado se almacena en la propia placa y se guarda con normalidad.
+tuningProfiles:
+  add: Añadir perfil de afinado
+  remove: Eliminar perfil
+  newName: Perfil
+  empty: No hay perfiles de afinado. Una clase de red toma uno en su columna Perfil de afinado.
+  name: Nombre
+  type: Tipo
+  single: Simple
+  differential: Diferencial
+  target: Objetivo
+  timeDomain: Dominio del tiempo
+  viaDelay: Retardo de vía
+  none: Ninguno
+  usedBy: Usado por
+  addLayer: Añadir capa
+  removeLayer: Eliminar capa
+  solve: Calcular
+  solveAll: Calcular todas las capas
+  solveHint: Anchura (y retardo) para el objetivo sobre el apilado, tal como lo calcula la calculadora de KiCad
+  readout: Z
+  columns:
+    layer: Capa
+    topReference: Referencia superior
+    bottomReference: Referencia inferior
+    width: Anchura
+    gap: Espacio
+    delay: Retardo
+  errors:
+    target-not-positive: Fijar primero una impedancia objetivo
+    signal-layer-missing: No se encontró la capa de señal en el apilado
+    zero-signal-thickness: El grosor de la capa de señal debe ser mayor que 0
+    reference-missing: No se encontró la capa de referencia en el apilado
+    reference-same-as-signal: La capa de referencia debe ser distinta de la capa de señal
+    top-reference-missing: No se encontró la capa de referencia superior en el apilado
+    top-reference-not-above: La referencia superior debe estar por encima de la capa de señal
+    bottom-reference-missing: No se encontró la capa de referencia inferior en el apilado
+    bottom-reference-not-below: La referencia inferior debe estar por debajo de la capa de señal
+    zero-dielectric: La altura del dieléctrico debe ser mayor que 0
+    gap-required: Fijar primero el espacio del par; la anchura se calcula para él
+    width-required: Fijar primero la anchura
+    width-and-gap-required: Fijar primero la anchura y el espacio
+    gap-on-single: Un perfil de terminación simple no tiene espacio
+    width-failed: No se pudo calcular la anchura de pista
+    gap-failed: No se pudo calcular el espacio del par diferencial
+    no-width: No se pudo calcular la anchura de pista
+    no-gap: No se pudo calcular el espacio del par diferencial
+    no-delay: No se pudo calcular el retardo de propagación de la pista
+pending:
+  added: Se añade al aplicar
+  edited: Cambia al aplicar
+customRules:
+  add: Añadir regla
+  edit: Editar regla
+  remove: Eliminar regla
+  save: Guardar
+  addSave: Añadir
+  oneRule: Escribir una sola regla, (rule "nombre" …), y nada más.
+  empty: No hay reglas personalizadas. Las Reglas personalizadas de KiCad, o configurar una interfaz estándar, las escriben en .kicad_dru.
+  columns:
+    rule: Regla
+    appliesTo: Se aplica a
+    constraint: Restricción
+    limit: Límite
+interfacePreset:
+  title: Configurar interfaz estándar
+  apply: Aplicar
+  discard: Descartar
+  interface: Interfaz
+  mode: Modo
+  target: Objetivo
+  stackup: Apilado
+  reference: ref.
+  customRules: Reglas personalizadas
+  classUpdates: 'Cambios en {netClass}'
+  profileUpdates: 'Perfil de afinado {profile}'
+  classUnchanged: La clase ya tiene estos tamaños.
+  constraints: Restricciones
+  stackupSummary: '{count} capas de cobre, {thickness} mm'
+  fabLimitsValues: 'pista ≥ {track}, holgura ≥ {clearance}'
+  notSet: sin fijar
+  defaultClearance: Holgura de la clase Default
+  frequency: Frecuencia de diseño
+  differential: diferencial
+  uncontrolled: 'la del estándar, sin mantener: la clase conserva los tamaños de la placa'
+  netClass: Clase de red
+  nets: Redes
+  assignNets: '{netClass} aún no tiene redes. Se configura igualmente; las redes asignadas en Asignaciones la toman, y sus pares se comprueban entonces.'
+  noClasses: Añadir arriba una clase de red y asignar sus redes; después, configurarla aquí.
+  matched: '{count} red, {pairs} pares: | {count} redes, {pairs} pares: | {count} redes, {pairs} pares:'
+  pairGap: Espacio del par
+  groundGap: Espacio a masa
+  linked: Vinculados para la impedancia objetivo; al fijar uno se calcula el otro
+  derivedGap: Usar el espacio derivado
+  layers: Capas
+  gapSource:
+    given: ''
+    fromWidth: Calculado para la anchura
+    classClearance: ''
+    fabClearance: La holgura mínima del fabricante (Restricciones)
+    widened: Ensanchado hasta una anchura que el fabricante produce
+  columns:
+    gap: Espacio
+    width: Anchura
+  writeFailed: 'No se pudo escribir {file}.'
+  modes:
+    usb2:
+      high: High Speed, 480 Mb/s
+      full: Full Speed, 12 Mb/s
+      full-uncontrolled: Full Speed, 12 Mb/s, impedancia sin mantener
+    rf-50:
+      sub1g: Sub-GHz, 868/915 MHz
+      2g4: 2,4 GHz
+      5g: 5 GHz
+    ethernet-mdi:
+      1g: 1000BASE-T
+      100m: 10/100BASE-T
+    rgmii:
+      1g: 1 Gb/s
+      100m: 10/100 Mb/s
+    csi2:
+      1g0: 1,0 Gb/s por carril
+      1g5: 1,5 Gb/s por carril
+      2g5: 2,5 Gb/s por carril
+  errors:
+    unknown-preset: No existe esa interfaz.
+    unknown-mode: No existe ese modo.
+    no-nets: 'Indicar una clase de red distinta de Default, y patrones que coincidan cada uno con una red.'
+    unpaired: 'KiCad empareja las redes por un sufijo P/N o +/-; estas no tienen pareja entre las coincidencias:'
+    bad-layer: 'La línea no puede discurrir por estas capas:'
+    solve-failed: El apilado no tiene solución para este objetivo.
+    below-fab: 'Por debajo de la holgura mínima o la anchura de pista mínima del fabricante (Restricciones).'

@@ -1,0 +1,487 @@
+insertSearch:
+  noMatches: Aucun résultat
+  placeholder: Outils…
+  label: Rechercher des outils
+  sections:
+    edit: Édition
+    view: Affichage
+  groups:
+    select: Sélection
+    place: Placer
+    connect: Connecter
+    routeOptions: Options de routage
+    draw: Dessiner
+    zones: Zones
+    units: Unités
+    utilities: Utilitaires
+    navigate: Naviguer
+    display: Affichage
+    layers: Couches
+  ops:
+    undo: Annuler
+    redo: Rétablir
+    rotateCCW: Rotation anti-horaire
+    rotateCW: Rotation horaire
+    mirrorHorizontal: Miroir horizontal
+    mirrorVertical: Miroir vertical
+    fitView: Zoom optimal
+    zoomIn: Zoom avant
+    zoomOut: Zoom arrière
+    centerOnCursor: Centrer sur le curseur
+    zoomToSelection: Zoom sur la sélection
+    find: Rechercher…
+    sketchPads: Pads en contour
+    inactiveLayers: 'Couches inactives : {mode}'
+properties:
+  selection: Sélection
+  browseFootprint: Choisir une empreinte…
+  openFootprint: Ouvrir dans l’éditeur d’empreintes
+  openDatasheet: Ouvrir la documentation
+  posX: Pos X
+  posY: Pos Y
+  x: X
+  y: Y
+  startX: Début X
+  startY: Début Y
+  endX: Fin X
+  endY: Fin Y
+  midX: Milieu X
+  midY: Milieu Y
+  centerX: Centre X
+  centerY: Centre Y
+  radius: Rayon
+  angle: Angle
+  length: Longueur
+  width: Largeur
+  height: Hauteur
+  marginLeft: Marge G
+  marginTop: Marge H
+  marginRight: Marge D
+  marginBottom: Marge B
+  showPinNames: Afficher noms
+  showPinNumbers: Afficher n°
+  pinNameOffset: Décalage nom
+  show: Afficher
+  showName: Afficher nom
+  doNotAutoplace: Pas d’autoplace
+  strokeWidth: Trait
+  strokeColor: Couleur trait
+  fill: Remplissage
+  fillColor: Couleur rempl.
+  textColor: Couleur
+  size: Taille
+  text: Texte
+  name: Nom
+  derivedFrom: Dérivé de
+  number: Numéro
+  reference: Référence
+  value: Valeur
+  footprint: Empreinte
+  datasheet: Documentation
+  description: Description
+  keywords: Mots-clés
+  electricalType: Type
+  graphicStyle: Style
+  hidden: Masqué
+  inBom: Dans BOM
+  onBoard: Sur le CI
+  excludeFromSim: Excl. sim
+  inPosFiles: Dans fich. pos
+  duplicatePinNumbersAreJumpers: Pins cavaliers
+  power: Alimentation
+  fpFilters: Filtres empr.
+  unitName: Nom d’unité
+  unitsInterchangeable: Unités permut.
+  net: Net
+  trackLength: Piste
+  arcLength: Arc
+  routedLength: Routée
+  padToDie: Pad à chip
+  fullLength: Totale
+  layer: Couche
+  type: Type
+  shape: Forme
+  drill: Perçage
+  roundRatio: Ratio coin
+  strokeType: Style trait
+  side: Face
+  locked: Verrouillé
+  hatchStyle: Hachure
+  hatchPitch: Pas hachure
+  minThickness: Épaisseur min
+  fillMode: Remplissage
+  hatchThickness: Largeur hachure
+  hatchGap: Écart hachure
+  hatchOrientation: Angle hachure
+  priority: Priorité
+  padConnection: Connexion pads
+  padClearance: Isolation pads
+  maskMargin: Expansion masque
+  pasteMargin: Marge pâte
+  pasteRatio: Ratio pâte
+  bridgedMask: Masque ponté autorisé
+  thermalGap: Écart thermique
+  thermalBridge: Rayon thermique
+  teardropsEnabled: Teardrops
+  teardropBestLength: Long. optimale
+  teardropMaxLength: Long. max.
+  teardropBestWidth: Larg. optimale
+  teardropMaxWidth: Larg. max.
+  teardropCurved: Bords courbes
+  teardropTwoSegments: Deux segments
+  teardropMaxTrackWidth: Limite larg. piste
+  teardropPreferZone: Préférer la zone
+  removeIslands: Îlots
+  keepout: Exclusion
+  blockTracks: Bloquer pistes
+  blockVias: Bloquer vias
+  blockPads: Bloquer pads
+  blockPour: Bloquer remplissage
+  blockFootprints: Bloquer empreintes
+  points: Points
+  columns: Colonnes
+  rows: Lignes
+  noEditable: Aucune propriété modifiable
+  knockout: En négatif
+  keepUpright: Garder droit
+  holeShape: Forme trou
+  holeSizeY: Trou Y
+  cornerRadius: Rayon coin
+  border: Bordure
+  externalBorder: Bordure ext.
+  headerBorder: Bordure en-tête
+  rowSeparators: Sép. lignes
+  colSeparators: Sép. colonnes
+  separatorWidth: Largeur sép.
+  borderWidth: Largeur bordure
+  pinLength: Longueur pin
+  scale: Échelle
+  private: Privé
+  minIslandArea: Aire min îlot
+  layerTop: Couche dessus
+  layerBottom: Couche dessous
+  pinType: Type de pin
+  bold: Gras
+  italic: Italique
+  hAlign: Align. H
+  vAlign: Align. V
+  thickness: Épaisseur
+  thicknessAuto: Graisse auto
+  nameSize: Taille nom
+  numberSize: Taille n°
+  commonToAllUnits: Toutes unités
+  paper: Page
+  pads: Pads
+  rotation: Rotation
+  mirror: Miroir
+  diameter: Diamètre
+  kind: Genre
+  libId: ID librairie
+  symbolUnit: Unité
+  bodyStyle: Style de corps
+  bodyStyleStandard: Standard
+  bodyStyleAlternate: Alternatif
+propertyChanges:
+  added: Ajouté
+  removed: Supprimé
+propertySections:
+  text: Propriétés du texte
+  shape: Forme
+  fill: Remplissage
+  border: Bordure
+  margins: Marges
+  pad: Pad
+  hole: Trou
+  via: Via
+  fields: Champs
+  attributes: Attributs
+  overrides: Outrepasser
+  keepout: Exclusion
+  islands: Îlots
+  thermal: Frein thermique
+  teardrops: Teardrops
+  pinDisplay: Affichage des pins
+  units: Unités et styles de corps
+  length: Longueur
+propertiesPanel:
+  title: Propriétés
+  manufacture: Sorties de fabrication
+  components: Composants
+  schematicSetup: Configuration de la schématique
+  updateFromSchematic: Mettre à jour depuis la schématique
+  syncAdded: '{count} empreinte à ajouter | {count} empreintes à ajouter | {count} empreintes à ajouter'
+  syncRemoved: '{count} empreinte absente de la schématique | {count} empreintes absentes de la schématique | {count} empreintes absentes de la schématique'
+  syncEdited: '{count} empreinte à mettre à jour | {count} empreintes à mettre à jour | {count} empreintes à mettre à jour'
+  syncNoSchematic: Le projet n’a pas de schématique à partir de laquelle mettre à jour.
+  syncUnannotated: Non annoté
+  boardSetup: Options du CI
+  colorInherited: Par défaut
+  colorReset: Rétablir la couleur par défaut
+preview3dToggle:
+  board: Vue 3D du circuit imprimé
+  footprint: Aperçu du modèle 3D
+nonActiveDisplay:
+  modes:
+    show: affichées
+    dim: atténuées
+    hide: masquées
+layersPanel:
+  title: Couches
+  buttonTitle: Couches
+  presetLabel: Préréglage
+  selectPreset: Sélectionner…
+  savePresetTitle: Enregistrer ces couches comme préréglage nommé
+  deletePresetTitle: Supprimer ce préréglage
+  deletePresetDisabledTitle: Sélectionnez un préréglage enregistré pour le supprimer
+  activeLayerTitle: Couche active
+  toggleVisibilityTitle: Basculer la visibilité de la couche
+gridSettingsPanel:
+  title: Grille
+  buttonTitle: Grille
+  unit: Unité
+  spacing: Pas
+  showGrid: Afficher la grille
+  snap: Magnétisme
+viewportStatus:
+  axisX: X
+  axisY: Y
+  gridMm: '{value} mm'
+  gridMil: '{value} mil'
+  gridIn: '{value} in'
+  unitMm: mm
+  unitMil: mil
+  unitIn: in
+viewportPopover:
+  pin: Épingler au panneau latéral
+  unpin: Détacher vers le coin de la vue
+selectionFilterPanel:
+  title: Filtre de sélection
+  allItems: Tous les éléments
+  locked: Verrouillés
+  button: Filtre
+  buttonTitle: Filtre de sélection
+  kinds:
+    footprint: Empreintes
+    track: Pistes
+    via: Vias
+    zone: Zones
+    pad: Pads
+    graphic: Graphiques
+    text: Textes
+    point: Points
+    symbol: Symboles
+    wire: Fils
+    label: Labels
+    junction: Jonctions
+    no_connect: Non-connexions
+    sheet: Feuilles
+    sheet_pin: Pins de feuille
+    image: Images
+    rule_area: Surfaces à règles
+    field: Texte de champ
+    pin: Pins
+layerPresets:
+  all: Toutes les couches
+  frontAssembly: Vue d’assemblage dessus
+  front: Couches dessus
+  backAssembly: Vue d’assemblage dessous
+  back: Couches dessous
+  copper: Toutes les couches cuivre
+  innerCopper: Couches cuivre internes
+  none: Aucune couche
+componentsTable:
+  filterPlaceholder: Filtrer les composants…
+  groupSymbols: Grouper les symboles
+  columns: Colonnes
+  columnsFieldHeader: Champ
+  columnsShowHeader: Visible
+  columnsGroupHeader: Grouper
+  recordCount: '{count} composants'
+  rowForeignTitle: Sur une autre feuille — cliquez pour l’ouvrir
+  collapseGroup: Replier le groupe
+  expandGroup: Déplier le groupe
+  mixedValue: (mixte)
+  noComponentsFiltered: Aucun composant ne correspond au filtre.
+  noComponentsAtAll: Aucun composant dans cette schématique.
+  fields:
+    reference: Référence
+    sheet: Feuille
+    value: Valeur
+    dnp: DNP
+    excludeFromBom: Exclure de la BOM
+    excludeFromBoard: Exclure du circuit imprimé
+    footprint: Empreinte
+    datasheet: Documentation
+layerNames:
+  fCu: Cuivre dessus
+  bCu: Cuivre dessous
+  fSilkS: Sérigraphie dessus
+  bSilkS: Sérigraphie dessous
+  fMask: Masque dessus
+  bMask: Masque dessous
+  fPaste: Pâte dessus
+  bPaste: Pâte dessous
+  fFab: Fabrication dessus
+  bFab: Fabrication dessous
+  fCrtYd: Zone d’occupation dessus
+  bCrtYd: Zone d’occupation dessous
+  edgeCuts: Contour du CI
+netHighlight:
+  status: Net
+  clear: Effacer
+  highlight: Surligner le net
+  clearMenu: Effacer le surlignage du net
+selectOther:
+  title: Sélectionner
+  all: Tout sélectionner
+  menu: Sélectionner un autre…
+primitives:
+  board: Circuit imprimé
+  footprint: Empreinte
+  pad: Pad
+  track: Piste
+  trackArc: Arc de piste
+  tuningPattern: Modèle d’ajustage
+  via: Via
+  zone: Zone
+  ruleArea: Surface à règles
+  line: Ligne
+  arc: Arc
+  circle: Cercle
+  rectangle: Rectangle
+  polygon: Polygone
+  curve: Courbe
+  text: Texte
+  textBox: Boîte de texte
+  table: Tableau
+  point: Point
+  symbol: Symbole
+  pin: Pin
+  field: Champ
+  wire: Fil
+  bus: Bus
+  busEntry: Entrée de bus
+  junction: Jonction
+  noConnect: Non-connexion
+  label: Label
+  directiveLabel: Label de directive
+  sheet: Feuille
+  sheetPin: Pin de feuille
+  graphic: Graphique
+  image: Image
+libraryChooser:
+  title:
+    placeSymbol: Placer un symbole
+    placePower: Placer un symbole d’alimentation
+  search:
+    symbol: Rechercher des symboles…
+    power: Rechercher des symboles d’alimentation…
+    footprint: Rechercher des empreintes…
+  searchTitle: 'Rechercher ({keys})'
+  scopes:
+    design: Dans cette conception
+    project: Projet
+    global: Les miennes
+    system: Standard
+  sections:
+    design: Dans cette conception
+    recent: Récents
+    fits: Compatible avec le symbole
+  columns:
+    name: Nom
+    description: Description
+  fits: Compatible
+  moreResults: '{n} de plus — continuez à taper pour affiner'
+  noMatches: Aucun résultat
+  indexing: Indexation des librairies…
+  noModel: Aucun modèle 3D
+  loading: Chargement…
+  noFootprint: Aucune empreinte assignée
+  noFootprintOption: Aucune
+  footprintMissing: Aucune librairie ne contient cette empreinte
+  unreadable: Impossible de lire ce fichier.
+  details:
+    name: Nom
+    description: Description
+    keywords: Mots-clés
+    source: Source
+    pinMap: Pins
+    datasheet: Documentation
+  pinMap:
+    allMatch: Chaque pin a un pad ({n})
+    pinsWithoutPad: 'Aucun pad pour : {list}'
+    padsWithoutPin: 'Aucune pin pour le pad : {list}'
+  openDatasheet: Ouvrir
+  cancel: Annuler
+  place: Placer
+  assign: Assigner
+  assignMany: Assigner à {n} pièces
+  change: Changer
+librarySync:
+  checking: Vérification de la librairie…
+  matches: 'Conforme à la librairie | Les {count} sont conformes à la librairie | Les {count} sont conformes à la librairie'
+  differs: Désynchronisé de la librairie
+  differsSome: '{count} sur {total} désynchronisés de la librairie'
+  missing: Dans aucune librairie
+  missingSome: '{count} sur {total} ne sont dans aucune librairie'
+libraryLink:
+  title: Librairie
+  update: Mettre à jour depuis la librairie…
+  updateHint: Reconstruire depuis la copie de la librairie, en conservant position, référence et nets
+  changeSymbol: Changer de symbole…
+  changeFootprint: Changer d’empreinte…
+  changeHintSymbol: Remplacer par un autre symbole de librairie
+  changeHintFootprint: Remplacer par une autre empreinte de librairie
+  editSymbol: Éditer le symbole…
+  editFootprint: Éditer l’empreinte…
+  editHintSymbol: Éditer la copie du symbole de cette feuille, sans toucher à la librairie
+  editHintFootprint: Éditer la copie de l’empreinte de ce circuit imprimé, sans toucher à la librairie
+  editLibrarySymbol: Éditer le symbole de librairie…
+  editLibraryFootprint: Éditer l’empreinte de librairie…
+  editLibraryHintSymbol: Ouvrir le symbole de librairie dans l’éditeur de symboles
+  editLibraryHintFootprint: Ouvrir l’empreinte de librairie dans l’éditeur d’empreintes
+partUpdate:
+  updateTitleSymbol: Mettre à jour les symboles depuis la librairie
+  updateTitleFootprint: Mettre à jour les empreintes depuis la librairie
+  changeTitleSymbol: Changer les symboles
+  changeTitleFootprint: Changer les empreintes
+  fromPartSymbol: Symbole de librairie
+  fromPartFootprint: Empreinte de librairie
+  newPartSymbol: Nouveau symbole
+  newPartFootprint: Nouvelle empreinte
+  newPartPlaceholderSymbol: Librairie:Symbole
+  newPartPlaceholderFootprint: Librairie:Empreinte
+  eachOwn: Chacun depuis le sien
+  updateHintSymbol: Chaque symbole est reconstruit depuis son propre symbole de librairie. Nommez-en un ici pour tous les reconstruire depuis celui-ci.
+  updateHintFootprint: Chaque empreinte est reconstruite depuis sa propre empreinte de librairie. Nommez-en une ici pour toutes les reconstruire depuis celle-ci.
+  updateToHintSymbol: Chaque symbole de la portée est reconstruit depuis ce symbole de librairie.
+  updateToHintFootprint: Chaque empreinte de la portée est reconstruite depuis cette empreinte de librairie.
+  browse: Parcourir…
+  scopeSymbol: Symboles
+  scopeFootprint: Empreintes
+  scopeSelectionSymbol: 'Symboles sélectionnés ({count})'
+  scopeSelectionFootprint: 'Empreintes sélectionnées ({count})'
+  scopeReference: Référence correspondante
+  scopeValue: Valeur correspondante
+  scopeLibId: Identifiant de librairie correspondant
+  scopeAllSymbol: Tous les symboles de la schématique
+  scopeAllFootprint: Toutes les empreintes du circuit imprimé
+  wildcards: '* correspond à toute suite de caractères, ? à un seul'
+  reset: Reprendre de la librairie
+  fields: Champs
+  all: Tout
+  none: Aucun
+  outcomeSymbol: Symboles à reconstruire
+  outcomeFootprint: Empreintes à reconstruire
+  loading: Lecture de la librairie…
+  notFound: 'Aucune librairie ne contient {libId}'
+  matches: Conforme à la librairie
+  differs: Désynchronisé de la librairie
+  nothingSymbol: Aucun symbole dans cette portée.
+  nothingFootprint: Aucune empreinte dans cette portée.
+  cancel: Annuler
+  confirmUpdate: Mettre à jour
+  confirmChange: Changer
+agentViewport:
+  close: Fermer la vue de l’agent
+  reveal: 'Afficher la vue de l’agent : {label}'

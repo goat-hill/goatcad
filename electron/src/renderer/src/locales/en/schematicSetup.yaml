@@ -1,0 +1,12 @@
+# Schematic Setup (SchematicSetupView.vue): a design's project settings for its
+# schematic, the schematic's twin of Board Setup. Same voice as boardSetup.yaml.
+title: Schematic setup
+sections:
+  # KiCad's name for the page that ranks the ERC's rules.
+  rules: Electrical rules
+  # The project's net classes and their patterns: the same ones Board Setup edits.
+  netClasses: Net classes
+  exclusions: Exclusions
+# Severities live in the project file, so a design opened without one has
+# nowhere to save them.
+noProject: This design has no project file, so rule severities cannot be saved and there are no exclusions. The checks run at KiCad's defaults.

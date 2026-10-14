@@ -1,0 +1,91 @@
+errors:
+  createFile: 'Erreur lors de la création du fichier : {error}'
+  deleteFile: 'Erreur lors de la suppression du fichier : {error}'
+  renameFile: 'Erreur lors du renommage du fichier : {error}'
+  library: 'Erreur lors de la mise à jour des librairies : {error}'
+  openRecent: Impossible de charger le dossier sélectionné. Il a peut-être été déplacé ou supprimé.
+  saveFile: 'Erreur lors de l’enregistrement du fichier : {error}'
+confirm:
+  deleteFile: Mettre « {name} » à la corbeille ?
+  renameForward: "Renommer « {from} » en « {to} » ?\n\n{count} autre fichier sera mis à jour en conséquence :\n{files} | Renommer « {from} » en « {to} » ?\n\n{count} autres fichiers seront mis à jour en conséquence :\n{files} | Renommer « {from} » en « {to} » ?\n\n{count} autres fichiers seront mis à jour en conséquence :\n{files}"
+  renameForwardFile: '• {name} ({count} référence de feuille) | • {name} ({count} références de feuille) | • {name} ({count} références de feuille)'
+  deleteFileReferenced: "Mettre « {name} » à la corbeille ?\n\n{count} fichier y fait référence et conservera un lien de feuille orphelin :\n{files} | Mettre « {name} » à la corbeille ?\n\n{count} fichiers y font référence et conserveront des liens de feuille orphelins :\n{files} | Mettre « {name} » à la corbeille ?\n\n{count} fichiers y font référence et conserveront des liens de feuille orphelins :\n{files}"
+  deleteImpactFile: '• {name} ({count} référence de feuille) | • {name} ({count} références de feuille) | • {name} ({count} références de feuille)'
+unsaved:
+  message: Voulez-vous enregistrer les modifications apportées à {name} ?
+  messageMany: Voulez-vous enregistrer les modifications des {count} fichiers suivants ?
+  detail: Vos modifications seront perdues si vous ne les enregistrez pas.
+  dontSave: Ne pas enregistrer
+  saveAll: Tout enregistrer
+branchPicker:
+  placeholder: Changer de branche ou saisir un nouveau nom…
+  create: Créer la branche « {name} »
+  loading: Chargement des branches…
+  noBranches: Aucune branche trouvée.
+quickOpen:
+  placeholder: Aller au fichier…
+  noResults: Aucun fichier correspondant
+shortcuts:
+  title: Raccourcis clavier
+  openFolder: Ouvrir un dossier
+  openProject: Ouvrir un projet
+  goToFile: Aller au fichier
+  newSchematic: Nouvelle schématique
+  newWindow: Nouvelle fenêtre
+  closeTab: Fermer l’onglet
+  nextTab: Onglet suivant
+  previousTab: Onglet précédent
+  splitTab: Déplacer l’onglet vers l’autre volet
+  splitDirection: Basculer volets côte à côte / empilés
+  focusOtherGroup: Activer l’autre volet
+  updatePcb: Mettre à jour le PCB depuis la schématique
+  save: Enregistrer
+  showExplorer: Afficher l’explorateur
+  showLibraries: Afficher les librairies
+  openPartSearch: Ouvrir la recherche de pièces
+  newTerminal: Nouveau terminal
+  openAgent: Ouvrir l’agent
+  openSettings: Ouvrir les paramètres
+  gitFocusCommit: Écrire le message de commit
+  gitCommit: Valider (dans la zone de message)
+  gitStageAll: Indexer toutes les modifications
+  gitPush: Pousser
+  gitPull: Tirer
+  toggleDevTools: Basculer les DevTools
+updatePcb:
+  title: Mettre à jour depuis la schématique
+  board: Circuit imprimé
+  loading: Comparaison de la schématique et du circuit imprimé…
+  upToDate: Le circuit imprimé correspond déjà à la schématique.
+  options: Options
+  replace: Remplacer les empreintes par celles spécifiées dans les symboles
+  prune: Supprimer les empreintes sans symbole associé
+  fields: Mettre à jour les champs d’empreinte à partir des symboles
+  columns:
+    reference: Référence
+    value: Valeur
+    footprint: Empreinte
+    change: Modification
+  change:
+    added: Ajoutée
+    deleted: Supprimée
+    kept: Absente de la schématique, conservée
+    reference: référence
+    value: valeur
+    footprint: empreinte
+    nets: nets des pads
+    fields: champs
+    attributes: attributs
+  skip:
+    noFootprint: Aucune empreinte assignée
+    footprintNotFound: '{libId} ne figure dans aucune librairie'
+    noUuid: Le symbole n’a pas d’UUID
+  confirm: Mettre à jour le PCB
+  errors:
+    noBoard: Le projet n’a pas de circuit imprimé (.kicad_pcb).
+    noSchematic: Le projet n’a pas de schématique racine à partir de laquelle mettre à jour.
+    notAnnotated: 'Annotez d’abord la schématique. Non annotés : {references}'
+netlist:
+  errors:
+    noSchematic: Le projet n’a pas de schématique racine à exporter.
+    write: 'Impossible d’écrire la netliste : {error}'

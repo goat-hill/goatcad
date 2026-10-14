@@ -1,0 +1,70 @@
+menu:
+  file: File
+  # Names the Edit menu — in the title bar on Windows/Linux, in the system menu
+  # bar on macOS. One set of menus, drawn in two places.
+  edit: Edit
+  new: New
+  needsProject: Open a project folder first
+  newProject: New Project…
+  newWindow: New Window
+  openProject: Open Project…
+  openFolder: Open Folder…
+  openFile: Open File…
+  openRecent: Open Recent
+  # Section titles inside Open Recent. A project-less folder sits with the files:
+  # both are things looked at outside a project.
+  recentProjects: Projects
+  recentFiles: Files & Folders
+  noRecent: No Recent Projects
+  clearRecent: Clear Recently Opened
+  save: Save
+  saveAs: Save As…
+  saveAll: Save All
+  # File ▸ the open design's own pages, each a tab (the Properties panel's
+  # buttons with nothing selected). Title Case: this is the menu bar.
+  schematicSetup: Schematic Setup
+  components: Components
+  boardSetup: Board Setup
+  manufacture: Fabrication Outputs
+  # File ▸ Export: files written from the design, in KiCad's formats.
+  export: Export
+  exportNetlist: Netlist…
+  exit: Exit
+  view: View
+  # View menu: the window shows one editor pane or two. "Pane" is the noun used
+  # everywhere for one of them.
+  splitTab: Move Tab to Other Pane
+  splitDirection: Toggle Side-by-Side / Stacked
+  focusOtherGroup: Focus Other Pane
+  toggleDevTools: Toggle Developer Tools
+  # Go: moving between the sheets of a schematic, shown while one has the
+  # keyboard. KiCad's navigation, VS Code's menu name.
+  go: Go
+  goBack: Back
+  goForward: Forward
+  goLeaveSheet: Leave Sheet
+  goPreviousSheet: Previous Sheet
+  goNextSheet: Next Sheet
+  # KiCad's name and F8, so its users find it where they look.
+  updatePcb: Update PCB from Schematic…
+  needsSchematic: Open a project with a schematic first
+  help: Help
+  welcome: Welcome
+  keyboardShortcutsReference: Keyboard Shortcuts Reference
+  # Opens a dialog that drafts a GitHub issue.
+  shareFeedback: Share App Feedback…
+  aboutGoatCAD: About GoatCAD
+windowTitle:
+  workspace: '{tabPrefix}{project}'
+  tabOnly: '{tab}'
+  default: GoatCAD
+  # The title the OS shows (taskbar, window switcher) on Windows and Linux:
+  # the in-app title, then the app's name. Not used on macOS.
+  withApp: '{title} — GoatCAD'
+# Tooltips/labels for the custom window buttons in the frameless title bar.
+# Match whatever the target OS calls these, rather than translating afresh.
+controls:
+  minimize: Minimize
+  maximize: Maximize
+  # The window close button — not the dialog-dismiss button in common.close.
+  close: Close

@@ -1,0 +1,16 @@
+loading: Recherche des fichiers de couche…
+layerCount: '{count} fichier de couche affiché | {count} fichiers de couche affichés | {count} fichiers de couche affichés'
+errorTitle: Impossible de lire ce fichier Gerber
+coords: 'X {x} Y {y} mm'
+warningsTitle: 'Avertissements ({count})'
+readOnlyNote: >-
+  Les fichiers Gerber sont des sorties de fabrication générées ; GoatCAD les
+  ouvre en lecture seule. Réexportez-les depuis l’éditeur de PCB pour les modifier.
+panel:
+  fileTitle: Fichier de la couche active
+properties:
+  file: Fichier
+  function: Fonction
+  units: Unités
+  apertures: Ouvertures
+  objects: Objets

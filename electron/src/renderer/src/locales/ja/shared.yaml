@@ -1,0 +1,487 @@
+insertSearch:
+  noMatches: 一致なし
+  placeholder: ツール…
+  label: ツールを検索
+  sections:
+    edit: 編集
+    view: 表示
+  groups:
+    select: 選択
+    place: 配置
+    connect: 接続
+    routeOptions: 配線オプション
+    draw: 描画
+    zones: ゾーン
+    units: ユニット
+    utilities: ユーティリティ
+    navigate: ナビゲート
+    display: 表示
+    layers: レイヤー
+  ops:
+    undo: 元に戻す
+    redo: やり直し
+    rotateCCW: 反時計回りに回転
+    rotateCW: 時計回りに回転
+    mirrorHorizontal: 水平方向に反転
+    mirrorVertical: 垂直方向に反転
+    fitView: 全体表示
+    zoomIn: ズームイン
+    zoomOut: ズームアウト
+    centerOnCursor: カーソルを中心に表示
+    zoomToSelection: 選択範囲にズーム
+    find: 検索…
+    sketchPads: パッドをスケッチ表示
+    inactiveLayers: '非アクティブレイヤー：{mode}'
+properties:
+  selection: 選択
+  browseFootprint: フットプリントを選択…
+  openFootprint: フットプリントエディターで開く
+  openDatasheet: データシートを開く
+  posX: 位置 X
+  posY: 位置 Y
+  x: X
+  y: Y
+  startX: 始点 X
+  startY: 始点 Y
+  endX: 終点 X
+  endY: 終点 Y
+  midX: 中点 X
+  midY: 中点 Y
+  centerX: 中心 X
+  centerY: 中心 Y
+  radius: 半径
+  angle: 角度
+  length: 長さ
+  width: 幅
+  height: 高さ
+  marginLeft: 余白 左
+  marginTop: 余白 上
+  marginRight: 余白 右
+  marginBottom: 余白 下
+  showPinNames: 名前を表示
+  showPinNumbers: 番号を表示
+  pinNameOffset: 名前オフセット
+  show: 表示
+  showName: 名前を表示
+  doNotAutoplace: 自動配置しない
+  strokeWidth: 線幅
+  strokeColor: 線の色
+  fill: 塗りつぶし
+  fillColor: 塗りつぶしの色
+  textColor: 色
+  size: サイズ
+  text: テキスト
+  name: 名前
+  derivedFrom: 派生元
+  number: 番号
+  reference: リファレンス
+  value: 値
+  footprint: フットプリント
+  datasheet: データシート
+  description: 説明
+  keywords: キーワード
+  electricalType: タイプ
+  graphicStyle: スタイル
+  hidden: 非表示
+  inBom: BOM に含める
+  onBoard: 基板に配置
+  excludeFromSim: シミュ除外
+  inPosFiles: 配置ファイル
+  duplicatePinNumbersAreJumpers: ジャンパーピン
+  power: 電源
+  fpFilters: FP フィルター
+  unitName: ユニット名
+  unitsInterchangeable: ユニット交換可
+  net: ネット
+  trackLength: 配線
+  arcLength: 円弧
+  routedLength: 配線済み
+  padToDie: パッド–ダイ
+  fullLength: 全長
+  layer: レイヤー
+  type: タイプ
+  shape: 形状
+  drill: ドリル
+  roundRatio: コーナー比率
+  strokeType: 線のスタイル
+  side: 面
+  locked: ロック
+  hatchStyle: ハッチ
+  hatchPitch: ハッチピッチ
+  minThickness: 最小幅
+  fillMode: 塗りつぶし
+  hatchThickness: ハッチ幅
+  hatchGap: ハッチ間隔
+  hatchOrientation: ハッチ角度
+  priority: 優先度
+  padConnection: パッド接続
+  padClearance: パッドクリアランス
+  maskMargin: マスク拡張
+  pasteMargin: ペーストクリアランス
+  pasteRatio: ペースト比率
+  bridgedMask: マスクのブリッジを許容
+  thermalGap: サーマルギャップ
+  thermalBridge: サーマルスポーク
+  teardropsEnabled: ティアドロップ
+  teardropBestLength: 最適な長さ
+  teardropMaxLength: 最大長
+  teardropBestWidth: 最適な幅
+  teardropMaxWidth: 最大幅
+  teardropCurved: 曲線のエッジ
+  teardropTwoSegments: 2 セグメント
+  teardropMaxTrackWidth: 配線幅の上限
+  teardropPreferZone: ゾーン優先
+  removeIslands: 孤立部分
+  keepout: 禁止領域
+  blockTracks: 配線を禁止
+  blockVias: ビアを禁止
+  blockPads: パッドを禁止
+  blockPour: 導体塗りつぶしを禁止
+  blockFootprints: フットプリントを禁止
+  points: 頂点
+  columns: 列
+  rows: 行
+  noEditable: 編集可能なプロパティはありません
+  knockout: 白抜き文字
+  keepUpright: 直立を維持
+  holeShape: 穴の形状
+  holeSizeY: 穴 Y
+  cornerRadius: コーナー半径
+  border: 境界
+  externalBorder: 外枠
+  headerBorder: ヘッダー枠
+  rowSeparators: 行区切り
+  colSeparators: 列区切り
+  separatorWidth: 区切り線幅
+  borderWidth: 境界線幅
+  pinLength: ピン長
+  scale: 拡大／縮小率
+  private: プライベート
+  minIslandArea: 最小孤立面積
+  layerTop: 上レイヤー
+  layerBottom: 下レイヤー
+  pinType: ピンのタイプ
+  bold: 太字
+  italic: 斜体
+  hAlign: 水平揃え
+  vAlign: 垂直揃え
+  thickness: 厚さ
+  thicknessAuto: 自動太さ
+  nameSize: 名前サイズ
+  numberSize: 番号サイズ
+  commonToAllUnits: 全ユニット共通
+  paper: 用紙
+  pads: パッド
+  rotation: 回転
+  mirror: 反転
+  diameter: 直径
+  kind: 種類
+  libId: ライブラリ ID
+  symbolUnit: ユニット
+  bodyStyle: ボディスタイル
+  bodyStyleStandard: 標準
+  bodyStyleAlternate: 代替
+propertyChanges:
+  added: 追加
+  removed: 削除
+propertySections:
+  text: テキストのプロパティ
+  shape: 形状
+  fill: 塗りつぶし
+  border: 境界
+  margins: 余白
+  pad: パッド
+  hole: 穴
+  via: ビア
+  fields: フィールド
+  attributes: 属性
+  overrides: 上書き
+  keepout: 禁止領域
+  islands: 孤立部分
+  thermal: サーマルリリーフ
+  teardrops: ティアドロップ
+  pinDisplay: ピンの表示
+  units: ユニットとボディスタイル
+  length: 長さ
+propertiesPanel:
+  title: プロパティ
+  manufacture: 製造用出力
+  components: コンポーネント
+  schematicSetup: 回路図の設定
+  updateFromSchematic: 回路図から更新
+  syncAdded: '追加するフットプリント {count} 個'
+  syncRemoved: '回路図にないフットプリント {count} 個'
+  syncEdited: '更新するフットプリント {count} 個'
+  syncNoSchematic: プロジェクトに更新元となる回路図がありません。
+  syncUnannotated: 未アノテーション
+  boardSetup: 基板の設定
+  colorInherited: 既定
+  colorReset: 既定の色に戻す
+preview3dToggle:
+  board: 3D 基板ビュー
+  footprint: 3D モデルプレビュー
+nonActiveDisplay:
+  modes:
+    show: 表示
+    dim: 暗く表示
+    hide: 非表示
+layersPanel:
+  title: レイヤー
+  buttonTitle: レイヤー
+  presetLabel: プリセット
+  selectPreset: 選択…
+  savePresetTitle: これらのレイヤーを名前付きプリセットとして保存
+  deletePresetTitle: このプリセットを削除
+  deletePresetDisabledTitle: 削除するには保存済みのプリセットを選択してください
+  activeLayerTitle: アクティブレイヤー
+  toggleVisibilityTitle: レイヤーの表示を切り替え
+gridSettingsPanel:
+  title: グリッド
+  buttonTitle: グリッド
+  unit: 単位
+  spacing: 間隔
+  showGrid: グリッドを表示
+  snap: スナップ
+viewportStatus:
+  axisX: X
+  axisY: Y
+  gridMm: '{value} mm'
+  gridMil: '{value} mil'
+  gridIn: '{value} in'
+  unitMm: mm
+  unitMil: mil
+  unitIn: in
+viewportPopover:
+  pin: サイドパネルに固定
+  unpin: 固定を解除してビューポートの隅に戻す
+selectionFilterPanel:
+  title: 選択フィルター
+  allItems: すべてのアイテム
+  locked: ロック
+  button: フィルター
+  buttonTitle: 選択フィルター
+  kinds:
+    footprint: フットプリント
+    track: 配線
+    via: ビア
+    zone: ゾーン
+    pad: パッド
+    graphic: 図形
+    text: テキスト
+    point: ポイント
+    symbol: シンボル
+    wire: ワイヤー
+    label: ラベル
+    junction: ジャンクション
+    no_connect: 未接続フラグ
+    sheet: シート
+    sheet_pin: シートピン
+    image: 画像
+    rule_area: ルール領域
+    field: フィールドテキスト
+    pin: ピン
+layerPresets:
+  all: すべてのレイヤー
+  frontAssembly: 表面アセンブリビュー
+  front: 表面レイヤー
+  backAssembly: 裏面アセンブリビュー
+  back: 裏面レイヤー
+  copper: すべての導体レイヤー
+  innerCopper: 内層の導体レイヤー
+  none: レイヤーなし
+componentsTable:
+  filterPlaceholder: コンポーネントを絞り込み…
+  groupSymbols: シンボルをグループ化
+  columns: 列
+  columnsFieldHeader: フィールド
+  columnsShowHeader: 表示
+  columnsGroupHeader: グループ
+  recordCount: '{count} 個のコンポーネント'
+  rowForeignTitle: 別のシート上にあります — クリックして開く
+  collapseGroup: グループを折りたたむ
+  expandGroup: グループを展開
+  mixedValue: (混在)
+  noComponentsFiltered: フィルターに一致するコンポーネントはありません。
+  noComponentsAtAll: この回路図にコンポーネントはありません。
+  fields:
+    reference: リファレンス
+    sheet: シート
+    value: 値
+    dnp: DNP
+    excludeFromBom: 部品表(BOM)から除外
+    excludeFromBoard: 基板から除外
+    footprint: フットプリント
+    datasheet: データシート
+layerNames:
+  fCu: 表面の導体層
+  bCu: 裏面の導体層
+  fSilkS: 表面シルクスクリーン
+  bSilkS: 裏面シルクスクリーン
+  fMask: 表面ハンダマスク
+  bMask: 裏面ハンダマスク
+  fPaste: 表面ハンダペースト
+  bPaste: 裏面ハンダペースト
+  fFab: 表面ファブリケーション
+  bFab: 裏面ファブリケーション
+  fCrtYd: 表面コートヤード
+  bCrtYd: 裏面コートヤード
+  edgeCuts: 基板外形
+netHighlight:
+  status: ネット
+  clear: 解除
+  highlight: ネットをハイライト
+  clearMenu: ネットのハイライトを解除
+selectOther:
+  title: 選択
+  all: すべて選択
+  menu: 他を選択…
+primitives:
+  board: 基板
+  footprint: フットプリント
+  pad: パッド
+  track: 配線
+  trackArc: 円弧配線
+  tuningPattern: 調整パターン
+  via: ビア
+  zone: ゾーン
+  ruleArea: ルール領域
+  line: ライン
+  arc: 円弧
+  circle: 円
+  rectangle: 矩形
+  polygon: ポリゴン
+  curve: 曲線
+  text: テキスト
+  textBox: テキストボックス
+  table: テーブル
+  point: ポイント
+  symbol: シンボル
+  pin: ピン
+  field: フィールド
+  wire: ワイヤー
+  bus: バス
+  busEntry: バスエントリー
+  junction: ジャンクション
+  noConnect: 未接続フラグ
+  label: ラベル
+  directiveLabel: 指示ラベル
+  sheet: シート
+  sheetPin: シートピン
+  graphic: 図形
+  image: 画像
+libraryChooser:
+  title:
+    placeSymbol: シンボルを配置
+    placePower: 電源シンボルを配置
+  search:
+    symbol: シンボルを検索…
+    power: 電源シンボルを検索…
+    footprint: フットプリントを検索…
+  searchTitle: '検索 ({keys})'
+  scopes:
+    design: この設計内
+    project: プロジェクト
+    global: マイライブラリ
+    system: 標準
+  sections:
+    design: この設計内
+    recent: 最近使ったもの
+    fits: シンボルに適合
+  columns:
+    name: 名前
+    description: 説明
+  fits: 適合
+  moreResults: 'ほか {n} 件 — 入力を続けて絞り込んでください'
+  noMatches: 一致なし
+  indexing: ライブラリのインデックスを作成中…
+  noModel: 3D モデルなし
+  loading: 読み込み中…
+  noFootprint: フットプリントが割り当てられていません
+  noFootprintOption: なし
+  footprintMissing: このフットプリントを含むライブラリはありません
+  unreadable: このファイルを読み込めませんでした。
+  details:
+    name: 名前
+    description: 説明
+    keywords: キーワード
+    source: ソース
+    pinMap: ピン
+    datasheet: データシート
+  pinMap:
+    allMatch: すべてのピンにパッドがあります ({n})
+    pinsWithoutPad: 'パッドがないピン：{list}'
+    padsWithoutPin: 'ピンがないパッド：{list}'
+  openDatasheet: 開く
+  cancel: キャンセル
+  place: 配置
+  assign: 割り当て
+  assignMany: '{n} 個の部品に割り当て'
+  change: 変更
+librarySync:
+  checking: ライブラリを確認中…
+  matches: 'ライブラリと一致 ({count})'
+  differs: ライブラリと同期していません
+  differsSome: '{total} 個中 {count} 個がライブラリと同期していません'
+  missing: どのライブラリにもありません
+  missingSome: '{total} 個中 {count} 個がどのライブラリにもありません'
+libraryLink:
+  title: ライブラリ
+  update: ライブラリから更新…
+  updateHint: 位置、リファレンス、ネットを保持したまま、ライブラリのコピーから再構築します
+  changeSymbol: シンボルを変更…
+  changeFootprint: フットプリントを変更…
+  changeHintSymbol: 別のライブラリシンボルに置き換えます
+  changeHintFootprint: 別のライブラリフットプリントに置き換えます
+  editSymbol: シンボルを編集…
+  editFootprint: フットプリントを編集…
+  editHintSymbol: ライブラリはそのままに、このシートが持つシンボルのコピーを編集します
+  editHintFootprint: ライブラリはそのままに、この基板が持つフットプリントのコピーを編集します
+  editLibrarySymbol: ライブラリシンボルを編集…
+  editLibraryFootprint: ライブラリフットプリントを編集…
+  editLibraryHintSymbol: ライブラリシンボルをシンボルエディターで開きます
+  editLibraryHintFootprint: ライブラリフットプリントをフットプリントエディターで開きます
+partUpdate:
+  updateTitleSymbol: ライブラリからシンボルを更新
+  updateTitleFootprint: ライブラリからフットプリントを更新
+  changeTitleSymbol: シンボルを変更
+  changeTitleFootprint: フットプリントを変更
+  fromPartSymbol: ライブラリシンボル
+  fromPartFootprint: ライブラリフットプリント
+  newPartSymbol: 新しいシンボル
+  newPartFootprint: 新しいフットプリント
+  newPartPlaceholderSymbol: ライブラリ:シンボル
+  newPartPlaceholderFootprint: ライブラリ:フットプリント
+  eachOwn: それぞれ自身のライブラリから
+  updateHintSymbol: 各シンボルはそれぞれのライブラリシンボルから再構築されます。ここで 1 つ指定すると、すべてをそれから再構築します。
+  updateHintFootprint: 各フットプリントはそれぞれのライブラリフットプリントから再構築されます。ここで 1 つ指定すると、すべてをそれから再構築します。
+  updateToHintSymbol: 対象のすべてのシンボルがこのライブラリシンボルから再構築されます。
+  updateToHintFootprint: 対象のすべてのフットプリントがこのライブラリフットプリントから再構築されます。
+  browse: 参照…
+  scopeSymbol: シンボル
+  scopeFootprint: フットプリント
+  scopeSelectionSymbol: '選択したシンボル ({count})'
+  scopeSelectionFootprint: '選択したフットプリント ({count})'
+  scopeReference: リファレンスが一致
+  scopeValue: 値が一致
+  scopeLibId: ライブラリ識別子が一致
+  scopeAllSymbol: 回路図内のすべてのシンボル
+  scopeAllFootprint: 基板上のすべてのフットプリント
+  wildcards: '* は任意の文字列、? は任意の 1 文字に一致'
+  reset: ライブラリから取得
+  fields: フィールド
+  all: すべて
+  none: なし
+  outcomeSymbol: 再構築するシンボル
+  outcomeFootprint: 再構築するフットプリント
+  loading: ライブラリを読み込み中…
+  notFound: '{libId} を含むライブラリはありません'
+  matches: ライブラリと一致
+  differs: ライブラリと同期していません
+  nothingSymbol: この範囲にシンボルはありません。
+  nothingFootprint: この範囲にフットプリントはありません。
+  cancel: キャンセル
+  confirmUpdate: 更新
+  confirmChange: 変更
+agentViewport:
+  close: エージェントのビューポートを閉じる
+  reveal: 'エージェントのビューポートを表示：{label}'

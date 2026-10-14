@@ -1,0 +1,578 @@
+commands:
+  editBoard: 基板を編集
+  editStackup: 積層構造を編集
+  applyProfile: 製造プロファイルを適用
+  applyStackup: 積層構造を適用
+  addDielectric: 誘電体レイヤーを追加
+  removeLayer: レイヤーを削除
+  editItem: アイテムを編集
+  routeTrack: 配線
+  dragTrack: 配線をドラッグ
+  dragVia: ビアをドラッグ
+  dragArc: 円弧をドラッグ
+  routePair: 差動ペアの配線
+  tune: 長さを調整
+  retune: 再調整
+  updateTuningPatterns: 全ての調整パターンを更新
+  removeTuningPattern: '{count} 個の調整パターンを削除'
+  editTeardrops: ティアドロップを編集
+  rebuildTeardrops: ティアドロップを再構築
+  dragFootprint: '{count} 個のフットプリントをドラッグ'
+  addVia: ビアを追加
+  placeFootprint: '{reference} を配置'
+  changeTrackWidth: 配線幅を変更
+  changeViaSize: ビア サイズを変更
+  addLine: '{count} 本の線を追加'
+  addArc: 円弧を追加
+  addRectangle: 矩形を追加
+  addCircle: 円を追加
+  addPolygon: ポリゴンを追加
+  addText: テキストを追加
+  addBezier: 曲線を追加
+  addTextBox: テキスト ボックスを追加
+  addPoint: ポイントを追加
+  addZone: ゾーンを追加
+  editZone: ゾーンを編集
+  editShape: 図形を編集
+  refillZones: ゾーンを塗り直す
+  rotateFootprints: '{count} 個のフットプリントを回転'
+  rotateItems: '{count} 個のアイテムを回転'
+  moveFootprint: '{reference} を移動'
+  rotateFootprint: '{reference} を回転'
+  flipFootprints: '{count} 個のフットプリントの配置面を変更'
+  flipItems: '{count} 個のアイテムの配置面を変更'
+  updateFootprints: '{count} 個のフットプリントをライブラリから更新'
+  changeFootprints: '{count} 個のフットプリントを変更'
+  fanout: '{reference} をファンアウト'
+  cleanup: 配線とビアをクリーンアップ
+  footprintFallback: フットプリント
+  editTrack: 配線を編集
+  editVia: ビアを編集
+  lock: '{count} 個のアイテムをロック'
+  unlock: '{count} 個のアイテムをロック解除'
+  mirror: '{count} 個のアイテムを反転'
+  placeGridOrigin: グリッド原点を配置
+  resetGridOrigin: グリッド原点をリセット
+  placeDrillOrigin: ドリル原点を配置
+  resetDrillOrigin: ドリル原点をリセット
+  breakTrack: 配線を分割
+  moveTracksToLayer: '{count} 本の配線を {layer} に移動'
+edit:
+  cut: 切り取り
+  copy: コピー
+  paste: 貼り付け
+  duplicate: 複製
+  delete: 削除
+  rotate: 左回転
+  rotateClockwise: 右回転
+  flip: 配置面を変更
+  fanout: ファンアウト…
+  breakTrack: 配線を分割
+  trackLayerNext: 次のレイヤーへ移動
+  trackLayerPrev: 前のレイヤーへ移動
+tools:
+  flip: 配置面を変更
+  fanout: ファンアウト…
+fanout:
+  title: ファンアウト
+  style: スタイル
+  direction: 方向
+  surfaceRows: 表層の行
+  surfaceRowsHint: グリッドの外側の行は、ビアなしで表層で配線するために残します
+  styles:
+    auto: 自動
+    dogbone: ドッグボーン
+    under-pads: パッド内
+    inline: 一列
+    staggered: 千鳥
+  directions:
+    out: 外向き
+    in: 内向き
+    ne: 北東
+    se: 南東
+    sw: 南西
+    nw: 北西
+  willPlace: '{count} 個のビアを配置します'
+  placed: '{count} 個のビアを配置しました'
+  skipped: '{count} 個をスキップ：{reason}'
+  surface: '{count} 個を表層に残します'
+  refused: '{count} 個のパッドにビアを配置できません'
+  skip:
+    no-net: ネットなし
+    no-connect: 未接続
+    through-hole: スルーホール
+    joined: すでにネットに接続済み
+    via: すでにビアあり
+  apply: ファンアウト
+selection:
+  toggleLock: ロック / ロック解除
+  selectConnection: 接続を選択
+  selectNet: ネットを選択
+  deleteFullTrack: 配線全体を削除
+origins:
+  placeGrid: グリッド原点
+  resetGrid: グリッド原点をリセット
+  placeDrill: ドリル/配置ファイルの原点
+  resetDrill: ドリル/配置ファイルの原点をリセット
+loadingBoard: '基板を読み込み中… {percent}%'
+viewRail:
+  zoneOutlines: ゾーンを外形線のみで表示
+  sketchTracks: 配線をスケッチ表示
+  sketchVias: ビアをスケッチ表示
+  hideRatsnest: ラッツネストを非表示
+  boardArea: 基板領域の色付け
+  flip: 基板を反転
+  fpReferences: フットプリントのリファレンス
+  fpValues: フットプリントの値
+  fpText: フットプリントのテキスト
+  assembly: アセンブリ オーバーレイ
+parseError:
+  title: 基板ファイルを解析できませんでした
+collision:
+  title: ルーター
+  buttonTitle: ルーター モード
+  explain:
+    highlight: すべてをそのままにしてクリアランス違反を表示しますが、DRC 違反を許容しない限り配置はしません。
+  settingsTitle: 設定
+  settings:
+    allowViolations:
+      name: DRC違反を許容する
+      note: ハイライトで表示されるクリアランス違反があっても配線を配置します。
+    freeAngle:
+      name: 自由角度モード
+      note: 配線を任意の角度でカーソルまでまっすぐ引きます。
+    shoveVias:
+      name: ビアの押しのけ
+    jumpOverObstacles:
+      name: 障害物を迂回
+      note: 押しのけた配線がパッドに当たったとき、配線を止めずにパッドの向こう側へ回り込みます。
+    removeLoops:
+      name: 余分な配線を削除
+      note: 既存の配線と同じ接続をする新しい配線が、既存の配線を置き換えます。
+    smartPads:
+      name: パッド接続を最適化
+      note: 配線はパッドの最もきれいな方向から出入りし、不自然な角度にはなりません。
+    smoothDragged:
+      name: セグメントをスムーズに移動
+      note: ドラッグしたセグメントは隣接セグメントと一直線にそろい、コーナーはその交点に吸着します。
+    optimizeDragged:
+      name: ドラッグした配線全体を最適化
+      note: ドラッグで動いた部分だけでなく、ドラッグした配線全体を整えます。
+    autoPosture:
+      name: マウスの軌跡を利用して配線の姿勢を設定
+      note: 配線を斜めから始めるか直線から始めるかを、クリック後のマウスの動きで決めます。
+    startDiagonal:
+      name: 斜めから開始
+      note: マウスの軌跡を使わない場合、配線は斜めから始まります。/ で切り替えます。
+    fixAllSegments:
+      name: クリック時にすべての配線セグメントを固定する
+      note: クリックするとカーソルまでの配線全体を確定します。オフにすると最後のセグメントは未確定のままです。
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+  select: 選択
+  route: 配線
+  via: ビア
+  layerPair:
+    title: レイヤー ペア
+    top: 上側のレイヤー
+    bottom: 下側のレイヤー
+    save: プリセットとして保存
+    remove: プリセットを削除
+    presets: プリセット（Shift+V でチェックしたものを順に切り替え）
+    pickLayer: ビアを配置するレイヤー
+  hintKeys:
+    routeVia: ビア
+    trackWidthNext: 幅
+    trackWidthPrev: 細く
+    viaSizeNext: ビア サイズ
+    routePosture: 姿勢
+    dropVia: ビアを配置
+    tuneSpacing: 間隔
+    tuneAmplitude: 振幅
+    tuneTighter: 詰める
+    tuneTaller: 高く
+    pairVia: ビア ペア
+    pairSize: ペアのサイズ
+    routeKeys: すべてのキー
+  keysCard:
+    title: 配線のキー
+    titlePair: 差動ペアのキー
+    titleTune: 配線長調整のキー
+    pairVia: ペアの進む方向にビア ペアを配置
+    pairSize: 次 / 前のペアのサイズ
+    via: 配線の進む方向に貫通ビアを配置
+    posture: 姿勢を反転
+    corner: コーナー モード
+    width: 太く / 細く
+    viaSize: ビアを大きく / 小さく
+    customSize: カスタム配線幅/ビアのサイズ
+    finish: パッドまで配線を完了
+    end: ここで配線を終了
+    unroute: 1 クリック戻る
+    mode: ルーター モード
+    layer: 次 / 前のレイヤー
+    blindVia: レイヤー ペア間のブラインド/ベリード ビア
+    microVia: マイクロビア
+    tuneSpacing: ミアンダの間隔を上げる / 下げる
+    tuneAmplitude: ミアンダの振幅を上げる / 下げる
+    viaPickLayer: リストから選んだレイヤーへのビア（貫通、ブラインド）
+    layerPair: 次のレイヤー ペアのプリセット
+    cancel: クリック済みの部分を残して配線を終了
+    toggle: このカードを表示 / 非表示
+    sections:
+      route: 配線
+      sizes: 幅とサイズ
+      vias: ビア
+      layers: レイヤー
+  trackWidthOp: '配線幅：{size} mm'
+  viaSizeOp: 'ビア サイズ：{size} mm'
+  sizes:
+    trackWidth: 配線幅
+    trackWidthBetween: '配線幅 · ルール {min}–{max} mm'
+    trackWidthAtLeast: '配線幅 · ルール ≥ {min} mm'
+    viaSize: ビア サイズ（直径 / ドリル）
+    viaSizeAtLeast: 'ビア サイズ（直径 / ドリル） · ルール ≥ {min} mm'
+    pairSize: ペアの幅 / ギャップ
+    custom: カスタムサイズ…
+    customTitle: カスタムサイズ
+    customViaDiameter: ビア直径
+    customViaDrill: ビアドリル
+    customApply: 適用
+    netClass: 'ネットクラス · {size} mm'
+    netClassIdle: ネットクラス
+    useConnected: 開始配線幅を使用
+    size: '{size} mm'
+    below: ルール未満
+    above: ルール超過
+    edit: サイズを編集…
+  routeMode: '衝突モード：{mode}'
+  routeModes:
+    shove: 押しのけ
+    walkaround: 回避
+    highlight: ハイライト
+  cornerMode: 'コーナー モード：{mode}'
+  cornerFree: 自由
+  cornerRounded: '丸め {angle}°'
+  lineModeTitle: ライン モード — 45° / 90° / 自由 ({hotkey})
+  posture: コーナーの姿勢を反転
+  facts:
+    route: 配線
+    netClass: ネットクラス
+    width: 幅
+    via: ビア
+    viaDiameter: ビア サイズ
+    viaDrill: ビア穴
+    widthOutside: '{min}–{max} mm の範囲外、設定元'
+    continued: 継続
+    custom: カスタム
+    picked: 選択
+    profile: '{name} プロファイル'
+    pairRoute: ペア配線
+    nets: ネット
+    gap: ギャップ
+    viaGap: ビア ギャップ
+    clearance: クリアランス
+    clearanceTo: 対象
+    length: 長さ
+    lengthRule: 長さのルール
+    lengthOver: 'ルールの最大値 {max} mm を超過'
+    lengthBetween: '{min}–{max}'
+    lengthAtMost: '≤ {max}'
+    lengthAtLeast: '≥ {min}'
+  line: 線
+  arc: 円弧
+  rectangle: 矩形
+  circle: 円
+  polygon: ポリゴン
+  text: テキスト
+  bezier: 曲線
+  textBox: テキスト ボックス
+  point: ポイント
+  polygonContinueHint: 最初の点をクリックして閉じる
+  arcHint: 始点、終点、膨らみの順にクリック
+  bezierHint: 始点、終点、各制御点の順にクリック
+  zone: ゾーン
+  zoneContinueHint: 最初の点をクリックして閉じる
+  placeFootprint: フットプリントを配置
+  refillTitle: ゾーンを塗り直す ({hotkey})
+  refill: ゾーンを塗り直す
+  rerunChecks: すべての設計チェックを再実行
+  fillProgress: 'ゾーンを塗りつぶし中… {settled} / {total}'
+  renderBuilding: アセンブリ オーバーレイを構築中…
+viewport3d:
+  bottomViewTitle: 下面ビュー
+  building: '基板を構築中… {percent}%'
+  loadingModels: 'モデルを読み込み中… {settled} / {total}'
+  missingModelsDetail: 解決できませんでした：
+  options:
+    layersGroup: レイヤー
+    boardBody: 基板本体
+    copper: 銅
+    solderMask: ハンダマスク
+    solderPaste: ハンダペースト
+    silkscreen: シルクスクリーン
+    holes: メッキ穴
+    drawings: コメントと図面
+    axes: 軸
+    gauge: スケール ゲージ
+    models: 部品モデル
+    modelsThroughHole: スルーホール
+    modelsSmd: SMD
+    modelsUnspecified: 未指定
+    modelsDnp: DNP
+    modelsNotInPosFiles: 部品位置情報ファイルから除外
+    reset: デフォルトに戻す
+  presentation:
+    title: 表示
+    projection: 投影法
+    projections:
+      perspective: 遠近法
+      orthographic: 正投影
+    lighting: 照明
+    lightings:
+      studio: スタジオ
+      soft: ソフト
+      flat: フラット
+      dramatic: ドラマチック
+    lightLevel: 明るさ
+    background: 背景
+    backgrounds:
+      theme: テーマ
+      transparent: 透明
+      white: 白
+      black: 黒
+  exportImage:
+    section: エクスポート
+    button: 画像をエクスポート…
+    menu: 3D 画像…
+    needs3d: 先に基板を 3D 表示に切り替えてください
+    title: 画像をエクスポート
+    size: サイズ
+    sizeView: '現在の表示 ({width} × {height})'
+    sizePreset: '{width} × {height}'
+    sizeCustom: カスタム
+    width: 幅
+    height: 高さ
+    lockAspect: 縦横比を維持
+    preview: プレビュー
+    copy: 画像をコピー
+    copied: クリップボードにコピーしました
+    copyFailed: 画像をコピーできませんでした
+    save: 画像を保存…
+    failed: 画像をエクスポートできませんでした
+footprintUpdate:
+  updateAction: ライブラリからフットプリントを更新…
+  changeAction: フットプリントを変更…
+  options:
+    removeExtraTexts: ライブラリのフットプリントにないテキストを削除
+    resetTextLayers: テキストのレイヤーと可視性
+    resetTextEffects: テキストのサイズとスタイル
+    resetTextPositions: テキストの位置
+    resetTextContent: フィールドのテキスト
+    resetFabricationAttributes: 基板製造用の属性
+    resetClearanceOverrides: クリアランスの上書き
+    reset3DModels: 3D モデル
+  owned: '回路図では引き続き {footprint} を指定'
+  droppedPads: '失われたパッド：{pads}'
+  addedPads: '新しいパッド（ネットなし）：{pads}'
+properties:
+  belowRule: '最小値 {size} mm 未満、設定元'
+  aboveRule: '最大値 {size} mm 超過、設定元'
+routeRun:
+  selected: 選択対象を配線
+  selectedFromEnd: 選択対象を別の終端から配線
+  finishSelected: 選択対象の完了を試行 (自動配線)
+  fromOtherEnd: 別の終端から配線
+  skip: 次の選択アイテムへスキップ
+routerMenu:
+  cancel: キャンセル
+  finish: 完了
+  undoSegment: 一つ前のセグメントを元に戻す
+  attemptFinish: 完了を試行
+  viaThrough: 貫通ビアを配置
+  viaBlind: ブラインド/ベリード ビアを配置
+  viaMicro: マイクロビアを配置
+  viaPickThrough: レイヤーを指定して貫通ビアを配置…
+  viaPickBlind: レイヤーを指定してブラインド/ベリード ビアを配置…
+  posture: 配線の姿勢を切り替え
+  corner: 配線のコーナー モード
+  cornerAngle: '{angle}°'
+  cornerArc: '円弧 {angle}°'
+  sizes: 配線とビアのサイズ
+  mode: ルーター モード
+pair:
+  route: 差動ペアの配線
+  dimensions: 差動ペア
+  dimensionsOp: 差動ペアの寸法…
+  width: 配線幅
+  gap: ギャップ
+  viaGap: ビア ギャップ
+  coach: ペアのパッド、ビア、または配線をクリック
+tune:
+  length: 長さ
+  skew: 遅延差（スキュー）
+  min: 最小
+  max: 最大
+  meter:
+    pairLength: ペアの長さ
+    delay: 遅延
+    pairDelay: ペアの遅延
+  target: 目標
+  noTarget: 制限なし
+  status: ステータス
+  statuses:
+    tuned: 調整済み
+    too_short: 短すぎ
+    too_long: 長すぎ
+  settings: 配線長の調整
+  settingsPair: 差動ペアの配線長の調整
+  settingsSkew: 遅延差（スキュー）の調整
+  settingsOp: 配線長の調整の設定…
+  tools:
+    single: 単線の長さを調整
+    pair: 差動ペア配線の長さを調整
+    skew: 差動ペアの遅延差（スキュー）を調整
+  coach:
+    start: ミアンダを開始する配線をクリック
+    startPair: ミアンダを開始するペアの配線をクリック
+    lay: 配線に沿って移動し、クリックしてミアンダを配置
+    noTrack: ここに配線がありません
+    noMate: この配線に並走する相手の配線がありません
+    cannot: ここからミアンダを開始できません
+    inPattern: 調整パターン内の配線は再調整できません
+    selectFirst: 先に調整する配線をクリック
+  targetField: 目標（なしは 0）
+  overrideRules: カスタムルールを上書き
+  minAmplitude: 最小振幅
+  maxAmplitude: 最大振幅
+  spacing: 間隔
+  cornerRadius: コーナー半径
+  singleSided: 片側のみ
+  mode: 調整モード
+  modes:
+    single: 単線
+    diff_pair: 差動ペア
+    diff_pair_skew: 遅延差（スキュー）
+  initialSide: 最初の山
+  sides:
+    left: 左
+    right: 右
+    default: デフォルト
+  rounded: 丸め
+limits:
+  title: 制限
+  hint: 選択対象にルールが求める値と、各値の設定元
+  constraint:
+    clearance: クリアランス
+    physical_clearance: 物理的クリアランス
+    hole_clearance: 穴のクリアランス
+    physical_hole_clearance: 物理的な穴のクリアランス
+    hole_to_hole: 穴から穴
+    zone_connection: ゾーン接続
+    track_width: 配線幅
+    via_diameter: ビア直径
+    annular_width: アニュラー幅
+    hole_size: 穴サイズ
+  sameNet: 0、同一ネット
+  unset: 制限なし
+  min: '最小 {value}'
+  opt: '推奨 {value}'
+  max: '最大 {value}'
+  connection:
+    solid: ベタ
+    thermal: 'サーマル、ギャップ {gap}、スポーク {spoke}'
+    none: 未接続
+  steps: 決定の過程
+  none: これらのアイテムには共通の導体レイヤーも穴もありません。
+  noneOne: このアイテムにはサイズの制限がありません。
+  outcome:
+    net-tie: ネットタイ、0
+    override: アイテム自体の値
+    board-minimum: 基板の最小値まで引き上げ
+    applied: 適用
+    condition-false: 条件が成立しない
+    layer-mismatch: このレイヤー上にない
+    not-copper: 導体ではない
+    no-hole: 穴なし
+    disallow-mismatch: 他の種類を禁止
+    local-clearance: ゾーン自体のクリアランス
+    fallback: フォールバック
+teardrops:
+  action: ティアドロップを編集…
+  selectionAction: 選択項目のティアドロップを編集…
+  title: ティアドロップを編集
+  actionGroup: 操作
+  actions:
+    add: デフォルト値で追加
+    set: 値を設定
+    remove: 削除
+    removeAll: すべて削除
+  targets: 対象
+  target:
+    vias: ビア
+    pthPads: スルーホールパッド
+    smdPads: SMD パッド
+    trackToTrack: 配線間
+  filter: フィルター
+  selectionOnly: '選択項目のみ（{count}）'
+  roundOnly: 円形パッドのみ
+  existingOnly: 既存のティアドロップのみ
+  net: ネット
+  allNets: すべてのネット
+  netClass: クラス
+  allClasses: すべてのクラス
+  layer: レイヤー
+  allLayers: すべてのレイヤー
+  values: 値
+  keep: 維持
+  'yes': はい
+  'no': いいえ
+  defaultsHint: 形状ごとのデフォルト値は 基板の設定 ▸ ティアドロップ にあります。
+  confirm:
+    add: '{count} 個のパッドとビアにティアドロップを追加'
+    set: '{count} 個のパッドとビアのティアドロップを設定'
+    remove: '{count} 個のパッドとビアからティアドロップを削除'
+    removeAll: すべてのティアドロップを削除
+cleanup:
+  action: 配線とビアをクリーンアップ…
+  selectionAction: 選択対象をクリーンアップ…
+  title: 配線とビアをクリーンアップ
+  actions: 操作
+  refill: クリーンアップの前後でゾーンを塗り直す
+  options:
+    shorts: 異なるネットを接続している配線を削除
+    redundantVias: 冗長なビアを削除
+    danglingVias: 一つのレイヤーにしか接続されていないビアを削除
+    mergeTracks: 共線の配線をマージ
+    danglingTracks: 一方の終端が未接続の配線を削除
+    tracksInPads: 完全にパッドの中に入っている配線を削除
+  filter: フィルター
+  selectionOnly: '選択項目のみ（{count}）'
+  net: ネット
+  allNets: すべてのネット
+  layer: レイヤー
+  allLayers: すべての導体レイヤー
+  loading: 変更を検出中…
+  clean: クリーンアップするものはありません。
+  columns:
+    change: 変更
+    net: ネット
+    layer: レイヤー
+    at: 位置 (mm)
+  change:
+    shortingTrack: ２つのネットを短絡する配線を削除
+    shortingVia: ２つのネットを短絡するビアを削除
+    redundantVia: 冗長なビアを削除
+    duplicateTrack: 重複した配線を削除
+    zeroLengthTrack: 長さ 0 の配線を削除
+    trackInPad: パッド内の配線を削除
+    danglingTrack: 両端が接続されていない配線を削除
+    danglingVia: 2つ以上のレイヤーに接続していないビアを削除
+    mergeTracks: 共線の配線をマージ
+  confirm: '{count} 件の変更を適用'
+  fix: 削除
+  fixAll: すべて削除
+setSizes:
+  action: ルールからサイズを設定
+  undo: ルールからサイズを設定

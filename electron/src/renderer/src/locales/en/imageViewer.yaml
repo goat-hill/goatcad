@@ -1,0 +1,10 @@
+# Image viewer — the editor tab shown for image files (png/jpg/svg/…).
+# All strings are short; toolbar titles are hover tooltips on icon-only chips.
+
+loading: Loading image…
+loadFailed: Could not load this image
+# "Actual size" shows the image at 100% zoom (one image pixel = one screen
+# pixel). Zoom to fit is shared (shared.insertSearch.ops.fitView).
+actualSizeTitle: Actual size (100%)
+# Pixel-size and zoom readout; w/h are integers, zoom is a percent number.
+dims: '{w} × {h} px · {zoom}%'

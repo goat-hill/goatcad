@@ -1,0 +1,29 @@
+title: Terminal
+
+tabTooltip: '{process} — {cwd}'
+
+status:
+  running: '{process} läuft'
+  working: '{process} arbeitet'
+  waiting: '{process} wartet auf eine Eingabe'
+  attention: '{process} braucht Ihre Aufmerksamkeit'
+  idle: Kein Prozess läuft
+  exited: 'Shell beendet (Code {code})'
+
+exitNotice: '[Prozess mit Code {code} beendet]'
+
+missingCli: '{cli} wurde von Ihrer Shell nicht gefunden. Installieren Sie es (siehe {docs}), schließen Sie diesen Tab und öffnen Sie ihn erneut. Bis dahin ist dieser Tab eine normale Shell.'
+
+menu:
+  copy: Kopieren
+  paste: Einfügen
+  selectAll: Alles auswählen
+  clear: Leeren
+
+close:
+  message: 'Terminal schließen, in dem {process} läuft?'
+  messageMany: '{count} laufende Terminals schließen?'
+  detail: Der Prozess wird beendet.
+  detailMany: Diese Prozesse werden beendet.
+  confirm: Terminal schließen
+  confirmMany: Terminals schließen

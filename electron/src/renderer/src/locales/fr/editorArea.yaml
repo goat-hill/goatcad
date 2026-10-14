@@ -1,0 +1,41 @@
+closeTab: Fermer l’onglet
+symbolTabTitle: '{file} › {symbol}'
+designCopyTooltip: '{part}, tel que {file} le contient — la librairie n’est pas modifiée'
+childTab:
+  boardSetup: Options du CI
+  schematicSetup: Configuration de la schématique
+  components: Composants
+  manufacture: Sorties de fabrication
+split:
+  sendTab: Déplacer l’onglet vers l’autre volet ({shortcut})
+  resize: Redimensionner les volets
+empty:
+  openFolder: Ouvrir un dossier
+  openProject: Ouvrir un projet
+  newSchematic: Nouvelle schématique
+  newWindow: Nouvelle fenêtre
+loadingFileContents: Chargement du contenu du fichier…
+writeContentPlaceholder: Saisissez le contenu ici…
+find:
+  placeholder: Rechercher
+  matchCase: Respecter la casse
+  matchWholeWord: Mot entier uniquement
+  useRegex: Utiliser une expression régulière
+  previousMatch: Résultat précédent
+  nextMatch: Résultat suivant
+  close: Fermer
+  noResults: Aucun résultat
+  results: '{current} sur {total}'
+formatNotice:
+  older: 'Format {kind} KiCad {release}'
+  olderBody: 'Ce fichier ({kind}) sera migré au format KiCad 10 à l’enregistrement.'
+  newer: 'Lecture seule : format {kind} KiCad {release}'
+  newerUnknown: 'Lecture seule : format {kind} KiCad plus récent'
+  newerBody: 'GoatCAD enregistre des fichiers KiCad 10 ; ce fichier ({kind}) s’ouvre donc en lecture seule.'
+  unsupported: 'Lecture seule : format {kind} antérieur à KiCad 6'
+  unsupportedBody: 'Enregistrez-le d’abord dans KiCad pour le modifier ici.'
+  kinds:
+    schematic: schématique
+    board: circuit imprimé
+    symbolLibrary: librairie de symboles
+    footprint: empreinte

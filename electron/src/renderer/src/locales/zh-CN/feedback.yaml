@@ -1,0 +1,25 @@
+title: 分享应用反馈
+kind:
+  bug: 错误报告
+  idea: 建议
+summary: 摘要
+summaryPlaceholder: 一行，像标题一样
+details: 详情
+detailsBugPlaceholder: 你做了什么，期望发生什么，实际又发生了什么？
+detailsIdeaPlaceholder: 你希望 GoatCAD 做什么，它能帮你解决什么问题？
+truncated: 内容过长，无法完整发送。末尾将被截断；请将其余内容粘贴到 GitHub 上的 issue 中。
+screenshot: 截图
+copyScreenshot: 复制截图
+screenshotHint: 不会自动附加。请复制后粘贴到 GitHub 上的 issue 中。
+screenshotCopied: 已复制。请将其粘贴到 GitHub 上的 issue 中。
+screenshotCopyFailed: 无法复制截图。
+noScreenshot: 无法截取此窗口。
+includeSystemInfo: 包含系统信息
+showSystemInfo: 显示
+hideSystemInfo: 隐藏
+note: 将在 GitHub 上新建一个 issue，你可以在发布前进行检查。需要 GitHub 账号。
+openFailed: 无法打开浏览器。请复制链接并在浏览器中打开。
+copyLink: 复制链接
+linkCopied: 已复制
+cancel: 取消
+continue: 在 GitHub 上继续

@@ -1,0 +1,123 @@
+title: Salidas de fabricación
+board: Placa
+exportProfile: Perfil de exportación
+outputs:
+  gerber: Gerbers
+  drill: Taladros
+  bom: BOM
+  cpl: Pick & place
+detail:
+  configure: Configurar
+  preview: Vista previa
+gerber:
+  category:
+    copper: Cobre
+    technical: Técnicas
+    board: Placa
+  format: Formato
+  coordinateFormat: Formato de coordenadas
+  units: Unidades
+  naming: Nombres de archivo
+  namingValue:
+    kicad: KiCad (.gbr)
+    protel: Extensiones Protel
+  layerCountNote: 'Las capas se leen de la placa; la vista previa representa los Gerbers exactos.'
+  previewLoading: Cargando placa…
+  previewEmpty: Seleccione al menos una capa para la vista previa.
+drill:
+  format: Formato
+  formatValue: Excellon
+  units: Unidades
+  zeros: Ceros
+  zerosValue:
+    none: Mantener
+    leading: Eliminar a la izquierda
+    trailing: Eliminar a la derecha
+  options: Opciones
+  merge: Combinar PTH + NPTH
+  map: Mapa de taladros (Gerber)
+  stats: '{holes} agujeros · {tools} herramientas'
+bom:
+  options: Opciones
+  group: Agrupar componentes idénticos
+  includeDnp: Incluir componentes DNP
+  partNumber: Número de pieza
+  format: Formato
+  formatValue: CSV
+  col:
+    comment: Comentario
+    designator: Identificador
+    footprint: Huella
+  export: Exportar BOM
+  loading: Cargando componentes…
+  empty: No hay componentes en la BOM; la placa no tiene huellas o todas están excluidas.
+  stats: '{total} componentes · {unique} únicos'
+  dnpLabel: 'DNP (no montados):'
+cpl:
+  units: Unidades
+  side: Cara de montaje
+  sideValue:
+    both: Superior + inferior
+    top: Solo superior
+  group: Agrupar componentes idénticos
+  rotationNote: Centroides estándar de KiCad; los mapas de rotación por fabricante llegan en M2+.
+  export: Exportar CPL
+  stats: '{total} colocaciones · {top} superior · {bottom} inferior'
+  empty: No hay colocaciones; la placa no tiene huellas o todas están excluidas.
+  listTitle: Componentes
+  top: Superior
+  bottom: Inferior
+  origin: Origen CPL
+  originOff: 'Origen CPL · {distance} mm'
+outputFolder: Carpeta de salida
+zip: Zip
+export: Exportar paquete
+exporting: Exportando…
+preflight:
+  title: Comprobación previa
+  group:
+    blocking: Bloquea la exportación
+    review: Para revisar
+    passed: Superadas
+  check:
+    outline: Contorno de la placa
+    drcErrors: Errores de reglas de diseño
+    drcWarnings: Avisos de reglas de diseño
+    unfilledZones: Rellenos de zonas
+    drillSize: Tamaños de taladro
+    holeSpacing: Separación entre agujeros
+    partNumbers: Números de pieza
+    values: Valores de componentes
+  outline:
+    found: El contorno de Edge.Cuts no es una única forma cerrada, por lo que ningún fabricante puede cortar la placa.
+    passed: El contorno es una única forma cerrada.
+  drc:
+    errors: '{count} error | {count} errores | {count} errores'
+    warnings: '{count} aviso | {count} avisos | {count} avisos'
+    noErrors: No hay errores de reglas de diseño.
+    noWarnings: No hay avisos de reglas de diseño.
+  zones:
+    found: '{count} zona nunca se rellenó: {names} | {count} zonas nunca se rellenaron: {names} | {count} zonas nunca se rellenaron: {names}'
+    passed: Todas las zonas están rellenas.
+  drill:
+    found: '{count} agujero está por debajo del mínimo de {limit} mm de este fabricante; el más pequeño mide {actual} mm. | {count} agujeros están por debajo del mínimo de {limit} mm de este fabricante; el más pequeño mide {actual} mm. | {count} agujeros están por debajo del mínimo de {limit} mm de este fabricante; el más pequeño mide {actual} mm.'
+    passed: 'Todos los agujeros miden al menos {limit} mm.'
+  spacing:
+    found: 'Dos agujeros están a {actual} mm de distancia; el mínimo de este fabricante es {limit} mm.'
+    passed: 'Los agujeros están separados al menos {limit} mm.'
+  partNumbers:
+    found: '{count} componente no tiene número de {field}: {refs} | {count} componentes no tienen número de {field}: {refs} | {count} componentes no tienen número de {field}: {refs}'
+    passed: 'Todos los componentes tienen número de {field}.'
+  values:
+    found: '{count} componente no tiene valor: {refs} | {count} componentes no tienen valor: {refs} | {count} componentes no tienen valor: {refs}'
+    passed: Todos los componentes tienen valor.
+  more: '{list} y {more} más'
+  showOnBoard: Mostrar en la placa
+  unsaved:
+    title: Cambios sin guardar
+    detail: La placa tiene ediciones sin guardar. El paquete se escribe a partir del archivo guardado; guarde para incluirlas.
+  status:
+    checking: Comprobando la placa…
+    blocked: Exportación bloqueada
+    review: '{count} para revisar | {count} para revisar | {count} para revisar'
+    ready: Listo para exportar

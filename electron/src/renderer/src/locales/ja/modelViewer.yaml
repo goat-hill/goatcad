@@ -1,0 +1,8 @@
+loading: 3D モデルを準備中…
+loadFailed: この 3D モデルを読み込めませんでした
+isoViewTitle: 等角ビュー
+frontViewTitle: 正面ビュー
+topViewTitle: 上面ビュー
+rightViewTitle: 右側面ビュー
+gaugeTitle: スケールゲージ
+dims: '{x} × {y} × {z} mm'

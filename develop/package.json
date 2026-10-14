@@ -1,0 +1,59 @@
+{
+  "name": "goatherd",
+  "version": "0.1.0",
+  "license": "GPL-3.0-or-later",
+  "private": true,
+  "description": "GoatHerd — workstream manager for GoatCAD development: parallel Claude Code sessions, git worktrees, one-click dev servers",
+  "main": "./out/main/index.js",
+  "author": "Goat Hill Electronics LLC",
+  "scripts": {
+    "format": "prettier --write .",
+    "lint": "eslint --cache .",
+    "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
+    "typecheck:web": "vue-tsc --noEmit -p tsconfig.web.json --composite false",
+    "typecheck": "npm run typecheck:node && npm run typecheck:web",
+    "test": "vitest run",
+    "start": "electron-vite preview",
+    "dev": "electron-vite dev",
+    "build": "npm run typecheck && electron-vite build",
+    "build:bundle": "electron-vite build",
+    "postinstall": "install-electron && electron-builder install-app-deps",
+    "build:unpack": "npm run build && electron-builder --dir",
+    "build:win": "npm run build && electron-builder --win",
+    "build:mac": "npm run build && electron-builder --mac",
+    "build:linux": "npm run build && electron-builder --linux"
+  },
+  "dependencies": {
+    "@electron-toolkit/preload": "^3.0.2",
+    "@electron-toolkit/utils": "^4.0.0",
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/xterm": "^6.0.0",
+    "node-pty": "^1.1.0"
+  },
+  "devDependencies": {
+    "@electron-toolkit/eslint-config-prettier": "^3.0.1",
+    "@electron-toolkit/eslint-config-ts": "^4.0.0",
+    "@electron-toolkit/tsconfig": "^2.0.0",
+    "@types/node": "^26.4.1",
+    "@vitejs/plugin-vue": "^6.0.2",
+    "electron": "^44.2.0",
+    "electron-builder": "^26.0.12",
+    "electron-vite": "^5.0.0",
+    "eslint": "^10.10.0",
+    "eslint-plugin-vue": "^10.6.2",
+    "playwright-core": "^1.61.1",
+    "prettier": "^3.7.4",
+    "typescript": "~6.0.3",
+    "vite": "^7.2.6",
+    "vitest": "^5.0.0",
+    "vue": "^3.5.25",
+    "vue-eslint-parser": "^10.2.0",
+    "vue-tsc": "^3.1.6"
+  },
+  "allowScripts": {
+    "electron-winstaller@5.4.0": true,
+    "esbuild@0.25.12": true,
+    "node-pty@1.1.0": true,
+    "esbuild@0.28.2": true
+  }
+}

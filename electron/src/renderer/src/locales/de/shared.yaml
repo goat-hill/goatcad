@@ -1,0 +1,488 @@
+insertSearch:
+  noMatches: Keine Treffer
+  placeholder: Werkzeuge…
+  label: Werkzeuge suchen
+  sections:
+    edit: Bearbeiten
+    view: Ansicht
+  groups:
+    select: Auswahl
+    place: Platzieren
+    connect: Verbinden
+    routeOptions: Verlegeoptionen
+    draw: Zeichnen
+    zones: Flächen
+    units: Einheiten
+    utilities: Hilfsmittel
+    navigate: Navigieren
+    display: Darstellung
+    layers: Lagen
+  ops:
+    undo: Rückgängig
+    redo: Wiederholen
+    rotateCCW: Gegen den Uhrzeigersinn drehen
+    rotateCW: Im Uhrzeigersinn drehen
+    mirrorHorizontal: Horizontal spiegeln
+    mirrorVertical: Vertikal spiegeln
+    fitView: Einpassen
+    zoomIn: Hineinzoomen
+    zoomOut: Herauszoomen
+    centerOnCursor: Auf Cursor zentrieren
+    zoomToSelection: Auf Auswahl zoomen
+    find: Suchen…
+    sketchPads: Pads als Umriss
+    inactiveLayers: 'Inaktive Lagen: {mode}'
+
+properties:
+  selection: Auswahl
+  browseFootprint: Footprint wählen…
+  openFootprint: Im Footprint-Editor öffnen
+  openDatasheet: Datenblatt öffnen
+  posX: Pos X
+  posY: Pos Y
+  x: X
+  y: Y
+  startX: Anfang X
+  startY: Anfang Y
+  endX: Ende X
+  endY: Ende Y
+  midX: Mitte X
+  midY: Mitte Y
+  centerX: Zentrum X
+  centerY: Zentrum Y
+  radius: Radius
+  angle: Winkel
+  length: Länge
+  width: Breite
+  height: Höhe
+  marginLeft: Rand L
+  marginTop: Rand O
+  marginRight: Rand R
+  marginBottom: Rand U
+  showPinNames: Namen zeigen
+  showPinNumbers: Nummern zeigen
+  pinNameOffset: Namensabstand
+  show: Sichtbar
+  showName: Name zeigen
+  doNotAutoplace: Kein Autoplatz
+  strokeWidth: Strich
+  strokeColor: Strichfarbe
+  fill: Füllung
+  fillColor: Füllfarbe
+  textColor: Farbe
+  size: Größe
+  text: Text
+  name: Name
+  derivedFrom: Abgeleitet von
+  number: Nummer
+  reference: Referenz
+  value: Wert
+  footprint: Footprint
+  datasheet: Datenblatt
+  description: Beschreibung
+  keywords: Schlagwörter
+  electricalType: Typ
+  graphicStyle: Stil
+  hidden: Verborgen
+  inBom: In Stückliste
+  onBoard: Auf Platine
+  excludeFromSim: Ohne Sim.
+  inPosFiles: In Pos.-Dat.
+  duplicatePinNumbersAreJumpers: Jumper-Pins
+  power: Spannung
+  fpFilters: Fp-Filter
+  unitName: Einheitenname
+  unitsInterchangeable: Tauschbare Einh.
+  net: Netz
+  trackLength: Leiterbahn
+  arcLength: Bogen
+  routedLength: Geroutet
+  padToDie: Pad-zu-Die
+  fullLength: Gesamt
+  layer: Lage
+  type: Typ
+  shape: Form
+  drill: Bohrung
+  roundRatio: Eckenradius
+  strokeType: Strichart
+  side: Seite
+  locked: Gesperrt
+  hatchStyle: Schraffur
+  hatchPitch: Schraffurabstand
+  minThickness: Min. Dicke
+  fillMode: Füllung
+  hatchThickness: Schraffurbreite
+  hatchGap: Schraffurlücke
+  hatchOrientation: Schraffurwinkel
+  priority: Priorität
+  padConnection: Pad-Anbindung
+  padClearance: Pad-Abstand
+  maskMargin: Lötstopp-Erw.
+  pasteMargin: Pasten-Abstand
+  pasteRatio: Pasten-Verh.
+  bridgedMask: Lötstoppbrücken erlauben
+  thermalGap: Thermospalt
+  thermalBridge: Thermosteg
+  teardropsEnabled: Teardrops
+  teardropBestLength: Opt. Länge
+  teardropMaxLength: Max. Länge
+  teardropBestWidth: Opt. Breite
+  teardropMaxWidth: Max. Breite
+  teardropCurved: Gekrümmte Kanten
+  teardropTwoSegments: Zwei Segmente
+  teardropMaxTrackWidth: Bahnbreitengrenze
+  teardropPreferZone: Zone bevorzugen
+  removeIslands: Inseln
+  keepout: Sperrfläche
+  blockTracks: Bahnen sperren
+  blockVias: DuKos sperren
+  blockPads: Pads sperren
+  blockPour: Kupfer sperren
+  blockFootprints: Footpr. sperren
+  points: Punkte
+  columns: Spalten
+  rows: Zeilen
+  noEditable: Keine bearbeitbaren Eigenschaften
+  knockout: Ausgespart
+  keepUpright: Aufrecht halten
+  holeShape: Bohrungsform
+  holeSizeY: Bohrung Y
+  cornerRadius: Eckenradius
+  border: Rahmen
+  externalBorder: Außenrahmen
+  headerBorder: Kopfzeilenrahmen
+  rowSeparators: Zeilentrenner
+  colSeparators: Spaltentrenner
+  separatorWidth: Trennerbreite
+  borderWidth: Rahmenbreite
+  pinLength: Pinlänge
+  scale: Skalierung
+  private: Privat
+  minIslandArea: Min. Inselfläche
+  layerTop: Obere Lage
+  layerBottom: Untere Lage
+  pinType: Pin-Typ
+  bold: Fett
+  italic: Kursiv
+  hAlign: Ausr. H
+  vAlign: Ausr. V
+  thickness: Dicke
+  thicknessAuto: Auto-Stärke
+  nameSize: Namensgröße
+  numberSize: Nummerngröße
+  commonToAllUnits: Alle Einheiten
+  paper: Papier
+  pads: Pads
+  rotation: Drehung
+  mirror: Spiegeln
+  diameter: Durchmesser
+  kind: Art
+  libId: Bibliotheks-ID
+  symbolUnit: Einheit
+  bodyStyle: Körperstil
+  bodyStyleStandard: Standard
+  bodyStyleAlternate: Alternativ
+propertyChanges:
+  added: Hinzugefügt
+  removed: Entfernt
+propertySections:
+  text: Texteigenschaften
+  shape: Form
+  fill: Füllung
+  border: Rahmen
+  margins: Ränder
+  pad: Pad
+  hole: Bohrung
+  via: Via
+  fields: Felder
+  attributes: Attribute
+  overrides: Überschreibungen
+  keepout: Sperrfläche
+  islands: Inseln
+  thermal: Wärmefalle
+  teardrops: Teardrops
+  pinDisplay: Pin-Anzeige
+  units: Einheiten und Körperstile
+  length: Länge
+propertiesPanel:
+  title: Eigenschaften
+  manufacture: Fertigungsdaten
+  components: Bauteile
+  schematicSetup: Schaltplaneinstellungen
+  updateFromSchematic: Aus Schaltplan aktualisieren
+  syncAdded: '{count} Footprint hinzuzufügen | {count} Footprints hinzuzufügen'
+  syncRemoved: '{count} Footprint nicht im Schaltplan | {count} Footprints nicht im Schaltplan'
+  syncEdited: '{count} Footprint zu aktualisieren | {count} Footprints zu aktualisieren'
+  syncNoSchematic: Das Projekt hat keinen Schaltplan, aus dem aktualisiert werden kann.
+  syncUnannotated: Nicht annotiert
+  boardSetup: Platineneinstellungen
+  colorInherited: Standard
+  colorReset: Auf Standardfarbe zurücksetzen
+preview3dToggle:
+  board: 3D-Platinenansicht
+  footprint: 3D-Modellvorschau
+nonActiveDisplay:
+  modes:
+    show: normal
+    dim: gedimmt
+    hide: verborgen
+layersPanel:
+  title: Lagen
+  buttonTitle: Lagen
+  presetLabel: Vorgabe
+  selectPreset: Wählen...
+  savePresetTitle: Diese Lagen als benannte Vorgabe speichern
+  deletePresetTitle: Diese Vorgabe löschen
+  deletePresetDisabledTitle: Zum Löschen eine gespeicherte Vorgabe wählen
+  activeLayerTitle: Aktive Lage
+  toggleVisibilityTitle: Sichtbarkeit der Lage umschalten
+gridSettingsPanel:
+  title: Raster
+  buttonTitle: Raster
+  unit: Einheit
+  spacing: Abstand
+  showGrid: Raster anzeigen
+  snap: Fang
+viewportStatus:
+  axisX: X
+  axisY: Y
+  gridMm: '{value} mm'
+  gridMil: '{value} mil'
+  gridIn: '{value} in'
+  unitMm: mm
+  unitMil: mil
+  unitIn: in
+viewportPopover:
+  pin: An die Seitenleiste anheften
+  unpin: Lösen und zurück in die Ecke der Ansicht
+selectionFilterPanel:
+  title: Auswahlfilter
+  allItems: Alle Elemente
+  locked: Gesperrt
+  button: Filter
+  buttonTitle: Auswahlfilter
+  kinds:
+    footprint: Footprints
+    track: Leiterbahnen
+    via: DuKos
+    zone: Flächen
+    pad: Pads
+    graphic: Grafiken
+    text: Texte
+    point: Punkte
+    symbol: Symbole
+    wire: Verbindungen
+    label: Bezeichner
+    junction: Knoten
+    no_connect: Nichtanschlüsse
+    sheet: Blätter
+    sheet_pin: Blattanschlüsse
+    image: Bilder
+    rule_area: Regelflächen
+    field: Feldtexte
+    pin: Pins
+layerPresets:
+  all: Alle Lagen
+  frontAssembly: Bestückung Oberseite
+  front: Lagen Oberseite
+  backAssembly: Bestückung Unterseite
+  back: Lagen Unterseite
+  copper: Alle Kupferlagen
+  innerCopper: Innere Kupferlagen
+  none: Keine Lagen
+componentsTable:
+  filterPlaceholder: Bauteile filtern…
+  groupSymbols: Symbole gruppieren
+  columns: Spalten
+  columnsFieldHeader: Feld
+  columnsShowHeader: Sichtbar
+  columnsGroupHeader: Gruppe
+  recordCount: '{count} Bauteile'
+  rowForeignTitle: Auf einem anderen Blatt — zum Öffnen klicken
+  collapseGroup: Gruppe einklappen
+  expandGroup: Gruppe ausklappen
+  mixedValue: (gemischt)
+  noComponentsFiltered: Keine Bauteile entsprechen dem Filter.
+  noComponentsAtAll: Keine Bauteile in diesem Schaltplan.
+  fields:
+    reference: Referenz
+    sheet: Blatt
+    value: Wert
+    dnp: DNP
+    excludeFromBom: Nicht in Stückliste
+    excludeFromBoard: Nicht auf Platine
+    footprint: Footprint
+    datasheet: Datenblatt
+layerNames:
+  fCu: Kupfer oben
+  bCu: Kupfer unten
+  fSilkS: Bestückungsdruck oben
+  bSilkS: Bestückungsdruck unten
+  fMask: Lötstopp oben
+  bMask: Lötstopp unten
+  fPaste: Lotpaste oben
+  bPaste: Lotpaste unten
+  fFab: Fertigung oben
+  bFab: Fertigung unten
+  fCrtYd: Sperrfläche oben
+  bCrtYd: Sperrfläche unten
+  edgeCuts: Platinenumriss
+netHighlight:
+  status: Netz
+  clear: Aufheben
+  highlight: Netz hervorheben
+  clearMenu: Netz-Hervorhebung aufheben
+selectOther:
+  title: Auswählen
+  all: Alle auswählen
+  menu: Andere auswählen…
+primitives:
+  board: Platine
+  footprint: Footprint
+  pad: Pad
+  track: Leiterbahn
+  trackArc: Leiterbahnbogen
+  tuningPattern: Abstimmmuster
+  via: Durchkontaktierung
+  zone: Fläche
+  ruleArea: Regelfläche
+  line: Linie
+  arc: Bogen
+  circle: Kreis
+  rectangle: Rechteck
+  polygon: Polygon
+  curve: Kurve
+  text: Text
+  textBox: Textfeld
+  table: Tabelle
+  point: Punkt
+  symbol: Symbol
+  pin: Pin
+  field: Feld
+  wire: Verbindung
+  bus: Bus
+  busEntry: Buseintrag
+  junction: Knoten
+  noConnect: Nichtanschluss
+  label: Bezeichner
+  directiveLabel: Direktiven-Bezeichner
+  sheet: Blatt
+  sheetPin: Blattanschluss
+  graphic: Grafik
+  image: Bild
+libraryChooser:
+  title:
+    placeSymbol: Symbol platzieren
+    placePower: Spannungssymbol platzieren
+  search:
+    symbol: Symbole suchen…
+    power: Spannungssymbole suchen…
+    footprint: Footprints suchen…
+  searchTitle: 'Suchen ({keys})'
+  scopes:
+    design: In diesem Entwurf
+    project: Projekt
+    global: Eigene
+    system: Standard
+  sections:
+    design: In diesem Entwurf
+    recent: Zuletzt verwendet
+    fits: Passt zum Symbol
+  columns:
+    name: Name
+    description: Beschreibung
+  fits: Passt
+  moreResults: '{n} weitere — weiter tippen, um einzugrenzen'
+  noMatches: Keine Treffer
+  indexing: Bibliotheken werden indiziert…
+  noModel: Kein 3D-Modell
+  loading: Wird geladen…
+  noFootprint: Kein Footprint zugewiesen
+  noFootprintOption: Keiner
+  footprintMissing: Keine Bibliothek enthält diesen Footprint
+  unreadable: Diese Datei konnte nicht gelesen werden.
+  details:
+    name: Name
+    description: Beschreibung
+    keywords: Schlüsselwörter
+    source: Quelle
+    pinMap: Pins
+    datasheet: Datenblatt
+  pinMap:
+    allMatch: Jeder Pin hat ein Pad ({n})
+    pinsWithoutPad: 'Kein Pad für: {list}'
+    padsWithoutPin: 'Kein Pin für Pad: {list}'
+  openDatasheet: Öffnen
+  cancel: Abbrechen
+  place: Platzieren
+  assign: Zuweisen
+  assignMany: '{n} Bauteilen zuweisen'
+  change: Ändern
+librarySync:
+  checking: Bibliothek wird geprüft…
+  matches: 'Entspricht der Bibliothek | Alle {count} entsprechen der Bibliothek'
+  differs: Nicht synchron mit der Bibliothek
+  differsSome: '{count} von {total} nicht synchron mit der Bibliothek'
+  missing: In keiner Bibliothek
+  missingSome: '{count} von {total} sind in keiner Bibliothek'
+libraryLink:
+  title: Bibliothek
+  update: Aus Bibliothek aktualisieren…
+  updateHint: Aus der Bibliothekskopie neu aufbauen, Platzierung, Referenz und Netze bleiben erhalten
+  changeSymbol: Symbol ändern…
+  changeFootprint: Footprint ändern…
+  changeHintSymbol: Gegen ein anderes Bibliothekssymbol tauschen
+  changeHintFootprint: Gegen einen anderen Bibliotheks-Footprint tauschen
+  editSymbol: Symbol bearbeiten…
+  editFootprint: Footprint bearbeiten…
+  editHintSymbol: Die Kopie des Symbols in diesem Blatt bearbeiten, die Bibliothek bleibt unverändert
+  editHintFootprint: Die Kopie des Footprints auf dieser Platine bearbeiten, die Bibliothek bleibt unverändert
+  editLibrarySymbol: Bibliothekssymbol bearbeiten…
+  editLibraryFootprint: Bibliotheks-Footprint bearbeiten…
+  editLibraryHintSymbol: Das Bibliothekssymbol im Symbol-Editor öffnen
+  editLibraryHintFootprint: Den Bibliotheks-Footprint im Footprint-Editor öffnen
+partUpdate:
+  updateTitleSymbol: Symbole aus Bibliothek aktualisieren
+  updateTitleFootprint: Footprints aus Bibliothek aktualisieren
+  changeTitleSymbol: Symbole ändern
+  changeTitleFootprint: Footprints ändern
+  fromPartSymbol: Bibliothekssymbol
+  fromPartFootprint: Bibliotheks-Footprint
+  newPartSymbol: Neues Symbol
+  newPartFootprint: Neuer Footprint
+  newPartPlaceholderSymbol: Bibliothek:Symbol
+  newPartPlaceholderFootprint: Bibliothek:Footprint
+  eachOwn: Jeweils aus dem eigenen
+  updateHintSymbol: Jedes Symbol wird aus seinem eigenen Bibliothekssymbol neu aufgebaut. Hier eines angeben, um alle daraus neu aufzubauen.
+  updateHintFootprint: Jeder Footprint wird aus seinem eigenen Bibliotheks-Footprint neu aufgebaut. Hier einen angeben, um alle daraus neu aufzubauen.
+  updateToHintSymbol: Jedes Symbol im Bereich wird aus diesem Bibliothekssymbol neu aufgebaut.
+  updateToHintFootprint: Jeder Footprint im Bereich wird aus diesem Bibliotheks-Footprint neu aufgebaut.
+  browse: Durchsuchen…
+  scopeSymbol: Symbole
+  scopeFootprint: Footprints
+  scopeSelectionSymbol: 'Ausgewählte Symbole ({count})'
+  scopeSelectionFootprint: 'Ausgewählte Footprints ({count})'
+  scopeReference: Passende Referenz
+  scopeValue: Passender Wert
+  scopeLibId: Passende Bibliothekskennung
+  scopeAllSymbol: Alle Symbole im Schaltplan
+  scopeAllFootprint: Alle Footprints auf der Platine
+  wildcards: '* passt auf eine beliebige Zeichenfolge, ? auf ein beliebiges Zeichen'
+  reset: Aus der Bibliothek übernehmen
+  fields: Felder
+  all: Alle
+  none: Keine
+  outcomeSymbol: Neu aufzubauende Symbole
+  outcomeFootprint: Neu aufzubauende Footprints
+  loading: Bibliothek wird gelesen…
+  notFound: 'Keine Bibliothek enthält {libId}'
+  matches: Entspricht der Bibliothek
+  differs: Nicht synchron mit der Bibliothek
+  nothingSymbol: Keine Symbole in diesem Bereich.
+  nothingFootprint: Keine Footprints in diesem Bereich.
+  cancel: Abbrechen
+  confirmUpdate: Aktualisieren
+  confirmChange: Ändern
+agentViewport:
+  close: Sichtbereich des Agenten schließen
+  reveal: 'Sichtbereich des Agenten zeigen: {label}'

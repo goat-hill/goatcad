@@ -1,0 +1,44 @@
+tabTitle: Welcome
+hero:
+  # Mirrors TAGLINE in web/src/brand.ts (BRAND.md §2) — change both together.
+  tagline: The modern, AI-native workbench for circuit board design.
+start:
+  # Heading over the "Open Project / New Project / Open File" actions on the
+  # welcome page — i.e. "getting started", not a button and not the track
+  # start-point in pcbEditor.propertiesPanel.start.
+  title: Start
+  openProject: Open project…
+  openProjectDesc: Open an existing .kicad_pro project
+  openFolder: Open folder…
+  newProject: New project…
+  newProjectDesc: Start a new schematic and board
+  openFile: Open file…
+  openSample: Open sample project…
+  openSampleDesc: Download an example design from GitHub
+explore:
+  # Heading over the sample-project action, below Start.
+  title: Explore
+recent:
+  # Heading over the recent *projects*; the files group below has its own.
+  title: Recent
+  filesTitle: Files
+  clear: Clear
+  remove: Remove from recents
+# The sample project picker, opened from the Start list. Nothing is fetched
+# until it opens; the chosen sample is copied into a temporary folder.
+samples:
+  title: Open sample project
+  loading: Loading samples…
+  empty: No sample projects are available right now.
+  # {size} is a localized number of megabytes.
+  size: '{size} MB'
+  cancel: Cancel
+  retry: Try again
+  open: Open
+  downloading: Downloading…
+  errors:
+    offline: Couldn't reach GitHub. Check your connection and try again.
+    rateLimited: GitHub is limiting requests from this network. Try again in a few minutes.
+    unavailable: The sample projects couldn't be loaded. Try again later.
+footer:
+  showOnStartup: Show welcome page on startup

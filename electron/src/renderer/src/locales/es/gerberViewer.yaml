@@ -1,0 +1,16 @@
+loading: Buscando archivos de capa…
+layerCount: 'Mostrando {count} archivo de capa | Mostrando {count} archivos de capa | Mostrando {count} archivos de capa'
+errorTitle: No se pudo leer este archivo Gerber
+coords: 'X {x} Y {y} mm'
+warningsTitle: 'Avisos ({count})'
+readOnlyNote: >-
+  Los archivos Gerber son salidas de fabricación generadas; GoatCAD los abre
+  en modo de solo lectura. Vuelva a exportarlos desde el editor de placas para cambiarlos.
+panel:
+  fileTitle: Archivo de la capa activa
+properties:
+  file: Archivo
+  function: Función
+  units: Unidades
+  apertures: Aperturas
+  objects: Objetos

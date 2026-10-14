@@ -1,0 +1,72 @@
+#!/bin/bash
+#
+# Compile the macOS 26 app icon: build/icon.icon → build/Assets.car.
+#
+# build/icon.icon is an Icon Composer bundle (open it in Icon Composer, which
+# ships inside Xcode 26). macOS 26 draws an icon from it with the system's
+# Liquid Glass lighting and its Dark / Clear / Tinted styles; a plain .icns is
+# drawn flat, exactly as painted. Only actool from Xcode 26+ can compile one.
+#
+# The compiled catalog is committed, so packaging needs no Xcode at all: the
+# .app just copies build/Assets.car into Contents/Resources and names the icon
+# in Info.plist (electron-builder.yml, mac.extraResources and extendInfo).
+# Older macOS ignores both and reads icon.icns, which electron-builder still
+# derives from build/icon.png — keep the two drawings in step.
+#
+# Run it after any change to build/icon.icon and commit both outputs. It also
+# writes build/Assets.car.sources, a SHA-256 per source file, and a unit test
+# (src/main/__tests__/macIcon.test.ts) fails when the sources no longer match
+# it — that is, when the bundle was edited and not recompiled.
+#
+# actool stamps the catalog, so two compiles of the same sources differ byte
+# for byte. The script therefore does nothing when the sources still match
+# build/Assets.car.sources, rather than churn a 1.7 MB binary in git.
+#
+# Usage:
+#   ./bin/build-mac-icon           # compile if build/icon.icon changed
+#   ./bin/build-mac-icon --force   # compile regardless
+#
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+if [ "$(uname -s)" != "Darwin" ]; then
+  echo "build-mac-icon: macOS only (actool ships with Xcode)" >&2
+  exit 1
+fi
+
+# The version is a plist whose key has dots in it, which plutil's key paths
+# cannot address; read the string after short-bundle-version instead.
+version="$(xcrun actool --version 2>/dev/null \
+  | sed -n '/short-bundle-version/{n;s/.*<string>\(.*\)<\/string>.*/\1/p;}' || true)"
+if [ -z "$version" ] || [ "${version%%.*}" -lt 26 ]; then
+  echo "build-mac-icon: needs actool from Xcode 26 or later (found: ${version:-none})" >&2
+  exit 1
+fi
+
+src=build/icon.icon
+sources() {
+  (cd "$src" && find . -type f ! -name .DS_Store | LC_ALL=C sort | xargs shasum -a 256)
+}
+
+if [ "${1:-}" != "--force" ] && [ -f build/Assets.car ] \
+  && [ "$(sources)" = "$(cat build/Assets.car.sources 2>/dev/null)" ]; then
+  echo "build-mac-icon: build/Assets.car is up to date (--force to recompile)"
+  exit 0
+fi
+
+tmp="$(mktemp -d)"
+trap 'rm -rf "$tmp"' EXIT
+
+# The app-icon name is the bundle's basename; Info.plist's CFBundleIconName
+# must match it.
+xcrun actool "$src" --compile "$tmp" \
+  --app-icon icon --include-all-app-icons \
+  --platform macosx --target-device mac --minimum-deployment-target 12.0 \
+  --enable-on-demand-resources NO --development-region en \
+  --output-partial-info-plist "$tmp/info.plist" \
+  --output-format human-readable-text --errors --warnings --notices >/dev/null
+
+cp "$tmp/Assets.car" build/Assets.car
+sources > build/Assets.car.sources
+
+echo "build-mac-icon: wrote build/Assets.car ($(du -h build/Assets.car | cut -f1 | xargs)) from actool $version"

@@ -1,0 +1,9 @@
+#!/bin/bash
+# GoatHerd in dev mode: electron-vite dev with HMR on the renderer.
+# Blocks the shell until you quit the app (Ctrl-C or closing the window).
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+npm run dev -- "$@"

@@ -1,0 +1,35 @@
+tabTitle: ようこそ
+hero:
+  tagline: 回路基板設計のための、AI ネイティブなモダン ワークベンチ。
+start:
+  title: はじめる
+  openProject: プロジェクトを開く…
+  openProjectDesc: 既存の .kicad_pro プロジェクトを開く
+  openFolder: フォルダーを開く…
+  newProject: 新規プロジェクト…
+  newProjectDesc: 新しい回路図と基板を作成
+  openFile: ファイルを開く…
+  openSample: サンプルプロジェクトを開く…
+  openSampleDesc: GitHub からサンプル設計をダウンロード
+explore:
+  title: 探す
+recent:
+  title: 最近使ったもの
+  filesTitle: ファイル
+  clear: クリア
+  remove: 最近使った項目から削除
+samples:
+  title: サンプルプロジェクトを開く
+  loading: サンプルを読み込み中…
+  empty: 現在利用できるサンプルプロジェクトはありません。
+  size: '{size} MB'
+  cancel: キャンセル
+  retry: 再試行
+  open: 開く
+  downloading: ダウンロード中…
+  errors:
+    offline: GitHub に接続できませんでした。接続を確認して再試行してください。
+    rateLimited: このネットワークからのリクエストが GitHub により制限されています。数分後に再試行してください。
+    unavailable: サンプルプロジェクトを読み込めませんでした。後でもう一度お試しください。
+footer:
+  showOnStartup: 起動時にようこそページを表示

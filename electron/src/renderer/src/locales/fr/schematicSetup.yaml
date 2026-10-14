@@ -1,0 +1,6 @@
+title: Configuration de la schématique
+sections:
+  rules: Règles électriques
+  netClasses: Classes d'équipotentielles
+  exclusions: Exclusions
+noProject: "Cette schématique n'a pas de fichier projet : les sévérités des règles ne peuvent pas être enregistrées et il n'y a pas d'exclusions. Les contrôles s'exécutent avec les valeurs par défaut de KiCad."

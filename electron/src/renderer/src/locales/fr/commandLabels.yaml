@@ -1,0 +1,56 @@
+move: Déplacer l’élément | Déplacer {count} éléments | Déplacer {count} éléments
+delete: Supprimer l’élément | Supprimer {count} éléments | Supprimer {count} éléments
+rotate: Pivoter l’élément | Pivoter {count} éléments | Pivoter {count} éléments
+mirror: Miroir de l’élément | Miroir de {count} éléments | Miroir de {count} éléments
+paste: Coller l’élément | Coller {count} éléments | Coller {count} éléments
+duplicate: Dupliquer l’élément | Dupliquer {count} éléments | Dupliquer {count} éléments
+cut: Couper l’élément | Couper {count} éléments | Couper {count} éléments
+pasteLeavingOut: Coller l’élément ({dropped} omis) | Coller {count} éléments ({dropped} omis) | Coller {count} éléments ({dropped} omis)
+repeat: Répéter l’élément | Répéter {count} éléments | Répéter {count} éléments
+addSymbol: Ajouter un symbole
+addWire: Ajouter un fil
+addLabel: Ajouter un label
+addJunction: Ajouter une jonction
+addNoConnect: Ajouter un indicateur de non-connexion
+addText: Ajouter un texte
+addSheet: Ajouter une feuille
+addBus: Ajouter un bus
+addBusEntry: Ajouter une entrée de bus
+addDirectiveLabel: Ajouter un label de directive
+addLine: Tracer une ligne
+addRectangle: Tracer un rectangle
+addCircle: Tracer un cercle
+addArc: Tracer un arc
+addBezier: Tracer une courbe de Bézier
+addRuleArea: Tracer une surface à règles
+addTable: Tracer un tableau
+addImage: Ajouter une image
+addTextBox: Ajouter une boîte de texte
+changeUnit: Changer d’unité
+swapUnits: Permuter les unités
+changeBodyStyle: Changer le style de corps
+incrementAnnotations: Incrémenter l’annotation | Incrémenter {count} annotations | Incrémenter {count} annotations
+resizeSheet: Redimensionner la feuille
+resizeGraphic: Redimensionner le graphique
+dragWireEnd: Faire glisser l’extrémité du fil
+dragBusEnd: Faire glisser l’extrémité du bus
+setPaper: Définir le format de page
+addSheetPin: Ajouter une pin de feuille
+cleanup: Nettoyer les fils
+annotate: Annoter le symbole | Annoter {count} symboles | Annoter {count} symboles
+generateSymbol: Générer le symbole
+copySymbol: Copier le symbole
+deleteSymbol: Supprimer le symbole
+boardSync: Synchroniser le circuit imprimé depuis la schématique
+bindPart: Lier la pièce
+agentBatch: Modification par l’agent | {count} modifications par l’agent | {count} modifications par l’agent
+editComponents: Modifier le composant | Modifier {count} composants | Modifier {count} composants
+editFootprintItem: Modifier l’élément d’empreinte
+addFootprintItem: Ajouter un élément d’empreinte
+editSymbolItem: Modifier l’élément de symbole
+addSymbolItem: Ajouter un élément de symbole
+updateSymbols: Mettre à jour le symbole depuis la librairie | Mettre à jour {count} symboles depuis la librairie | Mettre à jour {count} symboles depuis la librairie
+changeSymbols: Changer le symbole | Changer {count} symboles | Changer {count} symboles
+replaceText: Remplacer le texte | Remplacer {count} textes | Remplacer {count} textes
+align: Aligner l’élément | Aligner {count} éléments | Aligner {count} éléments
+distribute: Répartir l’élément | Répartir {count} éléments | Répartir {count} éléments

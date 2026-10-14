@@ -1,0 +1,10 @@
+#!/bin/bash
+# Astro dev server for the GoatCAD site (web/). See docs/WEB.md.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+# Astro supports `--background` plus `astro dev stop|status|logs`, which is
+# usually what an agent wants instead of blocking a shell.
+npm run dev -- "$@"

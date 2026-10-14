@@ -1,0 +1,35 @@
+tabTitle: Bienvenue
+hero:
+  tagline: L’atelier moderne et natif IA pour la conception de circuits imprimés.
+start:
+  title: Démarrer
+  openProject: Ouvrir un projet…
+  openProjectDesc: Ouvrir un projet .kicad_pro existant
+  openFolder: Ouvrir un dossier…
+  newProject: Nouveau projet…
+  newProjectDesc: Commencer une nouvelle schématique et un nouveau circuit imprimé
+  openFile: Ouvrir un fichier…
+  openSample: Ouvrir un projet d’exemple…
+  openSampleDesc: Télécharger un exemple de conception depuis GitHub
+explore:
+  title: Découvrir
+recent:
+  title: Récents
+  filesTitle: Fichiers
+  clear: Effacer
+  remove: Retirer des récents
+samples:
+  title: Ouvrir un projet d’exemple
+  loading: Chargement des exemples…
+  empty: Aucun projet d’exemple n’est disponible pour le moment.
+  size: '{size} Mo'
+  cancel: Annuler
+  retry: Réessayer
+  open: Ouvrir
+  downloading: Téléchargement…
+  errors:
+    offline: Impossible de joindre GitHub. Vérifiez votre connexion et réessayez.
+    rateLimited: GitHub limite les requêtes de ce réseau. Réessayez dans quelques minutes.
+    unavailable: Impossible de charger les projets d’exemple. Réessayez plus tard.
+footer:
+  showOnStartup: Afficher la page d’accueil au démarrage

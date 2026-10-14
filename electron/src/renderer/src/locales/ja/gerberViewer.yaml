@@ -1,0 +1,15 @@
+loading: レイヤーファイルを検索中…
+layerCount: '{count} 個のレイヤーファイルを表示中'
+errorTitle: この Gerber ファイルを読み込めませんでした
+coords: 'X {x} Y {y} mm'
+warningsTitle: '警告 ({count})'
+readOnlyNote: >-
+  Gerber ファイルは生成された製造用出力のため、GoatCAD では読み取り専用で開きます。変更するには基板エディターから再エクスポートしてください。
+panel:
+  fileTitle: アクティブレイヤーのファイル
+properties:
+  file: ファイル
+  function: 機能
+  units: 単位
+  apertures: アパーチャ
+  objects: オブジェクト

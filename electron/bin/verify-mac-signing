@@ -1,0 +1,132 @@
+#!/bin/bash
+#
+# Verify a packaged macOS build is signed, hardened, and notarized.
+#
+# electron-builder degrades *quietly* on all three. A missing certificate logs
+# "skipped macOS application code signing", a missing notarization credential
+# logs "skipped macOS notarization" — and both exit 0, leaving a .dmg that looks
+# fine in CI and is refused by Gatekeeper on a user's machine. Since the failure
+# only shows up on a machine that downloaded the file (a locally built .dmg has
+# no quarantine attribute and opens regardless), a build-time check is the only
+# place to catch it before a release goes out.
+#
+# Run it after ./bin/package --mac locally, and in release.yml on every tag.
+#
+# Usage:
+#   ./bin/verify-mac-signing            # checks dist/
+#   ./bin/verify-mac-signing some/dir   # checks another output dir
+#
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+dist="${1:-dist}"
+
+if [ "$(uname -s)" != "Darwin" ]; then
+  echo "verify-mac-signing: macOS only (codesign/spctl/stapler are not available here)" >&2
+  exit 1
+fi
+
+if [ ! -d "$dist" ]; then
+  echo "verify-mac-signing: no such directory '$dist' — build first with ./bin/package --mac" >&2
+  exit 1
+fi
+
+app="$(find "$dist" -maxdepth 2 -name '*.app' -type d 2>/dev/null | head -1)"
+if [ -z "$app" ]; then
+  echo "verify-mac-signing: no .app found under '$dist' — build first with ./bin/package --mac" >&2
+  exit 1
+fi
+
+fail=0
+note() { printf '  %s\n' "$1"; }
+bad() {
+  printf '\033[31mFAIL\033[0m %s\n' "$1"
+  fail=1
+}
+ok() { printf '\033[32mok\033[0m   %s\n' "$1"; }
+
+echo "Verifying $app"
+
+# 1. The signature is internally consistent and covers every nested binary.
+#    --deep is the right call here even though Apple discourages it for *signing*:
+#    we are verifying, not applying, and helpers each carry their own signature.
+if codesign --verify --deep --strict --verbose=2 "$app" 2>/dev/null; then
+  ok "signature valid (all nested code)"
+else
+  bad "codesign --verify failed — the bundle is unsigned or the signature is broken"
+fi
+
+info="$(codesign --display --verbose=4 "$app" 2>&1 || true)"
+
+# 2. Signed by Developer ID, not ad-hoc and not a development certificate.
+#    An "Apple Development" cert produces a bundle that runs on the signing Mac
+#    and nowhere else, which is the most expensive version of this bug to find.
+authority="$(grep -m1 '^Authority=' <<<"$info" | sed 's/^Authority=//' || true)"
+case "$authority" in
+  "Developer ID Application"*) ok "identity: $authority" ;;
+  "") bad "no signing authority — the bundle is ad-hoc signed or unsigned" ;;
+  *) bad "wrong certificate type: '$authority' (need 'Developer ID Application'; a development cert will not run on other Macs)" ;;
+esac
+
+# 3. Hardened runtime. Notarization *rejects* a bundle without it, so this
+#    normally fails earlier — but it is also what a stray `hardenedRuntime: false`
+#    would silently undo.
+if grep -q 'flags=.*runtime' <<<"$info"; then
+  ok "hardened runtime enabled"
+else
+  bad "hardened runtime not enabled — Apple's notary service will reject this bundle"
+fi
+
+# 4. Timestamp. A signature without a secure timestamp stops validating the day
+#    the certificate expires, rather than staying valid for what it signed.
+if grep -q '^Timestamp=' <<<"$info"; then
+  ok "secure timestamp present"
+else
+  bad "no secure timestamp — the signature will expire with the certificate"
+fi
+
+# 5. The stapled notarization ticket. This is the difference between "Apple
+#    could not verify this app" and a clean first launch, and it is what lets the
+#    app open on a machine that is offline.
+if xcrun stapler validate "$app" >/dev/null 2>&1; then
+  ok "notarization ticket stapled to .app"
+else
+  bad "no stapled notarization ticket on the .app — it was built without notary credentials, or notarization failed"
+fi
+
+# 6. Gatekeeper's own verdict on the .app, which is the question the user's Mac
+#    actually asks at first launch.
+if spctl --assess --type execute --verbose=2 "$app" 2>&1 | grep -q 'accepted'; then
+  ok "Gatekeeper accepts the .app"
+else
+  bad "Gatekeeper rejects the .app: $(spctl --assess --type execute --verbose=2 "$app" 2>&1 | tr '\n' ' ')"
+fi
+
+# 7. The .dmg is what people download, so it gets assessed too. electron-builder
+#    signs the disk image but does not submit it to the notary service
+#    separately — it notarizes and staples the .app, then builds the image from
+#    the stapled bundle. If Gatekeeper turns out to want a ticket on the image
+#    itself, this is where we find out, and the fix is an afterAllArtifactBuild
+#    hook that notarizes the .dmg too.
+shopt -s nullglob
+dmgs=("$dist"/*.dmg)
+shopt -u nullglob
+if [ ${#dmgs[@]} -eq 0 ]; then
+  note "(no .dmg in $dist — skipping disk image checks)"
+else
+  for dmg in "${dmgs[@]}"; do
+    verdict="$(spctl --assess --type open --context context:primary-signature --verbose=2 "$dmg" 2>&1 || true)"
+    if grep -q 'accepted' <<<"$verdict"; then
+      ok "Gatekeeper accepts $(basename "$dmg")"
+    else
+      bad "Gatekeeper rejects $(basename "$dmg"): $(tr '\n' ' ' <<<"$verdict")"
+    fi
+  done
+fi
+
+echo
+if [ "$fail" -ne 0 ]; then
+  echo "verify-mac-signing: FAILED — this build must not ship." >&2
+  exit 1
+fi
+echo "verify-mac-signing: all checks passed."

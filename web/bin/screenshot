@@ -1,0 +1,15 @@
+#!/bin/bash
+# Screenshot a page of the marketing site (web/): build, serve dist/ through
+# Astro's preview server, drive system Chrome with Playwright, capture a PNG.
+# See scripts/screenshot.mjs for options (--out, --size, --path, --url, --dpr,
+# --wait, --full-page, --script, --visible, --no-build) and
+# .claude/skills/screenshot-app/SKILL.md for usage.
+#
+# Headless by default — nothing appears on screen and no xvfb is needed (unlike
+# the Electron harness); --visible opens a real Chrome window to watch a driver.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+exec node scripts/screenshot.mjs "$@"

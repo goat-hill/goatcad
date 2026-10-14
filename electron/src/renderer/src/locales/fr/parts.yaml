@@ -1,0 +1,108 @@
+title: Recherche de pièces
+searchPlaceholder: 'Rechercher chez les distributeurs par référence ou mot-clé'
+search: Rechercher
+modes:
+  universal: Tous
+browse:
+  all: Toutes les catégories
+  searchCategory: Rechercher dans cette catégorie ({count} pièces)
+  backToCategories: Retour aux catégories
+  empty: Ce distributeur ne publie pas de liste de catégories.
+searching: Recherche…
+cancel: Annuler
+cancelled: Recherche annulée.
+retry: Réessayer
+emptyPrompt: Recherchez une référence fabricant pour voir qui la stocke, à quel prix, et avec quelle fiche technique.
+noResults: Aucune pièce ne correspond à cette recherche.
+paging:
+  showing: '{from}–{to} sur {total}'
+  none: Aucun résultat
+  previous: Précédent
+  next: Suivant
+  perPage: Par page
+groupCount: '{count} pièce | {count} pièces | {count} pièces'
+quantity: Prix pour la qté
+providerFailed: 'Impossible de rechercher chez {name}. {reason}'
+searchFailed: 'La recherche n’a pas pu s’exécuter : {error}'
+attribution: 'Prix, stock et données produit fournis par {names}.'
+setup:
+  title: Connecter un distributeur
+  body: Recherchez de vraies pièces de fabricants chez DigiKey ou Mouser — prix, stock, fiches techniques et liens vers les modèles CAO. Il faut une clé API gratuite du distributeur, qui s’obtient en quelques minutes.
+  action: Configurer un distributeur
+providers:
+  digikey:
+    steps:
+      - Connectez-vous au portail développeur de DigiKey et ajoutez une application Production — pas Sandbox, qui utilise un autre serveur.
+      - Cochez Product Information V4 dans la liste des produits. GoatCAD n’utilise que celui-ci.
+      - Laissez OAuth Callback vide. Il ne s’applique qu’à l’OAuth à trois étapes, que GoatCAD n’utilise pas.
+      - Copiez le Client ID et le Client Secret de l’application dans les champs ci-dessous.
+  mouser:
+    steps:
+      - Connectez-vous au hub API de Mouser.
+      - Demandez une clé pour la Search API. Mouser vous l’envoie par e-mail.
+      - Collez la clé dans le champ ci-dessous.
+filters:
+  title: Filtres
+  apply: Appliquer les filtres
+  pending: Pas encore appliqués
+  availability: Disponibilité
+  inStock: En stock
+  rohs: Conforme RoHS
+  hasDatasheet: Avec fiche technique
+  has3dModel: Avec modèle 3D
+  manufacturer: Fabricant
+  packaging: Conditionnement
+  status: État
+  series: Série
+  searchWithin: Rechercher dans les résultats…
+  removeFilter: Retirer ce filtre
+  clearAll: Tout effacer
+  findOption: Rechercher…
+  noOptions: Aucune option correspondante
+  scopeNote: Ce distributeur ne prend en charge que ces filtres. Recherchez directement chez DigiKey pour filtrer par catégorie et par spécification.
+columns:
+  part: Réf. fabricant
+  mpn: Réf. fabricant
+  manufacturer: Fabricant
+  status: État
+  seller: Distributeur
+  stock: Stock
+  price: Prix
+  packaging: Conditionnement
+  sortBy: Trier par {name}
+  expand: Afficher les détails
+part:
+  manufacturer: Fabricant
+  distributorPart: Réf. distributeur
+  inStock: '{count} en stock'
+  stockUnknown: Stock inconnu
+  outOfStock: Rupture de stock
+  priceAt: "{price} {'@'} {quantity}"
+  noPrice: Aucun prix
+  moq: 'Min. {quantity}'
+  datasheet: Fiche technique
+  product: Voir sur {name}
+  cadOpen: Ouvrir la page du modèle CAO
+  cadCheck: Rechercher un modèle CAO
+  cadNone: Aucun modèle CAO référencé
+  parametersFrom: Spécifications de {name}
+lifecycle:
+  active: Actif
+  nrnd: Déconseillé pour nouvelles conceptions
+  obsolete: Obsolète
+  unknown: Inconnu
+fields:
+  apiKey: Clé API
+  clientId: Client ID
+  clientSecret: Client Secret
+errors:
+  no-credentials: Aucune clé API n’est définie pour ce distributeur.
+  invalid-credentials: Ce distributeur a rejeté la clé API. Vérifiez-la et réessayez.
+  forbidden: Cette clé API n’est pas autorisée pour la recherche de pièces. Vérifiez l’abonnement sur le portail développeur du distributeur.
+  rate-limited: Trop de requêtes pour le moment. Réessayez dans {detail} secondes.
+  quota-exhausted: La limite de requêtes quotidienne de ce distributeur est atteinte. Elle est réinitialisée à minuit UTC.
+  network: Impossible de joindre le distributeur. Vérifiez votre connexion.
+  timeout: Le distributeur n’a pas répondu à temps. Il est peut-être occupé — réessayez.
+  provider-error: Le distributeur a renvoyé une erreur.
+  bad-response: Impossible de lire la réponse du distributeur.
+  storage-unavailable: La clé n’a pas été enregistrée, car le stockage sécurisé de cet ordinateur est indisponible.

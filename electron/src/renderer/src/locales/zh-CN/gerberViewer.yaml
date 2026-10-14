@@ -1,0 +1,14 @@
+loading: 正在扫描层文件…
+layerCount: 显示 {count} 个层文件
+errorTitle: 无法读取此 Gerber 文件
+coords: 'X {x} Y {y} mm'
+warningsTitle: 警告（{count}）
+readOnlyNote: Gerber 文件是生成的制造输出；GoatCAD 以只读方式打开。如需更改，请从 PCB 编辑器重新导出。
+panel:
+  fileTitle: 活动层文件
+properties:
+  file: 文件
+  function: 功能
+  units: 单位
+  apertures: 光圈
+  objects: 对象

@@ -1,0 +1,766 @@
+commands:
+  editBoard: Edit board
+  editStackup: Edit stackup
+  applyProfile: Apply manufacturing profile
+  applyStackup: Apply stackup
+  addDielectric: Add dielectric layer
+  removeLayer: Remove layer
+  editItem: Edit item
+  routeTrack: Route track
+  dragTrack: Drag track
+  dragVia: Drag via
+  dragArc: Drag arc
+  routePair: Route differential pair
+  tune: Tune length
+  retune: Re-tune
+  # KiCad's Update All Tuning Patterns: every pattern laid again to the rules as they are now.
+  updateTuningPatterns: Update all tuning patterns
+  removeTuningPattern: Remove tuning pattern | Remove {count} tuning patterns
+  # Edit teardrops' undo step: teardrops added, set or removed, then all rebuilt.
+  editTeardrops: Edit teardrops
+  # The undo step a refill takes first: every teardrop rebuilt, as KiCad's Fill All Zones does.
+  rebuildTeardrops: Rebuild teardrops
+  dragFootprint: Drag footprint | Drag {count} footprints
+  addVia: Add Via
+  # Place Footprint's undo label, naming the part it landed.
+  placeFootprint: Place {reference}
+  changeTrackWidth: Change track width
+  changeViaSize: Change via size
+  # Undo labels for the graphics tools; a line chain inserts one gr_line per
+  # segment, so its label carries the count.
+  addLine: Add line | Add {count} lines
+  addArc: Add arc
+  addRectangle: Add rectangle
+  addCircle: Add circle
+  addPolygon: Add polygon
+  addText: Add text
+  addBezier: Add curve
+  addTextBox: Add text box
+  addPoint: Add point
+  addZone: Add zone
+  editZone: Edit zone
+  editShape: Edit shape
+  refillZones: Refill zones
+  rotateFootprints: Rotate footprint | Rotate {count} footprints
+  # Undo label for R over a selection mixing footprints, tracks, graphics…, turned as one.
+  rotateItems: Rotate item | Rotate {count} items
+  moveFootprint: Move {reference}
+  rotateFootprint: Rotate {reference}
+  # Undo label for KiCad's Flip (F): the footprints move to the other side of the board.
+  flipFootprints: Change side of footprint | Change side of {count} footprints
+  # Undo label for F over a selection mixing footprints, tracks, graphics…, flipped as one.
+  flipItems: Change side of item | Change side of {count} items
+  updateFootprints: Update footprint from library | Update {count} footprints from library
+  changeFootprints: Change footprint | Change {count} footprints
+  # Undo label for Fanout: the footprint's pads each get a via (and a short track to it).
+  fanout: Fanout {reference}
+  cleanup: Clean up tracks and vias
+  footprintFallback: Footprint
+  editTrack: Edit track
+  editVia: Edit Via
+  # Undo labels for KiCad's Toggle Lock (L) and Mirror; {count} items changed.
+  lock: Lock item | Lock {count} items
+  unlock: Unlock item | Unlock {count} items
+  mirror: Mirror item | Mirror {count} items
+  placeGridOrigin: Place grid origin
+  resetGridOrigin: Reset grid origin
+  placeDrillOrigin: Place drill origin
+  resetDrillOrigin: Reset drill origin
+  # Undo labels for KiCad's Break Track and Switch Track to Next / Previous Layer.
+  breakTrack: Break track
+  moveTracksToLayer: Move track to {layer} | Move {count} tracks to {layer}
+# The title bar's Edit menu.
+edit:
+  cut: Cut
+  copy: Copy
+  paste: Paste
+  duplicate: Duplicate
+  delete: Delete
+  rotate: Rotate counterclockwise
+  rotateClockwise: Rotate clockwise
+  flip: Change side
+  fanout: Fanout…
+  # Canvas menu only: split the right-clicked track there, and move the
+  # selected tracks one copper layer up or down the stack.
+  breakTrack: Break track
+  trackLayerNext: Move to next layer
+  trackLayerPrev: Move to previous layer
+# Toolbar chips and tool-search rows that are not drawing tools.
+tools:
+  # KiCad's Flip: the selected footprints move to the other side of the board,
+  # front layers swapped for back.
+  flip: Change side
+  # Altium's Fanout / Allegro's Create Fanout, in the tool search: opens the
+  # overlay where each pad of the selected footprint gets a via.
+  fanout: Fanout…
+# The Fanout overlay (top right of the canvas).
+fanout:
+  title: Fanout
+  style: Style
+  direction: Direction
+  surfaceRows: Surface rows
+  surfaceRowsHint: A grid's outer rows left for routing on the surface, with no via
+  styles:
+    auto: Auto
+    # A via between four balls, reached by a short diagonal track.
+    dogbone: Dogbone
+    # The via in the pad itself (via-in-pad).
+    under-pads: Under pads
+    inline: Inline rows
+    staggered: Staggered rows
+  directions:
+    out: Outward
+    in: Inward
+    ne: North-east
+    se: South-east
+    sw: South-west
+    nw: North-west
+  willPlace: Will place 1 via | Will place {count} vias
+  placed: Placed 1 via | Placed {count} vias
+  # {reason} is one of skip.*, e.g. "50 skipped: no-connect".
+  skipped: '{count} skipped: {reason}'
+  surface: 1 left for the surface | {count} left for the surface
+  refused: 1 pad can't take a via | {count} pads can't take a via
+  skip:
+    no-net: no net
+    no-connect: no-connect
+    through-hole: through-hole
+    # The pad's copper already joins the rest of its net: no airwire leaves it.
+    joined: already joined to its net
+    # The pad's copper already reaches a via (a fanout run before, or a route).
+    via: already has a via
+  apply: Fan out
+# Selection verbs without a toolbar chip, found through the tool search (and
+# their keys: L, U, Shift+Del). "Connection": the copper joined to what is
+# selected; each Select connection widens it (to a junction, a pad, all of it).
+selection:
+  toggleLock: Lock / unlock
+  selectConnection: Select connection
+  selectNet: Select net
+  deleteFullTrack: Delete full track
+# The board's two user origins, as tool-search rows. The grid origin is where the
+# grid is measured from; the drill origin (KiCad's "drill / place file origin")
+# is the point drill and component-position files can be written relative to.
+origins:
+  placeGrid: Grid origin
+  resetGrid: Reset grid origin
+  placeDrill: Drill / place file origin
+  resetDrill: Reset drill / place file origin
+# Centered overlay over the board tab while it loads (rendered by EditorArea):
+# one bar spanning file read, parse, and first render; {percent} is 0-100.
+loadingBoard: 'Loading board… {percent}%'
+# The left view rail: display toggles over the canvas (KiCad's left toolbar).
+# Sketch = outline-only rendering, for seeing through dense copper.
+viewRail:
+  # The rail's toggles: each is the chip's tooltip and its tool-search name.
+  zoneOutlines: Zone outlines only
+  sketchTracks: Sketch tracks
+  sketchVias: Sketch vias
+  hideRatsnest: Hide ratsnest
+  # The shade over the area inside a closed board outline (Edge.Cuts).
+  boardArea: Board area tint
+  flip: Flip board
+  # KiCad's footprint-text switches: a footprint's Reference, its Value, and its
+  # other fields and texts, each drawn and clickable while on.
+  fpReferences: Footprint references
+  fpValues: Footprint values
+  fpText: Footprint text
+  # Component bodies registered over the layout. The complete physical board
+  # remains the job of the neighboring 3D Preview mode.
+  assembly: Assembly overlay
+parseError:
+  title: Could not parse board file
+# The collision pill in the board's corner, beside Grid and Filter: how a
+# route or a track drag meets other copper. The pill itself reads the mode's
+# name (viewport.routeModes).
+collision:
+  # Menu heading. Rendered upper-case by the popover chrome.
+  title: Router
+  # Hover text on the viewport pill, in every state: its name alone (DESIGN.md §Viewport status strips).
+  buttonTitle: Router mode
+  # Hover text on the router menu's mode whose name does not say what it does.
+  explain:
+    highlight: Leaves everything in place and marks clearance violations, but won't place them unless DRC violations are allowed.
+  # The router's switches: KiCad's Interactive Router Settings. Push's own sit
+  # under Push, Highlight's under Highlight, the rest below the modes; each
+  # note is the switch's hover text.
+  settingsTitle: Settings
+  settings:
+    allowViolations:
+      name: Allow DRC violations
+      note: Places the track even through the clearance violations Highlight marks.
+    freeAngle:
+      name: Free angle mode
+      note: Tracks run straight to the cursor at any angle.
+    shoveVias:
+      name: Push vias
+    jumpOverObstacles:
+      name: Jump over obstacles
+      note: Pushed tracks that meet a pad go on round it, behind it, instead of holding the route back.
+    removeLoops:
+      name: Remove redundant tracks
+      note: A new track that joins what an old one already joins replaces it.
+    smartPads:
+      name: Optimize pad connections
+      note: Tracks leave and enter pads by their cleanest exit, never at an odd angle.
+    smoothDragged:
+      name: Smooth dragged segments
+      note: A dragged segment snaps into line with its neighbors, and a corner onto where they meet.
+    optimizeDragged:
+      name: Optimize entire dragged track
+      note: The whole dragged track is tidied, not only the part the drag moved.
+    autoPosture:
+      name: Use mouse path to set posture
+      note: Whether a track starts diagonal or straight follows how the mouse leaves the click.
+    startDiagonal:
+      name: Start diagonal
+      note: Without the mouse path, tracks start with the diagonal; / flips it.
+    fixAllSegments:
+      name: Fix all segments on click
+      note: A click lays the whole track to the cursor. Off, the last segment stays free.
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+  select: Select
+  route: Route
+  # Toolbar button label for the place-a-via tool. If the language distinguishes
+  # a tool from the object it creates, this is the tool.
+  via: Via
+  # The layer pair chip and its list (KiCad's Set Layer Pair): the two layers a
+  # via toggles between, and the project's saved pairs.
+  layerPair:
+    title: Layer pair
+    top: Top layer
+    bottom: Bottom layer
+    save: Save as preset
+    remove: Remove preset
+    presets: Presets (Shift+V steps through those ticked)
+    pickLayer: Place via to layer
+  # The keys the route hint teaches beside it, each after its keycap
+  # (docs/router-behavior.md K1): what the key does, in a word or two.
+  hintKeys:
+    routeVia: Via
+    trackWidthNext: Width
+    trackWidthPrev: Narrower
+    viaSizeNext: Via size
+    routePosture: Posture
+    dropVia: Drop via
+    # The tuner's (T1): 1 / 2 and 3 / 4, and the one of each that adds length.
+    tuneSpacing: Spacing
+    tuneAmplitude: Amplitude
+    tuneTighter: Tighter
+    tuneTaller: Taller
+    # A pair route's (PR1–PR6).
+    pairVia: Via pair
+    pairSize: Pair size
+    # `?`: the card of every routing key.
+    routeKeys: All keys
+  # `?`'s card of the keys of the operation in hand: a route, a pair route or a tune (docs/router-behavior.md K4).
+  keysCard:
+    title: Routing keys
+    titlePair: Differential pair keys
+    titleTune: Length tuning keys
+    pairVia: Via pair, toward where the pair goes
+    pairSize: Next / previous pair size
+    via: Through via, toward where the route goes
+    posture: Flip posture
+    corner: Corner mode
+    width: Wider / narrower
+    viaSize: Larger / smaller via
+    customSize: Custom track and via size
+    finish: Finish to the pad
+    end: End the route here
+    unroute: Back one click
+    mode: Router mode
+    layer: Next / previous layer
+    blindVia: Blind or buried via across the layer pair
+    microVia: Microvia
+    # Mid-tune, KiCad's 1–4.
+    tuneSpacing: Meander spacing up / down
+    tuneAmplitude: Meander amplitude up / down
+    viaPickLayer: Via to a layer picked from a list (through, blind)
+    layerPair: Next layer pair preset
+    cancel: End the route, keeping what is clicked
+    # Beside its key (`?`): the key shows the card and hides it again.
+    toggle: Show or hide this card
+    # The card's section headings.
+    sections:
+      route: Route
+      sizes: Width and size
+      vias: Vias
+      layers: Layers
+  # The route's size chips and their list (docs/router-behavior.md S4–S6).
+  # {size} is millimeters; a via's is "diameter / drill".
+  trackWidthOp: 'Track width: {size} mm'
+  viaSizeOp: 'Via size: {size} mm'
+  sizes:
+    trackWidth: Track width
+    # While routing, the heading carries the net's rule, mm.
+    trackWidthBetween: 'Track width · rule {min}–{max} mm'
+    trackWidthAtLeast: 'Track width · rule ≥ {min} mm'
+    viaSize: Via size (diameter / drill)
+    viaSizeAtLeast: 'Via size (diameter / drill) · rule ≥ {min} mm'
+    # The list's heading while a differential pair is routed: its rows are "width / gap".
+    pairSize: Pair width / gap
+    # The size list's row that opens the typed-size form, and the form (KiCad's Custom Track/Via Size).
+    custom: Custom size…
+    customTitle: Custom size
+    customViaDiameter: Via diameter
+    customViaDrill: Via drill
+    customApply: Apply
+    # The list's first row: the routed net's own size, from its class (or a
+    # custom rule where one applies). KiCad's "Track netclass width".
+    netClass: 'Net class · {size} mm'
+    # The same row, and the chip, before a route starts: each net's own, not one size.
+    netClassIdle: Net class
+    # KiCad's "Use Starting Track Width": a route started on a track, or on a
+    # pad or via a track leaves, draws at that track's width.
+    useConnected: Use starting track width
+    size: '{size} mm'
+    below: below the rule
+    above: above the rule
+    # The list's last row: Board Setup's Net Classes, where its sizes are edited.
+    edit: Edit sizes…
+  # Tool-search names for the route options. {mode} in routeMode is one of
+  # routeModes, which also label the collision pill; in cornerMode, the
+  # corner angle (45°, 90°) or "free".
+  routeMode: 'Collision mode: {mode}'
+  routeModes:
+    shove: Push
+    walkaround: Avoid
+    highlight: Highlight
+  cornerMode: 'Corner mode: {mode}'
+  cornerFree: free
+  # A rounded corner mode, {angle} 45 or 90 (KiCad's Arc 45 / Arc 90).
+  cornerRounded: 'rounded {angle}°'
+  # The chip shown while the line, polygon or zone tool is armed: which
+  # angles a drawn edge may take.
+  lineModeTitle: Line mode — 45° / 90° / free ({hotkey})
+  posture: Flip corner posture
+  # The pills in the corner while a route is live (docs/router-behavior.md S11):
+  # the value, then where it came from. {source} is a rule's name as KiCad
+  # prints it (netclass 'USB', rule 'inner').
+  facts:
+    # The Properties panel's group while a route is live, in place of the selection (S11).
+    route: Route
+    netClass: Net class
+    width: Width
+    via: Via
+    viaDiameter: Via size
+    viaDrill: Via hole
+    # Under the width row when the size in force is outside the net's width rule.
+    # The rule or net class that set it follows, as its tag or name.
+    widthOutside: 'Outside {min}–{max} mm from'
+    # After the width or via label, where it is not the class's: carried from the track
+    # the route started on, typed (KiCad's custom size), or picked from the list.
+    continued: continued
+    custom: custom
+    picked: picked
+    # Where the net's own size is a KiCad tuning profile's for this layer, not its class's (S12).
+    # {name} is the profile's name.
+    profile: '{name} profile'
+    # The Properties group while a differential pair is routed (S13): its two nets, then
+    # the width, gap and via gap in force.
+    pairRoute: Pair route
+    nets: Nets
+    gap: Gap
+    viaGap: Via gap
+    clearance: Clearance
+    # The item the clearance above is held against: what the head hugs or meets.
+    clearanceTo: Against
+    length: Length
+    lengthRule: Length rule
+    # Under the length row past the rule's max, mm.
+    lengthOver: "Over the rule's max of {max} mm"
+    # After the net's length, its rule's bounds, mm.
+    lengthBetween: '{min}–{max}'
+    lengthAtMost: '≤ {max}'
+    lengthAtLeast: '≥ {min}'
+  # Graphics tools, drawn on the ACTIVE layer (unlike route, which sticks to
+  # copper). Tool names: the toolbar tooltip (hotkey appended in code) and the
+  # tool search.
+  line: Line
+  arc: Arc
+  rectangle: Rectangle
+  circle: Circle
+  polygon: Polygon
+  text: Text
+  # A cubic Bezier curve, KiCad's gr_curve.
+  bezier: Curve
+  textBox: Text box
+  # KiCad 10's point: a marker that snaps and measures, and plots nothing.
+  point: Point
+  polygonContinueHint: Click the first point to close
+  arcHint: Click the start, the end, then the bulge
+  bezierHint: Click the start, the end, then each control point
+  # Zone tool: draws a copper zone outline on the active copper layer. Net,
+  # layers and keepout are edited in the properties panel after it lands.
+  zone: Zone
+  zoneContinueHint: Click the first point to close
+  # Opens the library chooser; the pick follows the cursor until clicked down.
+  placeFootprint: Place footprint
+  # Recompute copper pours. Fills also recompute automatically after edits
+  # while the board stays under the auto-refill time budget.
+  refillTitle: Refill zones ({hotkey})
+  refill: Refill zones
+  rerunChecks: Re-run all design checks
+  # Bottom-left pill while zone fills stream in from the tessellation worker
+  # (first open of a dense board); {settled} of {total} have landed. Hidden
+  # entirely when filling finishes fast.
+  fillProgress: 'Filling zones… {settled} of {total}'
+  # Bottom-left pill while the assembly overlay assembles. Only the first
+  # switch-on pays for this; the built scene is kept for later toggles.
+  renderBuilding: Building assembly overlay…
+# Chrome for the board as a physical object — shared by the PCB editor's 3D
+# mode and the footprint editor's 3D pane. Toolbar titles are hover tooltips.
+viewport3d:
+  # Camera preset not shared with the model viewer: looking up at the underside.
+  bottomViewTitle: Bottom view
+  # Tessellating the board's layers; brief, but not instant on a large design.
+  # {percent} is 0–100 through the build; the board appears under it as the
+  # stages complete.
+  building: 'Building board… {percent}%'
+  # Label over the component-model progress bar. {settled} of {total} have
+  # finished loading — counting the ones that failed, which are also done.
+  loadingModels: 'Loading models… {settled} of {total}'
+  # Heading of a failed-model notice's hover tooltip, above the failing links.
+  missingModelsDetail: 'Could not resolve:'
+  options:
+    # Title of the right-rail panel holding the switches.
+    layersGroup: Layers
+    # One per switch. "Board body" is the bare substrate the layers sit on.
+    boardBody: Board body
+    copper: Copper
+    solderMask: Solder mask
+    solderPaste: Solder paste
+    silkscreen: Silkscreen
+    holes: Plated holes
+    # The KiCad user layers carrying notes and dimensions, not board material.
+    drawings: Comments & drawings
+    axes: Axes
+    # The dimension gauge drawn around the board — rails, ticks and sizes.
+    gauge: Scale gauge
+    # Master switch over the four class filters under it.
+    models: Component models
+    modelsThroughHole: Through-hole
+    modelsSmd: SMD
+    # Parts whose footprint declares neither through-hole nor SMD.
+    modelsUnspecified: Unspecified
+    # "Do not populate" — marked in the design as not fitted on the assembly.
+    modelsDnp: DNP
+    # Footprints the pick-and-place file skips: mounting holes, fiducials,
+    # logos. Nothing is assembled at these positions.
+    modelsNotInPosFiles: Not in position files
+    reset: Reset to defaults
+  # How the pane presents the board: the right rail's second section, a
+  # property table. An exported image carries all three.
+  presentation:
+    title: Presentation
+    projection: Projection
+    projections:
+      perspective: Perspective
+      # Parallel lines stay parallel; one scale across the picture.
+      orthographic: Orthographic
+    lighting: Lighting
+    lightings:
+      # The default: a raked key light with soft fill.
+      studio: Studio
+      # No key light; even, shadowless.
+      soft: Soft
+      # Every face lit alike; colors exactly as named.
+      flat: Flat
+      # A hard key and deep shadows.
+      dramatic: Dramatic
+    # A percent of the preset's light as tuned: 100 is the preset, 200 twice as bright.
+    lightLevel: Light level
+    # What the pane draws behind the board.
+    background: Background
+    backgrounds:
+      # The app's own dark or light ground.
+      theme: Theme
+      # Shown as a checkerboard; exported with alpha.
+      transparent: Transparent
+      white: White
+      black: Black
+  # The 3D view as a PNG: the rail's Export section, the File ▸ Export row and the dialog.
+  exportImage:
+    # Title of the right rail's third section.
+    section: Export
+    # The section's button; opens the dialog.
+    button: Export image…
+    # File ▸ Export row, beside Netlist….
+    menu: 3D image…
+    # That row's tooltip while the board is in its layout view.
+    needs3d: Switch the board to its 3D view first
+    title: Export image
+    size: Size
+    # The 3D pane's own size, in pixels.
+    sizeView: 'Current view ({width} × {height})'
+    sizePreset: '{width} × {height}'
+    sizeCustom: Custom
+    width: Width
+    height: Height
+    # The padlock between Width and Height: on, typing one sets the other.
+    lockAspect: Keep proportions
+    # Alt text of the small picture of what will be exported.
+    preview: Preview
+    copy: Copy image
+    copied: Copied to the clipboard
+    copyFailed: Could not copy the image
+    save: Save image…
+    failed: Could not export the image
+# Update from library / Change for footprints: the checklist and the per-footprint notes
+# (PartUpdateDialog.vue, lib/board/footprintExchange.ts).
+footprintUpdate:
+  # Tool-search and canvas-menu entries, as the schematic's for symbols; each opens the dialog.
+  updateAction: Update footprints from library…
+  changeAction: Change footprint…
+  options:
+    removeExtraTexts: Remove texts the library footprint lacks
+    resetTextLayers: Text layers and visibility
+    resetTextEffects: Text sizes and styles
+    resetTextPositions: Text positions
+    resetTextContent: Field text
+    resetFabricationAttributes: Fabrication attributes
+    resetClearanceOverrides: Clearance overrides
+    reset3DModels: 3D models
+  # The board changes alone, as in KiCad; the next Update PCB from Schematic
+  # would put back the footprint the schematic names.
+  owned: 'Schematic still names {footprint}'
+  droppedPads: 'Pads lost: {pads}'
+  addedPads: 'New pads, no net: {pads}'
+properties:
+  # Under a track's or via's size outside its rules' bounds, as DRC would flag it
+  # (docs/router-behavior.md S9). The rule or net class that set the bound
+  # follows, as its tag or name.
+  belowRule: 'Below the minimum {size} mm from'
+  aboveRule: 'Above the maximum {size} mm from'
+# Routing over a selection, KiCad's, in the tool search (docs/router-behavior.md R44–R46).
+routeRun:
+  selected: Route selected
+  selectedFromEnd: Route selected from the other end
+  finishSelected: Attempt finish selected (autoroute)
+  fromOtherEnd: Route from the other end
+  skip: Skip to the next selected item
+# The router's right-click menu while routing, pairing, dragging or tuning
+# (docs/router-behavior.md R21), KiCad's Interactive Router menu.
+routerMenu:
+  cancel: Cancel
+  # Ends the route where the cursor is (KiCad's Finish, the End key).
+  finish: Finish
+  undoSegment: Undo last segment
+  # Routes the rest of the way to the pad (KiCad's Attempt Finish, F).
+  attemptFinish: Attempt finish
+  viaThrough: Place through via
+  viaBlind: Place blind/buried via
+  viaMicro: Place microvia
+  viaPickThrough: Select layer and place through via…
+  viaPickBlind: Select layer and place blind/buried via…
+  posture: Switch track posture
+  corner: Track corner mode
+  # The corner modes, {angle} 45 or 90 (KiCad's 45, Arc 45, 90, Arc 90).
+  cornerAngle: '{angle}°'
+  cornerArc: 'Arc {angle}°'
+  sizes: Track and via sizes
+  mode: Router mode
+# Differential pairs (docs/router-behavior.md PR1–PR6), KiCad's Route Differential Pair and
+# Differential Pair Dimensions.
+pair:
+  route: Route differential pair
+  dimensions: Differential pair
+  dimensionsOp: Differential pair dimensions…
+  width: Track width
+  gap: Gap
+  viaGap: Via gap
+  # The bottom-left coaching line while the pair tool waits for its first click (PR1).
+  coach: Click a pad, via or track of a pair
+# Length and skew tuning (docs/router-behavior.md T1–T6), KiCad's length tuners: the
+# readout in Properties while tuning, and the settings form.
+tune:
+  length: Length
+  skew: Skew
+  # The cursor meter's bounds (KiCad's tuning status): what the length is held to either side.
+  min: Min
+  max: Max
+  # The cursor meter's titles (T4) for a pair tune, and for a tune held to a delay (ps) rather than a length.
+  meter:
+    pairLength: Pair length
+    delay: Delay
+    pairDelay: Pair delay
+  target: Target
+  noTarget: as long as it holds
+  status: Status
+  statuses:
+    tuned: tuned
+    too_short: too short
+    too_long: too long
+  settings: Length tuning
+  settingsPair: Differential pair length tuning
+  settingsSkew: Skew tuning
+  settingsOp: Length tuning settings…
+  # KiCad's three tuners (7, 8, 9), as the toolbar's Tune group and the tool search name them.
+  tools:
+    single: Tune track length
+    pair: Tune pair length
+    skew: Tune pair skew
+  # The bottom-left coaching line while a tuner is armed (T1), and why a click started nothing.
+  coach:
+    start: Click a track where the meanders begin
+    startPair: Click a track of a pair where the meanders begin
+    lay: Move along the track, then click to lay the meanders
+    noTrack: No track here
+    noMate: No partner track runs beside this one
+    cannot: The meanders can't start here
+    inPattern: Tracks inside a tuning pattern can't be tuned again
+    selectFirst: Click a track to tune first
+  # The typed target applies where the net has no length rule, or with the override on (KiCad's).
+  targetField: Target (0 for none)
+  overrideRules: Override custom rules
+  minAmplitude: Min amplitude
+  maxAmplitude: Max amplitude
+  spacing: Spacing
+  cornerRadius: Corner radius
+  singleSided: Single-sided
+  # A tuning pattern's own rows in Properties (T4): which tuner laid it, the side its first bump
+  # takes, and whether its corners are rounded.
+  mode: Tuning mode
+  modes:
+    single: Single track
+    diff_pair: Differential pair
+    diff_pair_skew: Skew
+  initialSide: First bump
+  sides:
+    left: Left
+    right: Right
+    default: Default
+  rounded: Rounded
+limits:
+  title: Limits
+  hint: What the rules require of the selection, and what set each value
+  constraint:
+    clearance: Clearance
+    physical_clearance: Physical clearance
+    hole_clearance: Hole clearance
+    physical_hole_clearance: Physical hole clearance
+    hole_to_hole: Hole to hole
+    zone_connection: Zone connection
+    track_width: Track width
+    via_diameter: Via diameter
+    annular_width: Annular width
+    hole_size: Hole size
+  sameNet: 0, one net
+  unset: No limit
+  min: 'min {value}'
+  opt: 'opt {value}'
+  max: 'max {value}'
+  connection:
+    solid: Solid
+    thermal: 'Thermal, gap {gap}, spoke {spoke}'
+    none: Not connected
+  steps: How it was decided
+  none: These items share no copper layer and no hole.
+  noneOne: No size limit applies to this item.
+  outcome:
+    net-tie: Net tie, 0
+    override: The item's own value
+    board-minimum: Raised to the board minimum
+    applied: Applies
+    condition-false: Condition does not hold
+    layer-mismatch: Not on this layer
+    not-copper: Not copper
+    no-hole: No hole
+    disallow-mismatch: Disallows other kinds
+    local-clearance: The zone's own clearance
+    fallback: Fallback
+# Clean up tracks and vias: KiCad's Cleanup Tracks & Vias (lib/board/trackCleanup.ts),
+# from the tool search, the canvas menu and the dangling findings.
+# Edit teardrops, KiCad's Edit ▸ Edit Teardrops (components/pcb/EditTeardropsDialog.vue).
+teardrops:
+  # The tool search and canvas menu entries that open the dialog.
+  action: Edit teardrops…
+  selectionAction: Edit teardrops of selection…
+  title: Edit teardrops
+  # The action buttons' group, for a screen reader.
+  actionGroup: Action
+  actions:
+    add: Add with defaults
+    set: Set values
+    remove: Remove
+    removeAll: Remove all
+  targets: Targets
+  target:
+    vias: Vias
+    pthPads: Through-hole pads
+    smdPads: SMD pads
+    trackToTrack: Track to track
+  filter: Filter
+  selectionOnly: Selected item only | Selected items only ({count})
+  roundOnly: Round pads only
+  existingOnly: Existing teardrops only
+  net: Net
+  allNets: All nets
+  netClass: Class
+  allClasses: All classes
+  layer: Layer
+  allLayers: All layers
+  values: Values
+  # A blank value field, and the choice that leaves each item's own value.
+  keep: Keep
+  'yes': 'Yes'
+  'no': 'No'
+  # Where the defaults "Add with defaults" takes live; the dialog does not open it (DESIGN.md §Modals).
+  defaultsHint: Each shape's defaults are in Board Setup ▸ Teardrops.
+  confirm:
+    add: Add teardrops to {count} pad or via | Add teardrops to {count} pads and vias
+    set: Set teardrops on {count} pad or via | Set teardrops on {count} pads and vias
+    remove: Remove teardrops from {count} pad or via | Remove teardrops from {count} pads and vias
+    removeAll: Remove every teardrop
+cleanup:
+  # The tool search and canvas menu entries that open the dialog.
+  action: Clean up tracks and vias…
+  selectionAction: Clean up selection…
+  title: Clean up tracks and vias
+  actions: Actions
+  # KiCad's options of these names.
+  refill: Refill zones before and after
+  options:
+    shorts: Delete tracks connecting different nets
+    redundantVias: Delete redundant vias
+    danglingVias: Delete vias connected on only one layer
+    mergeTracks: Merge co-linear tracks
+    danglingTracks: Delete tracks unconnected at one end
+    tracksInPads: Delete tracks fully inside pads
+  filter: Filter items
+  selectionOnly: 'Selected items only | Selected items only ({count})'
+  net: Net
+  allNets: All nets
+  layer: Layer
+  allLayers: All copper layers
+  loading: Finding changes…
+  clean: Nothing to clean up.
+  columns:
+    change: Change
+    net: Net
+    layer: Layer
+    # Where the change is, in the file's millimeters.
+    at: Position (mm)
+  # A row's Change cell, KiCad's words for each.
+  change:
+    shortingTrack: Remove track shorting two nets
+    shortingVia: Remove via shorting two nets
+    redundantVia: Remove redundant via
+    duplicateTrack: Remove duplicate track
+    zeroLengthTrack: Remove zero-length track
+    trackInPad: Remove track inside pad
+    danglingTrack: Remove track not connected at both ends
+    danglingVia: Remove via connected on fewer than two layers
+    mergeTracks: Merge co-linear tracks
+  confirm: 'Apply {count} change | Apply {count} changes'
+  # A dangling finding's quick fix: its stub, and what hangs off it.
+  fix: Remove
+  # Beside the dangling rules' headers in the findings list: every such finding.
+  fixAll: Remove all
+# Set sizes from rules: each selected track's width and via's size, as its rules ask.
+setSizes:
+  action: Set sizes from rules
+  undo: Set sizes from rules

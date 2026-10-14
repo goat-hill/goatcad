@@ -1,0 +1,139 @@
+severity:
+  error: Error
+  warning: Aviso
+  ignore: Ignorar
+status:
+  passing: Sin problemas
+  findings: '{count} hallazgo | {count} hallazgos | {count} hallazgos'
+notSupported: Aún no compatible
+defaultSeverity: 'Predeterminada: {severity}'
+restore: Restablecer
+drcGroups:
+  electrical: Eléctrico
+  dfm: Diseño para fabricación
+  schematicParity: Paridad de esquema
+  signalIntegrity: Integridad de señal
+  readability: Legibilidad
+  misc: Otros
+ercGroups:
+  connections: Conexiones
+  conflicts: Conflictos
+  misc: Otros
+drc:
+  shorting_items: Elementos que cortocircuitan dos redes
+  tracks_crossing: Pistas cruzándose
+  clearance: Infracción de holgura
+  creepage: Infracción de distancia de fuga
+  via_dangling: La vía no está conectada o está conectada en una sola capa
+  track_dangling: La pista tiene un extremo sin conectar
+  starved_thermal: Conexión de alivio térmico a zona incompleta
+  copper_edge_clearance: Infracción de holgura al borde de placa
+  hole_clearance: Infracción de holgura de orificio
+  hole_to_hole: Taladro demasiado cerca de otro taladro
+  holes_co_located: Orificios taladrados en un mismo lugar
+  track_width: Anchura de pista
+  track_angle: Ángulo de pista
+  track_segment_length: Longitud del segmento de pista
+  annular_width: Ancho de anillo anular
+  drill_out_of_range: Tamaño de orificio fuera del rango
+  microvia_drill_out_of_range: Tamaño de orificio de microvía fuera del rango
+  via_diameter: Diámetro de vía
+  courtyards_overlap: Solapamiento de patios
+  missing_courtyard: La huella no tiene un patio definido
+  malformed_courtyard: La huella tiene un patio mal formado
+  invalid_outline: La placa tiene un contorno mal formado
+  copper_sliver: Astilla de cobre
+  solder_mask_bridge: La apertura de máscara de soldadura une elementos de redes distintas
+  connection_width: Conexión de cobre demasiado estrecha
+  track_on_post_machined_layer: Pista conectada a capa post-mecanizada o con taladro posterior
+  track_not_centered_on_via: Extremo de pista no centrado en la vía
+  tuning_profile_track_geometries: Geometrías de pista del perfil de afinado
+  duplicate_footprints: Huellas duplicadas
+  missing_footprint: Huella faltante
+  extra_footprint: Huella extra
+  footprint_symbol_mismatch: Los atributos de huella no coinciden con el símbolo
+  footprint_symbol_field_mismatch: El campo de la huella no coincide con el campo del símbolo
+  footprint_filters_mismatch: La huella no coincide con los filtros de huella del símbolo
+  net_conflict: La red del pad no coincide con el esquema
+  unconnected_items: Conexión faltante entre elementos
+  length_out_of_range: Longitud de pista fuera de rango
+  skew_out_of_range: Desfase entre pistas fuera de rango
+  too_many_vias: Demasiadas o muy pocas vías en una conexión
+  diff_pair_gap_out_of_range: Espacio de par diferencial fuera del rango
+  diff_pair_uncoupled_length_too_long: Longitud diferencial desacoplada demasiado larga
+  silk_overlap: Holgura de serigrafía
+  silk_over_copper: Serigrafía recortada por la máscara de soldadura
+  silk_edge_clearance: Serigrafía recortada por el borde de la placa
+  text_height: Altura del texto fuera del rango
+  text_thickness: Grosor del texto fuera del rango
+  mirrored_text_on_front_layer: Texto reflejado en la capa frontal
+  nonmirrored_text_on_back_layer: Texto no reflejado en la capa trasera
+  items_not_allowed: Elementos no permitidos
+  text_on_edge_cuts: Texto o gráfico en la capa Edge.Cuts
+  zones_intersect: Zonas de cobre intersecantes
+  isolated_copper: Relleno de cobre aislado
+  footprint: La huella no es válida
+  padstack: El padstack es cuestionable
+  pth_inside_courtyard: PTH dentro de patio
+  npth_inside_courtyard: NPTH dentro de patio
+  item_on_disabled_layer: Elemento en capa de cobre desactivada
+  unresolved_variable: Variable de texto sin resolver
+  assertion_failure: Fallo de aserción
+  footprint_type_mismatch: El tipo de componente de huella no coincide con los pads de la huella
+  lib_footprint_issues: Huella no encontrada en bibliotecas
+  lib_footprint_mismatch: La huella no coincide con la copia en la biblioteca
+  through_hole_pad_without_hole: Pad de orificio pasante sin un orificio
+  missing_tuning_profile: Perfil de afinado no encontrado
+erc:
+  pin_not_connected: Pin no conectado
+  pin_not_driven: Pin de entrada no excitado por ningún pin de salida
+  power_pin_not_driven: Pin de entrada de alimentación no excitado por ningún pin de salida de alimentación
+  no_connect_connected: Un pin con marca de "no conectado" está conectado
+  no_connect_dangling: Marca de "no conectado" sin conectar
+  label_dangling: Etiqueta no conectada
+  isolated_pin_label: Etiqueta conectada a un solo pin
+  single_global_label: La etiqueta global solo aparece una vez en el esquema
+  same_local_global_label: Las etiquetas local y global tienen el mismo nombre
+  wire_dangling: Cables no conectados a nada
+  endpoint_off_grid: Pin de símbolo o fin de cable fuera de la rejilla de conexión
+  four_way_junction: Cuatro puntos de conexión están unidos
+  label_multiple_wires: La etiqueta conecta más de un cable
+  unconnected_wire_endpoint: Extremo de cable sin conectar
+  duplicate_reference: Indicadores de referencia duplicados
+  pin_to_pin: Conflicto entre pines
+  unit_value_mismatch: Unidades del mismo símbolo tienen valores distintos
+  different_unit_footprint: Hay una huella diferente asignada en otra unidad del símbolo
+  different_unit_net: Red diferente asignada a un pin compartido en otra unidad del símbolo
+  duplicate_sheet_names: Nombres de hoja duplicados dentro de una hoja dada
+  hier_label_mismatch: Discordancia entre etiquetas jerárquicas y pines de hoja
+  multiple_net_names: Más de un nombre asignado a este bus o red
+  bus_to_bus_conflict: Los buses están conectados gráficamente pero no comparten miembros
+  bus_to_net_conflict: Conexión no válida entre el bus y los elementos de red
+  net_not_bus_member: La red está conectada gráficamente a un bus pero no es miembro del bus
+  ground_pin_not_ground: Pin de tierra no conectado a la red de tierra
+  stacked_pin_name: El nombre del pin se asemeja a un pin apilado
+  field_name_whitespace: El nombre del campo tiene espacios en blanco al inicio o al final
+  unannotated: El símbolo no está anotado
+  unresolved_variable: Variable de texto sin resolver
+  undefined_netclass: Clase de red indefinida
+  simulation_model_issue: Problema de modelo SPICE
+  similar_labels: Las etiquetas son similares (solo difieren en mayúsculas/minúsculas)
+  similar_power: Los pines de alimentación son similares (solo difieren en mayúsculas/minúsculas)
+  similar_label_and_power: El pin de alimentación y la etiqueta son similares (solo difieren en mayúsculas/minúsculas)
+  lib_symbol_issues: Problema de símbolo de biblioteca
+  lib_symbol_mismatch: El símbolo no coincide con la copia en la biblioteca
+  footprint_link_issues: Problema de enlace de huella
+  footprint_filter: La huella asignada no coincide con los filtros de huellas
+  extra_units: El símbolo tiene más unidades que las definidas
+  missing_unit: El símbolo tiene unidades que no están colocadas
+  missing_input_pin: El símbolo tiene pines de entrada que no están colocados
+  missing_bidi_pin: El símbolo tiene pines bidireccionales que no están colocados
+  missing_power_pin: El símbolo tiene pines de entrada de alimentación que no están colocados
+exclusions:
+  note: Son los hallazgos excluidos en las comprobaciones de KiCad, leídos del archivo de proyecto. GoatCAD hace coincidir cada uno por su regla y los elementos que nombra, no por dónde dibujó KiCad su marcador, así que una exclusión se mantiene aquí aunque sus elementos se muevan; en KiCad el hallazgo volvería a aparecer. Las exclusiones se añaden y eliminan en KiCad.
+  none: El proyecto no tiene exclusiones.
+  matched: 'Excluye {count} hallazgo | Excluye {count} hallazgos | Excluye {count} hallazgos'
+  unmatched: No coincide con ningún hallazgo
+  unmatchedHint: Nada de lo que encuentra GoatCAD ahora corresponde a este hallazgo; se corrigió, sus elementos ya no existen o GoatCAD nombra sus elementos de forma distinta a KiCad.
+  noItems: No se puede asociar
+  noItemsHint: Esta exclusión solo indica una posición, no los elementos a los que se refiere, así que GoatCAD no puede saber a qué hallazgo corresponde.

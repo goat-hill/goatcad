@@ -1,0 +1,2 @@
+# Hashed byte-for-byte by src/main/__tests__/macIcon.test.ts: never convert line endings
+build/icon.icon/** -text

@@ -1,0 +1,65 @@
+activityBar:
+  explorer: 资源管理器
+  git: Git
+  partManager: 库
+  partSearch: 元件搜索
+  feedback: 分享应用反馈
+  settings: 设置
+project:
+  title: 项目
+  none: 无项目
+  isolated: 编辑是隔离的——重命名不会更新其他文件，且只加载全局库。
+  selectPrompt: 选择项目
+  switch: 切换活动项目
+  createProject: 创建项目…
+  why: 网络类、设计规则、项目库和图纸层次结构都保存在项目文件中。
+  schematics: 原理图
+  boards: PCB
+  symbolLibraries: 符号库
+  footprintLibraries: 封装库
+  newSchematicTitle: 新建原理图
+  newBoardTitle: 新建 PCB
+  symbolLibraryActions: 新建或添加符号库
+  footprintLibraryActions: 新建或添加封装库
+  newLibraryPlaceholder: 库名称
+  newLibraryError: 请输入一个有效且唯一的名称
+fileExplorer:
+  title: 文件资源管理器
+  newFile: 新建文件
+  refreshExplorer: 刷新资源管理器
+  newFilePlaceholder: filename.kicad_sch
+  emptyState: 你尚未打开文件夹。
+  openFolder: 打开文件夹
+  emptyWorkspace: 工作区为空。
+fileMenu:
+  open: 打开
+  new: 新建
+  newSchematic: 原理图
+  newBoard: PCB
+  newSymbolLibrary: 符号库
+  newFootprintLibrary: 封装库
+  newSymbol: 新建符号
+  newFootprint: 新建封装
+  reveal: 在文件夹中显示
+  copyPath: 复制路径
+  rename: 重命名
+  delete: 删除
+  needsFile: 请先选择一个文件或文件夹。
+  needsSymbolLibrary: 请先打开或选择一个符号库。
+  needsFootprintLibrary: 请先打开或选择一个封装库。
+schematics:
+  title: 原理图
+  sheetTitle: '{namePath}  ·  {fileName}'
+partManager:
+  title: 库
+  sharedLibraries: 共享库
+  browse: 浏览库
+  filterPlaceholder: 筛选元件…
+  noLibrariesConfigured: 还没有库。如果已安装 KiCad，会自动检测到其库——否则请下载或添加库。
+  configureLibraries: 管理库
+  noCustomFootprints: 未找到自定义封装文件。
+  rootCategory: （根）
+  tooManyResults: 结果过多，部分已隐藏
+  includes3dModel: 包含 3D 模型
+gitStatus:
+  branchTitle: Git 分支——点击切换

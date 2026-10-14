@@ -1,0 +1,619 @@
+---
+/*
+ * The agent pitch: bring your own coding agent (Claude Code or Codex, on the
+ * subscription you already pay for) and run it in a GoatCAD tab, beside the
+ * design it is working on.
+ *
+ * The visual is a mock of the app's split editor — a sheet on the left, the
+ * agent's tab on the right — but the sheet is GoatCAD's own drawing. The four
+ * `regulator-N.svg` stages are real `view.render` SVG exports (format "svg",
+ * one fixed frame) taken while the agent API built this circuit on an empty
+ * sheet: `library.create_symbol` drew the TLV76733DRVT, then U1, the two 1 µF
+ * caps, the power symbols, and the wires. Each stage holds everything before
+ * it, so fading each one in over the last draws the circuit step by step. To
+ * rebuild them, replay those calls and export at the same frame.
+ *
+ * The terminal is written to match those steps. Tool names are real operations
+ * the app serves (electron/src/main/ops) — keep them so, the audience will try
+ * them; the part numbers are real, and stock is stated without figures.
+ *
+ * Motion is progressive enhancement. Without JS, or with reduced motion, the
+ * finished turn and the finished sheet show at once. With JS, the inline script
+ * arms the demo (lines and stages hidden) and plays it once, the first time it
+ * scrolls into view. Each element's `--at` is its entrance time, and the
+ * terminal and the sheet share one clock.
+ */
+import { displayWidth, fmt, strings, type Locale } from '../i18n'
+import { FILE_HUE, FILE_ICONS, ICONS } from '../data/icons'
+import stage1 from '../assets/agent-demo/regulator-1.svg?url'
+import stage2 from '../assets/agent-demo/regulator-2.svg?url'
+import stage3 from '../assets/agent-demo/regulator-3.svg?url'
+import stage4 from '../assets/agent-demo/regulator-4.svg?url'
+
+interface Props {
+  locale?: Locale
+}
+
+/*
+ * The prompt and the agent's own sentences follow the page's language, as the
+ * agent answers in the language it is asked in; tool calls and their results
+ * stay English, because that is what the app returns.
+ */
+const s = strings(Astro.props.locale ?? 'en')
+const PROMPT = s.agent.prompt
+
+/** Each stage with the moment the terminal's matching call lands. */
+const stages = [
+  { src: stage1, at: '9.2s' },
+  { src: stage2, at: '12.8s' },
+  { src: stage3, at: '13.6s' },
+  { src: stage4, at: '14.4s' }
+]
+---
+
+<section id="agent" class="agent">
+  <div class="page">
+    <header class="intro">
+      <h2>{s.agent.heading}</h2>
+      <p class="lede">{fmt(s.agent.lede)}</p>
+    </header>
+
+    <figure class="window" data-agent-demo aria-label={fmt(s.agent.window)}>
+      {/* Left group: the sheet. */}
+      <div class="pane sheet-pane">
+        <div class="tabs" aria-hidden="true">
+          <span class="tab active">
+            <svg
+              class="tab-icon file-icon"
+              viewBox="0 0 16 16"
+              style={`color: ${FILE_HUE.schematic}`}
+            >
+              <Fragment set:html={FILE_ICONS.schematic} />
+            </svg>
+            regulator.kicad_sch
+          </span>
+        </div>
+        <div class="sheet">
+          <div class="stages" role="img" aria-label={s.agent.sheet}>
+            {stages.map((stage) => (
+              <img class="stage" src={stage.src} alt="" style={`--at: ${stage.at}`} />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Right group: the agent. */}
+      <div class="pane term-pane">
+        <div class="tabs" aria-hidden="true">
+          <span class="tab active">
+            <svg class="tab-icon" viewBox="0 0 24 24">
+              <Fragment set:html={ICONS.terminal} />
+            </svg>
+            Claude
+            <span class="dot"></span>
+          </span>
+        </div>
+
+        <div class="term">
+          <p class="line user" style="--at: 0s">
+            <span class="mark">❯</span>
+            <span
+              class="typed"
+              style={`--chars: ${[...PROMPT].length}; --width: ${displayWidth(PROMPT)}`}
+            >
+              {PROMPT}
+            </span>
+          </p>
+
+          <p class="line" style="--at: 1.9s">
+            <span class="mark">●</span>
+            {s.agent.sayPlan}
+          </p>
+
+          <div class="line" style="--at: 2.6s">
+            <p>
+              <span class="mark tool">●</span>
+              <strong>search_parts</strong>(TLV76733DRVT)
+            </p>
+            <p class="result swap" style="--until: 3.8s">
+              <span class="busy">
+                <span class="mark">⎿</span>Searching DigiKey and Mouser…
+              </span>
+              <span class="done">
+                <span class="mark">⎿</span>TI TLV76733DRVT, WSON-6, in stock at both
+              </span>
+            </p>
+          </div>
+
+          <div class="line" style="--at: 4.2s">
+            <p>
+              <span class="mark tool">●</span>
+              <strong>cache_datasheet</strong>(TLV76733DRVT)
+            </p>
+            <p class="result swap" style="--until: 5s">
+              <span class="busy">
+                <span class="mark">⎿</span>Downloading…
+              </span>
+              <span class="done">
+                <span class="mark">⎿</span>Saved datasheets/TLV76733DRVT.pdf
+              </span>
+            </p>
+          </div>
+
+          <div class="line" style="--at: 5.4s">
+            <p>
+              <span class="mark tool">●</span>
+              <strong>read_datasheet</strong>(pin functions)
+            </p>
+            <p class="result swap" style="--until: 6.4s">
+              <span class="busy">
+                <span class="mark">⎿</span>Reading…
+              </span>
+              <span class="done">
+                <span class="mark">⎿</span>6 IN, 4 EN, 1 OUT, 2 SNS, 3 GND, 7 thermal pad, 5 NC
+              </span>
+            </p>
+          </div>
+
+          <p class="line" style="--at: 6.8s">
+            <span class="mark">●</span>
+            {s.agent.sayDraw}
+          </p>
+
+          <div class="line" style="--at: 7.6s">
+            <p>
+              <span class="mark tool">●</span>
+              <strong>create_library_symbol</strong>(TLV76733DRVT)
+            </p>
+            <p class="result swap" style="--until: 8.6s">
+              <span class="busy">
+                <span class="mark">⎿</span>Drawing…
+              </span>
+              <span class="done">
+                <span class="mark">⎿</span>regulator:TLV76733DRVT, 6 pins, pad 7 stacked on 3
+              </span>
+            </p>
+          </div>
+
+          <div class="line" style="--at: 9s">
+            <p>
+              <span class="mark tool">●</span>
+              <strong>place_symbol</strong>(regulator:TLV76733DRVT)
+            </p>
+            <p class="result">
+              <span class="mark">⎿</span>U1
+            </p>
+          </div>
+
+          <div class="line" style="--at: 9.8s">
+            <p>
+              <span class="mark tool">●</span>
+              <strong>read_datasheet</strong>(recommended operating conditions)
+            </p>
+            <p class="result swap" style="--until: 10.8s">
+              <span class="busy">
+                <span class="mark">⎿</span>Reading…
+              </span>
+              <span class="done">
+                <span class="mark">⎿</span>1 µF on IN and OUT; EN tied to IN; SNS to OUT on fixed
+                versions
+              </span>
+            </p>
+          </div>
+
+          <div class="line" style="--at: 11.2s">
+            <p>
+              <span class="mark tool">●</span>
+              <strong>search_parts</strong>(1µF 0402 X5R 10V, in stock)
+            </p>
+            <p class="result swap" style="--until: 12.2s">
+              <span class="busy">
+                <span class="mark">⎿</span>Searching DigiKey and Mouser…
+              </span>
+              <span class="done">
+                <span class="mark">⎿</span>Murata GRM155R61A105KE15D, in stock at both
+              </span>
+            </p>
+          </div>
+
+          <div class="line" style="--at: 12.6s">
+            <p>
+              <span class="mark tool">●</span>
+              <strong>place_symbol</strong>(Device:C ×2)
+            </p>
+            <p class="result">
+              <span class="mark">⎿</span>C1 on IN, C2 on OUT
+            </p>
+          </div>
+
+          <div class="line" style="--at: 13.4s">
+            <p>
+              <span class="mark tool">●</span>
+              <strong>place_symbol</strong>(power ×5)
+            </p>
+            <p class="result">
+              <span class="mark">⎿</span>+5V, +3.3V, three GND
+            </p>
+          </div>
+
+          <div class="line" style="--at: 14.2s">
+            <p>
+              <span class="mark tool">●</span>
+              <strong>schematic_wire</strong>(×9)
+            </p>
+            <p class="result">
+              <span class="mark">⎿</span>+5V → C1 → IN ← EN, OUT → C2 → +3.3V ← SNS, grounds
+            </p>
+          </div>
+
+          <p class="line" style="--at: 15.2s">
+            <span class="mark">●</span>
+            {s.agent.sayDone}
+          </p>
+
+          <p class="line input" style="--at: 15.8s">
+            <span class="mark">❯</span>
+            <span class="cursor"></span>
+          </p>
+        </div>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<script>
+  // Plays the turn once, when it first scrolls into view. Without JS (or with
+  // reduced motion) it never arms, and the finished turn and sheet show.
+  ;(() => {
+    const demo = document.querySelector('[data-agent-demo]')
+    if (!demo || !('IntersectionObserver' in window)) return
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    demo.classList.add('is-armed')
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return
+        demo.classList.add('is-playing')
+        io.disconnect()
+      },
+      { threshold: 0.35 }
+    )
+    io.observe(demo)
+  })()
+</script>
+
+<style>
+  .agent {
+    padding-block: clamp(3.5rem, 8vw, 5.5rem);
+    border-top: 1px solid var(--border);
+  }
+
+  h2 {
+    font-size: var(--step-h2);
+  }
+
+  .lede {
+    margin-top: 1.25rem;
+    max-width: var(--measure);
+    color: var(--text-muted);
+  }
+
+  /* ---- The split window ------------------------------------------------- */
+
+  .window {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    margin-top: clamp(2rem, 4vw, 3rem);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--code-bg);
+    box-shadow: 0 24px 80px -24px rgb(0 0 0 / 0.6);
+  }
+
+  .pane {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  /* The split's divider, as in the app. */
+  .pane + .pane {
+    border-left: 1px solid var(--border-strong);
+  }
+
+  .tabs {
+    display: flex;
+    background: var(--bg-raised);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.8rem;
+  }
+
+  .tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 0.95rem;
+    color: var(--text-muted);
+    border-right: 1px solid var(--border);
+  }
+
+  .tab.active {
+    color: var(--text-bright);
+    background: var(--code-bg);
+    box-shadow: inset 0 -2px 0 var(--accent);
+  }
+
+  /* The app's glyphs at its tab size: the terminal from the 24-unit bar
+     family, the sheet from the 16-unit file family. */
+  .tab-icon {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .tab-icon.file-icon {
+    stroke-width: 1;
+  }
+
+  /* The agent tab's activity dot, as in the app. */
+  .tab .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--success);
+  }
+
+  /* ---- The sheet -------------------------------------------------------- */
+
+  /* The sheet's width, for its grid to measure the drawing by. */
+  .sheet-pane {
+    container-type: inline-size;
+  }
+
+  .sheet {
+    /* The stages' rendered width: the pane less the padding, capped. */
+    --stage-width: min(100cqw - 3rem, 560px);
+    flex: 1;
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+    /* The editor's dot grid, on the drawing's own 1.27 mm grid: the exports'
+       viewBox is 32 × 26 steps wide and tall, and its center sits on a grid
+       point, so a tile centered on the pane (its dot mid-tile) lands every dot
+       on one. */
+    background-image: radial-gradient(circle at center, var(--border-strong) 1px, transparent 1px);
+    background-size: calc(var(--stage-width) / 32) calc(var(--stage-width) / 32);
+    background-position: center;
+  }
+
+  /* The stages stack in one cell; each holds everything before it, so the
+     last one on top is the finished sheet. */
+  .stages {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    /* Stretched to the pane: centering alone would shrink it to the SVG's
+       intrinsic size, its width in millimetres. */
+    justify-self: stretch;
+    width: 100%;
+    max-width: 560px;
+    margin-inline: auto;
+  }
+
+  .stage {
+    grid-area: 1 / 1;
+    width: 100%;
+    height: auto;
+  }
+
+  /* ---- The terminal ----------------------------------------------------- */
+
+  .term {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 1.1rem 1.2rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.55;
+    color: var(--text);
+    /* The finished turn's height, so playing it never moves the page. */
+    min-height: 38rem;
+  }
+
+  /* Every row hangs off its leading mark (❯ ● ⎿), the way a terminal UI
+     wraps: continuation lines line up under the text, not the mark. */
+  .term p {
+    padding-left: 2ch;
+    text-indent: -2ch;
+  }
+
+  .line > p + p {
+    margin-top: 0.15rem;
+  }
+
+  .mark {
+    display: inline-block;
+    width: 2ch;
+    text-indent: 0;
+    color: var(--text-bright);
+  }
+
+  .mark.tool {
+    color: var(--accent);
+  }
+
+  .user {
+    color: var(--text-bright);
+    background: var(--bg-raised);
+    margin-inline: -0.5rem;
+    padding-block: 0.2rem;
+    padding-right: 0.5rem;
+    /* The hanging indent plus the half-rem the background bleeds out by. */
+    padding-left: calc(2ch + 0.5rem);
+    border-radius: 4px;
+  }
+
+  .typed {
+    text-indent: 0;
+    vertical-align: top;
+  }
+
+  .user .mark,
+  .input .mark,
+  .result .mark {
+    color: var(--text-muted);
+  }
+
+  .result {
+    color: var(--text-muted);
+  }
+
+  .term .result {
+    padding-left: 4ch;
+  }
+
+  /* A tool's further output lines, under its first ⎿ line's text. */
+  .term p.line.result {
+    text-indent: 0;
+  }
+
+  .term strong {
+    color: var(--text-bright);
+  }
+
+  /* A tool call's status: "busy" then "done", stacked in one cell so the swap
+     never reflows. The static page shows "done". */
+  .term .swap {
+    display: grid;
+    padding-left: 2ch;
+    text-indent: 0;
+  }
+
+  .swap > span {
+    grid-area: 1 / 1;
+    padding-left: 2ch;
+    text-indent: -2ch;
+  }
+
+  .swap .busy {
+    opacity: 0;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 1ch;
+    height: 1.2em;
+    background: var(--text);
+    vertical-align: text-bottom;
+    animation: blink 1.1s steps(1) infinite;
+  }
+
+  /* ---- Playing it ------------------------------------------------------- */
+
+  .is-armed .line,
+  .is-armed .stage {
+    opacity: 0;
+  }
+
+  .is-armed .swap .busy {
+    opacity: 1;
+  }
+
+  .is-armed .swap .done {
+    opacity: 0;
+  }
+
+  .is-playing .line {
+    animation: line-in 0.35s ease-out var(--at) forwards;
+  }
+
+  /* A stage fades in over the one below it: only what it adds appears. */
+  .is-playing .stage {
+    animation: show 0.45s ease-out var(--at) forwards;
+  }
+
+  /* The prompt types itself out. */
+  .is-playing .user {
+    animation-duration: 0.01s;
+  }
+
+  .is-playing .typed {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 0;
+    animation: type 1.2s steps(var(--chars)) 0.3s forwards;
+  }
+
+  .is-playing .swap .busy {
+    animation: hide 0.01s linear var(--until) forwards;
+  }
+
+  .is-playing .swap .done {
+    animation: show 0.01s linear var(--until) forwards;
+  }
+
+  @keyframes line-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes type {
+    to {
+      max-width: calc(var(--width) * 1ch);
+    }
+  }
+
+  @keyframes show {
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes hide {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  /* Stacked on narrow viewports: the sheet above, the agent under it. */
+  @media (max-width: 860px) {
+    .window {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .pane + .pane {
+      border-left: 0;
+      border-top: 1px solid var(--border-strong);
+    }
+
+    .term {
+      min-height: 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    /* The prompt may wrap here; typing it out needs it on one line. */
+    .is-playing .typed {
+      white-space: normal;
+      max-width: none;
+      animation: none;
+    }
+  }
+</style>

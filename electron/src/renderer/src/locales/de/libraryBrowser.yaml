@@ -1,0 +1,41 @@
+searchPlaceholder: Filtern…
+nav:
+  symbols: Symbole
+  footprints: Footprints
+  models3d: 3D-Modelle
+  models3dNote: 3D-Modelle werden über ihren Footprint durchsucht.
+  system: 'System ({n})'
+  systemPlain: System
+  addLibrary: Bibliothek hinzufügen
+  addSymbol: Symbolbibliothek hinzufügen…
+  addFootprint: Footprint-Bibliothek hinzufügen…
+  models3dManaged: 3D-Modell-Suchpfade werden über Umgebungsvariablen in den Einstellungen verwaltet.
+  remove: Entfernen
+  hasSymbol: Hat ein zugehöriges Symbol
+  hasFootprint: Hat einen zugehörigen Footprint
+  has3dModel: Hat ein zugehöriges 3D-Modell
+download: Offizielle KiCad-Bibliotheken herunterladen
+downloading: Wird heruntergeladen…
+rebuildIndex: Bibliotheksindex neu aufbauen
+indexing: 'Indizierung… {done}/{total}'
+indexingWait: Bibliotheksindex wird aufgebaut…
+resultsCapped: 'Es werden die ersten {n} Treffer je Typ angezeigt — Suche verfeinern, um einzugrenzen.'
+noResults: Keine Treffer.
+typeShort:
+  symbol: SYM
+  footprint: FP
+  model: 3D
+add:
+  newSymbolLibrary: Neue Symbolbibliothek
+  newFootprintLibrary: Neue Footprint-Bibliothek
+  addSymbolLibrary: Symbolbibliothek hinzufügen
+  addFootprintLibrary: Footprint-Bibliothek hinzufügen
+  symbolExt: .kicad_sym
+  footprintExt: .pretty/
+  toProject: zum Projekt…
+  toAllProjects: zu allen Projekten…
+  needsProject: Kein aktives Projekt
+  symbolFileTitle: Symbolbibliotheksdatei auswählen (.kicad_sym)
+  footprintFolderTitle: Footprint-Bibliotheksordner auswählen (Name endet auf .pretty)
+scanningEmptySymbols: 'In diesem Ordner wurden keine .kicad_sym-Dateien gefunden.'
+scanningEmptyFootprints: In diesem Ordner wurden keine Footprints gefunden.

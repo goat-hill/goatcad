@@ -1,0 +1,52 @@
+menu:
+  file: ファイル
+  edit: 編集
+  new: 新規
+  needsProject: 先にプロジェクトフォルダーを開いてください
+  newProject: 新規プロジェクト…
+  newWindow: 新しいウィンドウ
+  openProject: プロジェクトを開く…
+  openFolder: フォルダーを開く…
+  openFile: ファイルを開く…
+  openRecent: 最近使った項目を開く
+  recentProjects: プロジェクト
+  recentFiles: ファイルとフォルダー
+  noRecent: 最近使ったプロジェクトはありません
+  clearRecent: 最近開いた項目をクリア
+  save: 保存
+  saveAs: 名前を付けて保存…
+  saveAll: すべて保存
+  schematicSetup: 回路図の設定
+  components: コンポーネント
+  boardSetup: 基板の設定
+  manufacture: 製造用出力
+  export: エクスポート
+  exportNetlist: ネットリスト…
+  exit: 終了
+  view: 表示
+  splitTab: タブをもう一方のペインに移動
+  splitDirection: 左右／上下の切り替え
+  focusOtherGroup: もう一方のペインにフォーカス
+  toggleDevTools: 開発者ツールの切り替え
+  go: 移動
+  goBack: 戻る
+  goForward: 進む
+  goLeaveSheet: シートから抜ける
+  goPreviousSheet: 前のシート
+  goNextSheet: 次のシート
+  updatePcb: 回路図から基板を更新…
+  needsSchematic: 先に回路図のあるプロジェクトを開いてください
+  help: ヘルプ
+  welcome: ようこそ
+  keyboardShortcutsReference: キーボードショートカット一覧
+  shareFeedback: アプリのフィードバックを送る…
+  aboutGoatCAD: GoatCAD について
+windowTitle:
+  workspace: '{tabPrefix}{project}'
+  tabOnly: '{tab}'
+  default: GoatCAD
+  withApp: '{title} — GoatCAD'
+controls:
+  minimize: 最小化
+  maximize: 最大化
+  close: 閉じる

@@ -1,0 +1,179 @@
+errors:
+  empty: このシンボル ライブラリは空です。
+  parseTitle: KiCad のシンボル ライブラリとして開けません
+groups:
+  fields: フィールド
+  pinDisplay: ピンの表示
+  attributes: 属性
+  units: ユニット
+  alternate: '機能 {n}'
+pinTypes:
+  input: 入力
+  output: 出力
+  bidirectional: 双方向
+  tri_state: トライステート
+  passive: パッシブ
+  free: フリー
+  unspecified: 未指定
+  power_in: 電源入力
+  power_out: 電源出力
+  open_collector: オープン コレクター
+  open_emitter: オープン エミッター
+  no_connect: 未接続
+pinStyles:
+  line: ライン
+  inverted: 反転
+  clock: クロック
+  inverted_clock: 反転クロック
+  input_low: 負論理入力
+  clock_low: 負論理クロック
+  output_low: 負論理出力
+  edge_clock_high: クロック（エッジ）
+  non_logic: 非ロジック
+powerKinds:
+  none: なし
+  global: グローバル
+  local: ローカル
+fillTypes:
+  none: なし
+  outline: 外形
+  background: 背景
+  color: 色
+  hatch: ハッチ
+  reverse_hatch: 逆ハッチ
+  cross_hatch: クロスハッチ
+edit:
+  cut: 切り取り
+  copy: コピー
+  paste: 貼り付け
+  duplicate: 複製
+  delete: 削除
+  rotate: 左回転
+  rotateClockwise: 右回転
+  mirrorHorizontal: 水平反転
+  mirrorVertical: 垂直反転
+  repeat: 最後のアイテムを繰り返し
+units:
+  label: ユニット
+  title: このマルチユニット シンボルのどのユニットを編集するか
+  option: ユニット {letter}
+  namedOption: '{letter} — {name}'
+  add: ユニットを追加
+  remove: ユニットを削除
+  addTitle: このシンボルにユニットを追加
+  removeTitle: 編集中のユニットと、そこに描かれたすべてを削除
+bodyStyles:
+  label: スタイル
+  title: このシンボルのどのボディスタイルを表示するか
+  standard: 標準
+  alternate: 代替（ド・モルガン）
+  option: スタイル {number}
+  viewOnly: 表示のみ
+  viewOnlyTitle: 代替ボディスタイルの編集はまだ対応していません
+tools:
+  pin: ピン
+  rectangle: 矩形
+  line: 線
+  polygon: ポリゴン
+  circle: 円
+  arc: 円弧
+  bezier: 曲線
+  text: テキスト
+  anchor: シンボルのアンカーを移動
+  textBox: テキスト ボックス
+  repeat: 最後のアイテムを繰り返し
+export:
+  png: PNG としてエクスポート…
+  failed: 画像をエクスポートできませんでした
+actions:
+  editFields: 編集
+  editFieldsTitle: フィールドの追加、削除、並べ替え
+  focusField: キャンバスで選択
+fieldsDialog:
+  title: フィールド
+  name: 名前
+  value: 値
+  show: 表示
+  add: フィールドを追加
+  done: 完了
+  remove: このフィールドを削除
+  rename: このフィールドの名前を変更
+  moveUp: 上に移動
+  moveDown: 下へ移動
+  mandatory: KiCad で必須のフィールドです
+  defaultName: フィールド
+pinTable:
+  title: ピン
+  number: '#'
+  name: 名前
+  type: タイプ
+  unit: U
+  duplicateHint: このピン番号は複数回使われています
+  empty: このシンボルにはまだピンがありません。
+  add: ピンを追加
+  remove: ピンを削除
+  removeHint: 削除するピンを選択
+  removeN: '{count} 本のピンを削除'
+  import: インポート…
+  export: エクスポート…
+  importTitle: ピン テーブルをインポート
+  importButton: インポート
+  exportTitle: ピン テーブルをエクスポート
+  csvFilter: カンマ区切り値
+  importPrompt: '{count} 本のピンをインポートしますか？'
+  importSkipped: '{count} 行をスキップ'
+  importReplace: すべてのピンを置き換え
+  importAppend: 既存のピンに追加
+  importCancel: キャンセル
+  importEmpty: このファイルからピンを読み込めませんでした。
+  importFailed: このファイルを読み込めませんでした。
+  exportFailed: このファイルを書き込めませんでした。
+alternates:
+  add: ピン機能を追加
+  remove: このピン機能を削除
+  defaultName: 新しい機能
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+viewRail:
+  showHiddenPins: 非表示ピンを表示
+  showHiddenFields: 非表示フィールドを表示
+commands:
+  editField: '{field} を編集'
+  editFieldStyle: フィールドを編集
+  addField: フィールドを追加
+  removeField: フィールドを削除
+  renameField: フィールドの名前を変更
+  reorderFields: フィールドを並べ替え
+  editPin: ピンを編集
+  editGraphic: 図形を編集
+  editUnitScope: ユニットの範囲を変更
+  addPin: ピンを追加
+  removePins: '{count} 本のピンを削除'
+  importPins: ピンをインポート
+  addRectangle: 矩形を追加
+  addLine: 線を追加
+  addPolygon: ポリゴンを追加
+  moveAnchor: シンボルのアンカーを移動
+  addCircle: 円を追加
+  addArc: 円弧を追加
+  addBezier: 曲線を追加
+  addText: テキストを追加
+  addTextBox: テキスト ボックスを追加
+  addAlternate: ピン機能を追加
+  removeAlternate: ピン機能を削除
+  editAlternate: ピン機能を編集
+  deleteItems: '{count} 個のアイテムを削除'
+  rotate: 回転
+  duplicateItems: '{count} 個のアイテムを複製'
+  pasteItems: '{count} 個のアイテムを貼り付け'
+  cutItems: '{count} 個のアイテムを切り取り'
+  repeatItems: '{count} 個のアイテムを繰り返し'
+  mirrorHorizontal: 水平反転
+  mirrorVertical: 垂直反転
+  resizeGraphic: 図形のサイズを変更
+  addUnit: ユニットを追加
+  removeUnit: ユニットを削除
+  newSymbol: 新規シンボル
+  deleteSymbol: シンボルを削除
+  renameSymbol: シンボルの名前を変更

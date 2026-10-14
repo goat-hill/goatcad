@@ -1,0 +1,317 @@
+title: Platineneinstellungen
+sections:
+  stackup: Lagenaufbau
+  constraints: Randbedingungen
+  tuningPatterns: Längenabstimmungsmuster
+  teardrops: Teardrops
+  tuningProfiles: Abstimmungsprofile
+  netClasses: Netzklassen
+  customRules: Benutzerdefinierte Regeln
+  rules: Designregeln
+  exclusions: Ausschlüsse
+groups:
+  copper: Dicke
+  holes: Bohrungen
+  microvias: Microvias
+  silk: Bestückungsdruck
+  arcs: Bogennäherung
+  zones: Flächenfüllung
+  lengthTuning: Längenabstimmung
+  tuneSingle: Einzelne Leiterbahn
+  tunePair: Differenzielles Paar
+  tuneSkew: Laufzeitversatz des differenziellen Paars
+  teardropRound: Runde Formen
+  teardropRect: Rechteckige Formen
+  teardropTrack: Leiterbahn zu Leiterbahn
+actions:
+  save: Speichern
+  manage: Verwalten
+profile:
+  name: Randbedingungs-Konfiguration
+  custom: Benutzerdefiniert
+  edited: bearbeitet
+  saveAs: Speichern unter…
+stackup:
+  preset:
+    label: Lagenaufbau-Konfiguration
+  copperLayers:
+    label: Kupferlagen
+  copperFinish:
+    label: Oberfläche
+columns:
+  layer: Lage
+  type: Typ
+  material: Material
+  thickness: Dicke
+  weight: Gewicht
+  epsilonR: Dk
+  epsilonRHint: Dielektrizitätszahl (relative Permittivität). Höhere Werte verlangsamen Signale; sie bestimmt die Leiterbahnimpedanz.
+  lossTangent: Df
+  lossTangentHint: Verlustfaktor. Wie viel Signal das Laminat absorbiert — nur bei hohen Frequenzen relevant.
+  color: Farbe
+  colorUnsetMask: Nicht angegeben (grün)
+  colorUnsetSilk: Nicht angegeben (weiß)
+table:
+  addDielectric: Dielektrikum hinzufügen
+  removeLayer: Lage entfernen
+  copper: Dicke
+  dielectric: Dielektrikum
+  total: Gesamt
+constraints:
+  minClearance:
+    label: Minimaler Abstand
+  minTrackWidth:
+    label: Minimale Leiterbahnbreite
+  minConnectionWidth:
+    label: Minimale Verbindungsbreite
+  minViaAnnularWidth:
+    label: Minimaler Restring
+  minViaDiameter:
+    label: Minimaler Via-Durchmesser
+  minCopperHoleClearance:
+    label: Abstand Kupfer zu Bohrung
+  minCopperEdgeClearance:
+    label: Abstand zum Platinenrand
+  minThroughHoleDiameter:
+    label: Minimale Bohrungsgröße
+  minHoleToHole:
+    label: Abstand Bohrung zu Bohrung
+  minMicroviaDiameter:
+    label: Minimaler Microvia-Durchmesser
+  minMicroviaDrill:
+    label: Minimale Microvia-Bohrung
+  minSilkClearance:
+    label: Minimaler Elementabstand
+  minTextHeight:
+    label: Minimale Texthöhe
+  minTextThickness:
+    label: Minimale Textdicke
+  maxError:
+    label: Maximal zulässige Abweichung
+  zonesAllowExternalFillets:
+    label: Verrundungen außerhalb des Flächenumrisses erlauben
+  minResolvedSpokes:
+    label: Minimale Anzahl Thermalstege
+  useHeightForLengthCalcs:
+    label: Lagenaufbauhöhe in Leiterbahnlänge einbeziehen
+tuningPatterns:
+  minAmplitude:
+    label: Minimale Amplitude (A)
+  maxAmplitude:
+    label: Maximale Amplitude (A)
+  spacing:
+    label: Abstand (s)
+  cornerRadiusPercent:
+    label: Eckenradius (r), %
+  singleSided:
+    label: Einseitig
+teardrops:
+  enabled: Teardrops, wo eine Leiterbahn auf eine breitere trifft
+  bestLength: Optimale Länge (L)
+  maxLength: Maximale Länge (L)
+  bestWidth: Optimale Breite (W)
+  maxWidth: Maximale Breite (W)
+  trackWidthLimit: Leiterbahnbreitengrenze (w/d)
+  curved: Gekrümmte Kanten
+  twoSegments: Über zwei Leiterbahnsegmente
+  preferZone: Zonenanbindung bevorzugen
+netClassColumns:
+  name: Klasse
+  clearance: Abstand
+  trackWidth: Leiterbahnbreite
+  viaDiameter: Via-Größe
+  viaDrill: Via-Bohrung
+  microviaDiameter: µVia-Größe
+  microviaDrill: µVia-Bohrung
+  diffPairWidth: DP-Breite
+  diffPairGap: DP-Abstand
+  pcbColor: Leiterplattenfarbe
+  tuningProfile: Abstimmungsprofil
+  wireWidth: Verbindungsbreite
+  busWidth: Busbreite
+  schematicColor: Farbe
+  lineStyle: Linienstil
+netClasses:
+  title: Netzklassen
+  fromInterface: Standardschnittstelle einrichten…
+  interfaceSupports: USB 2.0, MIPI CSI-2, 50-Ω-HF-Leitung
+  interfaceAdds: Setzt die Paargrößen einer Netzklasse, ein für den Lagenaufbau berechnetes Abstimmungsprofil und benutzerdefinierte Regeln
+  layerColor: Lage
+  themeColor: Design
+  importColors: Farben aus Schaltplan importieren
+  add: Klasse hinzufügen
+  remove: Klasse entfernen
+  newName: Neue Klasse
+patterns:
+  pair: Differenzielles Paar (nach KiCads Benennung mit P/N oder +/-)
+  title: Zuweisungen
+  add: Zuweisung hinzufügen
+  remove: Zuweisung entfernen
+  matching: Passende Netze
+  syntax:
+    any: beliebige Zeichenfolge
+    one: genau ein beliebiges Zeichen
+    regex: regulärer Ausdruck, ganzer Name
+  invalid: Kein gültiger Ausdruck — passt auf nichts
+  overlap: '{count} auch in {classes}'
+patternColumns:
+  pattern: Netzmuster
+  netClass: Klasse
+  nets: Netze
+extraSizes:
+  title: Eigene Größen
+  width: Leiterbahnbreite
+  diameter: DuKo-Durchmesser
+  drill: DuKo-Bohrung
+  addTrack: Leiterbahnbreite hinzufügen
+  addVia: DuKo hinzufügen
+  remove: Größe entfernen
+currentWidth:
+  title: Breite aus Strom
+  current: Strom
+  rise: Temperaturanstieg
+  layer: Lage
+  copper: Dicke
+  width: Min. Breite
+  source: Nach IPC-2221
+  outOfRange: Außerhalb des angepassten Bereichs von IPC-2221
+section:
+  core: Kern
+  prepreg: Prepreg
+  silkTop: F.Silkscreen
+  maskTop: F.Mask
+  silkBottom: B.Silkscreen
+  maskBottom: B.Mask
+  total: Fertigdicke
+noProject: Diese Platine hat keine Projektdatei, daher können Randbedingungen, Netzklassen und Regelschweregrade nicht gespeichert werden. Der Lagenaufbau ist in der Platine selbst gespeichert und wird normal gesichert.
+tuningProfiles:
+  add: Abstimmungsprofil hinzufügen
+  remove: Profil entfernen
+  newName: Profil
+  empty: Keine Abstimmungsprofile. Eine Netzklasse erhält eines in ihrer Spalte Abstimmungsprofil.
+  name: Name
+  type: Typ
+  single: Einzeln
+  differential: Differenziell
+  target: Ziel
+  timeDomain: Zeitbereich
+  viaDelay: Via-Verzögerung
+  none: Keines
+  usedBy: Verwendet von
+  addLayer: Lage hinzufügen
+  removeLayer: Lage entfernen
+  solve: Berechnen
+  solveAll: Alle Lagen berechnen
+  solveHint: Breite (und Verzögerung) für das Ziel über den Lagenaufbau, wie KiCads Rechner sie berechnet
+  readout: Z
+  columns:
+    layer: Lage
+    topReference: Obere Referenz
+    bottomReference: Untere Referenz
+    width: Breite
+    gap: Abstand
+    delay: Verzögerung
+  errors:
+    target-not-positive: Zuerst eine Zielimpedanz festlegen
+    signal-layer-missing: Signallage nicht im Lagenaufbau gefunden
+    zero-signal-thickness: Die Dicke der Signallage muss größer als 0 sein
+    reference-missing: Referenzlage nicht im Lagenaufbau gefunden
+    reference-same-as-signal: Referenzlage muss sich von der Signallage unterscheiden
+    top-reference-missing: Obere Referenzlage nicht im Lagenaufbau gefunden
+    top-reference-not-above: Obere Referenz muss über der Signallage liegen
+    bottom-reference-missing: Untere Referenzlage nicht im Lagenaufbau gefunden
+    bottom-reference-not-below: Untere Referenz muss unter der Signallage liegen
+    zero-dielectric: Dicke des Dielektrikums muss größer als 0 sein
+    gap-required: Zuerst den Paarabstand festlegen; die Breite wird dafür berechnet
+    width-required: Zuerst die Breite festlegen
+    width-and-gap-required: Zuerst Breite und Abstand festlegen
+    gap-on-single: Ein unsymmetrisches Profil hat keinen Abstand
+    width-failed: Leiterbahnbreite konnte nicht berechnet werden
+    gap-failed: Differenzialpaar-Abstand konnte nicht berechnet werden
+    no-width: Leiterbahnbreite konnte nicht berechnet werden
+    no-gap: Differenzialpaar-Abstand konnte nicht berechnet werden
+    no-delay: Verzögerungszeit der Leiterbahn konnte nicht berechnet werden
+pending:
+  added: Wird bei Anwenden hinzugefügt
+  edited: Wird bei Anwenden geändert
+customRules:
+  add: Regel hinzufügen
+  edit: Regel bearbeiten
+  remove: Regel entfernen
+  save: Speichern
+  addSave: Hinzufügen
+  oneRule: Genau eine Regel schreiben, (rule "name" …), und sonst nichts.
+  empty: Keine benutzerdefinierten Regeln. KiCads benutzerdefinierte Regeln oder das Einrichten einer Standardschnittstelle schreiben sie in .kicad_dru.
+  columns:
+    rule: Regel
+    appliesTo: Gilt für
+    constraint: Randbedingung
+    limit: Grenzwert
+interfacePreset:
+  title: Standardschnittstelle einrichten
+  apply: Anwenden
+  discard: Verwerfen
+  interface: Schnittstelle
+  mode: Modus
+  target: Ziel
+  stackup: Lagenaufbau
+  reference: Ref.
+  customRules: Benutzerdefinierte Regeln
+  classUpdates: 'Änderungen an {netClass}'
+  profileUpdates: 'Abstimmungsprofil {profile}'
+  classUnchanged: Die Klasse hat diese Größen bereits.
+  constraints: Randbedingungen
+  stackupSummary: '{count} Kupferlagen, {thickness} mm'
+  fabLimitsValues: 'Leiterbahn ≥ {track}, Abstand ≥ {clearance}'
+  notSet: nicht festgelegt
+  defaultClearance: Standardabstand der Klasse
+  frequency: Designfrequenz
+  differential: differenziell
+  uncontrolled: 'die des Standards, nicht eingehalten: Die Klasse behält die Größen der Platine'
+  netClass: Netzklasse
+  nets: Netze
+  assignNets: '{netClass} hat noch keine Netze. Sie wird trotzdem eingerichtet; in Zuweisungen zugewiesene Netze übernehmen sie, und ihre Paare werden dann geprüft.'
+  noClasses: Oben eine Netzklasse hinzufügen und ihre Netze zuweisen, dann hier einrichten.
+  matched: '{count} Netz, {pairs} Paare: | {count} Netze, {pairs} Paare:'
+  pairGap: Paarabstand
+  groundGap: Masseabstand
+  linked: Für die Zielimpedanz gekoppelt; eines festlegen, das andere wird berechnet
+  derivedGap: Abgeleiteten Abstand verwenden
+  layers: Lagen
+  gapSource:
+    given: ''
+    fromWidth: Für die Breite berechnet
+    classClearance: ''
+    fabClearance: Mindestabstand des Fertigers (Randbedingungen)
+    widened: Verbreitert, bis der Fertiger die Breite fertigen kann
+  columns:
+    gap: Abstand
+    width: Breite
+  writeFailed: '{file} konnte nicht geschrieben werden.'
+  modes:
+    usb2:
+      high: High Speed, 480 Mb/s
+      full: Full Speed, 12 Mb/s
+      full-uncontrolled: Full Speed, 12 Mb/s, Impedanz nicht eingehalten
+    rf-50:
+      sub1g: Sub-GHz, 868/915 MHz
+      2g4: 2,4 GHz
+      5g: 5 GHz
+    ethernet-mdi:
+      1g: 1000BASE-T
+      100m: 10/100BASE-T
+    rgmii:
+      1g: 1 Gb/s
+      100m: 10/100 Mb/s
+    csi2:
+      1g0: 1,0 Gb/s pro Lane
+      1g5: 1,5 Gb/s pro Lane
+      2g5: 2,5 Gb/s pro Lane
+  errors:
+    unknown-preset: Keine solche Schnittstelle.
+    unknown-mode: Kein solcher Modus.
+    no-nets: Eine andere Netzklasse als Default angeben und Muster, die jeweils auf ein Netz passen.
+    unpaired: 'KiCad paart Netze über ein Suffix P/N oder +/-; diese haben unter den Treffern keinen Partner:'
+    bad-layer: 'Die Leitung kann nicht auf diesen Lagen verlaufen:'
+    solve-failed: Der Lagenaufbau lässt sich für dieses Ziel nicht lösen.
+    below-fab: Unter dem Mindestabstand oder der minimalen Leiterbahnbreite des Fertigers (Randbedingungen).

@@ -1,0 +1,116 @@
+title: Búsqueda de componentes
+searchPlaceholder: Buscar en distribuidores por referencia o palabra clave
+search: Buscar
+modes:
+  universal: Todos
+browse:
+  all: Todas las categorías
+  searchCategory: Buscar en esta categoría ({count} componentes)
+  backToCategories: Volver a las categorías
+  empty: Este distribuidor no publica una lista de categorías.
+searching: Buscando…
+cancel: Cancelar
+cancelled: Búsqueda cancelada.
+retry: Reintentar
+emptyPrompt: Busque una referencia de fabricante (MPN) para ver quién la tiene en stock, a qué
+  precio y con qué hoja de datos.
+noResults: Ningún componente coincide con esa búsqueda.
+paging:
+  showing: Mostrando {from}–{to} de {total}
+  none: Sin resultados
+  previous: Anterior
+  next: Siguiente
+  perPage: Por página
+groupCount: '{count} componente | {count} componentes | {count} componentes'
+quantity: Precio por cant.
+providerFailed: 'No se pudo buscar en {name}. {reason}'
+searchFailed: 'No se pudo ejecutar la búsqueda: {error}'
+attribution: 'Precios, existencias y datos de productos de {names}.'
+setup:
+  title: Conecte un distribuidor
+  body: Busque en DigiKey o Mouser componentes reales de fabricantes, con precios, existencias,
+    hojas de datos y enlaces a modelos CAD. Necesita una clave de API gratuita del distribuidor,
+    que se obtiene en unos minutos.
+  action: Configurar un distribuidor
+providers:
+  digikey:
+    steps:
+      - Inicie sesión en el portal para desarrolladores de DigiKey y añada una aplicación de
+        producción (Production), no de pruebas (Sandbox), que usa otro servidor.
+      - Marque Product Information V4 en la lista de productos. GoatCAD solo usa ese.
+      - Deje vacío OAuth Callback. Solo se aplica a OAuth de tres pasos, que GoatCAD no usa.
+      - Copie el Client ID y el Client Secret de la aplicación en los campos de abajo.
+  mouser:
+    steps:
+      - Inicie sesión en el API hub de Mouser.
+      - Solicite una clave para la Search API. Mouser se la envía por correo electrónico.
+      - Pegue la clave en el campo de abajo.
+filters:
+  title: Filtros
+  apply: Aplicar filtros
+  pending: Aún no aplicados
+  availability: Disponibilidad
+  inStock: En stock
+  rohs: Cumple RoHS
+  hasDatasheet: Tiene hoja de datos
+  has3dModel: Tiene modelo 3D
+  manufacturer: Fabricante
+  packaging: Embalaje
+  status: Estado
+  series: Serie
+  searchWithin: Buscar en los resultados…
+  removeFilter: Quitar este filtro
+  clearAll: Borrar todo
+  findOption: Buscar…
+  noOptions: No hay opciones coincidentes
+  scopeNote: Este distribuidor solo admite estos filtros. Busque directamente en DigiKey para
+    filtrar por categoría y especificaciones.
+columns:
+  part: Ref. de fabricante
+  mpn: Ref. de fabricante
+  manufacturer: Fabricante
+  status: Estado
+  seller: Distribuidor
+  stock: Stock
+  price: Precio
+  packaging: Embalaje
+  sortBy: Ordenar por {name}
+  expand: Mostrar detalles
+part:
+  manufacturer: Fabricante
+  distributorPart: Ref. de distribuidor
+  inStock: '{count} en stock'
+  stockUnknown: Stock desconocido
+  outOfStock: Sin stock
+  priceAt: "{price} {'@'} {quantity}"
+  noPrice: Sin precio
+  moq: 'Mín. {quantity}'
+  datasheet: Hoja de datos
+  product: Ver en {name}
+  cadOpen: Abrir la página del modelo CAD
+  cadCheck: Buscar modelo CAD
+  cadNone: No hay ningún modelo CAD
+  parametersFrom: Especificaciones de {name}
+lifecycle:
+  active: Activo
+  nrnd: No para diseños nuevos
+  obsolete: Obsoleto
+  unknown: Desconocido
+fields:
+  apiKey: Clave de API
+  clientId: Client ID
+  clientSecret: Client secret
+errors:
+  no-credentials: No hay ninguna clave de API configurada para este distribuidor.
+  invalid-credentials: Este distribuidor rechazó la clave de API. Compruébela e inténtelo de nuevo.
+  forbidden: Esta clave de API no está autorizada para buscar componentes. Compruebe la suscripción
+    en el portal para desarrolladores del distribuidor.
+  rate-limited: Demasiadas solicitudes en este momento. Inténtelo de nuevo en {detail} segundos.
+  quota-exhausted: Se ha agotado el límite diario de solicitudes de este distribuidor. Se restablece
+    a medianoche UTC.
+  network: No se pudo conectar con el distribuidor. Compruebe su conexión.
+  timeout: El distribuidor no respondió a tiempo. Puede que esté ocupado; inténtelo de nuevo.
+  provider-error: El distribuidor devolvió un error.
+  bad-response: No se pudo leer la respuesta del distribuidor.
+  storage-unavailable: La clave no se guardó porque el almacenamiento seguro de este equipo no está
+    disponible.

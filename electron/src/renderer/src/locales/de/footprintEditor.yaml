@@ -1,0 +1,130 @@
+commands:
+  editFootprintProperties: Footprint-Eigenschaften bearbeiten
+  editPad: Pad {number} bearbeiten
+  editLine: Linie bearbeiten
+  editPolygon: Polygon bearbeiten
+  editRuleArea: Regelfläche bearbeiten
+  editShape: Form bearbeiten
+  addPad: Pad hinzufügen
+  addLine: Linie hinzufügen
+  addArc: Bogen hinzufügen
+  addRectangle: Rechteck hinzufügen
+  addCircle: Kreis hinzufügen
+  addPolygon: Polygon hinzufügen
+  addText: Text hinzufügen
+  addBezier: Kurve hinzufügen
+  addTextBox: Textfeld hinzufügen
+  addPoint: Punkt hinzufügen
+  rotate: Drehen
+  mirror: Spiegeln
+  flip: Seite wechseln
+  moveAnchor: Footprint-Anker verschieben
+  editModel: 3D-Modell bearbeiten
+  addModel: 3D-Modell verknüpfen
+  removeModel: 3D-Modell entfernen
+edit:
+  cut: Ausschneiden
+  copy: Kopieren
+  paste: Einfügen
+  duplicate: Duplizieren
+  delete: Löschen
+  rotate: Gegen den Uhrzeigersinn drehen
+  rotateClockwise: Im Uhrzeigersinn drehen
+  flip: Seite wechseln
+tools:
+  flip: Seite wechseln
+  anchor: Footprint-Anker setzen
+  gridOrigin: Rasterursprung setzen
+  resetGridOrigin: Rasterursprung zurücksetzen
+properties:
+  fromBoard: Von Platine
+zoneConnect:
+  inherit: Von Zone
+  solid: Voll
+  thermal: Thermische Entlastung
+  none: Keine
+  thermalTht: Thermische Entlastung (nur THT)
+readonlyBanner:
+  title: Schreibgeschütztes Bauteil aus der offiziellen Bibliothek
+  body: Dieses Bauteil kann nicht direkt bearbeitet werden. Unten klicken, um es in den Projekt-Arbeitsbereich zu kopieren.
+  exportComponentTitle: Bauteil exportieren
+  exportPart: Bauteil exportieren
+saveModal:
+  title: Speicheroptionen für Footprint
+  subtitle: 'Dies ist ein schreibgeschützter Footprint aus der Standardbibliothek. Wählen Sie, wo Ihre Änderungen gespeichert werden sollen:'
+  saveLocalTitle: Als lokalen Projekt-Footprint speichern
+  saveLocalDesc: Eine wiederverwendbare `.kicad_mod`-Datei im Arbeitsbereich anlegen.
+  saveLocalPlaceholder: dateiname.kicad_mod
+propertiesPanel:
+  footprintProperties: Footprint-Eigenschaften
+  descr: Beschr.
+  model3d: 3D-Modell
+  modelPath: Pfad
+  modelOffset: Versatz (mm)
+  modelScale: Skalierung
+  modelRotate: Drehung (°)
+  addModel: 3D-Modell verknüpfen…
+  removeModel: 3D-Modell entfernen
+  browse: Durchsuchen…
+  padInspector: Pad-[{number}]-Inspektor
+  number: Nummer
+  type: Typ
+  padTypes:
+    smd: SMD
+    throughHole: Durchsteck
+    npThroughHole: Durchsteck ohne Kontakt
+  shape: Form
+  shapeTypes:
+    rect: Rechteckig
+    circle: Rund
+    oval: Oval / Langloch
+    roundrect: Abgerundetes Rechteck
+  drillSize: Bohrdurchmesser
+  roundRatio: Rundungsverhältnis
+  graphicInspector: Grafikelement-Inspektor
+  startX: Anfang X
+  startY: Anfang Y
+  endX: Ende X
+  endY: Ende Y
+  polygonInspector: Polygon-Inspektor
+  points: Punkte
+  fill: Füllung
+  fillTypes:
+    none: Keine (nur Umriss)
+    solid: Voll (gefüllt)
+    hatch: Schraffur
+    reverseHatch: Umgekehrte Schraffur
+    crossHatch: Kreuzschraffur
+  ruleAreaInspector: Regelflächen-Inspektor
+  minThickness: Mindestbreite
+  hatchStyle: Schraffurart
+  hatchStyleTypes:
+    none: Keine (nur Umriss)
+    edge: Rand (Randschraffur)
+    full: Voll (gefüllte Schraffur)
+  hatchPitch: Schraffurabstand
+  selectHint: Ein Pad oder eine Grafiklinie im 2D-Layout auswählen, um Details direkt in dieser Seitenleiste zu prüfen und zu bearbeiten.
+viewRail:
+  sketchGraphics: Grafik als Umriss
+  sketchText: Text als Umriss
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+  pad: Pad
+  line: Linie
+  arc: Bogen
+  rectangle: Rechteck
+  circle: Kreis
+  polygon: Polygon
+  text: Text
+  bezier: Kurve
+  textBox: Textfeld
+  point: Punkt
+  lineModeTitle: Linienmodus — 45° / 90° / frei ({hotkey})
+  lineMode: 'Linienmodus: {mode}'
+  lineFree: frei
+viewport3d:
+  title: 3D-Vorschau
+  noFootprintMsg: Einen Footprint öffnen, um ihn in 3D zu sehen.
+  noModelMsg: Mit diesem Footprint ist kein 3D-Modell verknüpft.
+  notFoundMsg: Die verknüpfte 3D-Modelldatei wurde auf der Festplatte nicht gefunden.

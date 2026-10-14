@@ -1,0 +1,51 @@
+---
+/* Reserved layout for media that has not been captured yet. */
+interface Props {
+  kind: 'screenshot' | 'animation'
+  /** What the final media is expected to show. Rendered visibly in the frame. */
+  expected: string
+  /** CSS aspect-ratio for the reserved space. */
+  aspect?: string
+}
+
+const { kind, expected, aspect = '16 / 9' } = Astro.props
+const label = kind === 'screenshot' ? 'Screenshot' : 'Animation'
+---
+
+<figure class="media-placeholder" style={`aspect-ratio: ${aspect}`}>
+  <span class="badge">{label} coming soon</span>
+  <figcaption>{expected}</figcaption>
+</figure>
+
+<style>
+  .media-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem;
+    width: 100%;
+    padding: 1.5rem;
+    background: var(--bg-panel);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius);
+  }
+
+  .badge {
+    padding: 0.25rem 0.75rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    color: var(--text);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  figcaption {
+    max-width: 48ch;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+</style>

@@ -1,0 +1,11 @@
+#!/bin/bash
+# The pre-MERGE gate: prove GoatHerd still bundles.
+#
+# Assumes bin/pre-cm-checks has already passed, so it skips the redundant
+# typecheck that `npm run build` normally performs.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+npm run build:bundle

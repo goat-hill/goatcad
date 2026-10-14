@@ -1,0 +1,11 @@
+save: Speichern
+cancel: Abbrechen
+close: Schließen
+delete: Löschen
+undo: Rückgängig ({shortcut})
+redo: Wiederherstellen ({shortcut})
+undoWithLabel: '{label} rückgängig ({shortcut})'
+redoWithLabel: '{label} wiederherstellen ({shortcut})'
+undoLabel: Rückgängig
+redoLabel: Wiederherstellen
+selectAllLabel: Alles auswählen

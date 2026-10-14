@@ -1,0 +1,16 @@
+diff --git a/third_party/BUILD.gn b/third_party/BUILD.gn
+index 9cc3e72..f4fa8b3 100644
+--- a/third_party/BUILD.gn
++++ b/third_party/BUILD.gn
+@@ -437,6 +437,11 @@ source_set("fx_libopenjpeg") {
+     "libopenjpeg/thread.c",
+   ]
+   deps = [ "../core/fxcrt" ]
++  if (is_wasm) {
++    # openjpeg calls fseeko/ftello. Compiled as -std=c11, emscripten's musl
++    # hides POSIX symbols unless a feature macro asks for them.
++    defines = [ "_POSIX_C_SOURCE=200809L" ]
++  }
+ }
+ 
+ if (!pdf_enable_rust_png) {

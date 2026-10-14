@@ -1,0 +1,1406 @@
+/* GoatHerd's own palette: same dark structure as GoatCAD, but slate-blue instead
+   of forest green, with a jade accent instead of copper — so the two apps are
+   recognizable at a glance. */
+:root {
+  --bg: #14181f;
+  --sidebar: #191e27;
+  --titlebar: #191e27;
+  /* An unfocused window's title bar, half way to the window background: the
+     raised bar flattens into the app instead of standing off it, which is the
+     direction GNOME, macOS and Windows all take a backdrop window's bar. */
+  --titlebar-inactive: #171b23;
+  --border: #242b38;
+  --accent: #6fb7a0;
+  --text: #d5dde2;
+  --dim: #808e9b;
+  --hover: #1f2530;
+  --danger: #e06c60;
+  --status-working: #4cc38a;
+  --status-waiting: #e5b567;
+  --status-idle: #6b7789;
+  --status-none: #39424f;
+
+  /* Code surface and syntax palette for the Git Diff view. A separate concern
+     from the app palette above: these are hues that have to stay legible on top
+     of the add/delete row tints, not brand colors, so they don't derive from
+     --accent. Kept here so there is one home for every color the app draws.
+
+     The code canvas is deliberately darker than --bg: dropping it lifts every
+     token's contrast at once, which is cheaper than chasing each hue. Every
+     value below is measured to clear WCAG AA (4.5:1) against --code-bg *and*
+     against both row tints at their 20% strength — the tinted rows are the
+     binding constraint, and comments and the gutter are the tightest of them
+     (4.86:1 and 4.92:1 on an added row). Re-measure if you darken either. */
+  --code-bg: #0f141b;
+  --code-text: #dce4ea;
+  --code-gutter: #94a2b0;
+  --syntax-comment: #93a1b0;
+  --syntax-string: #a3d977;
+  --syntax-keyword: #d7a1ec;
+  --syntax-number: #e0aa76;
+  --syntax-type: #7cc4f8;
+
+  --scrollbar-thumb: #3c4a5d;
+  --scrollbar-thumb-hover: #56687f;
+
+  /* Tells the engine every OS-drawn control belongs to a dark UI — without it a
+     native <select> popup (the Git Diff base picker) opens as a white sheet. */
+  color-scheme: dark;
+}
+
+/* Scrollbars, app-wide: the platform default is a pale slab that reads as a
+   seam of another app's chrome against this palette. The thumb is inset by a
+   transparent border so it floats in the track instead of butting against the
+   content edge, and the track stays invisible.
+
+   Deliberately *not* also setting the standard `scrollbar-width`/`scrollbar-color`:
+   Chromium drops every ::-webkit-scrollbar rule the moment either is specified,
+   so the pair below would go dead and take the radius and inset with them. We
+   only ever render in Chromium (Electron), so the pseudo-elements are the more
+   capable half of the choice, not a fallback. */
+::-webkit-scrollbar {
+  width: 15px;
+  height: 15px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+  background-clip: content-box;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  font-size: 13px;
+  overflow: hidden;
+  user-select: none;
+}
+
+button {
+  font: inherit;
+  color: var(--text);
+  background: var(--sidebar);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 5px 11px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--hover);
+  border-color: var(--accent);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+input {
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 8px;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* ---- layout ---- */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.shell {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+/* ---- title bar (frameless window, like GoatCAD) ---- */
+
+.titlebar {
+  height: 34px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 14px;
+  background: var(--titlebar);
+  border-bottom: 1px solid var(--border);
+  -webkit-app-region: drag;
+}
+
+/* The bar backs off when the window is not the active one — the platform
+   convention, and the only such cue a frameless window has to give (focus state
+   comes from main, see App.vue's windowFocused). Fading the children together is
+   what makes the wordmark, branch chip, View menu and window controls recede as
+   one surface rather than four things dimming separately. */
+.titlebar.inactive {
+  background: var(--titlebar-inactive);
+}
+
+.titlebar.inactive > * {
+  opacity: 0.55;
+}
+
+/* macOS: no wordmark and no window controls (App.vue) — the branch chip leads,
+   starting at 88px so it clears the native traffic lights, which sit at the far
+   left (positioned in main/index.ts) and end around 64px. */
+.titlebar.mac {
+  padding-left: 88px;
+}
+
+/* Type treatment copied from GoatCAD's shared/BrandWordmark.vue (`nav` size) so
+   the two apps read as siblings: same weight, same tight tracking, accent on the
+   second half of the name only. The colors are GoatHerd's own tokens — jade, not
+   copper — and the goat stands in for GoatCAD's IC mark. */
+.titlebar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  font-weight: 650;
+  font-size: 13px;
+  letter-spacing: -0.025em;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* Slightly larger than the cap height so the mark reads as a peer of the name,
+   not a bullet point in front of it. */
+.titlebar-brand .mark {
+  font-size: 1.15em;
+}
+
+/* The accent lands on "Herd" only — the half that says what the tool does. */
+.titlebar-brand .herd {
+  color: var(--accent);
+}
+
+.titlebar-branch {
+  font-size: 11px;
+  color: var(--status-waiting);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 6px;
+}
+
+.titlebar-menu {
+  position: relative;
+  -webkit-app-region: no-drag;
+}
+
+.menu-trigger {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 3px 9px;
+  font-size: 12px;
+  color: var(--dim);
+}
+
+.menu-trigger:hover,
+.menu-trigger.open {
+  background: var(--hover);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+/* Full-window catcher so a click anywhere else dismisses the dropdown. */
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 41;
+  min-width: 200px;
+  background: var(--sidebar);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.menu-heading {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--dim);
+  padding: 6px 8px 4px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-size: 13px;
+  text-align: left;
+}
+
+.menu-item:hover {
+  background: var(--hover);
+  border: none;
+}
+
+.menu-hint {
+  color: var(--dim);
+  font-size: 11px;
+}
+
+.menu-footer {
+  padding: 6px 8px 4px;
+  margin-top: 2px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--dim);
+}
+
+.titlebar-controls {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  -webkit-app-region: no-drag;
+}
+
+.control-btn {
+  width: 44px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+}
+
+.control-btn svg {
+  width: 10px;
+  height: 10px;
+  fill: var(--dim);
+}
+
+.control-btn:hover {
+  background: var(--hover);
+  border: none;
+}
+
+.control-btn:hover svg {
+  fill: var(--text);
+}
+
+.control-btn.close:hover {
+  background: var(--danger);
+}
+
+.control-btn.close:hover svg {
+  fill: #fff;
+}
+
+.sidebar {
+  width: 250px;
+  flex-shrink: 0;
+  background: var(--sidebar);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+
+.worktree-list {
+  flex: 1;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.worktree-list li {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 9px 14px;
+  cursor: pointer;
+  border-left: 2px solid transparent;
+}
+
+.worktree-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.worktree-status-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.commit-count {
+  background: var(--border);
+  color: var(--dim);
+  padding: 1px 5px;
+  border-radius: 9px;
+  font-size: 9px;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.dirty-icon {
+  width: 8px;
+  height: 8px;
+  fill: var(--status-waiting);
+}
+
+.worktree-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 8px;
+  padding-left: 16px;
+}
+
+.worktree-actions button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  padding: 4px 6px;
+  color: var(--dim);
+  font-size: 11px;
+  width: 100%;
+  text-align: left;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.worktree-actions button:hover {
+  background: var(--hover);
+  color: var(--text);
+  border-color: transparent;
+}
+
+.worktree-actions button.danger {
+  color: var(--danger);
+}
+
+.worktree-actions button.danger:hover {
+  background: rgba(224, 108, 96, 0.1);
+  color: var(--danger);
+}
+
+.worktree-actions .icon {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  color: var(--dim);
+}
+
+.worktree-actions button:hover .icon {
+  color: var(--accent);
+}
+
+.worktree-actions .claude-icon {
+  color: #d97757;
+}
+
+/* The goat is a color emoji, so it can't take currentColor like the drawn icons:
+   grayscale gets it to a neutral that reads level with them (--dim is neutral
+   gray), and hover gives its color back instead of the accent the others take. */
+.worktree-actions .goat-icon {
+  font-size: 11px;
+  line-height: 12px;
+  text-align: center;
+  filter: grayscale(1) brightness(1.15);
+}
+
+.worktree-actions button:hover .goat-icon {
+  filter: none;
+}
+
+.worktree-actions button:hover .claude-icon {
+  color: #d97757;
+}
+
+.worktree-list li:hover {
+  background: var(--hover);
+}
+
+.worktree-list li.active {
+  background: var(--bg);
+  border-left-color: var(--workstream-color, var(--accent));
+}
+
+.worktree-list li.active .branch {
+  color: var(--workstream-color, var(--accent));
+}
+
+.worktree-list .branch {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.worktree-list .branch-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* A renamed workstream keeps its branch visible underneath — the name is a label,
+   the branch is still the identity. */
+.worktree-list .branch-sub {
+  font-family: monospace;
+  font-size: 9px;
+  color: var(--dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rename-input {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg);
+  border: 1px solid var(--workstream-color, var(--accent));
+  border-radius: 3px;
+  color: var(--text);
+  font-size: inherit;
+  font-family: inherit;
+  padding: 1px 5px;
+}
+
+.finder-branch {
+  font-family: monospace;
+  font-size: 9px;
+  color: var(--dim);
+}
+
+.badge {
+  font-size: 10px;
+  padding: 1px 5px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--dim);
+}
+
+/* Sidebar row's mod+N hotkey number. */
+.key-hint {
+  font-size: 10px;
+  min-width: 14px;
+  text-align: center;
+  padding: 0 3px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--dim);
+  opacity: 0.7;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--status-none);
+}
+
+.dot.working {
+  background: var(--status-working);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+.dot.waiting {
+  background: var(--status-waiting);
+  box-shadow: 0 0 6px var(--status-waiting);
+}
+
+.dot.idle {
+  background: var(--status-idle);
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.add-worktree {
+  display: flex;
+  gap: 6px;
+  padding: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.add-worktree input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---- quota (bottom of sidebar) ---- */
+
+.quota {
+  padding: 8px 14px 10px;
+  border-top: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.quota-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 4px;
+  font-size: 11px;
+  color: var(--text);
+}
+
+/* Claude's coral, so the block is recognizably about Claude, not GoatHerd. */
+.claude-mark {
+  width: 11px;
+  height: 11px;
+  stroke: #d97757;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.quota-sync {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--dim);
+}
+
+.quota-sync.error {
+  color: var(--danger);
+}
+
+.quota-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  font-size: 11px;
+  color: var(--dim);
+}
+
+.quota-label {
+  width: 38px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.quota-bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--status-none);
+  overflow: hidden;
+}
+
+.quota-fill {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+.quota-fill.warn {
+  background: var(--status-waiting);
+}
+
+.quota-fill.danger {
+  background: var(--danger);
+}
+
+.quota-pct {
+  width: 32px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.quota-reset {
+  width: 40px;
+  text-align: right;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+
+/* ---- workstream finder ---- */
+
+.finder-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 90px;
+}
+
+.finder {
+  width: 380px;
+  background: var(--sidebar);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.finder input {
+  width: 100%;
+  background: var(--sidebar);
+  border: none;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  padding: 10px 12px;
+}
+
+.finder ul {
+  list-style: none;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.finder li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  cursor: pointer;
+}
+
+.finder li.active {
+  background: var(--hover);
+}
+
+.finder li .branch {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.finder li.none {
+  color: var(--dim);
+  cursor: default;
+}
+
+/* ---- main area ---- */
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.content.empty {
+  align-items: center;
+  justify-content: center;
+  color: var(--dim);
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.toolbar h1 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.toolbar .path {
+  color: var(--dim);
+  font-size: 11px;
+}
+
+.toolbar .actions {
+  display: flex;
+  gap: 6px;
+}
+
+.toolbar .actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.toolbar .icon {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  color: var(--dim);
+}
+
+.toolbar .actions button:hover .icon {
+  color: var(--accent);
+}
+
+/* Claude's coral (same as the quota widget's mark), on hover too. */
+.toolbar .claude-icon,
+.toolbar .actions button:hover .claude-icon {
+  color: #d97757;
+}
+
+/* Shared modifier for the buttons' letter cues, shown once on the left. */
+.toolbar .hotkey-mod {
+  align-self: center;
+  margin-right: 4px;
+  font-size: 10px;
+  white-space: nowrap;
+  color: var(--dim);
+  opacity: 0.7;
+}
+
+.toolbar .danger .icon,
+.toolbar .danger:hover .icon {
+  color: var(--danger);
+}
+
+.toolbar .danger {
+  color: var(--danger);
+}
+
+/* ---- editor tabs (VS Code style) ---- */
+
+/* One bar per split: the tab strip scrolls horizontally on overflow while the
+   group actions (split) stay pinned to the right. */
+.pane-tabbar {
+  display: flex;
+  align-items: stretch;
+  background: var(--sidebar);
+  border-bottom: 1px solid var(--border);
+  min-height: 35px;
+}
+
+.pane-tabs {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.pane-tabs::-webkit-scrollbar {
+  height: 0;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  border: none;
+  border-right: 1px solid var(--border);
+  border-top: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--dim);
+  padding: 0 10px;
+  height: 100%;
+}
+
+.tab:hover {
+  background: var(--hover);
+  color: var(--text);
+  border-color: transparent;
+  border-right-color: var(--border);
+  border-top-color: transparent;
+}
+
+.tab.active {
+  background: #10141a;
+  color: var(--text);
+  border-top-color: var(--workstream-color, var(--accent));
+}
+
+/* Active tab in a non-focused split reads as inactive, so it's clear which
+   split has keyboard focus (VS Code's active-group cue). */
+.pane:not(.active-group) .tab.active {
+  border-top-color: var(--border);
+  color: var(--dim);
+}
+
+.tab.dead {
+  font-style: italic;
+  opacity: 0.75;
+}
+
+.tab .tab-num {
+  font-size: 9px;
+  min-width: 13px;
+  text-align: center;
+  padding: 0 2px;
+  border-radius: 3px;
+  color: var(--dim);
+  background: rgba(255, 255, 255, 0.05);
+  opacity: 0.8;
+}
+
+.tab .tab-branch {
+  font-size: 11px;
+  color: var(--workstream-color, var(--accent));
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+.tab.active .tab-branch {
+  opacity: 1;
+  font-weight: 500;
+}
+
+.tab .tab-divider {
+  color: var(--border);
+  font-size: 11px;
+}
+
+/* Tabs size to their content — a renamed workstream or a long process label is
+   worth reading in full. The strip scrolls horizontally when they overflow. */
+.tab .tab-label {
+  white-space: nowrap;
+}
+
+.tab .port-link {
+  color: var(--accent);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.tab .close {
+  color: var(--dim);
+  opacity: 0;
+  width: 16px;
+  text-align: center;
+  border-radius: 3px;
+}
+
+.tab:hover .close,
+.tab.active .close {
+  opacity: 1;
+}
+
+.tab .close:hover {
+  color: var(--text);
+  background: var(--border);
+}
+
+.pane-tabbar-actions {
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+.split-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--dim);
+  border-radius: 4px;
+}
+
+.split-btn:hover {
+  background: var(--hover);
+  color: var(--accent);
+  border-color: transparent;
+}
+
+.split-btn svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+}
+
+.error {
+  color: var(--danger);
+  padding: 6px 16px;
+  font-family: monospace;
+  font-size: 12px;
+  white-space: pre-wrap;
+  user-select: text;
+}
+
+/* ---- terminal panes (split view) ---- */
+
+/* The 1px gap over the container's border color draws the separators. */
+.terminals {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 1px;
+  background: var(--border);
+}
+
+.pane {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: #10141a;
+  position: relative;
+}
+
+.pane-body {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+/* Which split has focus shouldn't rest on the tab bar's accent line alone: the
+   focused split gets a hairline ring in its workstream's color. An outline drawn
+   inward costs no layout — nothing reflows or shifts as focus moves — and unlike
+   dimming the unfocused splits with opacity it puts no compositing layer over
+   the terminal canvases (opacity layers are a suspect in the Linux/Mesa
+   GPU-process crashes). Muted, because it frames a whole split; the tab bar's
+   accent line carries the color at full strength.
+   A lone split has nothing to disambiguate, so it gets no ring. */
+.pane.active-group:not(:only-child) {
+  outline: 1px solid color-mix(in srgb, var(--group-color, var(--accent)) 55%, transparent);
+  outline-offset: -1px;
+}
+
+/* Sidebar Section Header (Worktrees) */
+.sidebar-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--dim);
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-section-header .refresh-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dim);
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+}
+
+.sidebar-section-header .refresh-btn:hover {
+  background: var(--hover);
+  color: var(--accent);
+}
+
+.sidebar-section-header .refresh-btn svg {
+  width: 11px;
+  height: 11px;
+}
+
+/* Claude Quota Refresh Button */
+.quota-refresh-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dim);
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  margin-left: 6px;
+}
+
+.quota-refresh-btn:hover {
+  background: var(--hover);
+  color: var(--accent);
+}
+
+.quota-refresh-btn svg {
+  width: 11px;
+  height: 11px;
+}
+
+/* Empty State / Welcome Screen */
+.content-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+}
+
+.welcome-box {
+  text-align: center;
+  max-width: 450px;
+  padding: 30px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--sidebar);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.welcome-box h2 {
+  font-size: 20px;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.welcome-box .path {
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--dim);
+  margin-bottom: 20px;
+  word-break: break-all;
+}
+
+.welcome-box .hint {
+  font-size: 13px;
+  color: var(--text);
+  opacity: 0.85;
+}
+
+/* Terminals Split Layout Directions */
+.terminals.row {
+  flex-direction: row;
+}
+
+.terminals.column {
+  flex-direction: column;
+}
+
+/* Pane Resizer Edge nested inside absolute pane */
+.pane-resizer-edge {
+  position: absolute;
+  z-index: 100;
+  background: transparent;
+  transition: background 0.15s;
+}
+
+.pane-resizer-edge:hover {
+  background: var(--accent);
+}
+
+/* Cursor and sizing based on direction */
+.pane-resizer-edge.row {
+  left: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  cursor: col-resize;
+}
+
+.pane-resizer-edge.column {
+  top: -2px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  cursor: row-resize;
+}
+
+/* Pane Empty State */
+.pane-empty-state {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  height: 100%;
+}
+
+/* ---- workspace viewer (.goatherd/ demos) ---- */
+
+/* Count badge on the sidebar's Workspace button. */
+.ws-count {
+  margin-left: auto;
+  font-size: 10px;
+  padding: 0 5px;
+  border-radius: 8px;
+  background: var(--workstream-color, var(--accent));
+  color: #10141a;
+  font-weight: 600;
+}
+
+.workspace-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 40px;
+}
+
+.workspace-empty .ws-empty-title {
+  font-size: 16px;
+  color: var(--text);
+}
+
+.workspace-empty .ws-empty-hint {
+  max-width: 420px;
+  color: var(--dim);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.workspace-empty code {
+  font-family: monospace;
+  color: var(--accent);
+}
+
+.workspace-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.workspace-list {
+  list-style: none;
+  width: 260px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  border-right: 1px solid var(--border);
+  padding: 6px;
+}
+
+.workspace-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.workspace-list li:hover {
+  background: var(--hover);
+}
+
+.workspace-list li.active {
+  background: var(--bg);
+  outline: 1px solid var(--border);
+}
+
+.ws-thumb {
+  width: 44px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  object-fit: cover;
+  background: #10141a;
+  border: 1px solid var(--border);
+}
+
+.ws-thumb-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dim);
+  font-size: 13px;
+}
+
+.ws-meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ws-meta .ws-name {
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ws-meta .ws-sub {
+  font-size: 10px;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.workspace-preview {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: var(--bg);
+  overflow: auto;
+}
+
+.ws-media {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 6px;
+  background: #10141a;
+}
+
+.ws-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.ws-doc {
+  align-self: stretch;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text);
+  user-select: text;
+}
+
+.ws-doc h1,
+.ws-doc h2,
+.ws-doc h3 {
+  margin: 18px 0 8px;
+  color: var(--text);
+}
+
+.ws-doc p {
+  margin: 8px 0;
+}
+
+.ws-doc ul {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.ws-doc a {
+  color: var(--accent);
+}
+
+.ws-doc img {
+  max-width: 100%;
+  border-radius: 6px;
+  margin: 8px 0;
+}
+
+.ws-doc code {
+  font-family: monospace;
+  font-size: 12px;
+  background: var(--sidebar);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.ws-doc pre {
+  background: #10141a;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  overflow-x: auto;
+}
+
+.ws-doc pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.ws-doc blockquote {
+  margin: 8px 0;
+  padding-left: 12px;
+  border-left: 3px solid var(--border);
+  color: var(--dim);
+}
+
+.ws-text {
+  align-self: stretch;
+  width: 100%;
+  font-family: monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text);
+  white-space: pre-wrap;
+  user-select: text;
+}
+
+.ws-other {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--dim);
+}

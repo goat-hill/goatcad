@@ -1,0 +1,578 @@
+commands:
+  editBoard: Platine bearbeiten
+  editStackup: Lagenaufbau bearbeiten
+  applyProfile: Fertigungsprofil anwenden
+  applyStackup: Lagenaufbau anwenden
+  addDielectric: Dielektrische Lage hinzufügen
+  removeLayer: Lage entfernen
+  editItem: Element bearbeiten
+  routeTrack: Leiterbahn verlegen
+  dragTrack: Leiterbahn ziehen
+  dragVia: DuKo ziehen
+  dragArc: Bogen ziehen
+  routePair: Differenzielles Paar verlegen
+  tune: Länge abstimmen
+  retune: Neu abstimmen
+  updateTuningPatterns: Alle Abstimmmuster aktualisieren
+  removeTuningPattern: Abstimmmuster entfernen | {count} Abstimmmuster entfernen
+  editTeardrops: Teardrops bearbeiten
+  rebuildTeardrops: Teardrops neu erstellen
+  dragFootprint: Footprint ziehen | {count} Footprints ziehen
+  addVia: Durchkontaktierung hinzufügen
+  placeFootprint: '{reference} platzieren'
+  changeTrackWidth: Leiterbahnbreite ändern
+  changeViaSize: DuKo-Größe ändern
+  addLine: Linie hinzufügen | {count} Linien hinzufügen
+  addArc: Bogen hinzufügen
+  addRectangle: Rechteck hinzufügen
+  addCircle: Kreis hinzufügen
+  addPolygon: Polygon hinzufügen
+  addText: Text hinzufügen
+  addBezier: Kurve hinzufügen
+  addTextBox: Textfeld hinzufügen
+  addPoint: Punkt hinzufügen
+  addZone: Fläche hinzufügen
+  editZone: Fläche bearbeiten
+  editShape: Form bearbeiten
+  refillZones: Flächen neu füllen
+  rotateFootprints: Footprint drehen | {count} Footprints drehen
+  rotateItems: Element drehen | {count} Elemente drehen
+  moveFootprint: '{reference} verschieben'
+  rotateFootprint: '{reference} drehen'
+  flipFootprints: Seite des Footprints wechseln | Seite von {count} Footprints wechseln
+  flipItems: Seite des Elements wechseln | Seite von {count} Elementen wechseln
+  updateFootprints: Footprint aus Bibliothek aktualisieren | {count} Footprints aus Bibliothek aktualisieren
+  changeFootprints: Footprint ändern | {count} Footprints ändern
+  fanout: 'Fanout {reference}'
+  cleanup: Leiterbahnen und DuKos aufräumen
+  footprintFallback: Footprint
+  editTrack: Leiterbahn bearbeiten
+  editVia: Durchkontaktierung bearbeiten
+  lock: Element sperren | {count} Elemente sperren
+  unlock: Element entsperren | {count} Elemente entsperren
+  mirror: Element spiegeln | {count} Elemente spiegeln
+  placeGridOrigin: Rasterursprung setzen
+  resetGridOrigin: Rasterursprung zurücksetzen
+  placeDrillOrigin: Bohrursprung setzen
+  resetDrillOrigin: Bohrursprung zurücksetzen
+  breakTrack: Leiterbahn auftrennen
+  moveTracksToLayer: Leiterbahn auf {layer} verschieben | {count} Leiterbahnen auf {layer} verschieben
+edit:
+  cut: Ausschneiden
+  copy: Kopieren
+  paste: Einfügen
+  duplicate: Duplizieren
+  delete: Löschen
+  rotate: Gegen den Uhrzeigersinn drehen
+  rotateClockwise: Im Uhrzeigersinn drehen
+  flip: Seite wechseln
+  fanout: Fanout…
+  breakTrack: Leiterbahn auftrennen
+  trackLayerNext: Auf nächste Lage verschieben
+  trackLayerPrev: Auf vorige Lage verschieben
+tools:
+  flip: Seite wechseln
+  fanout: Fanout…
+fanout:
+  title: Fanout
+  style: Stil
+  direction: Richtung
+  surfaceRows: Oberflächenreihen
+  surfaceRowsHint: Die äußeren Reihen eines Rasters, ohne DuKo für das Verlegen auf der Oberfläche freigelassen
+  styles:
+    auto: Automatisch
+    dogbone: Dogbone
+    under-pads: Unter den Pads
+    inline: Reihen in Linie
+    staggered: Versetzte Reihen
+  directions:
+    out: Nach außen
+    in: Nach innen
+    ne: Nordost
+    se: Südost
+    sw: Südwest
+    nw: Nordwest
+  willPlace: Setzt 1 DuKo | Setzt {count} DuKos
+  placed: 1 DuKo gesetzt | {count} DuKos gesetzt
+  skipped: '{count} übersprungen: {reason}'
+  surface: 1 für die Oberfläche frei | {count} für die Oberfläche frei
+  refused: 1 Pad kann keine DuKo aufnehmen | {count} Pads können keine DuKo aufnehmen
+  skip:
+    no-net: kein Netz
+    no-connect: nicht verbunden
+    through-hole: Durchsteck
+    joined: bereits mit seinem Netz verbunden
+    via: hat bereits eine DuKo
+  apply: Fanout ausführen
+selection:
+  toggleLock: Sperren / Entsperren
+  selectConnection: Verbindung auswählen
+  selectNet: Netz auswählen
+  deleteFullTrack: Ganze Leiterbahn löschen
+origins:
+  placeGrid: Rasterursprung
+  resetGrid: Rasterursprung zurücksetzen
+  placeDrill: Bohr-/Bestückungsdatei-Ursprung
+  resetDrill: Bohr-/Bestückungsdatei-Ursprung zurücksetzen
+loadingBoard: 'Platine wird geladen… {percent} %'
+viewRail:
+  zoneOutlines: Nur Flächenumrisse
+  sketchTracks: Leiterbahnen als Umriss
+  sketchVias: Durchkontaktierungen als Umriss
+  hideRatsnest: Luftlinien ausblenden
+  boardArea: Platinenfläche tönen
+  flip: Platine spiegeln
+  fpReferences: Footprint-Referenzen
+  fpValues: Footprint-Werte
+  fpText: Footprint-Texte
+  assembly: Bestückungsüberlagerung
+parseError:
+  title: Platinendatei konnte nicht gelesen werden
+collision:
+  title: Router
+  buttonTitle: Routermodus
+  explain:
+    highlight: Lässt alles an seinem Platz und markiert Abstandsverletzungen, setzt sie aber nur, wenn DRC-Verletzungen zugelassen sind.
+  settingsTitle: Einstellungen
+  settings:
+    allowViolations:
+      name: DRC-Verletzungen zulassen
+      note: Setzt die Leiterbahn auch durch die Abstandsverletzungen, die Hervorheben markiert.
+    freeAngle:
+      name: Freier Winkel
+      note: Leiterbahnen laufen in beliebigem Winkel gerade zum Cursor.
+    shoveVias:
+      name: DuKos schieben
+    jumpOverObstacles:
+      name: Hindernisse überspringen
+      note: Geschobene Leiterbahnen, die auf ein Pad treffen, laufen um es herum dahinter weiter, statt die Route aufzuhalten.
+    removeLoops:
+      name: Redundante Leiterbahnen entfernen
+      note: Eine neue Leiterbahn, die verbindet, was eine alte schon verbindet, ersetzt diese.
+    smartPads:
+      name: Pad-Anschlüsse optimieren
+      note: Leiterbahnen verlassen und erreichen Pads auf dem saubersten Weg, nie in einem schiefen Winkel.
+    smoothDragged:
+      name: Gezogene Segmente glätten
+      note: Ein gezogenes Segment rastet in die Linie seiner Nachbarn ein, eine Ecke auf deren Schnittpunkt.
+    optimizeDragged:
+      name: Ganze gezogene Leiterbahn optimieren
+      note: Die ganze gezogene Leiterbahn wird aufgeräumt, nicht nur der bewegte Teil.
+    autoPosture:
+      name: Mausweg bestimmt die Eckenlage
+      note: Ob eine Leiterbahn diagonal oder gerade beginnt, folgt daraus, wie die Maus den Klickpunkt verlässt.
+    startDiagonal:
+      name: Diagonal beginnen
+      note: Ohne Mausweg beginnen Leiterbahnen mit der Diagonale; / kehrt das um.
+    fixAllSegments:
+      name: Alle Segmente beim Klicken fixieren
+      note: Ein Klick legt die ganze Leiterbahn bis zum Cursor. Aus, bleibt das letzte Segment frei.
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+  select: Auswahl
+  route: Verlegen
+  via: DuKo
+  layerPair:
+    title: Lagenpaar
+    top: Obere Lage
+    bottom: Untere Lage
+    save: Als Vorgabe speichern
+    remove: Vorgabe entfernen
+    presets: Vorgaben (Umschalt+V geht die angehakten durch)
+    pickLayer: DuKo zu Lage setzen
+  hintKeys:
+    routeVia: DuKo
+    trackWidthNext: Breite
+    trackWidthPrev: schmaler
+    viaSizeNext: DuKo-Größe
+    routePosture: Eckenlage
+    dropVia: DuKo verwerfen
+    tuneSpacing: Abstand
+    tuneAmplitude: Amplitude
+    tuneTighter: Enger
+    tuneTaller: Höher
+    pairVia: DuKo-Paar
+    pairSize: Paargröße
+    routeKeys: Alle Tasten
+  keysCard:
+    title: Tasten beim Verlegen
+    titlePair: Tasten für differenzielle Paare
+    titleTune: Tasten der Längenabstimmung
+    pairVia: DuKo-Paar, in Richtung des Paars
+    pairSize: Nächste / vorige Paargröße
+    via: Durchgehende DuKo, in Richtung der Route
+    posture: Eckenlage umkehren
+    corner: Eckenmodus
+    width: Breiter / schmaler
+    viaSize: Größere / kleinere DuKo
+    customSize: Benutzerdefinierte Leiterbahn- und DuKo-Größe
+    finish: Bis zum Pad fertigstellen
+    end: Route hier beenden
+    unroute: Einen Klick zurück
+    mode: Routermodus
+    layer: Nächste / vorige Lage
+    blindVia: Blinde oder vergrabene DuKo über das Lagenpaar
+    microVia: Micro-DuKo
+    tuneSpacing: Mäanderabstand größer / kleiner
+    tuneAmplitude: Mäanderamplitude größer / kleiner
+    viaPickLayer: DuKo zu einer aus einer Liste gewählten Lage (durchgehend, blind)
+    layerPair: Nächste Lagenpaar-Vorgabe
+    cancel: Route beenden, Geklicktes bleibt
+    toggle: Diese Karte zeigen oder ausblenden
+    sections:
+      route: Verlegen
+      sizes: Breite und Größe
+      vias: DuKos
+      layers: Lagen
+  trackWidthOp: 'Leiterbahnbreite: {size} mm'
+  viaSizeOp: 'DuKo-Größe: {size} mm'
+  sizes:
+    trackWidth: Leiterbahnbreite
+    trackWidthBetween: 'Leiterbahnbreite · Regel {min}–{max} mm'
+    trackWidthAtLeast: 'Leiterbahnbreite · Regel ≥ {min} mm'
+    viaSize: DuKo-Größe (Durchmesser / Bohrung)
+    viaSizeAtLeast: 'DuKo-Größe (Durchmesser / Bohrung) · Regel ≥ {min} mm'
+    pairSize: Paarbreite / Abstand
+    custom: Benutzerdefinierte Größe…
+    customTitle: Benutzerdefinierte Größe
+    customViaDiameter: DuKo-Durchmesser
+    customViaDrill: DuKo-Bohrung
+    customApply: Übernehmen
+    netClass: Netzklasse · {size} mm
+    netClassIdle: Netzklasse
+    useConnected: Breite der Startleiterbahn verwenden
+    size: '{size} mm'
+    below: unter der Regel
+    above: über der Regel
+    edit: Größen bearbeiten…
+  routeMode: 'Kollisionsmodus: {mode}'
+  routeModes:
+    shove: Schieben
+    walkaround: Umgehen
+    highlight: Hervorheben
+  cornerMode: 'Eckenmodus: {mode}'
+  cornerFree: frei
+  cornerRounded: abgerundet {angle}°
+  lineModeTitle: Linienmodus — 45° / 90° / frei ({hotkey})
+  posture: Eckenlage umkehren
+  facts:
+    route: Route
+    netClass: Netzklasse
+    width: Breite
+    via: DuKo
+    viaDiameter: DuKo-Größe
+    viaDrill: DuKo-Bohrung
+    widthOutside: 'Außerhalb {min}–{max} mm laut'
+    continued: fortgesetzt
+    custom: benutzerdefiniert
+    picked: gewählt
+    profile: 'Profil {name}'
+    pairRoute: Paarroute
+    nets: Netze
+    gap: Abstand
+    viaGap: DuKo-Abstand
+    clearance: Abstand
+    clearanceTo: Gegenüber
+    length: Länge
+    lengthRule: Längenregel
+    lengthOver: 'Über dem Regelmaximum von {max} mm'
+    lengthBetween: '{min}–{max}'
+    lengthAtMost: '≤ {max}'
+    lengthAtLeast: '≥ {min}'
+  line: Linie
+  arc: Bogen
+  rectangle: Rechteck
+  circle: Kreis
+  polygon: Polygon
+  text: Text
+  bezier: Kurve
+  textBox: Textfeld
+  point: Punkt
+  polygonContinueHint: Den ersten Punkt klicken, um zu schließen
+  arcHint: Den Anfang, das Ende und dann die Wölbung klicken
+  bezierHint: Den Anfang, das Ende und dann jeden Kontrollpunkt klicken
+  zone: Fläche
+  zoneContinueHint: Den ersten Punkt klicken, um zu schließen
+  placeFootprint: Footprint platzieren
+  refillTitle: Flächen neu füllen ({hotkey})
+  refill: Flächen neu füllen
+  rerunChecks: Alle Designprüfungen erneut ausführen
+  fillProgress: 'Flächen werden gefüllt… {settled} von {total}'
+  renderBuilding: Bestückungsüberlagerung wird aufgebaut…
+viewport3d:
+  bottomViewTitle: Ansicht von unten
+  building: 'Platine wird aufgebaut… {percent} %'
+  loadingModels: 'Modelle werden geladen… {settled} von {total}'
+  missingModelsDetail: 'Nicht auflösbar:'
+  options:
+    layersGroup: Lagen
+    boardBody: Platinenkörper
+    copper: Kupfer
+    solderMask: Lötstopp
+    solderPaste: Lotpaste
+    silkscreen: Bestückungsdruck
+    holes: Metallisierte Bohrungen
+    drawings: Kommentare & Zeichnungen
+    axes: Achsen
+    gauge: Maßstab
+    models: Bauteilmodelle
+    modelsThroughHole: Durchsteck
+    modelsSmd: SMD
+    modelsUnspecified: Nicht angegeben
+    modelsDnp: DNP
+    modelsNotInPosFiles: Nicht in Bestückungsdatei
+    reset: Auf Standard zurücksetzen
+  presentation:
+    title: Darstellung
+    projection: Projektion
+    projections:
+      perspective: Perspektivisch
+      orthographic: Orthografisch
+    lighting: Beleuchtung
+    lightings:
+      studio: Studio
+      soft: Weich
+      flat: Flach
+      dramatic: Dramatisch
+    lightLevel: Helligkeit
+    background: Hintergrund
+    backgrounds:
+      theme: Design
+      transparent: Transparent
+      white: Weiß
+      black: Schwarz
+  exportImage:
+    section: Export
+    button: Bild exportieren…
+    menu: 3D-Bild…
+    needs3d: Schalten Sie die Platine zuerst in ihre 3D-Ansicht
+    title: Bild exportieren
+    size: Größe
+    sizeView: Aktuelle Ansicht ({width} × {height})
+    sizePreset: '{width} × {height}'
+    sizeCustom: Benutzerdefiniert
+    width: Breite
+    height: Höhe
+    lockAspect: Seitenverhältnis beibehalten
+    preview: Vorschau
+    copy: Bild kopieren
+    copied: In die Zwischenablage kopiert
+    copyFailed: Das Bild konnte nicht kopiert werden
+    save: Bild speichern…
+    failed: Das Bild konnte nicht exportiert werden
+footprintUpdate:
+  updateAction: Footprints aus Bibliothek aktualisieren…
+  changeAction: Footprint ändern…
+  options:
+    removeExtraTexts: Texte entfernen, die der Bibliotheks-Footprint nicht hat
+    resetTextLayers: Textlagen und Sichtbarkeit
+    resetTextEffects: Textgrößen und -stile
+    resetTextPositions: Textpositionen
+    resetTextContent: Feldtext
+    resetFabricationAttributes: Fertigungsattribute
+    resetClearanceOverrides: Abstandsüberschreibungen
+    reset3DModels: 3D-Modelle
+  owned: 'Der Schaltplan nennt weiterhin {footprint}'
+  droppedPads: 'Verlorene Pads: {pads}'
+  addedPads: 'Neue Pads ohne Netz: {pads}'
+properties:
+  belowRule: 'Unter dem Minimum {size} mm laut'
+  aboveRule: 'Über dem Maximum {size} mm laut'
+routeRun:
+  selected: Auswahl verlegen
+  selectedFromEnd: Auswahl vom anderen Ende verlegen
+  finishSelected: Auswahl fertigstellen versuchen (Autorouter)
+  fromOtherEnd: Vom anderen Ende verlegen
+  skip: Zum nächsten ausgewählten Element springen
+routerMenu:
+  cancel: Abbrechen
+  finish: Fertigstellen
+  undoSegment: Letztes Segment rückgängig
+  attemptFinish: Fertigstellen versuchen
+  viaThrough: Durchgehende DuKo setzen
+  viaBlind: Blinde/vergrabene DuKo setzen
+  viaMicro: Micro-DuKo setzen
+  viaPickThrough: Lage wählen und durchgehende DuKo setzen…
+  viaPickBlind: Lage wählen und blinde/vergrabene DuKo setzen…
+  posture: Eckenlage umkehren
+  corner: Eckenmodus der Leiterbahn
+  cornerAngle: '{angle}°'
+  cornerArc: Bogen {angle}°
+  sizes: Leiterbahn- und DuKo-Größen
+  mode: Routermodus
+pair:
+  route: Differenzielles Paar verlegen
+  dimensions: Differenzielles Paar
+  dimensionsOp: Maße des differenziellen Paars…
+  width: Leiterbahnbreite
+  gap: Abstand
+  viaGap: DuKo-Abstand
+  coach: Ein Pad, eine DuKo oder eine Leiterbahn eines Paars klicken
+tune:
+  length: Länge
+  skew: Laufzeitversatz
+  min: Min.
+  max: Max.
+  meter:
+    pairLength: Paarlänge
+    delay: Verzögerung
+    pairDelay: Paarverzögerung
+  target: Ziel
+  noTarget: so lang wie möglich
+  status: Status
+  statuses:
+    tuned: abgestimmt
+    too_short: zu kurz
+    too_long: zu lang
+  settings: Längenabstimmung
+  settingsPair: Längenabstimmung des differenziellen Paars
+  settingsSkew: Abstimmung des Laufzeitversatzes
+  settingsOp: Einstellungen der Längenabstimmung…
+  tools:
+    single: Leiterbahnlänge abstimmen
+    pair: Paarlänge abstimmen
+    skew: Laufzeitversatz des Paars abstimmen
+  coach:
+    start: Eine Leiterbahn klicken, wo die Mäander beginnen
+    startPair: Eine Leiterbahn eines Paars klicken, wo die Mäander beginnen
+    lay: Entlang der Leiterbahn bewegen, dann klicken, um die Mäander zu legen
+    noTrack: Hier ist keine Leiterbahn
+    noMate: Neben dieser Leiterbahn verläuft keine Partnerleiterbahn
+    cannot: Die Mäander können hier nicht beginnen
+    inPattern: Leiterbahnen in einem Abstimmmuster können nicht erneut abgestimmt werden
+    selectFirst: Zuerst eine Leiterbahn zum Abstimmen klicken
+  targetField: Ziel (0 für keines)
+  overrideRules: Eigene Regeln übersteuern
+  minAmplitude: Min. Amplitude
+  maxAmplitude: Max. Amplitude
+  spacing: Abstand
+  cornerRadius: Eckenradius
+  singleSided: Einseitig
+  mode: Abstimmmodus
+  modes:
+    single: Einzelne Leiterbahn
+    diff_pair: Differenzielles Paar
+    diff_pair_skew: Laufzeitversatz
+  initialSide: Erste Ausbuchtung
+  sides:
+    left: Links
+    right: Rechts
+    default: Standard
+  rounded: Abgerundet
+limits:
+  title: Grenzwerte
+  hint: Was die Regeln von der Auswahl verlangen und was jeden Wert festlegt
+  constraint:
+    clearance: Abstand
+    physical_clearance: Physischer Abstand
+    hole_clearance: Bohrungsabstand
+    physical_hole_clearance: Physischer Bohrungsabstand
+    hole_to_hole: Bohrung zu Bohrung
+    zone_connection: Zonenanbindung
+    track_width: Leiterbahnbreite
+    via_diameter: Via-Durchmesser
+    annular_width: Restringbreite
+    hole_size: Bohrungsgröße
+  sameNet: 0, ein Netz
+  unset: Kein Grenzwert
+  min: 'min. {value}'
+  opt: 'opt. {value}'
+  max: 'max. {value}'
+  connection:
+    solid: Vollflächig
+    thermal: 'Wärmefalle, Spalt {gap}, Steg {spoke}'
+    none: Nicht verbunden
+  steps: Wie es entschieden wurde
+  none: Diese Elemente teilen keine Kupferlage und keine Bohrung.
+  noneOne: Für dieses Element gilt keine Größenbeschränkung.
+  outcome:
+    net-tie: Netzbrücke, 0
+    override: Der eigene Wert des Elements
+    board-minimum: Auf das Platinenminimum angehoben
+    applied: Gilt
+    condition-false: Bedingung trifft nicht zu
+    layer-mismatch: Nicht auf dieser Lage
+    not-copper: Kein Kupfer
+    no-hole: Keine Bohrung
+    disallow-mismatch: Verbietet andere Arten
+    local-clearance: Der eigene Abstand der Zone
+    fallback: Rückfallwert
+teardrops:
+  action: Teardrops bearbeiten…
+  selectionAction: Teardrops der Auswahl bearbeiten…
+  title: Teardrops bearbeiten
+  actionGroup: Aktion
+  actions:
+    add: Mit Standardwerten hinzufügen
+    set: Werte setzen
+    remove: Entfernen
+    removeAll: Alle entfernen
+  targets: Ziele
+  target:
+    vias: DuKos
+    pthPads: Durchsteck-Pads
+    smdPads: SMD-Pads
+    trackToTrack: Leiterbahn zu Leiterbahn
+  filter: Filter
+  selectionOnly: 'Nur ausgewähltes Element | Nur ausgewählte Elemente ({count})'
+  roundOnly: Nur runde Pads
+  existingOnly: Nur vorhandene Teardrops
+  net: Netz
+  allNets: Alle Netze
+  netClass: Klasse
+  allClasses: Alle Klassen
+  layer: Lage
+  allLayers: Alle Lagen
+  values: Werte
+  keep: Beibehalten
+  'yes': Ja
+  'no': Nein
+  defaultsHint: Die Standardwerte jeder Form stehen unter Platineneinstellungen ▸ Teardrops.
+  confirm:
+    add: 'Teardrops zu {count} Pad oder DuKo hinzufügen | Teardrops zu {count} Pads und DuKos hinzufügen'
+    set: 'Teardrops an {count} Pad oder DuKo setzen | Teardrops an {count} Pads und DuKos setzen'
+    remove: 'Teardrops von {count} Pad oder DuKo entfernen | Teardrops von {count} Pads und DuKos entfernen'
+    removeAll: Alle Teardrops entfernen
+cleanup:
+  action: Leiterbahnen und DuKos aufräumen…
+  selectionAction: Auswahl aufräumen…
+  title: Leiterbahnen und DuKos aufräumen
+  actions: Aktionen
+  refill: Zonen vor und nach dem Aufräumen neu füllen
+  options:
+    shorts: Leiterbahnen löschen, die verschiedene Netze verbinden
+    redundantVias: Redundante DuKos löschen
+    danglingVias: DuKos löschen, die nur auf einer Lage verbunden sind
+    mergeTracks: Kollineare Leiterbahnen vereinen
+    danglingTracks: Leiterbahnen löschen, die an einem Ende nicht verbunden sind
+    tracksInPads: Leiterbahnen löschen, die sich vollständig in Pads befinden
+  filter: Elemente filtern
+  selectionOnly: 'Nur ausgewählte Elemente | Nur ausgewählte Elemente ({count})'
+  net: Netz
+  allNets: Alle Netze
+  layer: Lage
+  allLayers: Alle Kupferlagen
+  loading: Änderungen werden gesucht…
+  clean: Nichts aufzuräumen.
+  columns:
+    change: Änderung
+    net: Netz
+    layer: Lage
+    at: Position (mm)
+  change:
+    shortingTrack: Leiterbahn entfernen, die zwei Netze kurzschließt
+    shortingVia: DuKo entfernen, die zwei Netze kurzschließt
+    redundantVia: Redundante DuKo entfernen
+    duplicateTrack: Doppelte Leiterbahn entfernen
+    zeroLengthTrack: Leiterbahn mit Nulllänge entfernen
+    trackInPad: Leiterbahn innerhalb eines Pads entfernen
+    danglingTrack: Leiterbahn entfernen, die nicht an beiden Enden verbunden ist
+    danglingVia: DuKo entfernen, die auf weniger als zwei Lagen verbunden ist
+    mergeTracks: Kollineare Leiterbahnen vereinen
+  confirm: '{count} Änderung anwenden | {count} Änderungen anwenden'
+  fix: Entfernen
+  fixAll: Alle entfernen
+setSizes:
+  action: Größen aus den Regeln setzen
+  undo: Größen aus den Regeln setzen

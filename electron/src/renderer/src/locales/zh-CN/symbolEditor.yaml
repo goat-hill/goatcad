@@ -1,0 +1,179 @@
+errors:
+  empty: 此符号库为空。
+  parseTitle: 无法将其作为 KiCad 符号库打开
+groups:
+  fields: 字段
+  pinDisplay: 引脚显示
+  attributes: 属性
+  units: 单元
+  alternate: '功能 {n}'
+pinTypes:
+  input: 输入
+  output: 输出
+  bidirectional: 双向
+  tri_state: 三态
+  passive: 无源
+  free: 自由
+  unspecified: 未指定
+  power_in: 电源输入
+  power_out: 电源输出
+  open_collector: 集电极开路
+  open_emitter: 发射极开路
+  no_connect: 没有连接
+pinStyles:
+  line: 图线
+  inverted: 反相
+  clock: 时钟
+  inverted_clock: 反相时钟
+  input_low: 输入低
+  clock_low: 时钟低
+  output_low: 输出低
+  edge_clock_high: 时钟 (边沿)
+  non_logic: 非逻辑
+powerKinds:
+  none: 无
+  global: 全局
+  local: 局部
+fillTypes:
+  none: 无
+  outline: 轮廓
+  background: 背景
+  color: 颜色
+  hatch: 影线
+  reverse_hatch: 反向影线
+  cross_hatch: 交叉影线
+edit:
+  cut: 剪切
+  copy: 复制
+  paste: 粘贴
+  duplicate: 创建副本
+  delete: 删除
+  rotate: 逆时针旋转
+  rotateClockwise: 顺时针旋转
+  mirrorHorizontal: 水平镜像
+  mirrorVertical: 垂直镜像
+  repeat: 复刻最后项
+units:
+  label: 单元
+  title: 要编辑此多单元符号的哪个单元
+  option: 单元 {letter}
+  namedOption: '{letter} — {name}'
+  add: 添加单元
+  remove: 移除单元
+  addTitle: 为此符号添加一个单元
+  removeTitle: 移除正在编辑的单元及其上绘制的所有内容
+bodyStyles:
+  label: 样式
+  title: 要查看此符号的哪个图形样式
+  standard: 标准
+  alternate: 备选 (De Morgan)
+  option: 样式 {number}
+  viewOnly: 仅查看
+  viewOnlyTitle: 暂不支持编辑备选图形样式
+tools:
+  pin: 引脚
+  rectangle: 矩形
+  line: 图线
+  polygon: 多边形
+  circle: 圆形
+  arc: 弧线
+  bezier: 曲线
+  text: 文本
+  anchor: 移动符号锚点
+  textBox: 文本框
+  repeat: 复刻最后项
+export:
+  png: 导出为 PNG…
+  failed: 无法导出图像
+actions:
+  editFields: 编辑
+  editFieldsTitle: 添加、移除和重新排序字段
+  focusField: 在画布上选中
+fieldsDialog:
+  title: 字段
+  name: 名称
+  value: 值
+  show: 显示
+  add: 添加字段
+  done: 完成
+  remove: 移除此字段
+  rename: 重命名此字段
+  moveUp: 上移
+  moveDown: 下移
+  mandatory: KiCad 要求此字段
+  defaultName: 字段
+pinTable:
+  title: 引脚
+  number: '#'
+  name: 名称
+  type: 类型
+  unit: 单元
+  duplicateHint: 此引脚编号被多次使用
+  empty: 此符号还没有引脚。
+  add: 添加引脚
+  remove: 移除引脚
+  removeHint: 选择要移除的引脚
+  removeN: 移除 {count} 个引脚
+  import: 导入…
+  export: 导出…
+  importTitle: 导入引脚表
+  importButton: 导入
+  exportTitle: 导出引脚表
+  csvFilter: 逗号分隔值
+  importPrompt: '导入 {count} 个引脚？'
+  importSkipped: '已跳过 {count} 行'
+  importReplace: 替换所有引脚
+  importAppend: 追加到现有引脚
+  importCancel: 取消
+  importEmpty: 无法从该文件中读取任何引脚。
+  importFailed: 无法读取该文件。
+  exportFailed: 无法写入该文件。
+alternates:
+  add: 添加引脚功能
+  remove: 移除此引脚功能
+  defaultName: 新功能
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+viewRail:
+  showHiddenPins: 显示隐藏引脚
+  showHiddenFields: 显示隐藏字段
+commands:
+  editField: '编辑{field}'
+  editFieldStyle: 编辑字段
+  addField: 添加字段
+  removeField: 移除字段
+  renameField: 重命名字段
+  reorderFields: 重新排序字段
+  editPin: 编辑引脚
+  editGraphic: 编辑图形
+  editUnitScope: 更改单元范围
+  addPin: 添加引脚
+  removePins: 移除 {count} 个引脚
+  importPins: 导入引脚
+  addRectangle: 添加矩形
+  addLine: 添加图线
+  addPolygon: 添加多边形
+  moveAnchor: 移动符号锚点
+  addCircle: 添加圆形
+  addArc: 添加弧线
+  addBezier: 添加曲线
+  addText: 添加文本
+  addTextBox: 添加文本框
+  addAlternate: 添加引脚功能
+  removeAlternate: 移除引脚功能
+  editAlternate: 编辑引脚功能
+  deleteItems: 删除 {count} 个项目
+  rotate: 旋转
+  duplicateItems: 创建 {count} 个项目的副本
+  pasteItems: 粘贴 {count} 个项目
+  cutItems: 剪切 {count} 个项目
+  repeatItems: 复刻 {count} 个项目
+  mirrorHorizontal: 水平镜像
+  mirrorVertical: 垂直镜像
+  resizeGraphic: 调整图形大小
+  addUnit: 添加单元
+  removeUnit: 移除单元
+  newSymbol: 新建符号
+  deleteSymbol: 删除符号
+  renameSymbol: 重命名符号

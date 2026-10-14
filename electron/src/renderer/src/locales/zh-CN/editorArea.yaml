@@ -1,0 +1,41 @@
+closeTab: 关闭标签页
+symbolTabTitle: '{file} › {symbol}'
+designCopyTooltip: '{file} 中保存的 {part}——库不会被更改'
+childTab:
+  boardSetup: 电路板配置
+  schematicSetup: 原理图配置
+  components: 元件
+  manufacture: 制造输出
+split:
+  sendTab: 将标签页移到另一窗格（{shortcut}）
+  resize: 调整窗格大小
+empty:
+  openFolder: 打开文件夹
+  openProject: 打开项目
+  newSchematic: 新建原理图
+  newWindow: 新建窗口
+loadingFileContents: 正在加载文件内容…
+writeContentPlaceholder: 在此输入内容…
+find:
+  placeholder: 查找
+  matchCase: 区分大小写
+  matchWholeWord: 全字匹配
+  useRegex: 使用正则表达式
+  previousMatch: 上一个匹配项
+  nextMatch: 下一个匹配项
+  close: 关闭
+  noResults: 无结果
+  results: 第 {current} 项，共 {total} 项
+formatNotice:
+  older: KiCad {release} {kind}格式
+  olderBody: 保存时，此{kind}将迁移为 KiCad 10 格式。
+  newer: 只读：KiCad {release} {kind}格式
+  newerUnknown: 只读：较新的 KiCad {kind}格式
+  newerBody: GoatCAD 保存的是 KiCad 10 文件，因此此{kind}以只读方式打开。
+  unsupported: 只读：KiCad 6 之前的{kind}格式
+  unsupportedBody: 请先在 KiCad 中保存，然后才能在此编辑。
+  kinds:
+    schematic: 原理图
+    board: 电路板
+    symbolLibrary: 符号库
+    footprint: 封装

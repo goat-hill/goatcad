@@ -1,0 +1,27 @@
+# Gerber viewer — read-only tab for fabrication outputs (.gbr and the
+# Protel .gtl/.gbs/… family). Opening one file loads every Gerber layer in
+# its directory; the opened file starts as the active layer.
+
+loading: Scanning for layer files…
+# {count} = number of Gerber layer files loaded from the directory.
+layerCount: 'Showing {count} layer file | Showing {count} layer files'
+errorTitle: Could not read this Gerber file
+# Coordinate readout, bottom-right of the canvas. Compact; keep the unit.
+coords: 'X {x} Y {y} mm'
+# Collapsible list of parser warnings; {count} = number of warnings.
+warningsTitle: 'Warnings ({count})'
+readOnlyNote: >-
+  Gerber files are generated fabrication outputs; GoatCAD opens them
+  read-only. Re-export from the board editor to change them.
+panel:
+  # Section heading over the properties of the active layer's file.
+  fileTitle: Active layer file
+properties:
+  file: File
+  # The Gerber X2 file-function attribute, e.g. "Copper,L1,Top". A noun.
+  function: Function
+  units: Units
+  # Count of aperture (tool shape) definitions in the file.
+  apertures: Apertures
+  # Count of drawn objects (flashes, strokes, regions).
+  objects: Objects

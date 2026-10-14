@@ -1,0 +1,11 @@
+save: 保存
+cancel: 取消
+close: 关闭
+delete: 删除
+undo: 撤销（{shortcut}）
+redo: 重做（{shortcut}）
+undoWithLabel: 撤销 {label}（{shortcut}）
+redoWithLabel: 重做 {label}（{shortcut}）
+undoLabel: 撤销
+redoLabel: 重做
+selectAllLabel: 全选

@@ -1,0 +1,8 @@
+#!/bin/bash
+# Production build of the GoatCAD site into web/dist.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+npm run build

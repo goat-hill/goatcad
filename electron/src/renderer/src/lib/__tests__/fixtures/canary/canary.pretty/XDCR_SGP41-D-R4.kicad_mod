@@ -1,0 +1,305 @@
+(footprint "XDCR_SGP41-D-R4"
+	(layer "F.Cu")
+	(uuid "fa01aa8e-2740-4a3b-9a33-698f5364194d")
+	(at 0 0)
+	(property "Reference" "REF**"
+		(at -4 1.25 0)
+		(layer "F.SilkS")
+		(uuid "68cdd20c-205a-46c1-81f9-73724d74f421")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.165)
+			)
+		)
+	)
+	(property "Value" "SGP41-D-R4"
+		(at 0 3 0)
+		(layer "F.Fab")
+		(uuid "d8b2e985-25e0-444a-b2a9-e7f5292c55b4")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "de0cfa3a-da4c-4476-be08-692def676f7e")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a3390978-1972-4262-8827-77aad8f09870")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "PARTREV" "1.0"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f78769f9-e0aa-4fa8-9e11-b85868452bc3")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "STANDARD" "Manufacturer Recommendations"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "6c012d75-0aa0-4aab-ab93-803239f4ffbd")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "MAXIMUM_PACKAGE_HEIGHT" "0.95 mm"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e32c8e91-e516-4b4a-a31c-791023cf17d6")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "MANUFACTURER" "Sensirion"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "739b50d6-242b-4833-9d88-ce3522b2685e")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "JLCPCB Part #" "C3659325"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f64e73fa-4008-407e-a0a2-847719426dda")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "I2C Address" "0x59"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "35a86756-efb2-4667-aeef-e56f4b7cad5a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -1.22 -1.32)
+		(end 1.22 -1.32)
+		(stroke
+			(width 0.165)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "7dc1cf74-d2ea-43e7-8146-1c0569f5bf71")
+	)
+	(fp_line
+		(start 1.22 1.32)
+		(end -1.22 1.32)
+		(stroke
+			(width 0.165)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "81908c6f-8b04-417c-adec-a0cc0ae39fd2")
+	)
+	(fp_poly
+		(pts
+			(xy -1.47 -1.25) (xy -1.75 -1.25) (xy -1.47 -1.53) (xy -1.47 -1.25)
+		)
+		(stroke
+			(width 0.165)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.SilkS")
+		(uuid "8dce5ac9-2d1c-4489-8cac-4cb1054a6acb")
+	)
+	(fp_poly
+		(pts
+			(xy -0.225 -0.75) (xy 0.525 -0.75) (xy 0.525 0.75) (xy -0.525 0.75) (xy -0.525 -0.45)
+		)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.Paste")
+		(uuid "00c41908-1964-4c8e-9006-179bf4c8eab0")
+	)
+	(fp_line
+		(start -1.675 -1.47)
+		(end -1.675 1.47)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "cc8d6ebe-2971-4517-bc75-08fc5ab9b3a9")
+	)
+	(fp_line
+		(start -1.675 1.47)
+		(end 1.675 1.47)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "85364f6e-c731-44d3-b66a-662d8509469c")
+	)
+	(fp_line
+		(start 1.675 -1.47)
+		(end -1.675 -1.47)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "6558887b-96cd-4a5e-bac1-444e830ae898")
+	)
+	(fp_line
+		(start 1.675 1.47)
+		(end 1.675 -1.47)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "4fa0f21e-8eae-4049-a700-9a90925482bd")
+	)
+	(pad "1" smd rect
+		(at -1.15 -0.8)
+		(size 0.55 0.4)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(net "/Sensors/SGP4X_VDD")
+		(pinfunction "VDD")
+		(pintype "power_in")
+		(uuid "cf96b455-8e85-4873-9dcb-f4d8219b5572")
+	)
+	(pad "2" smd rect
+		(at -1.15 0)
+		(size 0.55 0.4)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(net "GND")
+		(pinfunction "VSS")
+		(pintype "power_in")
+		(uuid "f5605500-ebaa-4dbf-b21d-2e9ebe1bc922")
+	)
+	(pad "3" smd rect
+		(at -1.15 0.8)
+		(size 0.55 0.4)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(net "/I2C_SDA")
+		(pinfunction "SDA")
+		(pintype "bidirectional")
+		(uuid "3ba45d6d-b80a-421c-848a-a8fa0b45b559")
+	)
+	(pad "4" smd rect
+		(at 1.15 0.8)
+		(size 0.55 0.4)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(net "GND")
+		(pinfunction "N/A")
+		(pintype "passive")
+		(uuid "d5de14c3-af4f-40a3-8795-8257c0d296af")
+	)
+	(pad "5" smd rect
+		(at 1.15 0)
+		(size 0.55 0.4)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(net "+3.3V")
+		(pinfunction "VDDH")
+		(pintype "power_in")
+		(uuid "6594e59d-bf49-402b-8414-b3191558cb03")
+	)
+	(pad "6" smd rect
+		(at 1.15 -0.8)
+		(size 0.55 0.4)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(net "/I2C_SCL")
+		(pinfunction "SCL")
+		(pintype "bidirectional")
+		(uuid "8b4b6238-71db-4d1a-9b5a-d77a544c35f8")
+	)
+	(pad "7" smd custom
+		(at 0 0)
+		(size 0.5 0.5)
+		(layers "F.Cu")
+		(net "GND")
+		(pinfunction "EXP")
+		(pintype "power_in")
+		(options
+			(clearance outline)
+			(anchor rect)
+		)
+		(primitives
+			(gr_poly
+				(pts
+					(xy -0.325 -0.85) (xy 0.625 -0.85) (xy 0.625 0.85) (xy -0.625 0.85) (xy -0.625 -0.55)
+				)
+				(width 0.01)
+				(fill yes)
+			)
+		)
+		(uuid "6c9231c8-fe4c-4671-9792-d5f6ffb561f3")
+	)
+	(embedded_fonts no)
+	(model "${KIPRJMOD}/canary.3dshapes/Sensirion_SGP40_DFN_2.44x2.44mm.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -90 0 0)
+		)
+	)
+)

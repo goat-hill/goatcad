@@ -1,0 +1,139 @@
+severity:
+  error: Erreur
+  warning: Avertissement
+  ignore: Ignorer
+status:
+  passing: Conforme
+  findings: '{count} constat | {count} de constats | {count} constats'
+notSupported: Pas encore pris en charge
+defaultSeverity: 'Par défaut : {severity}'
+restore: Rétablir
+drcGroups:
+  electrical: Électrique
+  dfm: Conception pour la fabrication
+  schematicParity: Parité avec la schématique
+  signalIntegrity: Intégrité du signal
+  readability: Lisibilité
+  misc: Divers
+ercGroups:
+  connections: Connexions
+  conflicts: Conflits
+  misc: Divers
+drc:
+  shorting_items: 'Éléments court-circuitant deux nets'
+  tracks_crossing: 'Pistes se croisant'
+  clearance: "Violation d'isolation"
+  creepage: 'Violation de ligne de fuite'
+  via_dangling: 'La via est non connectée ou connectée sur une seule couche'
+  track_dangling: 'La piste a une extrémité non connectée'
+  starved_thermal: 'Connexion de frein thermique à la zone incomplète'
+  copper_edge_clearance: "Violation d'isolation au contour du CI"
+  hole_clearance: "Violation d'isolation des trous"
+  hole_to_hole: "Trou percé trop près d'un autre trou"
+  holes_co_located: 'Trous percés co-localisés'
+  track_width: 'Largeur de piste'
+  track_angle: 'Angle de piste'
+  track_segment_length: 'Longueur de segment de piste'
+  annular_width: 'Largeur des anneaux'
+  drill_out_of_range: 'Taille du trou hors de plage'
+  microvia_drill_out_of_range: 'Taille du trou de microvia hors de plage'
+  via_diameter: 'Diamètre de via'
+  courtyards_overlap: "Zones d'occupation d'empreintes chevauchantes"
+  missing_courtyard: "L'empreinte n'a aucune zone d'occupation définie"
+  malformed_courtyard: "L'empreinte a une zone d'occupation mal formée"
+  invalid_outline: 'Le CI a un contour mal formé'
+  copper_sliver: 'Pointes sur cuivre'
+  solder_mask_bridge: "L'ouverture du masque de soudure relie des éléments de nets différents"
+  connection_width: 'Connexion cuivre trop étroite'
+  track_on_post_machined_layer: 'Piste connectée à une couche post-usinée ou contre-percée'
+  track_not_centered_on_via: 'Extrémité de piste non centrée sur la via'
+  tuning_profile_track_geometries: "Géométries de piste du profil d'ajustage"
+  duplicate_footprints: 'Empreintes dupliquées'
+  missing_footprint: 'Empreinte manquante'
+  extra_footprint: 'Empreinte supplémentaire'
+  footprint_symbol_mismatch: "Les attributs de l'empreinte ne correspondent pas au symbole"
+  footprint_symbol_field_mismatch: "Le champ de l'empreinte ne correspond pas au champ du symbole"
+  footprint_filters_mismatch: "L'empreinte ne correspond pas aux filtres d'empreintes du symbole"
+  net_conflict: 'Le net du pad ne correspond pas à la schématique'
+  unconnected_items: 'Connexion manquante entre les éléments'
+  length_out_of_range: 'Longueur de piste hors de plage'
+  skew_out_of_range: 'Décalage entre les pistes hors de plage'
+  too_many_vias: 'Trop ou trop peu de vias sur une connexion'
+  diff_pair_gap_out_of_range: 'Espacement de paire différentielle hors de plage'
+  diff_pair_uncoupled_length_too_long: 'Longueur non couplée de paire différentielle trop longue'
+  silk_overlap: 'Marge de sérigraphie'
+  silk_over_copper: 'Sérigraphie tronquée par le masque de soudure'
+  silk_edge_clearance: 'Sérigraphie tronquée par le bord du CI'
+  text_height: 'Hauteur de texte hors de plage'
+  text_thickness: 'Épaisseur de texte hors de plage'
+  mirrored_text_on_front_layer: 'Texte en miroir sur une couche de dessus'
+  nonmirrored_text_on_back_layer: 'Texte non en miroir sur une couche de dessous'
+  items_not_allowed: 'Éléments non autorisés'
+  text_on_edge_cuts: 'Texte ou graphique sur la couche Edge.Cuts'
+  zones_intersect: 'Les zones de cuivre se coupent'
+  isolated_copper: 'Remplissage de cuivre isolé'
+  footprint: 'Empreinte non valide'
+  padstack: 'Padstack douteux'
+  pth_inside_courtyard: "Pad métallisé à l'intérieur d'une zone d'occupation"
+  npth_inside_courtyard: "Pad non métallisé à l'intérieur d'une zone d'occupation"
+  item_on_disabled_layer: 'Élément sur une couche cuivre inactive'
+  unresolved_variable: 'Variable texte non résolue'
+  assertion_failure: 'Assertion en échec'
+  footprint_type_mismatch: "Le type de composant de l'empreinte ne correspond pas à ses pads"
+  lib_footprint_issues: 'Empreinte introuvable dans les librairies'
+  lib_footprint_mismatch: "L'empreinte ne correspond pas à la copie en librairie"
+  through_hole_pad_without_hole: "Le pad traversant n'a pas de trou"
+  missing_tuning_profile: "Profil d'ajustage manquant"
+erc:
+  pin_not_connected: 'Pin non connectée'
+  pin_not_driven: "Pin d'entrée non pilotée par une pin de sortie"
+  power_pin_not_driven: "Pin d'entrée d'alimentation non pilotée par une pin de sortie d'alimentation"
+  no_connect_connected: 'Une pin avec un indicateur « pas de connexion » est connectée'
+  no_connect_dangling: 'Indicateur « pas de connexion » non connecté'
+  label_dangling: 'Label non connecté'
+  isolated_pin_label: 'Label connecté à une seule pin'
+  single_global_label: "Label global n'apparaissant qu'une fois dans la schématique"
+  same_local_global_label: 'Labels local et global portant le même nom'
+  wire_dangling: 'Fils reliés à rien'
+  endpoint_off_grid: 'Pin de symbole ou extrémité de fil hors de la grille de connexion'
+  four_way_junction: 'Quatre points de connexion sont réunis'
+  label_multiple_wires: "Le label connecte plus d'un fil"
+  unconnected_wire_endpoint: 'Extrémité de fil non connectée'
+  duplicate_reference: 'Références dupliquées'
+  pin_to_pin: 'Conflit entre pins'
+  unit_value_mismatch: "Les unités d'un même symbole ont des valeurs différentes"
+  different_unit_footprint: 'Empreinte différente assignée dans une autre unité du symbole'
+  different_unit_net: 'Net différent assigné à une pin partagée dans une autre unité du symbole'
+  duplicate_sheet_names: 'Noms de feuilles en double dans une même feuille'
+  hier_label_mismatch: 'Non-concordance entre labels hiérarchiques et pins de feuille'
+  multiple_net_names: "Plus d'un nom donné à ce bus ou net"
+  bus_to_bus_conflict: 'Bus connectés graphiquement mais sans membre de bus commun'
+  bus_to_net_conflict: 'Connexion non valide entre bus et éléments de net'
+  net_not_bus_member: 'Net connecté graphiquement à un bus sans en être membre'
+  ground_pin_not_ground: 'Pin de masse non connectée à un net de masse'
+  stacked_pin_name: "Le nom de pin ressemble à celui d'une pin empilée"
+  field_name_whitespace: 'Le nom du champ comporte des espaces au début ou à la fin'
+  unannotated: 'Symbole non annoté'
+  unresolved_variable: 'Variable texte non résolue'
+  undefined_netclass: "Classe d'équipotentielle non définie"
+  simulation_model_issue: 'Problème de modèle SPICE'
+  similar_labels: 'Labels semblables (différence de casse uniquement)'
+  similar_power: "Pins d'alimentation semblables (différence de casse uniquement)"
+  similar_label_and_power: "Pin d'alimentation et label semblables (différence de casse uniquement)"
+  lib_symbol_issues: 'Problème de symbole de librairie'
+  lib_symbol_mismatch: 'Le symbole ne correspond pas à la copie en librairie'
+  footprint_link_issues: "Problème de lien d'empreinte"
+  footprint_filter: "L'empreinte assignée ne correspond pas aux filtres d'empreintes"
+  extra_units: "Le symbole a plus d'unités que celles définies"
+  missing_unit: 'Le symbole a des unités non placées'
+  missing_input_pin: "Le symbole a des pins d'entrée non placées"
+  missing_bidi_pin: 'Le symbole a des pins bidirectionnelles non placées'
+  missing_power_pin: "Le symbole a des pins d'entrée d'alimentation non placées"
+exclusions:
+  note: Voici les constats exclus dans les contrôles de KiCad, lus depuis le fichier projet. GoatCAD associe chacun à sa règle et aux éléments qu'il nomme, et non à l'endroit où KiCad a dessiné son marqueur ; une exclusion reste donc valable ici après le déplacement de ses éléments, alors que dans KiCad le constat réapparaîtrait. Les exclusions s'ajoutent et se retirent dans KiCad.
+  none: Le projet n'a aucune exclusion.
+  matched: 'Exclut {count} constat | Exclut {count} de constats | Exclut {count} constats'
+  unmatched: Ne correspond à aucun constat
+  unmatchedHint: Rien de ce que GoatCAD trouve actuellement ne correspond à ce constat — il a été corrigé, ses éléments ont disparu, ou GoatCAD nomme ses éléments autrement que KiCad.
+  noItems: Association impossible
+  noItemsHint: Cette exclusion ne nomme qu'une position, pas les éléments qu'elle concerne ; GoatCAD ne peut donc pas savoir de quel constat il s'agit.

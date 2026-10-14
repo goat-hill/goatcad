@@ -1,0 +1,132 @@
+title: Fertigungsdaten
+
+board: Platine
+exportProfile: Exportprofil
+
+outputs:
+  gerber: Gerber
+  drill: Bohrdaten
+  bom: Stückliste
+  cpl: Bestückungsdaten
+
+detail:
+  configure: Einstellen
+  preview: Vorschau
+
+gerber:
+  category:
+    copper: Kupfer
+    technical: Technisch
+    board: Platine
+  format: Format
+  coordinateFormat: Koordinatenformat
+  units: Einheiten
+  naming: Dateibenennung
+  namingValue:
+    kicad: KiCad (.gbr)
+    protel: Protel-Endungen
+  layerCountNote: 'Die Lagen werden aus der Platine gelesen; die Vorschau zeigt genau die erzeugten Gerber.'
+  previewLoading: Platine wird geladen…
+  previewEmpty: Mindestens eine Lage für die Vorschau auswählen.
+
+drill:
+  format: Format
+  formatValue: Excellon
+  units: Einheiten
+  zeros: Nullen
+  zerosValue:
+    none: Beibehalten
+    leading: Führende unterdrücken
+    trailing: Nachfolgende unterdrücken
+  options: Optionen
+  merge: PTH + NPTH zusammenführen
+  map: Bohrplan (Gerber)
+  stats: '{holes} Bohrungen · {tools} Werkzeuge'
+
+bom:
+  options: Optionen
+  group: Gleiche Bauteile gruppieren
+  includeDnp: DNP-Bauteile einschließen
+  partNumber: Artikelnummer
+  format: Format
+  formatValue: CSV
+  col:
+    comment: Kommentar
+    designator: Referenz
+    footprint: Footprint
+  export: Stückliste exportieren
+  loading: Bauteile werden geladen…
+  empty: Keine Stücklistenpositionen — die Platine hat keine Footprints, oder alle sind ausgeschlossen.
+  stats: '{total} Bauteile · {unique} eindeutig'
+  dnpLabel: 'DNP (nicht bestückt):'
+
+cpl:
+  units: Einheiten
+  side: Bestückungsseite
+  sideValue:
+    both: Oben + unten
+    top: Nur oben
+  group: Gleiche Bauteile gruppieren
+  rotationNote: Standardmäßige KiCad-Schwerpunkte; fertigerspezifische Drehungstabellen ab M2.
+  export: Bestückungsdaten exportieren
+  stats: '{total} Positionen · {top} oben · {bottom} unten'
+  empty: Keine Positionen — die Platine hat keine Footprints, oder alle sind ausgeschlossen.
+  listTitle: Bauteile
+  top: Oben
+  bottom: Unten
+  origin: Ursprung der Bestückungsdaten
+  originOff: 'Ursprung der Bestückungsdaten · {distance} mm'
+
+outputFolder: Ausgabeordner
+zip: Zip
+export: Paket exportieren
+exporting: Wird exportiert…
+
+preflight:
+  title: Vorabprüfung
+  group:
+    blocking: Blockiert Export
+    review: Zu prüfen
+    passed: Bestanden
+  check:
+    outline: Platinenumriss
+    drcErrors: Designregel-Fehler
+    drcWarnings: Designregel-Warnungen
+    unfilledZones: Zonenfüllungen
+    drillSize: Bohrdurchmesser
+    holeSpacing: Bohrungsabstand
+    partNumbers: Artikelnummern
+    values: Bauteilwerte
+  outline:
+    found: Der Edge.Cuts-Umriss ist keine geschlossene Form, daher kann kein Fertiger die Platine ausfräsen.
+    passed: Der Umriss ist eine geschlossene Form.
+  drc:
+    errors: '{count} Fehler | {count} Fehler'
+    warnings: '{count} Warnung | {count} Warnungen'
+    noErrors: Keine Designregel-Fehler.
+    noWarnings: Keine Designregel-Warnungen.
+  zones:
+    found: '{count} Zone wurde nie gefüllt: {names} | {count} Zonen wurden nie gefüllt: {names}'
+    passed: Alle Zonen sind gefüllt.
+  drill:
+    found: '{count} Bohrung liegt unter dem Minimum dieses Fertigers von {limit} mm; die kleinste hat {actual} mm. | {count} Bohrungen liegen unter dem Minimum dieses Fertigers von {limit} mm; die kleinste hat {actual} mm.'
+    passed: 'Alle Bohrungen haben mindestens {limit} mm.'
+  spacing:
+    found: 'Zwei Bohrungen liegen {actual} mm auseinander; das Minimum dieses Fertigers ist {limit} mm.'
+    passed: 'Bohrungen liegen mindestens {limit} mm auseinander.'
+  partNumbers:
+    found: '{count} Bauteil hat keine {field}-Nummer: {refs} | {count} Bauteile haben keine {field}-Nummer: {refs}'
+    passed: 'Alle Bauteile haben eine {field}-Nummer.'
+  values:
+    found: '{count} Bauteil hat keinen Wert: {refs} | {count} Bauteile haben keinen Wert: {refs}'
+    passed: Alle Bauteile haben einen Wert.
+  more: '{list} und {more} weitere'
+  showOnBoard: Auf Platine zeigen
+  unsaved:
+    title: Nicht gespeicherte Änderungen
+    detail: Die Platine hat nicht gespeicherte Änderungen. Das Paket wird aus der gespeicherten Datei geschrieben; speichern Sie, um sie einzuschließen.
+  status:
+    checking: Platine wird geprüft…
+    blocked: Export blockiert
+    review: '{count} zu prüfen | {count} zu prüfen'
+    ready: Bereit zum Export

@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+# Build an installable package (not just the JS bundle — that's ./bin/build).
+#
+# Usage:
+#   ./bin/package                  # sensible default for the current platform
+#   ./bin/package --linux deb      # any electron-builder target(s)
+#   ./bin/package --linux AppImage
+#   ./bin/package --win
+#
+# Output lands in dist/. Electron-builder can generally only target the platform
+# you are on (macOS builds need macOS, Windows installers need Windows or wine).
+#
+set -euo pipefail
+
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+
+if [ "$#" -gt 0 ]; then
+  args=("$@")
+else
+  case "$(uname -s)" in
+    # deb by default: every target registers GoatCAD as a handler, but the deb is
+    # the only one that also installs the mime-type *definitions*, so it is the
+    # only target where double-click-to-open works without KiCad already
+    # installed. It also avoids the snap target's snapcraft dependency.
+    Linux) args=(--linux deb) ;;
+    Darwin) args=(--mac) ;;
+    MINGW*|MSYS*|CYGWIN*) args=(--win) ;;
+    *)
+      echo "package: unsupported platform '$(uname -s)' — pass an explicit target" >&2
+      exit 1
+      ;;
+  esac
+fi
+
+npm run build
+npm exec -- electron-builder "${args[@]}"
+
+echo
+echo "Artifacts:"
+ls -1sh dist/ 2>/dev/null | grep -Ev '^total|/$' || echo "  (nothing in dist/)"

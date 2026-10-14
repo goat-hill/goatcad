@@ -1,0 +1,122 @@
+---
+import Base from '../layouts/Base.astro'
+import { PRODUCT_NAME, COMPANY_NAME } from '../brand'
+
+/*
+ * The privacy notice. Every claim on this page maps to verified behavior in
+ * the codebase as of the date below — before changing what the site or app
+ * touches on the network, change this page in the same PR:
+ *
+ * - Site: static assets on Cloudflare, no analytics/cookies/external requests
+ *   (docs/WEB.md §3). Downloads are served from the R2 bucket behind download.goatcad.com
+ *   (docs/RELEASES.md §8).
+ * - App: src/main/updater.ts checks download.goatcad.com for a newer version
+ *   on launch and every few hours, downloads it, and installs it on quit after
+ *   asking; the Settings toggle stops the check entirely. The other network
+ *   request in src/main is the user-initiated footprint-library download from
+ *   KiCad's GitLab, which is cached locally. No telemetry or crash reporting
+ *   exists.
+ *
+ * The date is hand-set, not build-time: it must mean "the facts changed",
+ * not "the site redeployed".
+ */
+const UPDATED = 'October 7, 2026'
+---
+
+<Base
+  title="Privacy"
+  description={`${PRODUCT_NAME} collects no data — no accounts, no analytics, no cookies, no telemetry. What the site and the app do and don't touch.`}
+>
+  <section class="privacy">
+    <div class="page">
+      <h1>Privacy</h1>
+      <p class="updated">Last updated {UPDATED}</p>
+
+      <p class="lede">
+        {PRODUCT_NAME} collects no data. No accounts, no analytics, no cookies, no telemetry — not
+        on this site, not in the app. There is nothing to opt out of. The site and the app are
+        published by {COMPANY_NAME}; the rest of this page is the complete list of network activity
+        either one involves.
+      </p>
+
+      <h2>This website</h2>
+      <p>
+        goatcad.com is static files. It ships no analytics, sets no cookies, and your browser makes
+        no requests to third parties while you read it — fonts and images are self-hosted.
+      </p>
+      <p>
+        The site is served by Cloudflare, our hosting provider. Like any host, Cloudflare processes
+        standard request metadata — your IP address, user agent, and the URL you requested — in the
+        course of delivering the site and protecting it from abuse. We don't receive or keep any of
+        it; Cloudflare's handling is described in
+        <a href="https://www.cloudflare.com/privacypolicy/" rel="noopener">
+          its privacy policy
+        </a>
+        .
+      </p>
+      <p>
+        Downloads are served from download.goatcad.com, which is also Cloudflare, so the same
+        applies to downloading the app.
+      </p>
+
+      <h2>The app</h2>
+      <p>
+        {PRODUCT_NAME} runs entirely on your machine. Your projects are files on your disk — nothing
+        is uploaded, synced, or backed up anywhere by us. There is no account, no license check, no
+        telemetry, and no crash reporting.
+      </p>
+      <p>
+        The app checks download.goatcad.com for a newer version when it starts, every few hours
+        while it runs, and when you press Check now in Settings ▸ About. That request carries the
+        version you have and nothing else, and Cloudflare handles it like any other. When a newer
+        version has downloaded, the app asks before restarting, and otherwise installs it the next
+        time you quit. Settings ▸ About turns the check off. Installs made by a package manager,
+        including the Debian package, never self-update.
+      </p>
+      <p>
+        Beyond that, the app talks to the network only when you ask it to: downloading a footprint
+        library fetches it from the KiCad project's GitLab, then caches it locally so later use
+        works offline.
+      </p>
+      <p>If any of this changes, this page will say so before the version that does it ships.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .privacy {
+    padding-block: clamp(3rem, 8vw, 5rem);
+  }
+
+  h1,
+  h2,
+  p {
+    max-width: var(--measure);
+  }
+
+  h1 {
+    font-size: var(--step-h2);
+  }
+
+  .updated {
+    margin-top: 0.75rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .lede {
+    margin-top: 1.5rem;
+    font-size: var(--step-lead);
+    color: var(--text);
+  }
+
+  h2 {
+    font-size: var(--step-h3);
+    margin-top: 2.75rem;
+  }
+
+  p {
+    margin-top: 1rem;
+    color: var(--text-muted);
+  }
+</style>

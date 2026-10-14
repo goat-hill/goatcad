@@ -1,0 +1,258 @@
+# Symbol library editor (.kicad_sym files). Edits ONE symbol at a time — the
+# symbol shown is chosen from the File Explorer (which expands a .kicad_sym), and
+# add/rename/delete of symbols live in that left tree. The right bar is the
+# shared PropertyTable: its property LABELS come from shared.properties.*; only
+# the symbol-domain bits (group titles, enum option labels) live here.
+errors:
+  empty: This symbol library is empty.
+  parseTitle: Unable to open this as a KiCad symbol library
+# PropertyTable section headers that are not an item's name (a primitive's group
+# is titled from shared.primitives): the symbol's own sections, a pin's display, a
+# unit's gates, a pin's alternate functions.
+groups:
+  fields: Fields
+  pinDisplay: Pin display
+  attributes: Attributes
+  # A multi-unit symbol's gates: the one on screen's name, and whether they swap.
+  units: Units
+  # One group per alternate pin function, numbered — {n} is its position.
+  alternate: 'Function {n}'
+# Pin electrical-type dropdown options (KiCad's names).
+pinTypes:
+  input: Input
+  output: Output
+  bidirectional: Bidirectional
+  tri_state: Tri-state
+  passive: Passive
+  free: Free
+  unspecified: Unspecified
+  power_in: Power in
+  power_out: Power out
+  open_collector: Open collector
+  open_emitter: Open emitter
+  no_connect: Not connected
+# Pin graphic-style dropdown options.
+pinStyles:
+  line: Line
+  inverted: Inverted
+  clock: Clock
+  inverted_clock: Inverted clock
+  input_low: Input low
+  clock_low: Clock low
+  output_low: Output low
+  edge_clock_high: Clock (edge)
+  non_logic: Non-logic
+# The Power row's options: not a power symbol, a global net, or a net local to
+# its sheet (KiCad 9's local power symbols).
+powerKinds:
+  none: None
+  global: Global
+  local: Local
+# Graphic fill dropdown options.
+fillTypes:
+  none: None
+  outline: Outline
+  background: Background
+  color: Color
+  hatch: Hatch
+  reverse_hatch: Reverse hatch
+  cross_hatch: Cross hatch
+# Edit-command labels, shown in the title bar's Edit menu and the canvas
+# right-click menu. Each row's shortcut column is filled from the hotkey
+# registry, so these are labels only.
+edit:
+  cut: Cut
+  copy: Copy
+  paste: Paste
+  duplicate: Duplicate
+  delete: Delete
+  rotate: Rotate counterclockwise
+  rotateClockwise: Rotate clockwise
+  mirrorHorizontal: Mirror horizontally
+  mirrorVertical: Mirror vertically
+  # KiCad's own name for this command, so it is what a KiCad user searches for.
+  repeat: Repeat last item
+# Multi-unit packages: a quad NAND is one chip holding four gates ("units").
+# KiCad labels them by letter, matching the U1A / U1B reference suffix.
+units:
+  label: Unit
+  title: Which unit of this multi-unit symbol to edit
+  # e.g. "Unit B"; the named variant is for KiCad's (unit_name "NMOS").
+  option: Unit {letter}
+  namedOption: '{letter} — {name}'
+  add: Add unit
+  remove: Remove unit
+  addTitle: Add a unit to this symbol
+  removeTitle: Remove the unit being edited, and everything drawn on it
+bodyStyles:
+  label: Style
+  title: Which body style of this symbol to view
+  # KiCad names the first two; a KiCad 10 custom style falls back to its number.
+  standard: Standard
+  alternate: Alternate (De Morgan)
+  option: Style {number}
+  viewOnly: View only
+  viewOnlyTitle: Editing alternate body styles is not supported yet
+tools:
+  # Toolbar chip labels (search) + hover-title variants.
+  pin: Pin
+  rectangle: Rectangle
+  line: Line
+  # A closed outline: the chain closes back to its first corner when finished.
+  polygon: Polygon
+  circle: Circle
+  arc: Arc
+  bezier: Curve
+  text: Text
+  # KiCad's Move Symbol Anchor, tool-search only: click the point that becomes
+  # the symbol's origin (what a placement hangs from and rotates about).
+  anchor: Move symbol anchor
+  # Insert-search entry only, with no toolbar chip — KiCad gives a text box a
+  # Place-menu entry and no toolbar button either, and it is rare enough that a
+  # chip would cost more space than it earns.
+  textBox: Text box
+  # Insert-search entry only — it repeats a selection, so it has no toolbar chip.
+  repeat: Repeat last item
+# Export the symbol on screen as a picture (tool search). `failed` titles the
+# message box when the file could not be written; the OS error is its detail.
+export:
+  png: Export as PNG…
+  failed: Could not export the image
+# Buttons in the properties panel's Fields section.
+actions:
+  # Opens the Fields dialog: which fields exist, their order, and whether shown.
+  # Just "Edit" — it sits inside the FIELDS section header, which already says
+  # what is being edited (BRAND: don't restate context the surface gives).
+  editFields: Edit
+  # The tooltip carries what the short label cannot (BRAND: the overflow goes to
+  # the tooltip, not into the button).
+  editFieldsTitle: Add, remove and reorder fields
+  # Selects this field on the canvas, so the panel switches to its styling rows.
+  focusField: Select on canvas
+# The Fields dialog — the structural half of field editing.
+fieldsDialog:
+  title: Fields
+  name: Name
+  value: Value
+  show: Show
+  add: Add field
+  done: Done
+  remove: Remove this field
+  rename: Rename this field
+  moveUp: Move up
+  moveDown: Move down
+  # Tooltip on the five fields KiCad requires, which cannot be renamed, removed
+  # or reordered.
+  mandatory: KiCad requires this field
+  # Starting name for a newly added custom field.
+  defaultName: Field
+# The pin table: every pin as a grid, shown in the right bar when nothing is
+# selected. It carries a pin's IDENTITY only (number, name, electrical type);
+# where a pin sits and how it draws belong to a canvas selection.
+pinTable:
+  # Panel title, and the columns. Short: three typing columns share the bar's
+  # width. Each column header is also its sort button.
+  title: Pins
+  number: '#'
+  name: Name
+  type: Type
+  # Only shown on a multi-gate symbol. Abbreviated — the column is 26px.
+  unit: U
+  # Tooltip on a pin-number cell whose number is used twice, which is also the
+  # only marking a duplicate gets. One draws perfectly and fails later, in ERC or
+  # the netlist, so the cell is the last place it can be caught by eye.
+  duplicateHint: This pin number is used more than once
+  empty: This symbol has no pins yet.
+  add: Add pin
+  remove: Remove pins
+  # Tooltip when the trash is disabled: it acts on the selected pins, and a row
+  # of this table is selected by clicking it.
+  removeHint: Select pins to remove
+  removeN: Remove pin | Remove {count} pins
+  import: Import…
+  export: Export…
+  # Native file-dialog titles and the CSV filter name.
+  importTitle: Import pin table
+  importButton: Import
+  exportTitle: Export pin table
+  csvFilter: Comma-separated values
+  # Import summary, shown before anything is written. Pluralized on what was read.
+  importPrompt: 'Import {count} pin? | Import {count} pins?'
+  # Appended when the file had rows we could not read. Each is line-numbered.
+  importSkipped: '{count} row skipped | {count} rows skipped'
+  # The two ways an import can land, offered as the native dialog's buttons.
+  importReplace: Replace all pins
+  importAppend: Append to existing pins
+  importCancel: Cancel
+  # Nothing usable in the file.
+  importEmpty: No pins could be read from that file.
+  importFailed: Could not read that file.
+  exportFailed: Could not write that file.
+# Alternate pin functions: a second name/type/style a pin can take on, chosen
+# per placed instance in the schematic. Authored here, as a repeating list.
+alternates:
+  add: Add a pin function
+  remove: Remove this pin function
+  # A fresh entry is named from its position — an EMPTY name reads to KiCad as
+  # no alternate at all, so a blank row would look added and behave as absent.
+  defaultName: New function
+viewport:
+  # Same shape as the footprint and PCB readouts — one format across the editors.
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+# The viewport pill that governs whether the editor draws (hide yes) pins and
+# fields. Both are drawn by default; the pill goes gold while either is off.
+# The left view rail's display switches (tooltips and tool-search rows). Each
+# names the state it turns on; the chip's lit state shows whether it is on.
+viewRail:
+  showHiddenPins: Show hidden pins
+  showHiddenFields: Show hidden fields
+commands:
+  # Undo/redo entry labels. {field} names the property key (e.g. Reference).
+  editField: 'Edit {field}'
+  # Styling a field (position, weight, alignment, color), as opposed to its value.
+  editFieldStyle: Edit field
+  addField: Add field
+  removeField: Remove field
+  renameField: Rename field
+  reorderFields: Reorder fields
+  editPin: Edit pin
+  editGraphic: Edit graphic
+  # Moving a pin or graphic between the shared unit and the gate being edited.
+  editUnitScope: Change unit scope
+  addPin: Add pin
+  # Pluralized: the pin table's trash acts on however many rows are picked.
+  removePins: Remove pin | Remove {count} pins
+  # One command for the whole import, never one per pin: a 48-pin paste must
+  # undo in a single step.
+  importPins: Import pins
+  addRectangle: Add rectangle
+  addLine: Add line
+  addPolygon: Add polygon
+  # The symbol's origin moved to a clicked point; everything shifts with it.
+  moveAnchor: Move symbol anchor
+  addCircle: Add circle
+  addArc: Add arc
+  addBezier: Add curve
+  addText: Add text
+  addTextBox: Add text box
+  addAlternate: Add pin function
+  removeAlternate: Remove pin function
+  editAlternate: Edit pin function
+  # Pluralized: one selection vs many.
+  deleteItems: Delete item | Delete {count} items
+  rotate: Rotate
+  # Pluralized: one item vs many.
+  duplicateItems: Duplicate item | Duplicate {count} items
+  pasteItems: Paste item | Paste {count} items
+  cutItems: Cut item | Cut {count} items
+  # Pluralized: one selected item repeated vs several at once.
+  repeatItems: Repeat item | Repeat {count} items
+  mirrorHorizontal: Mirror horizontally
+  mirrorVertical: Mirror vertically
+  resizeGraphic: Resize graphic
+  addUnit: Add unit
+  removeUnit: Remove unit
+  newSymbol: New symbol
+  deleteSymbol: Delete symbol
+  renameSymbol: Rename symbol

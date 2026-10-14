@@ -1,0 +1,6 @@
+{
+  "pdfium": "chromium/8044",
+  "pdfiumCommit": "f91ca5a72358bb0b00b4da9481b21fe668157614",
+  "toolchain": "emscripten/emsdk:6.0.9 (emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.9 (4e4223852a0835923411059a3929907d7df1232e))",
+  "builtBy": "electron/wasm/pdfium/build.sh"
+}

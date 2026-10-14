@@ -1,0 +1,11 @@
+#!/bin/bash
+# The pre-COMMIT gate: format, lint, typecheck, and test.
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+npm run format
+npm run lint
+npm run typecheck
+npm run test

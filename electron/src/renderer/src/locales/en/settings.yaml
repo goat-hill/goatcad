@@ -1,0 +1,232 @@
+tabTitle: Settings
+title: Settings
+searchPlaceholder: Search settings
+# A category's settings set back to how they ship; disabled while they are.
+restoreDefaults: Restore defaults
+
+categories:
+  appearance: Appearance
+  # How the PCB editor draws the board, for every board (KiCad's Preferences ▸
+  # PCB Editor ▸ Display Options).
+  boardEditor: Board editor
+  libraries: Libraries
+  # Distributor API keys for part search (docs/parts-sourcing-workstream.md).
+  # Named for what you configure here — the keys — not for the feature they
+  # power, since "Parts" collided with the Libraries panel's older name.
+  parts: Distributor APIs
+  # Connecting an AI assistant (MCP client) to the running app.
+  integrations: AI integrations
+  about: About
+
+appearance:
+  theme: Theme
+  themeDark: Dark
+  themeLight: Light
+  # Heading over the UI language picker. The language names themselves are
+  # endonyms ("Deutsch", not "German") and live in i18n.ts, deliberately
+  # untranslated — see LOCALE_NAMES.
+  language: Language
+  # WebGL's powerPreference: which GPU the editor canvases ask for on a
+  # computer with both an integrated and a dedicated one.
+  gpu: GPU power preference
+  # Shown beside the picker once changed: a canvas keeps the GPU it was created
+  # with, and every tab switch recreates the editor's canvas.
+  gpuAppliesToNewTabs: Applies to new tabs
+  gpuDefault: System default
+  gpuLowPower: Power saving
+  gpuHighPerformance: High performance
+  # Linux only. Vulkan and OpenGL are graphics API names, kept as-is.
+  vulkan: Use Vulkan
+  vulkanDescription: Draws the window and the editor canvases with Vulkan instead of OpenGL. Can be
+    faster on some graphics drivers; turn it off if the window goes blank.
+  # Shown beside the toggle once changed: the setting is read at launch.
+  vulkanAppliesAfterRestart: Applies after restarting GoatCAD
+
+boardEditor:
+  # A line drawn round copper at the distance other copper must keep from it.
+  clearanceHeading: Clearance outlines
+  # The rows name the copper outlined; the options say when.
+  pads: Pads
+  tracksAndVias: Tracks and vias
+  never: Never
+  # The route in progress and the via it carries.
+  whileRouting: While routing
+  whileRoutingAndDragging: While routing and dragging
+  # Pads: on the active layer. Tracks and vias: every one on the active layer.
+  always: Always
+
+libraries:
+  model3dDir: KiCad 3D model directory
+  # Braces are vue-i18n placeholder syntax, so KiCad's literal
+  # ${KICAD10_3DMODEL_DIR} token cannot appear unescaped in a message — it fails
+  # to compile at render time. Named without the braces here; the exact token is
+  # shown by `variableName` below, which is interpolated as a value instead.
+  model3dDirDescription: Where {variableName} in footprint model paths resolves. Leave empty to
+    use the detected KiCad install.
+  browse: Browse…
+  clear: Clear
+  detected: Detected automatically
+  detectedNone: No KiCad installation was detected on this computer.
+  overridden: Overriding the detected location
+  usingPath: 'Using: {path}'
+  # Re-runs the launch-time system probes. Worth a settings row because the
+  # import of a KiCad user's own libraries is a one-time seed, so a library added
+  # to KiCad afterwards would otherwise never appear here.
+  kicadImport: Libraries from KiCad
+  kicadImportDescription: Import libraries you added to KiCad. Copied once, not kept in sync, so
+    rerun after adding one in KiCad.
+  kicadImportAction: Check for libraries
+  kicadImportBusy: Checking…
+  kicadImportNone: No KiCad configuration was found on this computer.
+  kicadImportUpToDate: Nothing new to import.
+  kicadImportDone: 'Imported {count} library. | Imported {count} libraries.'
+  kicadImportFailed: 'Could not read the KiCad configuration: {error}'
+
+# Distributor API keys. The app opens the registration page and stores what you
+# paste back; it never creates an account or submits anything on your behalf.
+parts:
+  # Heading over the numbered steps on a distributor that has no key yet.
+  stepsHeading: How to get a key
+  # {name} is a company name, e.g. "DigiKey".
+  register: Get a key from {name}
+  save: Save key
+  saving: Saving…
+  # Re-runs the connection check. Reports only through the badge and the
+  # timestamp above it — there is deliberately no confirmation line, since the
+  # badge already says Connected.
+  test: Test connection
+  remove: Remove
+  # Connection status badge, top right of each distributor card. This badge is
+  # the card's whole status surface — there is no separate test button and no
+  # success message, so these five words carry it.
+  connected: Connected
+  notConnected: Not connected
+  # A key is stored but no call has succeeded with it yet.
+  unverified: Not checked
+  checking: Checking…
+  # A key is stored and the last check failed; the reason renders below.
+  notWorking: Not working
+  # Stops waiting on a check. The request itself ends on its own deadline.
+  cancel: Cancel
+  # Under the badge. {when} is a relative time from lib/relativeTime.ts, e.g.
+  # "2 days ago" — which that helper leaves to Intl, so it is already localized.
+  verifiedAt: Checked {when}
+  # relativeTime returns null for anything under ~45s; this is that case.
+  justNow: Checked just now
+  # Which key is installed, without showing it: a DigiKey Client ID, or the last
+  # few characters of a Mouser key.
+  keyHint: 'Key: {hint}'
+  # Label over the daily quota bar. The number is small (~1000/day), which is why
+  # it is shown at all — "my searches stopped working" otherwise has no answer.
+  usage: '{used} of {limit} requests used today'
+  usageResets: Resets at midnight UTC
+  # Shown when the OS keyring is unavailable (typically Linux without
+  # libsecret/kwallet). We say this plainly rather than implying a protection we
+  # do not have.
+  noKeyring: This computer has no available keyring, so a key cannot be encrypted
+    here and will not be saved.
+  saveFailed: 'Could not save the key: {error}'
+
+# Also where Help ▸ About lands. The product name is the wordmark above these
+# lines, so neither repeats it.
+about:
+  # {version} is the packaged app's version, e.g. "0.0.7".
+  version: Version {version}
+  # Under the version: opens GoatCAD's source repository in the browser.
+  # GitHub is a product name, kept as-is.
+  viewSource: View source on GitHub
+  # Beside it: opens the same feedback dialog as the activity bar's button.
+  shareFeedback: Share feedback
+  # Self-update toggle (main/updater.ts). Off for package-manager installs
+  # regardless.
+  checkForUpdates: Check for updates automatically
+  # The button under it runs one check at once; the outcome is written beside
+  # it. "available" means a newer build is downloading — the app asks before
+  # restarting once it is ready.
+  checkNow: Check now
+  checkResult:
+    checking: Checking…
+    available: Downloading update…
+    up-to-date: Up to date
+    failed: Couldn't check
+    unavailable: Not available here
+  # GoatCAD's own license; a row under it opens the license's full text. A GPL
+  # build also owes its users where the source is (View source on GitHub,
+  # above) and the license of everything it includes (below).
+  licenseHeading: License
+  license: GoatCAD is free software under the GNU General Public License, version 3 or later, and comes with no warranty.
+  # Credit to the projects GoatCAD's development rests on, the README's
+  # Acknowledgements section. KiCad and Claude are product names, kept as-is.
+  acknowledgementsHeading: Acknowledgements
+  acknowledgementsKicad: We want to give credit to the developers of KiCad, whose work greatly
+    accelerated GoatCAD's development. Much of GoatCAD's initial file handling, routing and design
+    checking is inspired by KiCad or ported directly from it. GoatCAD is an independent project, not
+    affiliated with or endorsed by the KiCad project.
+  acknowledgementsClaude: GoatCAD is written almost entirely with Claude, an AI model trained on a
+    vast body of open-source software. Thank you to everyone whose public open-source contributions
+    made that possible.
+  # Heading over the list of every component GoatCAD includes, each opening to
+  # its license. The component names, versions and license texts in the list
+  # are shown as they are, untranslated.
+  thirdPartyLicenses: Third-party licenses
+  # The list's last row, opening the rest: the libraries and packages under the
+  # major components named above it.
+  supporting: '{count} supporting component | {count} supporting components'
+  # Opens the bundled notices file, every license in one text file, in the
+  # system's text viewer.
+  noticesFile: Open notices file
+  # Written beside the button when no app could open the notices file.
+  noticesFailed: Couldn't open the license file
+
+# The one agent button in the activity bar, and which CLI it launches. The
+# option names are product names, so they stay as-is in every language.
+agent:
+  label: Agent
+  description: Opened by the activity bar's agent button, resuming this folder's last session.
+  claude: Claude Code
+  codex: Codex
+
+# AI Integrations — MCP client registration.
+mcp:
+  # The local server this app runs for AI assistants to talk to.
+  serverHeading: MCP server
+  # {url} is a local address, e.g. http://127.0.0.1:8788/mcp
+  listening: Listening on {url}
+  notRunning: Not running — the local port is in use by another program.
+  running: Running
+  stopped: Stopped
+  # Labels for the lists of what the server exposes. Prompts are typed by the
+  # user; tools are called by the assistant.
+  promptsLabel: Prompts
+  toolsLabel: Tools
+  # The card that lists them, last on the page, with each one's detail on click.
+  apiHeading: Prompts and tools
+  # The same operation over the local HTTP API.
+  http: HTTP
+  scope: Scope
+  # Whether a call edits the open design (one undo step on a dirty tab).
+  effect: Effect
+  mutates: Edits the design
+  readsOnly: Does not edit the design
+  arguments: Arguments
+  noArguments: No arguments.
+  required: required
+  optional: optional
+  examples: Examples
+  # The one line on a client's card, above the text to copy: what to do with
+  # it. {path} is a config file, abbreviated to ~/… where it is under the home
+  # folder.
+  runCommand: Run in a terminal to use GoatCAD from a session started outside the app
+  addToFile: Add to {path} to use GoatCAD from a session started outside the app
+  copy: Copy
+  copied: Copied
+  # The bearer token, shown for a client that has no card of its own.
+  tokenLabel: Token
+  copyToken: Copy token
+  tokenCopied: Token copied
+  regenerate: Replace token
+  # Shown after a launch that could not read the stored token (the keyring
+  # refused, or the file was damaged) and minted a new one instead.
+  tokenReset: Token replaced at launch — the stored one could not be read. Copy the commands below again.
+  tokenReplaced: Token replaced — copy the commands below again.
+  regenerateFailed: Could not restart the server with the new token.

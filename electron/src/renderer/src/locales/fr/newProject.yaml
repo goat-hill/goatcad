@@ -1,0 +1,19 @@
+title: Créer un projet
+inFolder: dans
+name: Nom du projet
+foundTitle: Trouvé dans ce dossier
+rootSheetLabel: Utiliser comme feuille racine
+boardsIncluded: 'Sera inclus : {names}'
+blankSheet: Créer plutôt une nouvelle schématique vierge
+emptyNote: Une schématique et un circuit imprimé vierges seront créés.
+create: Créer le projet
+cancel: Annuler
+existsTitle: Ce dossier contient déjà un projet
+existsBody: '{name} est déjà ici. L’ouvrir au lieu d’en créer un autre ?'
+open: Ouvrir le projet
+errors:
+  empty: Saisissez un nom de projet.
+  separator: Un nom de projet ne peut pas contenir de barres obliques.
+  reserved: Ce nom est réservé par le système d’exploitation.
+  dots: Un nom de projet ne peut pas commencer ni finir par un point.
+  exists: Un fichier portant ce nom existe déjà ici.

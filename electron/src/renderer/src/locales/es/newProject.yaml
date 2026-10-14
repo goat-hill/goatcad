@@ -1,0 +1,19 @@
+title: Crear proyecto
+inFolder: en
+name: Nombre del proyecto
+foundTitle: Encontrado en esta carpeta
+rootSheetLabel: Usar como hoja raíz
+boardsIncluded: 'Se incluirá: {names}'
+blankSheet: Crear en su lugar un esquema nuevo en blanco
+emptyNote: Se crearán un esquema y una placa en blanco.
+create: Crear proyecto
+cancel: Cancelar
+existsTitle: Esta carpeta ya contiene un proyecto
+existsBody: '{name} ya está aquí. ¿Abrirlo en lugar de crear otro?'
+open: Abrir proyecto
+errors:
+  empty: Introduzca un nombre de proyecto.
+  separator: Un nombre de proyecto no puede contener barras.
+  reserved: Ese nombre está reservado por el sistema operativo.
+  dots: Un nombre de proyecto no puede empezar ni terminar con un punto.
+  exists: Ya existe aquí un archivo con ese nombre.

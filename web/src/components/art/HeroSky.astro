@@ -1,0 +1,134 @@
+---
+/*
+ * The night sky over the whole hero, behind the text. HeroArt only covers
+ * the foot of the hero (and fades out at its top), so when its pot turns the
+ * sunset down to night, the sky above the heading comes from here: a night
+ * tint and a field of twinkling stars. Hidden by day; revealed by the same
+ * hover, through `.hero:has(.spot-pot:is(.is-on, .can-hover :hover))`.
+ *
+ * The star field turns with HeroArt's sky (its SKY_TURN, about a pivot far
+ * up and to the right) so the stars behind the heading wheel in along the
+ * same arc as the rest. The pivot here is HeroArt's, mapped to the hero at a
+ * typical desktop width; close is enough, since it's the same slow arc.
+ *
+ * Stars are placed by a fixed-seed hash (stable between builds), in percent
+ * so they spread over any hero size, with a clear box around the CTA so none
+ * lands on a button — checked where each star lands after the turn (about
+ * DRIFT down and right of where it's drawn). Plain HTML + CSS, for the same port-as-a-copy reason as
+ * HeroArt (BRAND.md §4).
+ */
+const hash = (n: number): number => {
+  const v = Math.sin(n * 12.9898 + 78.233) * 43758.5453
+  return v - Math.floor(v)
+}
+const r1 = (n: number): number => Math.round(n * 10) / 10
+
+// The CTA's neighbourhood, in % of the hero: kept clear.
+const CLEAR = { x0: 34, x1: 66, y0: 52, y1: 80 }
+// On a phone the text spans the full width, so a star anywhere behind it
+// lands on a letter and reads as dust: phones drop the stars in this box.
+const PHONE_TEXT = { x0: 3, x1: 97, y0: 18, y1: 72 }
+// How far the turn carries a star, in % of the hero (x, y).
+const DRIFT = { x: 2, y: 10 }
+
+const stars = Array.from({ length: 160 }, (_, i) => ({
+  x: r1(-DRIFT.x + hash(i * 5 + 101) * 100),
+  y: r1(-DRIFT.y + 4 + hash(i * 5 + 102) * 70),
+  size: r1(1 + hash(i * 5 + 103) ** 3 * 2),
+  tw: r1(1.6 + hash(i * 5 + 104) * 2.2),
+  td: r1(-hash(i * 5 + 105) * 3)
+}))
+  .filter((s) => {
+    const x = s.x + DRIFT.x
+    const y = s.y + DRIFT.y
+    return !(x > CLEAR.x0 && x < CLEAR.x1 && y > CLEAR.y0 && y < CLEAR.y1)
+  })
+  .slice(0, 70)
+  .map((s) => {
+    const x = s.x + DRIFT.x
+    const y = s.y + DRIFT.y
+    const behindText =
+      x > PHONE_TEXT.x0 && x < PHONE_TEXT.x1 && y > PHONE_TEXT.y0 && y < PHONE_TEXT.y1
+    return { ...s, behindText }
+  })
+---
+
+<div class="hero-sky" aria-hidden="true">
+  <div class="sky-field">
+    {stars.map((s) => (
+      <span
+        class:list={['star', { 'behind-text': s.behindText }]}
+        style={`left: ${s.x}%; top: ${s.y}%; --size: ${s.size}px; --tw: ${s.tw}s; --td: ${s.td}s`}
+      />
+    ))}
+  </div>
+</div>
+
+<style>
+  .hero-sky {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: rgb(7 18 26 / 0.45);
+    opacity: 0;
+    transition: opacity 1200ms ease-in-out;
+  }
+
+  .sky-field {
+    position: absolute;
+    inset: 0;
+    transform-origin: 177% -8%;
+    transition: transform 1600ms ease-in-out;
+  }
+  :global(.hero:has(.spot-pot:is(.is-on, .can-hover :hover))) .sky-field {
+    transform: rotate(-3deg);
+  }
+
+  .star {
+    position: absolute;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    background: #f4f1e6;
+    opacity: 0;
+    transition: opacity 600ms ease-out;
+  }
+
+  :global(.hero:has(.spot-pot:is(.is-on, .can-hover :hover))) .hero-sky {
+    opacity: 1;
+  }
+  :global(.hero:has(.spot-pot:is(.is-on, .can-hover :hover))) .star {
+    opacity: 0.85;
+    transition-delay: 700ms;
+    animation: sky-twinkle var(--tw) ease-in-out infinite var(--td);
+  }
+
+  @keyframes sky-twinkle {
+    0%,
+    100% {
+      opacity: 0.85;
+      transform: scale(1);
+    }
+    45% {
+      opacity: 0.2;
+      transform: scale(0.6);
+    }
+    60% {
+      opacity: 0.8;
+      transform: scale(1.15);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .behind-text {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.hero:has(.spot-pot:is(.is-on, .can-hover :hover))) .star {
+      animation: none;
+    }
+  }
+</style>

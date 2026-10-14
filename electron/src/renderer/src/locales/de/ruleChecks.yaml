@@ -1,0 +1,139 @@
+severity:
+  error: Fehler
+  warning: Warnung
+  ignore: Ignorieren
+status:
+  passing: Bestanden
+  findings: '{count} Befund | {count} Befunde'
+notSupported: Noch nicht unterstützt
+defaultSeverity: 'Standard: {severity}'
+restore: Zurücksetzen
+drcGroups:
+  electrical: Elektrisch
+  dfm: Fertigungsgerechtes Design
+  schematicParity: Übereinstimmung mit dem Schaltplan
+  signalIntegrity: Signalintegrität
+  readability: Lesbarkeit
+  misc: Sonstiges
+ercGroups:
+  connections: Verbindungen
+  conflicts: Konflikte
+  misc: Sonstiges
+drc:
+  shorting_items: 'Elemente schließen zwei Netze kurz'
+  tracks_crossing: 'Leiterbahnen kreuzen sich'
+  clearance: 'Abstandsverletzung'
+  creepage: 'Kriechstreckenverletzung'
+  via_dangling: 'Durchkontaktierung ist nicht oder nur auf einer Lage verbunden'
+  track_dangling: 'Leiterbahn hat ein unverbundenes Ende'
+  starved_thermal: 'Thermische Anbindung an die Zone unvollständig'
+  copper_edge_clearance: 'Verletzung des Abstands zum Platinenrand'
+  hole_clearance: 'Verletzung des Bohrungsabstands'
+  hole_to_hole: 'Bohrung zu nahe an anderer Bohrung'
+  holes_co_located: 'Bohrungen an derselben Position'
+  track_width: 'Leiterbahnbreite'
+  track_angle: 'Leiterbahnwinkel'
+  track_segment_length: 'Länge des Leiterbahnsegments'
+  annular_width: 'Restringbreite'
+  drill_out_of_range: 'Bohrungsgröße außerhalb des zulässigen Bereichs'
+  microvia_drill_out_of_range: 'Microvia-Bohrungsgröße außerhalb des zulässigen Bereichs'
+  via_diameter: 'Durchmesser der Durchkontaktierung'
+  courtyards_overlap: 'Courtyards überlappen'
+  missing_courtyard: 'Footprint hat keinen Courtyard'
+  malformed_courtyard: 'Footprint hat fehlerhaften Courtyard'
+  invalid_outline: 'Platine hat fehlerhaften Umriss'
+  copper_sliver: 'Kupfersplitter'
+  solder_mask_bridge: 'Lötstoppmaskenöffnung überbrückt Elemente verschiedener Netze'
+  connection_width: 'Kupferverbindung zu schmal'
+  track_on_post_machined_layer: 'Leiterbahn mit nachbearbeiteter oder rückgebohrter Lage verbunden'
+  track_not_centered_on_via: 'Leiterbahnende nicht auf der Durchkontaktierung zentriert'
+  tuning_profile_track_geometries: 'Leiterbahngeometrien des Längenanpassungsprofils'
+  duplicate_footprints: 'Doppelte Footprints'
+  missing_footprint: 'Fehlender Footprint'
+  extra_footprint: 'Zusätzlicher Footprint'
+  footprint_symbol_mismatch: 'Footprint-Attribute stimmen nicht mit dem Symbol überein'
+  footprint_symbol_field_mismatch: 'Footprint-Feld stimmt nicht mit dem Symbolfeld überein'
+  footprint_filters_mismatch: 'Footprint passt nicht zu den Footprint-Filtern des Symbols'
+  net_conflict: 'Pad-Netz stimmt nicht mit dem Schaltplan überein'
+  unconnected_items: 'Fehlende Verbindung zwischen Elementen'
+  length_out_of_range: 'Leiterbahnlänge außerhalb des zulässigen Bereichs'
+  skew_out_of_range: 'Laufzeitunterschied zwischen Leiterbahnen außerhalb des zulässigen Bereichs'
+  too_many_vias: 'Zu viele oder zu wenige Durchkontaktierungen in einer Verbindung'
+  diff_pair_gap_out_of_range: 'Abstand des differenziellen Paars außerhalb des zulässigen Bereichs'
+  diff_pair_uncoupled_length_too_long: 'Ungekoppelte Länge des differenziellen Paars zu lang'
+  silk_overlap: 'Abstand Bestückungsdruck'
+  silk_over_copper: 'Bestückungsdruck von Lötstoppmaske beschnitten'
+  silk_edge_clearance: 'Bestückungsdruck vom Platinenrand beschnitten'
+  text_height: 'Texthöhe außerhalb des zulässigen Bereichs'
+  text_thickness: 'Textstärke außerhalb des zulässigen Bereichs'
+  mirrored_text_on_front_layer: 'Gespiegelter Text auf vorderer Lage'
+  nonmirrored_text_on_back_layer: 'Nicht gespiegelter Text auf hinterer Lage'
+  items_not_allowed: 'Elemente nicht erlaubt'
+  text_on_edge_cuts: 'Text oder Grafik auf der Lage Edge.Cuts'
+  zones_intersect: 'Kupferzonen überschneiden sich'
+  isolated_copper: 'Isolierte Kupferfüllung'
+  footprint: 'Footprint ist ungültig'
+  padstack: 'Padstack ist fragwürdig'
+  pth_inside_courtyard: 'PTH innerhalb des Courtyards'
+  npth_inside_courtyard: 'NPTH innerhalb des Courtyards'
+  item_on_disabled_layer: 'Element auf einer deaktivierten Kupferlage'
+  unresolved_variable: 'Nicht aufgelöste Textvariable'
+  assertion_failure: 'Assertion fehlgeschlagen'
+  footprint_type_mismatch: 'Bauteiltyp des Footprints passt nicht zu seinen Pads'
+  lib_footprint_issues: 'Footprint nicht in den Bibliotheken gefunden'
+  lib_footprint_mismatch: 'Footprint stimmt nicht mit der Kopie in der Bibliothek überein'
+  through_hole_pad_without_hole: 'THT-Pad hat keine Bohrung'
+  missing_tuning_profile: 'Fehlendes Längenanpassungsprofil'
+erc:
+  pin_not_connected: 'Pin nicht verbunden'
+  pin_not_driven: 'Eingangspin wird von keinem Ausgangspin getrieben'
+  power_pin_not_driven: 'Versorgungseingangspin wird von keinem Versorgungsausgangspin getrieben'
+  no_connect_connected: 'Ein Pin mit Nichtanschluss-Markierung ist verbunden'
+  no_connect_dangling: 'Nicht verbundene Nichtanschluss-Markierung'
+  label_dangling: 'Label nicht verbunden'
+  isolated_pin_label: 'Label ist nur mit einem Pin verbunden'
+  single_global_label: 'Globales Label kommt im Schaltplan nur einmal vor'
+  same_local_global_label: 'Lokales und globales Label haben denselben Namen'
+  wire_dangling: 'Leitungen sind mit nichts verbunden'
+  endpoint_off_grid: 'Symbolpin oder Leitungsende außerhalb des Verbindungsrasters'
+  four_way_junction: 'Vier Verbindungspunkte sind miteinander verbunden'
+  label_multiple_wires: 'Label verbindet mehr als eine Leitung'
+  unconnected_wire_endpoint: 'Nicht verbundenes Leitungsende'
+  duplicate_reference: 'Doppelte Referenzbezeichner'
+  pin_to_pin: 'Konflikt zwischen Pins'
+  unit_value_mismatch: 'Einheiten desselben Symbols haben unterschiedliche Werte'
+  different_unit_footprint: 'Einer anderen Einheit des Symbols ist ein anderer Footprint zugewiesen'
+  different_unit_net: 'Einem gemeinsamen Pin ist in einer anderen Einheit des Symbols ein anderes Netz zugewiesen'
+  duplicate_sheet_names: 'Doppelte Blattnamen innerhalb eines Blatts'
+  hier_label_mismatch: 'Hierarchische Labels und Blatt-Pins stimmen nicht überein'
+  multiple_net_names: 'Diesem Bus oder Netz wurde mehr als ein Name gegeben'
+  bus_to_bus_conflict: 'Busse sind grafisch verbunden, haben aber keine gemeinsamen Busmitglieder'
+  bus_to_net_conflict: 'Ungültige Verbindung zwischen Bus- und Netzelementen'
+  net_not_bus_member: 'Netz ist grafisch mit einem Bus verbunden, aber kein Busmitglied'
+  ground_pin_not_ground: 'Masse-Pin nicht mit einem Massenetz verbunden'
+  stacked_pin_name: 'Pinname ähnelt einem gestapelten Pin'
+  field_name_whitespace: 'Feldname hat führende oder nachgestellte Leerzeichen'
+  unannotated: 'Symbol ist nicht annotiert'
+  unresolved_variable: 'Nicht aufgelöste Textvariable'
+  undefined_netclass: 'Nicht definierte Netzklasse'
+  simulation_model_issue: 'Problem mit SPICE-Modell'
+  similar_labels: 'Labels sind ähnlich (nur Unterschied in Groß-/Kleinschreibung)'
+  similar_power: 'Versorgungspins sind ähnlich (nur Unterschied in Groß-/Kleinschreibung)'
+  similar_label_and_power: 'Versorgungspin und Label sind ähnlich (nur Unterschied in Groß-/Kleinschreibung)'
+  lib_symbol_issues: 'Problem mit Bibliothekssymbol'
+  lib_symbol_mismatch: 'Symbol stimmt nicht mit der Kopie in der Bibliothek überein'
+  footprint_link_issues: 'Problem mit Footprint-Verknüpfung'
+  footprint_filter: 'Zugewiesener Footprint passt nicht zu den Footprint-Filtern'
+  extra_units: 'Symbol hat mehr Einheiten als definiert'
+  missing_unit: 'Symbol hat Einheiten, die nicht platziert sind'
+  missing_input_pin: 'Symbol hat Eingangspins, die nicht platziert sind'
+  missing_bidi_pin: 'Symbol hat bidirektionale Pins, die nicht platziert sind'
+  missing_power_pin: 'Symbol hat Versorgungseingangspins, die nicht platziert sind'
+exclusions:
+  note: Dies sind die in den Prüfungen von KiCad ausgeschlossenen Befunde, gelesen aus der Projektdatei. GoatCAD ordnet jeden über seine Regel und die genannten Elemente zu, nicht über die Stelle, an der KiCad seine Markierung gezeichnet hat. Ein Ausschluss gilt hier also weiter, nachdem seine Elemente verschoben wurden — in KiCad käme der Befund zurück. Ausschlüsse werden in KiCad hinzugefügt und entfernt.
+  none: Das Projekt hat keine Ausschlüsse.
+  matched: 'Schließt {count} Befund aus | Schließt {count} Befunde aus'
+  unmatched: Passt zu keinem Befund
+  unmatchedHint: Nichts, was GoatCAD jetzt findet, ist dieser Befund — er wurde behoben, seine Elemente sind entfernt, oder GoatCAD benennt seine Elemente anders als KiCad.
+  noItems: Nicht zuordenbar
+  noItemsHint: Dieser Ausschluss nennt nur eine Position, nicht die Elemente, um die es geht, daher kann GoatCAD nicht erkennen, welchen Befund er meint.

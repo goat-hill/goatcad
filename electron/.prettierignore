@@ -1,0 +1,18 @@
+out
+dist
+pnpm-lock.yaml
+LICENSE.md
+tsconfig.json
+tsconfig.*.json
+# Agent worktrees (e.g. the Astro landing site) carry their own toolchains
+.claude/
+# Generated Emscripten loaders (electron/wasm/*/build.sh)
+src/renderer/src/lib/geometry/wasm/clipper2.js
+src/main/wasm/pdfium.js
+# Upstream sources fetched by the electron/wasm/*/build.sh scripts
+wasm/*/upstream/
+# Icon Composer writes this bundle; reformatting it would force a recompile
+# of build/Assets.car (bin/build-mac-icon)
+build/icon.icon/
+# Written by bin/notices; the staleness test compares it byte for byte
+src/renderer/src/lib/licenses.json

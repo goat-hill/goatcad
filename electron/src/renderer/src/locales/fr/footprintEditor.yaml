@@ -1,0 +1,130 @@
+commands:
+  editFootprintProperties: Modifier les propriétés de l'empreinte
+  editPad: Modifier le pad {number}
+  editLine: Modifier la ligne
+  editPolygon: Modifier le polygone
+  editRuleArea: Modifier la surface à règles
+  editShape: Modifier la forme
+  addPad: Ajouter un pad
+  addLine: Ajouter une ligne
+  addArc: Ajouter un arc
+  addRectangle: Ajouter un rectangle
+  addCircle: Ajouter un cercle
+  addPolygon: Ajouter un polygone
+  addText: Ajouter un texte
+  addBezier: Ajouter une courbe
+  addTextBox: Ajouter une boîte de texte
+  addPoint: Ajouter un point
+  rotate: Rotation
+  mirror: Miroir
+  flip: Changer de côté
+  moveAnchor: Déplacer l'ancre de l'empreinte
+  editModel: Modifier le modèle 3D
+  addModel: Lier un modèle 3D
+  removeModel: Retirer le modèle 3D
+edit:
+  cut: Couper
+  copy: Copier
+  paste: Coller
+  duplicate: Dupliquer
+  delete: Supprimer
+  rotate: Rotation anti-horaire
+  rotateClockwise: Rotation horaire
+  flip: Changer de côté
+tools:
+  flip: Changer de côté
+  anchor: Placer l'ancre de l'empreinte
+  gridOrigin: Définir l'origine de la grille
+  resetGridOrigin: Réinitialiser l'origine de la grille
+properties:
+  fromBoard: Du CI
+zoneConnect:
+  inherit: De la zone
+  solid: Solide
+  thermal: Freins thermiques
+  none: Aucune
+  thermalTht: Freins thermiques (traversants seulement)
+readonlyBanner:
+  title: Composant de librairie officielle en lecture seule
+  body: Vous ne pouvez pas modifier ce composant directement. Cliquez ci-dessous pour le copier dans l'espace de travail de votre projet.
+  exportComponentTitle: Exporter le composant
+  exportPart: Exporter le composant
+saveModal:
+  title: Options d'enregistrement de l'empreinte
+  subtitle: Cette empreinte provient d'une librairie en lecture seule. Enregistrez-en une copie dans votre projet pour la modifier.
+  saveLocalTitle: Enregistrer comme empreinte locale du projet
+  saveLocalDesc: Crée un fichier d'empreinte `.kicad_mod` réutilisable dans le répertoire de votre espace de travail.
+  saveLocalPlaceholder: fichier.kicad_mod
+propertiesPanel:
+  footprintProperties: Propriétés de l'empreinte
+  descr: Descr.
+  model3d: Modèle 3D
+  modelPath: Chemin
+  modelOffset: Décalage (mm)
+  modelScale: Échelle
+  modelRotate: Rotation (°)
+  addModel: Lier un modèle 3D…
+  removeModel: Retirer le modèle 3D
+  browse: Parcourir…
+  padInspector: Inspecteur du pad [{number}]
+  number: Numéro
+  type: Type
+  padTypes:
+    smd: CMS
+    throughHole: Traversant
+    npThroughHole: Traversant non métallisé
+  shape: Forme
+  shapeTypes:
+    rect: Rectangulaire
+    circle: Circulaire
+    oval: Ovale / oblong
+    roundrect: Rect. arrondi
+  drillSize: Perçage
+  roundRatio: Ratio d'arrondi
+  graphicInspector: Inspecteur d'élément graphique
+  startX: Début X
+  startY: Début Y
+  endX: Fin X
+  endY: Fin Y
+  polygonInspector: Inspecteur de polygone
+  points: Points
+  fill: Remplissage
+  fillTypes:
+    none: Aucun (contour seul)
+    solid: Plein
+    hatch: Hachure
+    reverseHatch: Hachure inversée
+    crossHatch: Hachure croisée
+  ruleAreaInspector: Inspecteur de surface à règles
+  minThickness: Épaisseur min.
+  hatchStyle: Style de hachure
+  hatchStyleTypes:
+    none: Aucun (contour seul)
+    edge: Bord (hachure du contour)
+    full: Complet (hachure pleine)
+  hatchPitch: Pas de hachure
+  selectHint: Sélectionnez un pad ou une ligne graphique dans la vue 2D pour en inspecter et modifier les détails directement dans ce panneau.
+viewRail:
+  sketchGraphics: Graphiques en contour
+  sketchText: Textes en contour
+viewport:
+  coordsMm: 'X: {x} Y: {y} mm'
+  coordsMil: 'X: {x} Y: {y} mils'
+  pad: Pad
+  line: Ligne
+  arc: Arc
+  rectangle: Rectangle
+  circle: Cercle
+  polygon: Polygone
+  text: Texte
+  bezier: Courbe
+  textBox: Boîte de texte
+  point: Point
+  lineModeTitle: Mode de ligne — 45° / 90° / libre ({hotkey})
+  lineMode: 'Mode de ligne : {mode}'
+  lineFree: libre
+viewport3d:
+  title: Aperçu 3D
+  noFootprintMsg: Ouvrez une empreinte pour la voir en 3D.
+  noModelMsg: Aucun modèle 3D n'est lié à cette empreinte.
+  notFoundMsg: Le modèle 3D lié est introuvable.

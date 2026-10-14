@@ -1,0 +1,74 @@
+name: macOS signing check
+
+# Proves the Apple credentials produce a signed, notarized, Gatekeeper-accepted
+# build — without cutting a release.
+#
+# release.yml only runs on a v*.*.* tag, so it is the wrong place to *discover*
+# that a secret is malformed: every attempt would burn a version number and leave
+# a junk draft release behind. This runs the same mac build, through the same
+# credential action and the same verification gate, on demand and publishing
+# nothing.
+#
+# Use it when setting the secrets up, when rotating the certificate (it expires
+# every five years), and after any change to the mac block of
+# electron-builder.yml. See docs/RELEASES.md §7.
+
+on:
+  workflow_dispatch:
+    inputs:
+      upload-dmg:
+        description: >
+          Attach the .dmg as a workflow artifact, to test first launch on a Mac
+          that has never seen the app. Note a downloaded workflow artifact is a
+          zip, which strips the quarantine attribute from what is inside — so
+          unpack it, then re-add quarantine to reproduce a real download.
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    runs-on: macos-latest
+    # codesign can hang rather than fail, and the 6h default bills at 10x on mac.
+    # ~2x expected; the variable part is Apple's notary queue, not the build.
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: electron
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          # Actions ignore `defaults.run.working-directory`; path is from the repo root.
+          cache-dependency-path: electron/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prepare macOS signing credentials
+        uses: ./.github/actions/mac-signing-credentials
+        with:
+          certificate-p12-base64: ${{ secrets.APPLE_CSC_LINK }}
+          certificate-password: ${{ secrets.APPLE_CSC_KEY_PASSWORD }}
+          api-key-base64: ${{ secrets.APPLE_API_KEY }}
+          api-key-id: ${{ secrets.APPLE_API_KEY_ID }}
+          api-issuer: ${{ secrets.APPLE_API_ISSUER }}
+
+      # Same flags as release.yml's mac leg, so a pass here means a pass there.
+      - name: Build
+        run: npm run build:mac -- --publish=never -c.mac.forceCodeSigning=true
+
+      - name: Verify macOS signature and notarization
+        run: ./bin/verify-mac-signing
+
+      - name: Upload .dmg
+        if: inputs.upload-dmg
+        uses: actions/upload-artifact@v4
+        with:
+          name: dmg-unreleased
+          path: electron/dist/*.dmg
+          if-no-files-found: error

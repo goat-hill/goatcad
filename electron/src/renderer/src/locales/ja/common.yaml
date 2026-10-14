@@ -1,0 +1,11 @@
+save: 保存
+cancel: キャンセル
+close: 閉じる
+delete: 削除
+undo: 元に戻す ({shortcut})
+redo: やり直し ({shortcut})
+undoWithLabel: '元に戻す：{label} ({shortcut})'
+redoWithLabel: 'やり直し：{label} ({shortcut})'
+undoLabel: 元に戻す
+redoLabel: やり直し
+selectAllLabel: すべて選択

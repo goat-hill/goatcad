@@ -1,0 +1,35 @@
+tabTitle: Willkommen
+hero:
+  tagline: Erwecken Sie Ihre Schaltungen zum Leben.
+start:
+  title: Erste Schritte
+  openProject: Projekt öffnen…
+  openProjectDesc: Eine Projektdatei auswählen und an diesem Entwurf arbeiten
+  openFolder: Ordner öffnen…
+  newProject: Neues Projekt…
+  newProjectDesc: Mit einem leeren Schaltplan und Platinenlayout beginnen
+  openFile: Datei öffnen…
+  openSample: Beispielprojekt öffnen…
+  openSampleDesc: Einen Beispielentwurf von GitHub herunterladen
+explore:
+  title: Entdecken
+recent:
+  title: Zuletzt verwendet
+  filesTitle: Dateien
+  clear: Leeren
+  remove: Aus „Zuletzt verwendet“ entfernen
+samples:
+  title: Beispielprojekt öffnen
+  loading: Beispiele werden geladen…
+  empty: Derzeit sind keine Beispielprojekte verfügbar.
+  size: '{size} MB'
+  cancel: Abbrechen
+  retry: Erneut versuchen
+  open: Öffnen
+  downloading: Wird heruntergeladen…
+  errors:
+    offline: GitHub konnte nicht erreicht werden. Verbindung prüfen und erneut versuchen.
+    rateLimited: GitHub begrenzt Anfragen aus diesem Netzwerk. In einigen Minuten erneut versuchen.
+    unavailable: Die Beispielprojekte konnten nicht geladen werden. Später erneut versuchen.
+footer:
+  showOnStartup: Willkommensseite beim Start anzeigen

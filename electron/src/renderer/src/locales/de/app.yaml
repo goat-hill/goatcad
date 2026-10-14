@@ -1,0 +1,91 @@
+errors:
+  createFile: 'Fehler beim Erstellen der Datei: {error}'
+  deleteFile: 'Fehler beim Löschen der Datei: {error}'
+  renameFile: 'Fehler beim Umbenennen der Datei: {error}'
+  library: 'Fehler beim Aktualisieren der Bibliotheken: {error}'
+  openRecent: Das ausgewählte Verzeichnis konnte nicht geladen werden. Möglicherweise wurde es verschoben oder gelöscht.
+  saveFile: 'Fehler beim Speichern der Datei: {error}'
+confirm:
+  deleteFile: '"{name}" in den Papierkorb verschieben?'
+  renameForward: "\"{from}\" in \"{to}\" umbenennen?\n\n{count} weitere Datei wird angepasst und folgt der Umbenennung:\n{files} | \"{from}\" in \"{to}\" umbenennen?\n\n{count} weitere Dateien werden angepasst und folgen der Umbenennung:\n{files}"
+  renameForwardFile: '• {name} ({count} Blattverweis) | • {name} ({count} Blattverweise)'
+  deleteFileReferenced: "\"{name}\" in den Papierkorb verschieben?\n\n{count} Datei verweist darauf und behält einen ungültigen Blattverweis:\n{files} | \"{name}\" in den Papierkorb verschieben?\n\n{count} Dateien verweisen darauf und behalten ungültige Blattverweise:\n{files}"
+  deleteImpactFile: '• {name} ({count} Blattverweis) | • {name} ({count} Blattverweise)'
+unsaved:
+  message: Möchten Sie die an {name} vorgenommenen Änderungen speichern?
+  messageMany: Möchten Sie die Änderungen an den folgenden {count} Dateien speichern?
+  detail: Ihre Änderungen gehen verloren, wenn Sie sie nicht speichern.
+  dontSave: Nicht speichern
+  saveAll: Alle speichern
+branchPicker:
+  placeholder: Branch wechseln oder neuen Namen eingeben...
+  create: Branch "{name}" erstellen
+  loading: Branches werden geladen...
+  noBranches: Keine Branches gefunden.
+quickOpen:
+  placeholder: Gehe zu Datei...
+  noResults: Keine passenden Dateien gefunden
+shortcuts:
+  title: Tastenkürzel
+  openFolder: Ordner öffnen
+  openProject: Projekt öffnen
+  goToFile: Gehe zu Datei
+  newSchematic: Neuer Schaltplan
+  newWindow: Neues Fenster
+  closeTab: Tab schließen
+  nextTab: Nächster Tab
+  previousTab: Vorheriger Tab
+  splitTab: Tab in den anderen Bereich verschieben
+  splitDirection: Bereiche neben-/untereinander umschalten
+  focusOtherGroup: Anderen Bereich fokussieren
+  updatePcb: Platine aus Schaltplan aktualisieren
+  save: Speichern
+  showExplorer: Explorer anzeigen
+  showLibraries: Bibliotheken anzeigen
+  openPartSearch: Bauteilsuche öffnen
+  newTerminal: Neues Terminal
+  openAgent: Agent öffnen
+  openSettings: Einstellungen öffnen
+  gitFocusCommit: Commit-Nachricht schreiben
+  gitCommit: Committen (im Nachrichtenfeld)
+  gitStageAll: Alle Änderungen vormerken
+  gitPush: Push
+  gitPull: Pull
+  toggleDevTools: DevTools-Konsole umschalten
+updatePcb:
+  title: Aus Schaltplan aktualisieren
+  board: Platine
+  loading: Schaltplan und Platine werden verglichen…
+  upToDate: Die Platine entspricht bereits dem Schaltplan.
+  options: Optionen
+  replace: Footprints durch die in den Symbolen angegebenen ersetzen
+  prune: Footprints ohne Symbole löschen
+  fields: Footprint-Felder aus Symbolen aktualisieren
+  columns:
+    reference: Referenz
+    value: Wert
+    footprint: Footprint
+    change: Änderung
+  change:
+    added: Hinzugefügt
+    deleted: Gelöscht
+    kept: Nicht im Schaltplan, beibehalten
+    reference: Referenz
+    value: Wert
+    footprint: Footprint
+    nets: Pad-Netze
+    fields: Felder
+    attributes: Attribute
+  skip:
+    noFootprint: Kein Footprint zugewiesen
+    footprintNotFound: '{libId} ist in keiner Bibliothek'
+    noUuid: Symbol hat keine UUID
+  confirm: Platine aktualisieren
+  errors:
+    noBoard: Das Projekt hat keine Platine (.kicad_pcb).
+    noSchematic: Das Projekt hat keinen Hauptschaltplan, aus dem aktualisiert werden kann.
+    notAnnotated: 'Zuerst den Schaltplan annotieren. Nicht annotiert: {references}'
+netlist:
+  errors:
+    noSchematic: Das Projekt hat keinen Hauptschaltplan zum Exportieren.
+    write: 'Netzliste konnte nicht geschrieben werden: {error}'

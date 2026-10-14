@@ -1,0 +1,42 @@
+kind:
+  symbol: Symbole
+  footprint: Empreinte
+  model: Modèle 3D
+scope:
+  system: Système
+  global: Global
+  project: Projet
+noneAssociated: Aucun associé
+open: Ouvrir
+openTitle: Ouvrir dans un onglet d’éditeur complet
+loading: Chargement…
+indexLoading: Chargement de l’index des librairies…
+notFound: Impossible de résoudre cet élément de librairie.
+panes:
+  symbol: Symbole
+  footprint: Empreinte
+  model3d: Modèle 3D
+fields:
+  reference: Référence
+  value: Valeur
+  units: Unités
+  pins: Pins
+  description: Description
+  library: Librairie
+  category: Catégorie
+  pads: Pads
+  model: Modèle 3D
+noPreview: Aucun aperçu disponible
+footprintAssigned: Empreinte assignée
+footprintNone: Aucune empreinte assignée.
+footprintCandidates: Empreintes candidates (d’après les filtres)
+footprintNoCandidates: Aucun filtre d’empreinte défini — toute empreinte convient.
+model3dVia: Résolu via l’empreinte assignée.
+model3dPath: Chemin du modèle
+model3dNone: Aucune empreinte assignée, donc aucun modèle 3D.
+model3dPending: L’aperçu du modèle 3D n’est pas encore branché.
+reverseHeading: Utilisé par
+reverseNote: Savoir quelles pièces utilisent cette empreinte est une recherche inverse — calculée à la demande, non affichée ici.
+usedByNone: Rien dans les librairies indexées n’utilise ceci.
+choice: '{name} — {library}'
+more: '+{n} de plus'

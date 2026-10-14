@@ -1,0 +1,14 @@
+save: Save
+cancel: Cancel
+# Imperative verb on a button that dismisses a dialog. Contrast
+# titleBar.controls.close, which names the window's close button.
+close: Close
+delete: Delete
+undo: Undo ({shortcut})
+redo: Redo ({shortcut})
+undoWithLabel: Undo {label} ({shortcut})
+redoWithLabel: Redo {label} ({shortcut})
+undoLabel: Undo
+redoLabel: Redo
+# Edit ▸ Select All in every visual editor; Esc is its undo.
+selectAllLabel: Select all

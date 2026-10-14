@@ -1,0 +1,163 @@
+---
+import { Image } from 'astro:assets'
+import { fmt, strings, type Locale } from '../i18n'
+import pcbEditor from '../assets/screenshots/pcb-editor.png'
+import schematicEditor from '../assets/screenshots/schematic-editor.png'
+import pcb3d from '../assets/screenshots/pcb-3d.png'
+
+/* CSS-only slideshow of real app captures. The first slide is the likely LCP.
+   It decodes sync: Astro's default async decode lets the page paint a frame
+   before a cached image is ready, so on every reload the shot pops in late. */
+
+interface Props {
+  locale?: Locale
+}
+
+const s = strings(Astro.props.locale ?? 'en')
+---
+
+<section class="showcase">
+  <div class="page">
+    <figure class="frame slides">
+      <Image
+        class="slide"
+        src={pcbEditor}
+        alt={fmt(s.showcase.altPcb)}
+        width={1120}
+        densities={[1, 2]}
+        format="webp"
+        quality={82}
+        loading="eager"
+        fetchpriority="high"
+        decoding="sync"
+      />
+      <Image
+        class="slide"
+        src={schematicEditor}
+        alt={s.showcase.altSchematic}
+        width={1120}
+        densities={[1, 2]}
+        format="webp"
+        quality={82}
+        loading="eager"
+        fetchpriority="low"
+      />
+      <Image
+        class="slide"
+        src={pcb3d}
+        alt={s.showcase.alt3d}
+        width={1120}
+        densities={[1, 2]}
+        format="webp"
+        quality={82}
+        loading="eager"
+        fetchpriority="low"
+      />
+    </figure>
+    <div class="intro">
+      <h2>{s.showcase.heading}</h2>
+      <p class="lede">{fmt(s.showcase.lede)}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .showcase {
+    padding-block: 0 clamp(3rem, 8vw, 5rem);
+  }
+
+  /* Below the frame, spanning the page column. */
+  .intro {
+    margin-top: clamp(1.75rem, 4vw, 2.75rem);
+  }
+
+  .intro h2 {
+    font-size: var(--step-h2);
+  }
+
+  .intro .lede {
+    margin-top: 1.25rem;
+    max-width: var(--measure);
+    color: var(--text-muted);
+  }
+
+  .frame {
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg-raised);
+    box-shadow: 0 24px 80px -24px rgb(0 0 0 / 0.6);
+  }
+
+  .frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* The slide loop: the first slide keeps the frame's size in flow, the rest
+     stack on top. Every slide runs the same 15s loop — 5s on top, then an
+     instant cut to the next — offset by a third of the cycle each. The cut
+     animates z-index only: every slide stays painted at full opacity the
+     whole time, so all three are decoded up front and some image is on
+     screen at every frame. Cutting via opacity instead flashes the
+     background black at each boundary — the outgoing and incoming slides
+     are separate animations that don't land on the same frame.
+
+     Slides 2 and 3 stay hidden until their first turn: a slide still
+     decoding is transparent, and on load the 3D shot could beat the board
+     shot and show through it. Each is revealed by the same delay that puts
+     it on top, so it lands over a slide already painted. */
+  .slides {
+    position: relative;
+  }
+
+  .slide {
+    position: relative;
+    z-index: 0;
+    animation: slide-top 15s linear infinite;
+  }
+
+  .slide + .slide {
+    position: absolute;
+    inset: 0;
+    visibility: hidden;
+    animation:
+      slide-top 15s linear var(--delay) infinite,
+      reveal 0s linear var(--delay) forwards;
+  }
+
+  .slide:nth-child(2) {
+    --delay: 5s;
+  }
+
+  .slide:nth-child(3) {
+    --delay: 10s;
+  }
+
+  @keyframes slide-top {
+    0%,
+    33.33% {
+      z-index: 2;
+    }
+    33.34%,
+    100% {
+      z-index: 0;
+    }
+  }
+
+  @keyframes reveal {
+    to {
+      visibility: visible;
+    }
+  }
+
+  /* Reduced motion: no cycling, hold the board shot (it must win the paint
+     order explicitly — with no animation, the other slides stay hidden). */
+  @media (prefers-reduced-motion: reduce) {
+    .slide,
+    .slide + .slide {
+      animation: none;
+    }
+  }
+</style>
