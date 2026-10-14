@@ -18,6 +18,9 @@ cd "$(dirname "$0")/.."
 export GOATCAD_USER_DATA_DIR="${GOATCAD_USER_DATA_DIR:-$(cd .. && pwd)/.goatherd/goatcad}"
 export GOATCAD_MCP_PORT="${GOATCAD_MCP_PORT:-0}"
 mkdir -p "$GOATCAD_USER_DATA_DIR"
+# A shell inside another electron-vite app (GoatHerd's terminals) inherits its dev
+# server's URL, which an unpackaged build would load instead of its own renderer.
+unset ELECTRON_RENDERER_URL NODE_ENV_ELECTRON_VITE
 if [ "$1" = "dev" ]; then
   shift
   exec npm run dev -- "$@"
