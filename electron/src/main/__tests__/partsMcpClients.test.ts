@@ -59,29 +59,32 @@ describe('the launch-time definition for Codex', () => {
 })
 
 describe('the manual path', () => {
-  const relay = { command: '/Applications/GoatCAD.app/Contents/MacOS/GoatCAD', args: ['mcp'] }
-  const spaced = { command: 'C:\\Program Files\\GoatCAD\\GoatCAD.exe', args: ['mcp'] }
+  const server = { url: URL_NOW, token: 'tok' }
 
-  it('registers Claude Code at user scope, as this executable with mcp', () => {
+  it('registers Claude Code at user scope, by URL with the token', () => {
     // `claude mcp add` defaults to `local` scope, which would recreate exactly
-    // the per-project coupling the design rejects. No URL and no token: the
-    // relay finds the app, so the line never goes stale.
+    // the per-project coupling the design rejects. Nothing launches the app for
+    // the client: the URL answers only while it runs.
     expect(claudeCode.manual).toBe('command')
-    expect(claudeCode.manualText(relay)).toBe(
-      `claude mcp add --scope user ${SERVER_NAME} -- /Applications/GoatCAD.app/Contents/MacOS/GoatCAD mcp`
-    )
-    expect(claudeCode.manualText(spaced)).toContain(
-      '-- "C:\\Program Files\\GoatCAD\\GoatCAD.exe" mcp'
+    expect(claudeCode.manualText(server)).toBe(
+      `claude mcp add --transport http --scope user ${SERVER_NAME} ${URL_NOW} --header "Authorization: Bearer tok"`
     )
   })
 
-  it('gives Codex its config table with the command and arguments', () => {
-    const snippet = codex.manualText(relay)
+  it('registers a development build for its folder only', () => {
+    // So it shadows an installed GoatCAD's registration there instead of replacing it.
+    expect(claudeCode.manualText({ ...server, dev: true })).toContain(
+      `--scope local ${SERVER_NAME} `
+    )
+  })
+
+  it('gives Codex its config table with the URL and the header', () => {
+    const snippet = codex.manualText(server)
     expect(codex.manual).toBe('snippet')
     expect(snippet.split('\n')).toEqual([
       `[mcp_servers.${SERVER_NAME}]`,
-      'command = "/Applications/GoatCAD.app/Contents/MacOS/GoatCAD"',
-      'args = ["mcp"]'
+      `url = "${URL_NOW}"`,
+      'http_headers = { Authorization = "Bearer tok" }'
     ])
   })
 

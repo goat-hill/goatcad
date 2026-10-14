@@ -139,13 +139,15 @@ describe('parseFolderArgs', () => {
 
 describe('launchMode', () => {
   test('reads the verb the executable was run with', () => {
-    expect(launchMode(['exe', 'mcp'], true)).toBe('mcp')
-    expect(launchMode(['electron', '/app', 'mcp'], false)).toBe('mcp')
+    expect(launchMode(['exe', 'help'], true)).toBe('help')
+    expect(launchMode(['electron', '/app', 'help'], false)).toBe('help')
     expect(launchMode(['exe', 'help', 'agents'], true)).toBe('help-agents')
     expect(launchMode(['exe', '--help'], true)).toBe('help')
     expect(launchMode(['exe', '--background'], true)).toBe('background')
     expect(launchMode(['exe', '--ozone-platform=x11', '/p/a.kicad_sch'], true)).toBe('app')
     // A file named like a verb is a file.
-    expect(launchMode(['exe', '/p/mcp'], true)).toBe('app')
+    expect(launchMode(['exe', '/p/help'], true)).toBe('app')
+    // `mcp` was a verb (the stdio relay); it is not one now.
+    expect(launchMode(['exe', 'mcp'], true)).toBe('app')
   })
 })

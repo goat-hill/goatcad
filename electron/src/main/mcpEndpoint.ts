@@ -21,7 +21,7 @@
  * mode is the fence. A Windows named pipe takes the token like the port.
  */
 import { createHash } from 'node:crypto'
-import { mkdirSync, rmSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 
 const ENDPOINT_FILE = 'goatcad-endpoint.json'
@@ -93,6 +93,24 @@ export const writeEndpoint = (dir: string, endpoint: McpEndpointFile): void => {
   } catch {
     // Nothing to do about it, and nothing that depends on it having worked.
   }
+}
+
+/** The published address, or null when there is none or it is not ours. A
+ *  crash leaves the file behind, so this is where the app was, not proof it is up. */
+export const readEndpoint = (dir: string): McpEndpointFile | null => {
+  try {
+    const parsed: unknown = JSON.parse(readFileSync(endpointPath(dir), 'utf8'))
+    if (
+      parsed &&
+      typeof parsed === 'object' &&
+      typeof (parsed as McpEndpointFile).url === 'string' &&
+      typeof (parsed as McpEndpointFile).port === 'number'
+    )
+      return parsed as McpEndpointFile
+  } catch {
+    // Missing while the app is not running, which is the ordinary case.
+  }
+  return null
 }
 
 /** Withdraw the claim that we are listening. */

@@ -91,23 +91,6 @@ const parse = (content: string): StoredToken | null => {
   return null
 }
 
-/** The stored token, or null; writes nothing (`mcpRelay.ts`, which must not mint one). */
-export const readToken = (dir: string, cipher: SecretCipher): string | null => {
-  let stored: StoredToken | null
-  try {
-    stored = parse(readFileSync(tokenPath(dir), 'utf8'))
-  } catch {
-    return null
-  }
-  if (!stored) return null
-  if (!stored.encrypted) return stored.data
-  try {
-    return cipher.decryptString(Buffer.from(stored.data, 'base64'))
-  } catch {
-    return null
-  }
-}
-
 /**
  * Read the stored token, minting one when there is none.
  *

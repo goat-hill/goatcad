@@ -196,9 +196,9 @@ const config = (): ConfigStore => {
   return configStore
 }
 
-// A command (`goatcad mcp`, `help`) is not the app: it draws nothing and keeps
+// A command (`goatcad help`) is not the app: it draws nothing and keeps
 // no crash dumps of its own (`commandLine.ts`).
-const command = mode === 'mcp' || mode === 'help' || mode === 'help-agents' ? mode : null
+const command = mode === 'help' || mode === 'help-agents' ? mode : null
 if (!command) {
   startCrashDumps(is.dev)
   watchProcessCrashes()

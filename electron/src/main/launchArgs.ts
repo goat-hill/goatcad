@@ -75,18 +75,16 @@ export const parseFolderArgs = (
 }
 
 /**
- * What a launch is for. `mcp` relays an MCP client's stdio to the running app
- * (`mcpRelay.ts`); `help` prints usage; `background` starts the app with no
+ * What a launch is for. `help` prints usage; `background` starts the app with no
  * window, for agents (`--background`); `app` is everything else.
  */
-export type LaunchMode = 'mcp' | 'help' | 'help-agents' | 'background' | 'app'
+export type LaunchMode = 'help' | 'help-agents' | 'background' | 'app'
 
 export const launchMode = (argv: readonly string[], isPackaged: boolean): LaunchMode => {
   const args = argv.slice(isPackaged ? 1 : 2)
   const first = args.find(
     (arg) => !arg.startsWith('--') || arg === '--help' || arg === '--background'
   )
-  if (first === 'mcp') return 'mcp'
   if (first === 'help') return args.includes('agents') ? 'help-agents' : 'help'
   if (args.includes('--help')) return 'help'
   if (args.includes('--background')) return 'background'

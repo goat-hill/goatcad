@@ -2,17 +2,16 @@
 # This worktree's GoatCAD, as the installed `goatcad` command, in the worktree's
 # own profile (.goatherd/goatcad/ at the worktree root), so it never collides with
 # an installed GoatCAD or another worktree: the single-instance lock, the agent
-# socket and the endpoint file all live in the profile.
+# socket, the endpoint file and the Python client all live in the profile.
 #
-#   ./bin/goatcad dev            the app with HMR (electron-vite dev)
-#   ./bin/goatcad                the built app (./bin/build first)
-#   ./bin/goatcad mcp            the stdio relay to whichever of those is running
-#   ./bin/goatcad help agents    the line that registers this worktree with Claude Code
+#   ./bin/goatcad dev               the app with HMR (electron-vite dev)
+#   ./bin/goatcad                   the built app (./bin/build first)
+#   ./bin/goatcad --background      the built app with no window, for agents
+#   ./bin/goatcad help agents       how an agent reaches this worktree's app
 #
 # --shared-profile (anywhere in the arguments) runs in the shared profile instead (an
 # installed GoatCAD's: its keys, libraries and settings). One GoatCAD runs per
-# profile, so with another already running there, a launch hands off to it and the
-# relay reaches it. Pass it to the relay too, or it reaches the worktree's profile.
+# profile, so with another already running there, a launch hands off to it.
 #
 # GOATCAD_USER_DATA_DIR overrides the profile; the port is always ephemeral.
 set -e
@@ -20,17 +19,17 @@ if [ -f "$HOME/.nvm/nvm.sh" ]; then
   source "$HOME/.nvm/nvm.sh" >/dev/null
 fi
 cd "$(dirname "$0")/.."
+shared=
 args=()
 for arg in "$@"; do
   if [ "$arg" = "--shared-profile" ]; then
-    # Read by the app, so the relay it registers carries the flag too.
-    export GOATCAD_SHARED_PROFILE=1
+    shared=1
   else
     args+=("$arg")
   fi
 done
 set -- "${args[@]}"
-if [ -z "$GOATCAD_SHARED_PROFILE" ]; then
+if [ -z "$shared" ]; then
   export GOATCAD_USER_DATA_DIR="${GOATCAD_USER_DATA_DIR:-$(cd .. && pwd)/.goatherd/goatcad}"
 fi
 if [ -n "$GOATCAD_USER_DATA_DIR" ]; then

@@ -38,7 +38,6 @@ import {
 } from './partsMcpServer'
 import { loadOrCreateToken, newToken, writeToken } from './mcpToken'
 import { MCP_CLIENTS, promptCommand } from './partsMcpClients'
-import { relayCommand } from './commandLine'
 import {
   buildEndpoint,
   clearEndpoint,
@@ -115,7 +114,10 @@ export function mcpStatus(): McpServerStatus {
     id: client.id,
     name: client.name,
     manual: client.manual,
-    manualText: client.manualText(relayCommand()),
+    manualText:
+      url && activeToken
+        ? client.manualText({ url, token: activeToken, dev: !app.isPackaged })
+        : null,
     configPath: client.configPath()
   }))
 

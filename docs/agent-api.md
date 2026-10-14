@@ -267,9 +267,10 @@ background, while the person works in another.
   (`discard` drops them). A workspace with no window belongs to the connection that started it:
   when that connection ends it closes, or opens a window when it holds unsaved edits, so work is
   never lost unseen. A background launch quits once it has no window and no connection.
-- **Clients.** In-app tabs use the HTTP endpoint with the header. Outside, a client registers
-  `goatcad mcp`, which starts the app in the background when it is not running. Python:
-  `connect(workspace=…)`.
+- **Clients.** In-app tabs use the HTTP endpoint with the header. Outside, the person starts
+  GoatCAD (with a window, or `goatcad --background`) and a client registers its URL with the
+  token; Claude Code connects at session start, so the app runs first or `/mcp` reconnects.
+  Nothing starts the app for a client. Python: `connect(workspace=…)`.
 
 ## The agent viewport
 

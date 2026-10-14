@@ -13,8 +13,10 @@
  *
  * What is left for a client to *store* is the manual path: a person
  * running the CLI in their own terminal, outside GoatCAD, registers the server
- * themselves with a line Settings shows them. It names this executable with
- * `mcp` (`mcpRelay.ts`), not the URL and token, so it never goes stale either.
+ * themselves with a line Settings shows them: the URL and the token. It goes
+ * stale when the token is replaced (Settings reprints it) or, in a development
+ * build, when the app restarts on another port. The app serves it only while it
+ * runs, and nothing starts the app for a client: the person starts it first.
  * We never write a client's config file — `~/.claude.json` and
  * `~/.codex/config.toml` are theirs.
  *
@@ -58,8 +60,8 @@ export interface McpClient {
   name: string
   /** What the manual path copies: a shell command, or a config snippet. */
   manual: 'command' | 'snippet'
-  /** The text for a server run as `relay`: this executable with `mcp`; `dev` is a worktree's build. */
-  manualText(relay: { command: string; args: string[]; dev?: boolean }): string
+  /** The text that registers the server at `url` with `token`; `dev` is a worktree's build. */
+  manualText(server: { url: string; token: string; dev?: boolean }): string
   /** The file the manual path ends up in. Shown, never written by us. */
   configPath(): string
 }
@@ -77,31 +79,28 @@ export const claudeCode: McpClient = {
   manual: 'command',
   // A worktree's build registers for that folder only, shadowing an installed
   // GoatCAD's there rather than replacing it everywhere.
-  manualText: ({ command, args, dev }) =>
-    `claude mcp add --scope ${dev ? 'local' : 'user'} ${SERVER_NAME} -- ${[command, ...args].map(shellWord).join(' ')}`,
+  manualText: ({ url, token, dev }) =>
+    `claude mcp add --transport http --scope ${dev ? 'local' : 'user'} ${SERVER_NAME} ${url} --header "Authorization: Bearer ${token}"`,
   // Where `--scope user` writes.
   configPath: () => join(homedir(), '.claude.json')
 }
 
-/** Codex, as its `config.toml` table, which carries the command and its arguments as TOML. */
+/** Codex, as its `config.toml` table, which carries the URL and the header as TOML. */
 export const codex: McpClient = {
   id: 'codex',
   name: 'Codex',
   manual: 'snippet',
   // One config file for every folder: a worktree's build's table replaces an installed one's.
-  manualText: ({ command, args }) =>
+  manualText: ({ url, token }) =>
     [
       `[mcp_servers.${SERVER_NAME}]`,
-      `command = ${JSON.stringify(command)}`,
-      `args = ${JSON.stringify(args)}`
+      `url = ${JSON.stringify(url)}`,
+      `http_headers = { Authorization = ${JSON.stringify(`Bearer ${token}`)} }`
     ].join('\n'),
   configPath: () => join(homedir(), '.codex', 'config.toml')
 }
 
 export const MCP_CLIENTS: McpClient[] = [claudeCode, codex]
-
-/** A word as a POSIX shell or cmd.exe reads it: double-quoted when it holds a space. A path holds no quote. */
-const shellWord = (word: string): string => (/\s/.test(word) ? `"${word}"` : word)
 
 // ------------------------------------------------------------ launch config
 
