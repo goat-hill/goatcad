@@ -98,6 +98,12 @@ const LIB = `
         (pin power_in line (at 0 0 270) (length 0) hide
           (name "GND" (effects (font (size 1.27 1.27))))
           (number "1" (effects (font (size 1.27 1.27)))))))
+    (symbol "power:LGND"
+      (power local)
+      (symbol "LGND_1_1"
+        (pin power_in line (at 0 0 270) (length 0) hide
+          (name "LGND" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27)))))))
     (symbol "power:PWR_FLAG"
       (power)
       (symbol "PWR_FLAG_1_1"
@@ -897,6 +903,9 @@ describe('every rule selects what it reports', () => {
         uuidLabel('l-sda2', 'sda', 76.2, 254),
         powerPart('#PWR50', 101.6, 254, 'GND'),
         powerPart('#PWR51', 111.76, 254, 'gnd'),
+        // A global and a local power port of one name.
+        powerPart('#PWR52', 500.38, 330.2, 'RAIL'),
+        powerPart('#PWR53', 510.54, 330.2, 'RAIL').replace('power:GND', 'power:LGND'),
         uuidWire('w-vcc', 127, 254, 137.16, 254),
         uuidLabel('l-vcc', 'gnd', 127, 254),
         uuidWire('w-shared', 152.4, 254, 162.56, 254),

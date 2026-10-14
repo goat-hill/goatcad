@@ -78,6 +78,7 @@ rules:
   similarPower: 仅大小写不同的电源名称
   similarLabelAndPower: 仅大小写不同的标签和电源名称
   sameLocalGlobalLabel: 名称同时用作局部和全局标签
+  sameLocalGlobalPower: 电源名称同时用作局部和全局
   groundPinNotGround: 接地引脚未接地
   stackedPinName: 堆叠引脚编号格式错误
   fieldNameWhitespace: 字段名含多余空格

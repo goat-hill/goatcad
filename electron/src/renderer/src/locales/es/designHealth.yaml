@@ -78,6 +78,7 @@ rules:
   similarPower: Nombres de alimentación que solo difieren en mayúsculas
   similarLabelAndPower: Etiqueta y nombre de alimentación que solo difieren en mayúsculas
   sameLocalGlobalLabel: Nombre usado como local y global
+  sameLocalGlobalPower: Nombre de alimentación usado como local y global
   groundPinNotGround: Pin de tierra fuera de tierra
   stackedPinName: Número de pin apilado mal formado
   fieldNameWhitespace: Nombre de campo con espacios sobrantes

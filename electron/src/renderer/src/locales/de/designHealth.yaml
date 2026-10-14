@@ -78,6 +78,7 @@ rules:
   similarPower: Versorgungsnamen, die sich nur in der Groß-/Kleinschreibung unterscheiden
   similarLabelAndPower: Label und Versorgungsname, die sich nur in der Groß-/Kleinschreibung unterscheiden
   sameLocalGlobalLabel: Name als lokales und globales Label verwendet
+  sameLocalGlobalPower: Versorgungsname lokal und global verwendet
   groundPinNotGround: Masse-Pin nicht an Masse
   stackedPinName: Fehlerhafte gestapelte Pinnummer
   fieldNameWhitespace: Feldname mit überzähligen Leerzeichen

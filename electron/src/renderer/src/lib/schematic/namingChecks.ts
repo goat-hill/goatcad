@@ -61,7 +61,7 @@ const namesOf = (connectivity: SchematicConnectivity): Name[] => {
       names.push({
         text: entry.powerName ?? entry.pin.name,
         kind: 'power',
-        globalPower: true,
+        globalPower: !entry.localPower,
         sheetPath: entry.sheetPath,
         position: entry.position,
         id: placedPinUuid(entry.symbol, entry.pin.number),
@@ -132,26 +132,33 @@ const similarNames = (names: Name[]): CheckResult[] => {
   return results
 }
 
-/** One name used by a local label and by a global label. */
+/**
+ * One name used locally and globally (`TestSameLocalGlobalLabel`): a global
+ * label or global power port against a local label or local power port, each
+ * name's lowest-uuid item standing for it. Two power ports are their own rule.
+ */
 const sameLocalGlobal = (names: Name[]): CheckResult[] => {
   const global = new Map<string, Name>()
   const local = new Map<string, Name>()
+  const keep = (map: Map<string, Name>, name: Name): void => {
+    const held = map.get(name.text)
+    if (!held || (name.id ?? '') < (held.id ?? '')) map.set(name.text, name)
+  }
   for (const name of names) {
-    // KiCad 10 compares labels only; power ports are not local or global labels here.
-    if (name.kind === 'global') {
-      if (!global.has(name.text)) global.set(name.text, name)
-    } else if (name.kind === 'local' && !local.has(name.text)) {
-      local.set(name.text, name)
-    }
+    if (name.kind === 'global' || (name.kind === 'power' && name.globalPower)) keep(global, name)
+    else if (name.kind === 'local' || name.kind === 'power') keep(local, name)
   }
   const results: CheckResult[] = []
   for (const [text, g] of global) {
     const l = local.get(text)
     if (!l) continue
+    const power = g.kind === 'power' && l.kind === 'power'
     results.push({
-      code: 'same-local-global-label',
+      code: power ? 'same-local-global-power' : 'same-local-global-label',
       severity: 'warning',
-      message: `${text} is both a local label and a global label. The local label joins only its own sheet, which is rarely what the shared name means; use one kind.`,
+      message: power
+        ? `${text} is both a local and a global power port. The local one powers only its own sheet, which is rarely what the shared name means; use one kind.`
+        : `${text} is used both locally and globally, by a label or a power port. The local one joins only its own sheet, which is rarely what the shared name means; use one kind.`,
       items: [text],
       position: mm(g.position),
       sheetPath: g.sheetPath,
@@ -579,7 +586,9 @@ export const NAMING_RULES: Record<string, string> = {
   'similar-power': 'Two power ports whose names differ only in case, and so name two rails.',
   'similar-label-and-power': 'A label and a power port whose names differ only in case.',
   'same-local-global-label':
-    'One name used by a local label and by a global label; the local one joins only its sheet.',
+    'One name used locally and globally, by labels or power ports; the local one joins only its sheet.',
+  'same-local-global-power':
+    'One name used by a local power port and by a global one; the local one powers only its sheet.',
   'ground-pin-not-ground':
     "A part's ground pin that is not on a ground net while another of its ground pins is.",
   'stacked-pin-name': 'A pin number in stacked notation ([1,2,5-7]) that does not parse.',
@@ -596,6 +605,7 @@ export const NAMING_KICAD_KEYS: Record<string, string> = {
   'similar-power': 'similar_power',
   'similar-label-and-power': 'similar_label_and_power',
   'same-local-global-label': 'same_local_global_label',
+  'same-local-global-power': 'same_local_global_power',
   'ground-pin-not-ground': 'ground_pin_not_ground',
   'stacked-pin-name': 'stacked_pin_name',
   'field-name-whitespace': 'field_name_whitespace',

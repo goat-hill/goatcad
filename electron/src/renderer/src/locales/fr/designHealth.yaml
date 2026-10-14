@@ -78,6 +78,7 @@ rules:
   similarPower: Noms d’alimentation ne différant que par la casse
   similarLabelAndPower: Label et nom d’alimentation ne différant que par la casse
   sameLocalGlobalLabel: Nom utilisé en local et en global
+  sameLocalGlobalPower: Nom d’alimentation utilisé en local et en global
   groundPinNotGround: Pin de masse hors de la masse
   stackedPinName: Numéro de pin empilée mal formé
   fieldNameWhitespace: Nom de champ avec des espaces parasites

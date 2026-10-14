@@ -136,6 +136,7 @@ const RULE_TITLES: Record<string, MessageKey> = {
   'similar-power': tk('designHealth.rules.similarPower'),
   'similar-label-and-power': tk('designHealth.rules.similarLabelAndPower'),
   'same-local-global-label': tk('designHealth.rules.sameLocalGlobalLabel'),
+  'same-local-global-power': tk('designHealth.rules.sameLocalGlobalPower'),
   'ground-pin-not-ground': tk('designHealth.rules.groundPinNotGround'),
   'stacked-pin-name': tk('designHealth.rules.stackedPinName'),
   'field-name-whitespace': tk('designHealth.rules.fieldNameWhitespace'),

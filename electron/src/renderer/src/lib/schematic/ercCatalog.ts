@@ -36,6 +36,7 @@ const RULES: Array<[ErcGroup, string, RuleSeverity]> = [
   ['connections', 'isolated_pin_label', W],
   ['connections', 'single_global_label', I],
   ['connections', 'same_local_global_label', W],
+  ['connections', 'same_local_global_power', W],
   ['connections', 'wire_dangling', E],
   ['connections', 'endpoint_off_grid', W],
   ['connections', 'four_way_junction', I],

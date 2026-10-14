@@ -78,6 +78,7 @@ rules:
   similarPower: 大文字・小文字だけが異なる電源名
   similarLabelAndPower: 大文字・小文字だけが異なるラベルと電源名
   sameLocalGlobalLabel: ローカルとグローバルの両方で使われている名前
+  sameLocalGlobalPower: ローカルとグローバルの両方で使われている電源名
   groundPinNotGround: グランドに接続されていないグランドピン
   stackedPinName: 不正なスタックピン番号
   fieldNameWhitespace: 余分なスペースを含むフィールド名

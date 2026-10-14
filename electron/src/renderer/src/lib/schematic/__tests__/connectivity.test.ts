@@ -639,6 +639,40 @@ describe('legacy power symbols', () => {
   })
 })
 
+describe('local power symbols', () => {
+  // `(power local)`: the port names its own sheet's net, as a local label does.
+  const localGnd = (reference: string, x: number, y: number): string =>
+    gnd(reference, x, y).replace('power:GND', 'power:LGND')
+  const withLocal = (body: string): SchematicConnectivity =>
+    buildSheetConnectivity(
+      parseKicadSchematic(
+        sheetDoc(body).replace(
+          '(symbol "power:GND"',
+          `(symbol "power:LGND" (power local)
+             (symbol "LGND_1_1"
+               (pin power_in line (at 0 0 270) (length 0) hide
+                 (name "GND" (effects (font (size 1.27 1.27))))
+                 (number "1" (effects (font (size 1.27 1.27)))))))
+           (symbol "power:GND"`
+        )
+      )
+    )
+
+  test('two local ports of one name join, under the sheet path', () => {
+    const c = withLocal(
+      `${wire(10, 10, 20, 10)} ${wire(40, 10, 50, 10)} ${localGnd('#PWR1', 10, 10)} ${localGnd('#PWR2', 40, 10)}`
+    )
+    expect(c.nets.map((n) => n.name)).toEqual(['/GND'])
+  })
+
+  test('a local port stays apart from a global one of the same name', () => {
+    const c = withLocal(
+      `${wire(10, 10, 20, 10)} ${wire(40, 10, 50, 10)} ${localGnd('#PWR1', 10, 10)} ${gnd('#PWR2', 40, 10)}`
+    )
+    expect(c.nets.map((n) => n.name).sort()).toEqual(['/GND', 'GND'])
+  })
+})
+
 describe('lookups', () => {
   test('netOfPin, netOfWire, and netAt agree', () => {
     const connectivity = connectivityOf(

@@ -61,6 +61,7 @@ export const KICAD10_ERC_DEFAULTS: Record<string, unknown> = {
     pin_to_pin: 'warning',
     power_pin_not_driven: 'error',
     same_local_global_label: 'warning',
+    same_local_global_power: 'warning',
     similar_label_and_power: 'warning',
     similar_labels: 'warning',
     similar_power: 'warning',

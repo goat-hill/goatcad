@@ -53,7 +53,14 @@ export interface SheetConnectivityInput {
 }
 
 export type NetNameSource =
-  'global_label' | 'power' | 'local_label' | 'hierarchical_label' | 'sheet_pin' | 'pin' | 'none'
+  | 'global_label'
+  | 'power'
+  | 'local_power'
+  | 'local_label'
+  | 'hierarchical_label'
+  | 'sheet_pin'
+  | 'pin'
+  | 'none'
 
 export interface NetPin {
   sheetPath: string
@@ -69,6 +76,8 @@ export interface NetPin {
   power: boolean
   /** The net name a power port drives, for a power symbol's power input pin. */
   powerName?: string
+  /** True on a `(power local)` symbol's pin: its name is its sheet's alone. */
+  localPower?: boolean
 }
 
 export interface NetWire {
@@ -346,6 +355,9 @@ const connectsOnWireInterior = (item: Item): boolean =>
 const isPowerSymbol = (schematic: KicadSchematic, symbol: KicadSchematicSymbol): boolean =>
   schematic.libSymbols.get(definitionIdOf(symbol))?.isPower || symbol.libId.startsWith('power:')
 
+const isLocalPowerSymbol = (schematic: KicadSchematic, symbol: KicadSchematicSymbol): boolean =>
+  schematic.libSymbols.get(definitionIdOf(symbol))?.isLocalPower ?? false
+
 /** The net name a power symbol drives: its Value, falling back to pin name. */
 /** KiCad's first schematic format after the release that stopped renaming legacy power pins. */
 const LEGACY_POWER_BEFORE = 20230221
@@ -444,8 +456,9 @@ const scopedName = (namePath: string, text: string): string =>
   namePath === '/' ? `/${text}` : `${namePath}/${text}`
 
 const NAME_PRIORITY: Record<NetNameSource, number> = {
-  global_label: 6,
-  power: 5,
+  global_label: 7,
+  power: 6,
+  local_power: 5,
   local_label: 4,
   hierarchical_label: 3,
   sheet_pin: 2,
@@ -708,7 +721,10 @@ export function buildConnectivity(
             noConnect: false,
             power,
             ...(power && pin.electricalType === 'power_in'
-              ? { powerName: shown(sheetIndex, powerNetName(symbol, pin, schematic)) }
+              ? {
+                  powerName: shown(sheetIndex, powerNetName(symbol, pin, schematic)),
+                  ...(isLocalPowerSymbol(schematic, symbol) ? { localPower: true } : {})
+                }
               : {})
           },
           points: [position]
@@ -719,7 +735,13 @@ export function buildConnectivity(
         // and two of them on two rails must not become one net.
         if (power && pin.electricalType === 'power_in') {
           const name = shown(sheetIndex, powerNetName(symbol, pin, schematic))
-          if (name) {
+          if (name && isLocalPowerSymbol(schematic, symbol)) {
+            // A local power port names its sheet's net, as a local label does.
+            const key = `${sheetIndex}|${escapeNetName(name)}`
+            const bucket = sheetLocalNames.get(key)
+            if (bucket) bucket.push(item.id)
+            else sheetLocalNames.set(key, [item.id])
+          } else if (name) {
             const bucket = powerNames.get(name)
             if (bucket) bucket.push(item.id)
             else powerNames.set(name, [item.id])
@@ -995,8 +1017,10 @@ export function buildConnectivity(
   // On one sheet, a local name joins a global label or power port of the same
   // name: KiCad merges same-sheet subgraphs whose unprefixed names match
   // (`CONNECTION_GRAPH::buildConnectionGraph`), so a local `GND` label lands
-  // on the `GND` rail when a `power:GND` stands on the same sheet.
+  // on the `GND` rail when a `power:GND` stands on the same sheet. A local
+  // power port alone does not: its `GND` stays apart from a global `GND`.
   for (const [key, bucket] of sheetLocalNames) {
+    if (!bucket.some((id) => items[id].kind === 'label')) continue
     const separator = key.indexOf('|')
     const sheetIndex = Number(key.slice(0, separator))
     const name = key.slice(separator + 1)
@@ -1128,6 +1152,13 @@ export function buildConnectivity(
           break
         case 'pin':
           net.pins.push(item.netPin)
+          if (item.netPin.localPower && item.netPin.powerName)
+            candidates.push({
+              name: scopedName(namePath, escapeNetName(item.netPin.powerName)),
+              source: 'local_power',
+              depth: depthOf(sheetPath),
+              subgraph: sheetFind.find(item.id)
+            })
           break
         case 'label': {
           net.labels.push({ sheetPath, label: item.label })
@@ -1188,11 +1219,17 @@ export function buildConnectivity(
         schematicIndex !== undefined &&
         schematic &&
         isPowerSymbol(schematic, pin.symbol) &&
-        pin.pin.electricalType === 'power_in'
+        pin.pin.electricalType === 'power_in' &&
+        !pin.localPower
       ) {
         const name = shown(schematicIndex, powerNetName(pin.symbol, pin.pin, schematic))
         if (name) candidates.push({ name, source: 'power', depth: 0 })
-      } else if (pin.pin.hidden && pin.pin.electricalType === 'power_in' && pin.pin.name) {
+      } else if (
+        !pin.localPower &&
+        pin.pin.hidden &&
+        pin.pin.electricalType === 'power_in' &&
+        pin.pin.name
+      ) {
         candidates.push({ name: pin.pin.name, source: 'power', depth: 0 })
       }
     }

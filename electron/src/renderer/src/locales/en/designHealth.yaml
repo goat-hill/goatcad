@@ -102,6 +102,7 @@ rules:
   similarPower: Power names differing only in case
   similarLabelAndPower: Label and power name differing only in case
   sameLocalGlobalLabel: Name used as local and global
+  sameLocalGlobalPower: Power name used as local and global
   groundPinNotGround: Ground pin off ground
   stackedPinName: Malformed stacked pin number
   fieldNameWhitespace: Field name with stray spaces
