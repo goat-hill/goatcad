@@ -71,6 +71,7 @@ Run from `electron/`. `npm` is not on `PATH`: use the `bin/` wrappers, never `np
   - `test-e2e` needs a Python interpreter;
   - `test-parity` compares against KiCad (see [kicad-parity.md](./kicad-parity.md#running-the-suites)).
   - `launch-timing` and `board-timing` measure performance (`--record` adds a row to `perf/*-history.html`);
+  - `kicad-compare` times GoatCAD against KiCad 10 on one board, each by its own route (GUI, kipy, kicad-cli). It runs on a visible desktop, and its first run says how to make its kipy venv;
   - `reset` gives a fresh-install profile.
   - `./bin/dev` (the same as `./bin/goatcad dev`) blocks the shell, so it is the maintainer's command.
   - `./bin/goatcad` is this worktree's build as the `goatcad` command, in the worktree's own

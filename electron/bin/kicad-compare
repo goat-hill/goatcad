@@ -1,0 +1,26 @@
+#!/bin/bash
+# Compare GoatCAD with KiCad 10 on one board: launch, GPU memory, pan and zoom,
+# the agent API from Python, DRC, ERC and exports. Visible desktops only, both
+# apps on the real GPU. See scripts/kicad-compare.mjs for options (--runs,
+# --reps, --board, --ref, --no-build, --out).
+set -e
+if [ -f "$HOME/.nvm/nvm.sh" ]; then
+  source "$HOME/.nvm/nvm.sh"
+fi
+cd "$(dirname "$0")/.."
+
+venv=node_modules/.cache/kicad-compare/venv
+if [ ! -x "$venv/bin/python" ] || ! "$venv/bin/python" -c 'import kipy' 2>/dev/null; then
+  echo "kicad-compare: KiCad's Python client (kipy) is missing. Create its venv with:" >&2
+  echo "  python3 -m venv $venv && $venv/bin/pip install kicad-python" >&2
+  exit 1
+fi
+if [ "$(uname)" = Linux ] && ! python3 -c 'import Xlib' 2>/dev/null; then
+  echo "kicad-compare: the system python3 needs python-xlib (Ubuntu: python3-xlib)." >&2
+  exit 1
+fi
+if [ "$(uname)" = Darwin ]; then
+  echo "kicad-compare: pan and zoom in KiCad post real mouse events; give this terminal" >&2
+  echo "  Accessibility permission (System Settings > Privacy & Security) or KiCad's frames read 0." >&2
+fi
+exec node scripts/kicad-compare.mjs "$@"
