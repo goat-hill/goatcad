@@ -276,6 +276,11 @@ export const renderPythonClient = (ops: readonly RegisteredOp[], configDir: stri
     ),
     '"""',
     '',
+    // Annotations stay unevaluated: inside an ops class, a method named
+    // `list` shadows the builtin, so `list[str]` there fails on Pythons
+    // before 3.14, which evaluate annotations eagerly.
+    'from __future__ import annotations',
+    '',
     `_WRITTEN_CONFIG_DIR = ${JSON.stringify(configDir)}`,
     '',
     PYTHON_RUNTIME,
